@@ -1,8 +1,22 @@
-<script lang="ts">
-  import { MyCounterButton } from 'ui';
+<script lang='ts'>
+import '../app.css'
+import { onMount } from "svelte"
+import { goto } from "$app/navigation"
+  
+  onMount(() => {
+    window.addEventListener("popstate", () => {
+      const hash = window.location.hash;
+      console.log('========================hash======================', hash)
+      if (hash) {
+        goto(hash.slice(1))
+      }
+    })
+  })
+
 </script>
 
-<h1>Web</h1>
-<MyCounterButton />
+<svelte:head>
+  <base href="#/" />
+</svelte:head>
 
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<button on:click={() => goto("/about")}> goto about </button>

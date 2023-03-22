@@ -1,8 +1,11 @@
 {
 	"name": "library",
 	"version": "0.0.2",
+	"type": "module",
+  "module": "src/lib/index.js",
+  "svelte": "src/lib/index.js",
 	"scripts": {
-		"dev": "vite dev -- port 3001 --open",
+		"dev": "vite dev --port 3001 --open",
 		"build": "svelte-kit sync && svelte-package",
 		"prepublishOnly": "echo 'Did you mean to publish `./package/`, instead of `./`?' && exit 1",
 		"test": "playwright test",
@@ -38,8 +41,5 @@
 		"vite": "^4.0.0",
 		"vitest": "^0.25.3",
 		"zx": "1.14.2"
-	},
-	"type": "module",
-	"dependencies": {
 	}
 }
