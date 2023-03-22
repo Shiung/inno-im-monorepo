@@ -1,5 +1,4 @@
 import * as path from 'path'
-import testPlugin from './testPlugin'
 import { sveltekit } from '@sveltejs/kit/vite';
 
 /** @type {import('vite').UserConfig} */

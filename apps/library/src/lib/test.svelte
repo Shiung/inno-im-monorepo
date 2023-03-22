@@ -9,7 +9,7 @@ const plus = () => {
 
 </script>
 
-<div> this is a test svelte library </div>
+<div class='text-sky-400'> this is a test svelte library </div>
 <button on:click={plus}> plus </button>
 <div> {count} </div>
 
