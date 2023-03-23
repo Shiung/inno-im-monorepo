@@ -13,11 +13,12 @@
     "format": "prettier --write --ignore-path=../../.prettierignore ."
   },
   "dependencies": {
-    "svelte-spa-router": "^3.3.0",
     "api": "workspace:*",
-    "ui": "workspace:*",
+    "assets": "workspace:*",
     "env-config": "workspace:*",
-    "library": "workspace:*"
+    "library": "workspace:*",
+    "svelte-spa-router": "^3.3.0",
+    "ui": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "latest",
@@ -26,10 +27,12 @@
     "autoprefixer": "^10.4.14",
     "eslint-config-custom": "workspace:*",
     "postcss": "^8.4.21",
+    "rollup-plugin-svelte-svg": "1.0.0-beta.6",
     "svelte": "^3.54.0",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.6",
     "tailwind-config": "workspace:*",
+    "tailwind-merge": "^1.10.0",
     "tailwindcss": "^3.2.7",
     "tslib": "^2.3.1",
     "typescript": "^5.0.0",
