@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "description": "for fetch API",
   "type": "module",
-  "module": "index.ts",
-  "svelte": "index.ts",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "lint": "prettier --check --ignore-path=../../.prettierignore . && eslint \".\"",
     "format": "prettier --write --ignore-path=../../.prettierignore ."
+  },
+  "dependencies": {
+    "env-config": "workspace:*"
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*"

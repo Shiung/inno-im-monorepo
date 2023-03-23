@@ -1,0 +1,9 @@
+{
+  "name": "env-config",
+  "version": "0.0.0",
+  "description": "for window._env_",
+  "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "license": "MIT"
+}

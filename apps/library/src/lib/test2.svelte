@@ -1,9 +1,16 @@
 <script lang='ts'>
 import { onMount } from 'svelte'
-import { fetchIp } from 'api'
+import { echo } from 'api'
 
-onMount(() => {
-  fetchIp()
+onMount(async() => {
+  const res = await echo.test({
+    params: { aa: 'asffd', bb: 'aaaaaaaaaaaaaaa' },
+    method: 'post',
+    headers: { auto: 'auto1244' },
+    body: { a: 123 },
+  })
+
+  console.log(res)
 })
 
 

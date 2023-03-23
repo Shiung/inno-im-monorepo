@@ -18,7 +18,8 @@
 	},
   "dependencies": {
     "ui": "workspace:*",
-    "api": "workspace:*"
+    "api": "workspace:*",
+    "env-config": "workspace:*"
   },
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
