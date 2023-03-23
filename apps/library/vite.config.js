@@ -1,5 +1,4 @@
-import * as path from 'path'
-import { sveltekit } from '@sveltejs/kit/vite';
+import { sveltekit } from '@sveltejs/kit/vite'
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -7,11 +6,6 @@ const config = {
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
-  resolve: {
-    alias: {
-      $lib: path.resolve('./src/lib'),
-    }
-  },
-};
+}
 
-export default config;
+export default config

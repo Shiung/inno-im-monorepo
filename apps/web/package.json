@@ -1,8 +1,9 @@
 {
   "name": "web",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "vite dev --port 3002 --open",
+    "dev": "vite dev --port 3000 --open",
     "build": "vite build",
     "package": "vite package",
     "preview": "vite preview",
@@ -12,10 +13,14 @@
     "format": "prettier --write --ignore-path=../../.prettierignore ."
   },
   "dependencies": {
-    "ui": "workspace:*"
+    "svelte-spa-router": "^3.3.0",
+    "api": "workspace:*",
+    "ui": "workspace:*",
+    "library": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "latest",
+    "@sveltejs/adapter-static": "^2.0.1",
     "@sveltejs/kit": "latest",
     "autoprefixer": "^10.4.14",
     "eslint-config-custom": "workspace:*",
@@ -28,6 +33,5 @@
     "tslib": "^2.3.1",
     "typescript": "^5.0.0",
     "vite": "^4.0.0"
-  },
-  "type": "module"
+  }
 }

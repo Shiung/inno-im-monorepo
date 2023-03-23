@@ -1,5 +1,5 @@
 <script lang='ts'>
-import Test2 from '$lib/test2.svelte'
+import Test2 from './test2.svelte'
 
 let count = 0
 
