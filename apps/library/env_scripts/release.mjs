@@ -2,8 +2,7 @@ import fs from 'fs'
 
 const build = async () => {
   await $`pnpm build`
-  // await $`cd release`
-  // await $`find . ! -name '.git' -delete`
+  await $`find ./release ! -name '.git' -delete`
   // await $`cp ../dist/*.* .`
   
   // await $`git init && git add -A && git commit -m "Initial commit"`
