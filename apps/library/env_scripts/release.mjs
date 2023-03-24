@@ -24,7 +24,8 @@ const writeVersionToRelease = (version) => {
   fs.writeFileSync('./release/package.json', JSON.stringify(data))
 }
 
-await build()
+// await build()
 
 const version = readVersion()
+console.log('version', version)
 writeVersionToRelease(version)
