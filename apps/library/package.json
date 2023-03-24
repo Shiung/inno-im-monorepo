@@ -1,14 +1,14 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 5173 --open",
     "build": "vite build",
     "build:library": "APP_ENV=library vite build",
     "preview": "vite preview",
-    "release": "zx ./env_scripts/release.mjs",
+    "release": "zx ./env_scripts/releaseLibrary.mjs",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "lint": "prettier --check --ignore-path=../../.prettierignore . && eslint \"src\"",
     "format": "prettier --write --ignore-path=../../.prettierignore ."

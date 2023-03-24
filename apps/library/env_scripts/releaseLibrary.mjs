@@ -1,12 +1,12 @@
 import fs from 'fs'
 
-const readVersion = () => {
+const readVersion = async () => {
   let data = fs.readFileSync('./package.json', 'utf8')
   data = JSON.parse(data)
   return data.version
 }
 
-const writeVersionToRelease = (version) => {
+const writeVersionToRelease = async (version) => {
   let data = fs.readFileSync('./library_package.json', 'utf8')
   data = JSON.parse(data)
   data.version = version
@@ -25,7 +25,7 @@ const getReleasedVersion = async () => {
 }
 
 const returnOrExitIfVersionTheSame = async (releasedVer) => {
-  const version = readVersion()
+  const version = await readVersion()
 
   if (releasedVer === version) {
     console.log('==================== release version cannot be the same ================================')
@@ -47,11 +47,12 @@ const pushToGit = async (version) => {
 }
 
 
-renewReleaseFolder()
-const releasedVer = getReleasedVersion()
-const newVer = returnOrExitIfVersionTheSame(releasedVer)
+await renewReleaseFolder()
+const releasedVer = await getReleasedVersion()
+console.log('releasedVer', releasedVer)
+const newVer = await returnOrExitIfVersionTheSame(releasedVer)
 console.log('version', newVer)
-build()
-writeVersionToRelease(newVer)
-pushToGit(newVer)
+await build()
+await writeVersionToRelease(newVer)
+await pushToGit(newVer)
 
