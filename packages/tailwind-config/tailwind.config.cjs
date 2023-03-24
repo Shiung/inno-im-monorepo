@@ -2,8 +2,7 @@
 module.exports = {
   content: [
     './src/**/*.{html,js,svelte,ts}',
-    './node_modules/ui/**/*.{html,js,svelte,ts}',
-    './node_modules/library/**/*.{html,js,svelte,ts}',
+    './node_modules/ui/**/*.{js,svelte,ts}',
   ],
   theme: {
     extend: {}

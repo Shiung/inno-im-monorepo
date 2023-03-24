@@ -1,6 +1,0 @@
-<script lang='ts'>
-import '../app.css'
-import Test from '$lib/test.svelte'
-</script>
-
-<Test />

@@ -1,6 +1,6 @@
 <script lang='ts'>
-import Test2 from './test2.svelte'
-import Edit from 'assets/test/edit.svg'
+import Fetch from './fetch.svelte'
+import Edit from '$assets/edit.svg'
 
 let count = 0
 
@@ -17,4 +17,4 @@ const plus = () => {
 <Edit width={30} height={30} />
 
 
-<Test2 />
+<Fetch />
