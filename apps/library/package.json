@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev --port 5173 --open",
     "build": "vite build",
+    "build:library": "APP_ENV=library vite build",
     "preview": "vite preview",
     "release": "zx ./env_scripts/release.mjs",
     "check": "svelte-check --tsconfig ./tsconfig.json",
