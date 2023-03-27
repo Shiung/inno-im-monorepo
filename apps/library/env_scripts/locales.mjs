@@ -31,7 +31,8 @@ const genLangFiles = async (lang, dict) => {
 
     await $`touch ${filePath}`
     fs.writeFileSync(`${filePath}`, JSON.stringify(data))
-    $`echo export { default as ${fileName} } from "\'./${fileName}.json'\" >> ${LANG_FILEPATH}/index.ts`
+    $`echo "export { default as ${fileName} } from './${fileName}.json'" >> ${LANG_FILEPATH}/index.ts`
+    $`echo "case '${fileName}': return () => import('./${fileName}.json')" >> ${LANG_FILEPATH}/fetcher.ts`
   }
 }
 
@@ -39,6 +40,8 @@ const genLangFiles = async (lang, dict) => {
 await clearLangFolder()
 await $`mkdir -p ${LANG_FILEPATH}`
 await $`touch ${LANG_FILEPATH}/index.ts`
+await $`touch ${LANG_FILEPATH}/fetcher.ts`
+await $`echo "export default (path: string) => {\n  switch (path) {" >> ${LANG_FILEPATH}/fetcher.ts`
 
 for (const lang of LANGUAGES) {
   const langData = await fetch(`${LOCALE_SERVER}/client/${REPO_NAME}/${lang}`)
@@ -47,4 +50,7 @@ for (const lang of LANGUAGES) {
   const dict = parseJsonDataToDict(json)
   await genLangFiles(lang, dict)
 }
+
+await $`echo "default: return () => import('./en_US_common.json')" >> ${LANG_FILEPATH}/fetcher.ts`
+await $`echo "}}" >> ${LANG_FILEPATH}/fetcher.ts`
 

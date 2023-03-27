@@ -30,7 +30,8 @@ export default defineConfig({
     alias: {
       $assets: resolve('./src/assets'),
       $lib: resolve('./src/lib'),
-      $pages: resolve('./src/pages')
+      $pages: resolve('./src/pages'),
+      $stores: resolve('./src/stores')
     }
   },
   ...(process.env.APP_ENV === 'library' && buildAsLibrary())
