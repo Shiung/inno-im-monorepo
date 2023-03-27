@@ -47,12 +47,12 @@ const pushToGit = async (version) => {
 }
 
 
-await $`npm run locales`
 await renewReleaseFolder()
 const releasedVer = await getReleasedVersion()
 console.log('releasedVer', releasedVer)
 const newVer = await returnOrExitIfVersionTheSame(releasedVer)
 console.log('version', newVer)
+await $`npm run locales`
 await build()
 await writeVersionToRelease(newVer)
 await pushToGit(newVer)
