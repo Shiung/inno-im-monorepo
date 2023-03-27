@@ -1,0 +1,9 @@
+{
+  "name": "node-env",
+  "version": "0.0.0",
+  "description": "for build env.",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs",
+  "license": "MIT"
+}

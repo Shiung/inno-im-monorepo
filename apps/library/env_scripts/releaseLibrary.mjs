@@ -47,6 +47,7 @@ const pushToGit = async (version) => {
 }
 
 
+await $`npm run locales`
 await renewReleaseFolder()
 const releasedVer = await getReleasedVersion()
 console.log('releasedVer', releasedVer)
