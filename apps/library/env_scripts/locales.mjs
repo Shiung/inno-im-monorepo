@@ -25,15 +25,21 @@ const clearLangFolder = async () => {
 }
 
 const genLangFiles = async (lang, dict) => {
-  await $`mkdir -p ${LANG_FILEPATH}`
-  for (const [fileName, data] of Object.entries(dict)) {
-    const filePath = `${LANG_FILEPATH}/${lang}_${fileName.replace('/', '_')}.json`
+  for (const [name, data] of Object.entries(dict)) {
+    const fileName = `${lang}_${name.replace('/', '_')}`
+    const filePath = `${LANG_FILEPATH}/${fileName}.json`
+
     await $`touch ${filePath}`
     fs.writeFileSync(`${filePath}`, JSON.stringify(data))
+    $`echo export { default as ${fileName} } from "\'./${fileName}.json'\" >> ${LANG_FILEPATH}/index.ts`
   }
 }
 
+
 await clearLangFolder()
+await $`mkdir -p ${LANG_FILEPATH}`
+await $`touch ${LANG_FILEPATH}/index.ts`
+
 for (const lang of LANGUAGES) {
   const langData = await fetch(`${LOCALE_SERVER}/client/${REPO_NAME}/${lang}`)
   const json = await langData.json()
