@@ -5,7 +5,7 @@ export const writableSyncLocalStorage = <T>(key: string, init: any): Writable<T>
   const stored = localStorage.getItem(key)
   const def = stored || init
 
-  const store = svelteWritable(def)
+  const store = svelteWritable<T>(def)
   localStorage.setItem(key, def)
 
 
@@ -17,7 +17,7 @@ export const writableSyncLocalStorage = <T>(key: string, init: any): Writable<T>
     },
     update: (func) => {
       store.update(func)
-      localStorage.setItem(key, get(store))
+      localStorage.setItem(key, get(store) as any)
     }
   }
 }

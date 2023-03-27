@@ -16,4 +16,4 @@ onMount(async() => {
 
 </script>
 
-<div> this is test2 </div>
+<div> this is fetch </div>

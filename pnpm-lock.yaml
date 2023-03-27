@@ -87,7 +87,10 @@ importers:
       eslint-config-custom: link:../eslint-config-custom
 
   packages/env-config:
-    specifiers: {}
+    specifiers:
+      node-env: workspace:*
+    devDependencies:
+      node-env: link:../node-env
 
   packages/eslint-config-custom:
     specifiers:

@@ -1,5 +1,6 @@
 <script lang='ts'>
 import Fetch from './fetch.svelte'
+import ChangeLocale from './changeLocale.svelte'
 import Edit from '$assets/edit.svg'
 import { t, locale } from '$stores'
 
@@ -14,10 +15,12 @@ const plus = () => {
 <div class='text-sky-400'> this is a test svelte library </div>
 <button on:click={plus}> plus </button>
 <div> {count} </div>
-<div> {$t('test.common.test2')} </div>
+<div> {$t('test.common.test2', {account: 'aaav'})} </div>
 <div> {$locale} </div>
 
 <Edit width={30} height={30} />
 
 
 <Fetch />
+
+<ChangeLocale />

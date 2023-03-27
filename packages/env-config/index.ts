@@ -1,4 +1,6 @@
 import type { ENV, WindowEnv } from './types'
+export type { ENV, ILanguages } from './types'
+export { languages } from './types'
 
 const env = 'dev'
 
