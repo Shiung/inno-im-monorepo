@@ -1,6 +1,15 @@
+type IMethod = 'get' | 'post' | 'put' | 'patch' | 'delete'
+
+export interface IMockData {
+  method?: IMethod 
+  timeout?: number
+  response?: () => any
+}
+
 export type IApiInit = {
   url: string
-  method?: 'get' | 'post' | 'put' | 'patch' | 'delete',
+  method?: IMethod
+  mock?: IMockData
 }
 
 export type IApi = (o?: RequestWrap) => Promise<any>
@@ -10,3 +19,4 @@ export type RequestWrap = {
 } & {
   params?: { [key: string]: string }
 }
+

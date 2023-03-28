@@ -3,15 +3,25 @@ import type { WindowEnv } from 'env-config/types'
 
 import type { IApiInit, RequestWrap } from './types'
 
+const mock = localStorage.getItem('mock') === 'true' || false
+const MOCK_SERVER = 'http://localhost:5174'
+
 export default class Base {
   private baseUrl: string
 
   constructor({ API_KEY }: { API_KEY: keyof WindowEnv }) {
+    this.baseUrl = ''
+
     try {
+      if (mock) {
+        this.baseUrl = `${MOCK_SERVER}/${API_KEY}`
+        return
+      }
+
       const baseUrl = getConfig()[API_KEY]
       if (!baseUrl) throw('[missing a certain API_KEY]')
 
-      this.baseUrl = getConfig()[API_KEY]
+      this.baseUrl = baseUrl
 
     } catch (e) {
       console.error(e, `missing ${API_KEY} at window._env_`) 
@@ -27,7 +37,7 @@ export default class Base {
   protected apiGenerator({ url, method }: IApiInit) {
 
     return async (request?: RequestWrap) => {
-      const _method = request?.method || method
+      const _method = request?.method || method || 'get'
       const _request = { ...request, body: null }
 
       const getBody = () => {

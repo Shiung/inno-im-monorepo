@@ -3,9 +3,8 @@ import { onMount } from 'svelte'
 import { echo } from 'api'
 
 onMount(async() => {
-  const res = await echo.test({
+  const res = await echo.users({
     params: { aa: 'asffd', bb: 'aaaaaaaaaaaaaaa' },
-    method: 'post',
     headers: { auto: 'auto1244' },
     body: { a: 123 },
   })

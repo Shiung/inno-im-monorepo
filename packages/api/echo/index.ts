@@ -1,4 +1,4 @@
-import Base from './base'
+import Base from '../base'
 
 class Echo extends Base {
   constructor() {
@@ -6,7 +6,7 @@ class Echo extends Base {
   }
 
   root = this.apiGenerator({ url: '/', method: 'get' })
-  test = this.apiGenerator({ url: '/test' })
+  users = this.apiGenerator({ url: '/users' })
 }
 
 export default new Echo()
