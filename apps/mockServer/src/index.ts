@@ -23,7 +23,6 @@ const getPathAndModule = (path: string) => {
 }
 
 const getMockData = (module: IMockData[], method: IMethod, path: string) => {
-  console.log('module', module)
   const defGetData = module.map((data: IMockData) => ({ 
     ...data,
     method: data?.method || 'get'
