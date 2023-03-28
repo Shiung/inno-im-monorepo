@@ -18,7 +18,7 @@ const plus = () => {
 <div> {$t('test.common.test2', {account: 'aaav'})} </div>
 <div> {$locale} </div>
 
-<Edit width={30} height={30} />
+<Edit width={30} height={30} fill='#4c9eea' />
 
 
 <Fetch />

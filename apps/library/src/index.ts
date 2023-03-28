@@ -1,4 +1,4 @@
-import './app.css'
+import './library.css'
 
 // Reexport your entry components here
 export { default as App } from './App.svelte'

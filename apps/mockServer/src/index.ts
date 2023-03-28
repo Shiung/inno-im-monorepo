@@ -43,7 +43,13 @@ app.all('*', async (req, res) => {
   const mockData = getMockData(mod.default, method, path)
   if (!mockData?.response) return res.status(404).json({ data: 'no such MockData' })
   
-  res.json(mockData.response())
+
+  setTimeout(() => {
+    const mockData = getMockData(mod.default, method, path)
+    if (!mockData?.response) return res.status(404).json({ data: 'no such MockData' })
+  
+    res.json(mockData.response())
+  }, mockData.timeout || 200)
 })
 
 app.listen(5174)

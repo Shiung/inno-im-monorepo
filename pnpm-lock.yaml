@@ -156,12 +156,14 @@ importers:
   packages/ui:
     specifiers:
       eslint-config-custom: workspace:*
+      sass: ^1.59.3
       svelte: ^3.54.0
       tailwind-merge: ^1.10.0
     dependencies:
       tailwind-merge: 1.10.0
     devDependencies:
       eslint-config-custom: link:../eslint-config-custom
+      sass: 1.60.0
       svelte: 3.57.0
 
 packages:

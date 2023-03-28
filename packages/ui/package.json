@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
+    "sass": "^1.59.3",
     "svelte": "^3.54.0"
   }
 }
