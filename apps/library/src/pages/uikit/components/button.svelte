@@ -6,4 +6,3 @@ import { Button } from 'ui'
 <Button loading > for testing </Button>
 <Button disabled> disabled </Button>
 <Button variant='outline' on:click={() => console.log('outline clicked')}> outline </Button>
-

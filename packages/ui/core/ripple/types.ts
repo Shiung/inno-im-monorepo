@@ -6,3 +6,4 @@ export interface InitAttr {
 export type Variants<V> = {
   [K in keyof V]: InitAttr
 } & { primary?: InitAttr }
+

@@ -3,7 +3,7 @@ import { hasRipple } from '../utils'
 
 import type { InitAttr } from './types'
 
-export const initAttrMerge = (...props: InitAttr[]): InitAttr => {
+export default (...props: InitAttr[]): InitAttr => {
   const merged: InitAttr = {}
 
   for (const prop of props) {
