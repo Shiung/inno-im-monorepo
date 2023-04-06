@@ -141,7 +141,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.44.0_f7g2dh642i572w4ah2bl3qrzme
       '@typescript-eslint/parser': 5.44.0_c3s5twac2s6plwjjm5iitobq3m
       eslint-config-prettier: 8.5.0_eslint@8.28.0
-      eslint-config-turbo: 1.8.6_eslint@8.28.0
+      eslint-config-turbo: 1.8.8_eslint@8.28.0
       eslint-plugin-svelte3: 4.0.0_zo3e5nvszeelp7ldo26dn5nvlq
 
   packages/node-env:
@@ -155,11 +155,13 @@ importers:
 
   packages/ui:
     specifiers:
+      '@better-scroll/core': ^2.5.1
       eslint-config-custom: workspace:*
       sass: ^1.59.3
       svelte: ^3.54.0
       tailwind-merge: ^1.10.0
     dependencies:
+      '@better-scroll/core': 2.5.1
       tailwind-merge: 1.10.0
     devDependencies:
       eslint-config-custom: link:../eslint-config-custom
@@ -199,6 +201,16 @@ packages:
     dependencies:
       regenerator-runtime: 0.13.11
     dev: true
+
+  /@better-scroll/core/2.5.1:
+    resolution: {integrity: sha512-koKOuYA55dQ04FJRIVUpMGDr1hbCfWmfX0MGp1hKagkQSWSRpwblqACiwtggVauoj9aaJRJZ9hDsTM4weaavlg==}
+    dependencies:
+      '@better-scroll/shared-utils': 2.5.1
+    dev: false
+
+  /@better-scroll/shared-utils/2.5.1:
+    resolution: {integrity: sha512-AplkfSjXVYP9LZiD6JsKgmgQJ/mG4uuLmBuwLz8W5OsYc7AYTfN8kw6GqZ5OwCGoXkVhBGyd8NeC4xwYItp0aw==}
+    dev: false
 
   /@cspotcode/source-map-support/0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1601,13 +1613,13 @@ packages:
       eslint: 8.28.0
     dev: false
 
-  /eslint-config-turbo/1.8.6_eslint@8.28.0:
-    resolution: {integrity: sha512-LSMqrHmFeQcYRuBnzrzw+B2bJ3+o8wxPkRwfK0Y+SSLsq2F/niRJ2kqB8j4uOSCfxybHHpFEB2CgUpQiiyfeoQ==}
+  /eslint-config-turbo/1.8.8_eslint@8.28.0:
+    resolution: {integrity: sha512-+yT22sHOT5iC1sbBXfLIdXfbZuiv9bAyOXsxTxFCWelTeFFnANqmuKB3x274CFvf7WRuZ/vYP/VMjzU9xnFnxA==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
       eslint: 8.28.0
-      eslint-plugin-turbo: 1.8.6_eslint@8.28.0
+      eslint-plugin-turbo: 1.8.8_eslint@8.28.0
     dev: false
 
   /eslint-plugin-svelte3/4.0.0_zo3e5nvszeelp7ldo26dn5nvlq:
@@ -1619,8 +1631,8 @@ packages:
       eslint: 8.28.0
       svelte: 3.57.0
 
-  /eslint-plugin-turbo/1.8.6_eslint@8.28.0:
-    resolution: {integrity: sha512-LieXzur+4XtIsLst8GdupTMhvGn2ebFetG3AVErh2jHBy1EobPHbatjcdNZQMy5EsdG35axQVB8KFF3jo4u+OQ==}
+  /eslint-plugin-turbo/1.8.8_eslint@8.28.0:
+    resolution: {integrity: sha512-zqyTIvveOY4YU5jviDWw9GXHd4RiKmfEgwsjBrV/a965w0PpDwJgEUoSMB/C/dU310Sv9mF3DSdEjxjJLaw6rA==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:

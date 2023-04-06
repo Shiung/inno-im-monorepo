@@ -8,9 +8,9 @@ let open: boolean = true
 <Button on:click={() => open = true}> open </Button>
 
 <BottomSheet dragBar bind:open={open}
-  initHeight={() => 400}
-  maxHeight={(inner) => inner - 200}
-  onDismiss={() => console.log('onDismiss')}
+  initHeight={() => 600}
+  maxHeight={(innerHeight) => innerHeight - 50}
+  onDismiss={() => open = false}
 >
   <Header title='title slot' class='bg-orange-600'>
     <button on:click={() => console.log('header left')}> this </button>
