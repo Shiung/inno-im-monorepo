@@ -15,7 +15,7 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "lint": "prettier --check --ignore-path=../../.prettierignore . && eslint \"src\"",
     "format": "prettier --write --ignore-path=../../.prettierignore .",
-    "_dev": "vite dev --port 5173 --open",
+    "_dev": "vite dev --port 5173 --open --host",
     "_build": "vite build"
   },
   "dependencies": {
