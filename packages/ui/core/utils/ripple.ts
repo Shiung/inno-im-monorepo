@@ -1,6 +1,3 @@
-import { twMerge } from 'tailwind-merge'
-import type { InitAttr } from './types'
-
 export const createRipple = (event: any, ripple: boolean | string) => {
   const button = event.currentTarget
 
@@ -25,14 +22,3 @@ export const createRipple = (event: any, ripple: boolean | string) => {
 }
 
 export const hasRipple = (ripple?: boolean | string) => typeof ripple === 'boolean' || typeof ripple === 'string'
-
-export const initAttrMerge = (...props: InitAttr[]): InitAttr => {
-  const merged: InitAttr = {}
-
-  for (const prop of props) {
-    merged.className = twMerge(merged.className, prop.className)
-    merged.ripple = hasRipple(prop.ripple) ? prop.ripple : merged.ripple
-  }
-
-  return merged
-}

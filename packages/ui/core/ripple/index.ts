@@ -10,14 +10,10 @@ export interface IComponentAttr {
   ripple?: boolean | string
 }
 
-export const createButton = <T>(initVariants?: Variants<T, IComponentAttr>) => {
+export const createRipple = <T>(initVariants?: Variants<T, IComponentAttr>) => {
   return createInstance({
     baseComponent: Base,
     defaultAttr: {
-      className: [
-        'inline-flex items-center justify-center px-[15px] h-[32px] rounded-[5px] text-[12px] ',
-        'bg-[#4C9EEA] text-[white] hover:bg-[#7EB8EE]',
-      ].join(' '),
       ripple: true
     },
     initVariants,
