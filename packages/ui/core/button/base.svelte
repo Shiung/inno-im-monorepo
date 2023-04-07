@@ -1,11 +1,15 @@
 <script lang='ts'>
+import UAParser from 'ua-parser-js'
 import { createEventDispatcher } from 'svelte'
 import { twMerge } from 'tailwind-merge'
-const dispatch = createEventDispatcher()
-
 import Loading from './loading.svelte'
 
 import { createRipple } from '../utils'
+
+const ua = new UAParser()
+$: isMobile = ua.getDevice().type === 'mobile'
+
+const dispatch = createEventDispatcher()
 
 export let loading: boolean = false
 export let ripple: boolean | string = false
@@ -26,8 +30,9 @@ const handleClick = (e: any) => {
 
 <button {...$$restProps} {disabled}
   class={twMerge(
-    'relative overflow-hidden cursor-pointer',
+    'relative overflow-hidden',
     disabled && 'cursor-auto',
+    isMobile && 'cursor-auto',
     _variant?.className, $$props.class
   )}
   on:click={handleClick}

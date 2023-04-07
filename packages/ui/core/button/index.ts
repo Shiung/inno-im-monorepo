@@ -1,46 +1,29 @@
+import { twMerge } from 'tailwind-merge'
 import Base from './base.svelte'
-import { initAttrMerge } from './utils'
+import { hasRipple } from '../utils'
+import createInstance from '../utils/createInstance'
 
-import type { ComponentConstructorOptions } from 'svelte'
-import type { InitAttr, Variants } from './types'
+import type { Variants } from '../utils/createInstance'
 
-
-const defaultAttr: InitAttr = {
-  className: [
-    'inline-flex items-center justify-center px-[15px] h-[32px] rounded-[5px] text-[12px] ',
-    'bg-[#4C9EEA] text-[white] hover:bg-[#7EB8EE]',
-  ].join(' '),
-  ripple: true
+export interface IComponentAttr {
+  className?: string
+  ripple?: boolean | string
 }
 
-const createInstance = <V>(def: Variants<V>) => {
-  if (typeof window === 'undefined') return Base
-
-  class Button extends Base {
-    constructor(options: ComponentConstructorOptions<Record<string, any>>) {
-      super({...options, props: { ...options.props, variants: def }})
-    }
-  }
-  return Button
+export const createButton = <T>(initVariants?: Variants<T, IComponentAttr>) => {
+  return createInstance({
+    baseComponent: Base,
+    defaultAttr: {
+      className: [
+        'inline-flex items-center justify-center px-[15px] h-[32px] rounded-[5px] text-[12px] ',
+        'bg-[#4C9EEA] text-[white] hover:bg-[#7EB8EE]',
+      ].join(' '),
+      ripple: true
+    },
+    initVariants,
+    attrMerge: (def, item) => ({
+      className: twMerge(def.className, item.className),
+      ripple: hasRipple(item.ripple) ? item.ripple : def.ripple
+    })
+  })
 }
-
-const mergeAttr = <V>(initVariants?: Variants<V>) => {
-  const variants: any = {
-    primary: { ...defaultAttr, ...initVariants?.primary },
-    ...initVariants
-  }
-
-  if (!initVariants) return variants
-
-  for (const [variant, variantAttr] of Object.entries(variants)) {
-    variants[variant] = initAttrMerge(defaultAttr, variantAttr as InitAttr)
-  }
-  return variants
-}
-
-export const createButton = <V>(initVariants?: Variants<V>) => {
-  const variants = mergeAttr(initVariants)
-
-  return createInstance(variants)
-}
-

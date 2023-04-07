@@ -1,41 +1,25 @@
+import { twMerge } from 'tailwind-merge'
 import Base from './base.svelte'
-import initAttrMerge from './initAttrMerge'
+import { hasRipple } from '../utils'
+import createInstance from '../utils/createInstance'
 
-import type { ComponentConstructorOptions } from 'svelte'
-import type { InitAttr, Variants } from './types'
+import type { Variants } from '../utils/createInstance'
 
-
-const defaultAttr: InitAttr = {
-  ripple: true
+export interface IComponentAttr {
+  className?: string
+  ripple?: boolean | string
 }
 
-const createInstance = <V>(def: Variants<V>) => {
-  if (typeof window === 'undefined') return Base
-
-  class Ripple extends Base {
-    constructor(options: ComponentConstructorOptions<Record<string, any>>) {
-      super({...options, props: { ...options.props, variants: def }})
-    }
-  }
-  return Ripple
-}
-
-const mergeAttr = <V>(initVariants?: Variants<V>) => {
-  const variants: any = {
-    primary: { ...defaultAttr, ...initVariants?.primary },
-    ...initVariants
-  }
-
-  if (!initVariants) return variants
-
-  for (const [variant, variantAttr] of Object.entries(variants)) {
-    variants[variant] = initAttrMerge(defaultAttr, variantAttr as InitAttr)
-  }
-  return variants
-}
-
-export const createRipple = <V>(initVariants?: Variants<V>) => {
-  const variants = mergeAttr(initVariants)
-
-  return createInstance(variants)
+export const createRipple = <T>(initVariants?: Variants<T, IComponentAttr>) => {
+  return createInstance({
+    baseComponent: Base,
+    defaultAttr: {
+      ripple: true
+    },
+    initVariants,
+    attrMerge: (def, item) => ({
+      className: twMerge(def.className, item.className),
+      ripple: hasRipple(item.ripple) ? item.ripple : def.ripple
+    })
+  })
 }

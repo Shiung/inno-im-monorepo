@@ -2,5 +2,4 @@
 import { Ripple } from 'ui'
 </script>
 
-<Ripple on:click={() => console.log('primary clicked')}> primary </Ripple>
-
+<Ripple on:click={() => console.log('primary clicked')} > primary </Ripple>
