@@ -22,7 +22,6 @@ const createInstance = <T, IComponentAttr>(props: ICreateInstance<T, IComponentA
     if (!initVariants) return
 
     for (const [variant, variantAttr] of Object.entries(initVariants)) {
-      console.log('variant', variant, variantAttr)
       merged[variant] = attrMerge(defaultAttr || {} as IComponentAttr, variantAttr)
     }
   }

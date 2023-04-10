@@ -3,7 +3,7 @@ export default {
   button: () => import('./components/button.svelte'),
   ripple: () => import('./components/ripple.svelte'),
   bottomSheet: () => import('./components/bottomSheet.svelte'),
+  bottomNavigation: () => import('./components/bottomNavigation/index.svelte'),
   badget: () => import('./components/badget.svelte'),
   localeChange: () => import('./components/localeChange.svelte')
 }
-
