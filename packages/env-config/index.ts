@@ -11,7 +11,8 @@ const getDevConfig = (env: ENV): WindowEnv => {
     BE_CDN_URL: 'https://be-source.dev.mppwr.com',
     DEPLOY_ENV: env,
     RESOURCE_URL: '',
-    ECHO_URL: 'https://echo.zuplo.io'
+    ECHO_URL: 'https://echo.zuplo.io',
+    IM_BE_URL: 'http://172.28.40.157:3000/im/v1'
   }
 }
 

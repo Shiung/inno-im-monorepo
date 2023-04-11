@@ -30,6 +30,7 @@ export default defineConfig({
     alias: {
       $assets: resolve('./src/assets'),
       $lib: resolve('./src/lib'),
+      $containers: resolve('./src/containers'),
       $pages: resolve('./src/pages'),
       $stores: resolve('./src/stores')
     }
