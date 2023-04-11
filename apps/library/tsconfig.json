@@ -9,6 +9,7 @@
     "paths": {
       "$assets/*": ["./src/assets/*"],
       "$lib/*": ["./src/lib/*"],
+      "$containers/*": ["./src/containers/*"],
       "$pages/*": ["./src/pages/*"],
       "$stores": ["./src/stores"],
       "$stores/*": ["./src/stores/*"]

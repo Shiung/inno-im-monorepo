@@ -23,4 +23,5 @@ export interface WindowEnv {
   DEPLOY_ENV: string
   RESOURCE_URL: string
   ECHO_URL: string
+  IM_BE_URL: string
 }

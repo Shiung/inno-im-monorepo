@@ -3,6 +3,9 @@ import Entry from '$pages/entry.svelte'
 
 const routes = {
   '/': Entry,
+  '/squire': wrap({
+    asyncComponent: () => import('$pages/squire/index.svelte')
+  }),
   '/uikit': wrap({
     asyncComponent: () => import('$pages/uikit/index.svelte')
   }),
