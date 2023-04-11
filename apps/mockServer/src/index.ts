@@ -4,7 +4,8 @@ import cors from 'cors'
 import type { IMockData, IMethod } from'./types'
 
 const moduleDict: { [apiUrl: string]: () => Promise<any>} = {
-  ECHO_URL: () => import('./mock/echo')
+  ECHO_URL: () => import('./mock/echo'),
+  IM_BE_URL: () => import('./mock/im')
 }
 
 let app = express()
@@ -48,7 +49,7 @@ app.all('*', async (req, res) => {
     const mockData = getMockData(mod.default, method, path)
     if (!mockData?.response) return res.status(404).json({ data: 'no such MockData' })
   
-    res.json(mockData.response())
+    res.json(mockData.response(req))
   }, mockData.timeout || 200)
 })
 
