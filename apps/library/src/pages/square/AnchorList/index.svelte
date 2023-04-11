@@ -1,13 +1,20 @@
 <script lang='ts'>
-import { onMount } from 'svelte'
-import { fetchArchorList } from '../service'
+import Anchor from './Anchor'
+import { fetchArchors } from '../service'
 
-onMount(() => {
-  fetchArchorList()
-})
+const archorsPromise = fetchArchors()
 
 </script>
 
 <div>
  anchor
+  {#await archorsPromise}
+    <div> loading... </div>
+  {:then anchors}
+    {#each anchors?.list as anchor}
+
+      <Anchor anchor={anchor} />
+
+    {/each}
+  {/await}
 </div>

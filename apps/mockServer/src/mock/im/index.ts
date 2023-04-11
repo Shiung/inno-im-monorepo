@@ -3,8 +3,7 @@ import { mock, Random } from 'mockjs'
 import type { IMockData } from '../../types'
 
 Random.extend({
-  housename: function(date) {
-    console.log('random extend date', date)
+  housename: function() {
     const names = ['球球直播', '娟娟直播', '糖果直播', '君君直播']
     return this.pick(names)
   },

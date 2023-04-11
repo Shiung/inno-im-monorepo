@@ -1,7 +1,9 @@
 import { im } from 'api'
+
+import type { IWebAnchors } from 'api/im/types'
 import type { Request } from 'api/types'
 
-export const fetchArchorList = async (options?: Request) => {
+export const fetchArchors = async (options?: Request): Promise<IWebAnchors> => {
   const res = await im.webAnchors(options)
-  console.log(res)
+  return res?.data
 }

@@ -1,12 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 
+import moduleDict from './moduleDict'
 import type { IMockData, IMethod } from'./types'
-
-const moduleDict: { [apiUrl: string]: () => Promise<any>} = {
-  ECHO_URL: () => import('./mock/echo'),
-  IM_BE_URL: () => import('./mock/im')
-}
 
 let app = express()
 app.use(cors())
