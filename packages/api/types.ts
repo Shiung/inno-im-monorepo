@@ -12,9 +12,9 @@ export type IApiInit = {
   mock?: IMockData
 }
 
-export type IApi = (o?: RequestWrap) => Promise<any>
+export type IApi = (o?: Request) => Promise<any>
 
-export type RequestWrap = {
+export type Request = {
   [k in keyof RequestInit]: k extends 'body' ? { [key: string]: any } : RequestInit[k]
 } & {
   params?: { [key: string]: string }

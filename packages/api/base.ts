@@ -1,7 +1,7 @@
 import { getConfig } from 'env-config'
 import type { WindowEnv } from 'env-config/types'
 
-import type { IApiInit, RequestWrap } from './types'
+import type { IApiInit, Request } from './types'
 
 const mock = localStorage.getItem('mock') === 'true' || false
 const MOCK_SERVER = 'http://localhost:5174'
@@ -36,7 +36,7 @@ export default class Base {
 
   protected apiGenerator({ url, method }: IApiInit) {
 
-    return async (request?: RequestWrap) => {
+    return async (request?: Request) => {
       const _method = request?.method || method || 'get'
       const _request = { ...request, body: null }
 
