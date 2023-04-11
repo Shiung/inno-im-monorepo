@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { BottomNavigation } from 'ui'
 
-let ripple: boolean | string = '#4c9eea'
+let color: string = '#4c9eea'
 let icons = [
   {
     icon: () => import('./announcement.svg'),
@@ -32,4 +32,4 @@ let icons = [
 
 </script>
 
-<BottomNavigation icons={icons} active={1} color='#4c9eea' ripple='#4c9eea' />
+<BottomNavigation icons={icons} active={5} color={color} ripple={color} />

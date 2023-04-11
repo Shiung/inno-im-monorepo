@@ -19,23 +19,24 @@ const fetchIcon = async () => {
 let promise = fetchIcon()
 
 let dom: HTMLButtonElement
-const onClick = (e) => {
-  console.log(e, dom.getBoundingClientRect())
-  dispatch('click')
+const onClick = () => {
+  const clientRect = dom.getBoundingClientRect()
+  const middlePosition = clientRect.left + clientRect.width / 2
+  if (active) return
+  dispatch('click', middlePosition)
 }
 
 </script>
 
 <Ripple 
-  class={twMerge('flex flex-col flex-1 items-center',
-    active && 'overflow-visible'
+  class={twMerge('flex flex-col flex-1 items-center rounded-[10px]',
   )}
   ripple={!active && ripple} on:click={onClick}
   bind:dom={dom}
 >
-  <div style:transform={active && 'scale(1.5) translateY(-5px)'}>
+  <div style:transform={active ? 'scale(1.5) translateY(-5px)' : ''}>
   {#await promise then Icon}
-    <Icon class='mt-2' width={20} height={20} fill={active ? color : '#BBBBBB'} />
+    <Icon class='mt-[15px]' width={20} height={20} fill={active ? color : '#BBBBBB'} />
   {/await}
   </div>
 
