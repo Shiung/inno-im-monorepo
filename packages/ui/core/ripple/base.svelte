@@ -13,12 +13,13 @@ const dispatch = createEventDispatcher()
 export let ripple: boolean | string = false
 export let variant: keyof typeof $$props.variants = 'primary'
 export let disabled: boolean = false
+export let dom: HTMLButtonElement
 
 $: _variant = $$props.variants && $$props.variants[variant]
 
 const handleClick = (e: any) => {
   const _ripple = ripple || _variant?.ripple
-  if (_ripple) createRipple(e, _ripple)
+  if (ripple !== false && _ripple) createRipple(e, _ripple)
   dispatch('click')
 }
 
@@ -33,6 +34,7 @@ const handleClick = (e: any) => {
     _variant?.className, $$props.class
   )}
   on:click={handleClick}
+  bind:this={dom}
 >
 
   <slot></slot>
