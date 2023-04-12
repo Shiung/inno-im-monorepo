@@ -45,7 +45,7 @@ export default class Base {
         return request?.body
       }
 
-      const _url = `${this.baseUrl}${url}${this.genParams(request?.params)}`
+      const _url = `${this.baseUrl}${url}${this.genParams(request?.query)}`
 
       const res = await fetch(_url, {
         ..._request,
