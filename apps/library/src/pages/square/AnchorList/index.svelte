@@ -1,4 +1,5 @@
 <script lang='ts'>
+import { twMerge } from 'tailwind-merge'
 import { t } from '$stores'
 
 import { Ripple } from 'ui'
@@ -18,7 +19,7 @@ const archorBgs = [ bg0, bg1, bg2, bg3 ]
 
 </script>
 
-<div data-cid='AnchorList' class='bg-white rounded-[20px] pt-[16px]'>
+<div data-cid='AnchorList' class={twMerge('bg-white rounded-[20px] pt-[16px]', $$props.class)}>
   <div class='px-[16px] flex items-center justify-between'>
     <div class='text-[18px] font-semibold'> {$t('anchor.finding')} </div>
 

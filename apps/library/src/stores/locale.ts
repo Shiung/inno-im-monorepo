@@ -4,7 +4,7 @@ import localeFetcher from '../locales/fetcher'
 
 import type { ILanguages } from 'env-config/types'
 
-type ITransStore = (
+export type ITransStore = (
   key: string,
   replace?: {
     [key: string]: string

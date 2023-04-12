@@ -8,8 +8,10 @@ export let liveStatus: IWebAnchor['liveStatus']
 
 </script>
 
-{#if liveStatus === 2}
-  <Badget variant='onLine'> {$t('anchor.online')} </Badget>
-{:else}
-  <div class='h-[20px]' />
-{/if}
+<div>
+  {#if liveStatus === 2}
+    <Badget class='inline-flex' variant='onLine'> {$t('anchor.online')} </Badget>
+  {:else}
+    <div class='h-[20px]' />
+  {/if}
+</div>

@@ -3,10 +3,12 @@ import HeaderNavigation from '$containers/HeaderNavigation'
 import LiveStreaming from '$containers/LiveStreaming'
 
 import AnchorList from './AnchorList'
+import Expert from './Expert'
 </script>
 
-<div>
+<div class='space-y-[10px]'>
   <HeaderNavigation />
-  <LiveStreaming class='mb-[8px]' />
+  <LiveStreaming />
   <AnchorList />
+  <Expert />
 </div>
