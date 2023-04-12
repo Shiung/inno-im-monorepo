@@ -10,7 +10,7 @@ $: isMobile = ua.getDevice().type === 'mobile'
 
 const dispatch = createEventDispatcher()
 
-export let ripple: boolean | string = false
+export let ripple: boolean | string = null
 export let variant: keyof typeof $$props.variants = 'primary'
 export let disabled: boolean = false
 export let dom: HTMLButtonElement

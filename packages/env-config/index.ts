@@ -9,6 +9,7 @@ const getDevConfig = (env: ENV): WindowEnv => {
     ODDS_BOARD_API_URL: 'https://api-dev.kioga.site/product',
     ODDS_BOARD_WEBSOCKET_URL: 'wss://api-dev.kioga.site/product',
     BE_CDN_URL: 'https://be-source.dev.mppwr.com',
+    VENDERID: 'vd004',
     DEPLOY_ENV: env,
     RESOURCE_URL: '',
     ECHO_URL: 'https://echo.zuplo.io',

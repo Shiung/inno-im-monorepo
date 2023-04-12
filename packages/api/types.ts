@@ -17,6 +17,6 @@ export type IApi = (o?: Request) => Promise<any>
 export type Request = {
   [k in keyof RequestInit]: k extends 'body' ? { [key: string]: any } : RequestInit[k]
 } & {
-  params?: { [key: string]: string }
+  query?: { [key: string]: string }
 }
 

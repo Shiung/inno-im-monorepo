@@ -4,8 +4,8 @@ module.exports = {
     './src/**/*.{html,js,svelte,ts}',
     './node_modules/ui/**/*.{js,svelte,ts}',
   ],
-  theme: {
-    extend: {}
-  },
+  presets: [
+    require('./tailwind.present.cjs')
+  ],
   plugins: []
 };

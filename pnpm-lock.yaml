@@ -34,6 +34,9 @@ importers:
       svelte-spa-router:
         specifier: ^3.3.0
         version: 3.3.0
+      tailwind-merge:
+        specifier: ^1.10.0
+        version: 1.10.0
       ui:
         specifier: workspace:*
         version: link:../../packages/ui

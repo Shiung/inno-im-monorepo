@@ -4,31 +4,27 @@ import Item from './Item.svelte'
 import hill from './images/iconSelect.png'
 
 interface IIcon {
+  id: string
   icon: () => Promise<any>
   text: string | number
+  disabled?: boolean
   onClick: () => void
 }
 
 export let icons: IIcon[]
 export let ripple: boolean | string
-export let active: string | number
+export let active: string | undefined
 export let color: string
 
 const hillWidth = 125
 let hillLeft: number
 let hillTop: number = 15
 
-const onClick = (e: CustomEvent, item: IIcon) => {
-  active = item.text
-  hillLeft = e.detail - hillWidth / 2
-  item.onClick()
-}
-
 let items: HTMLDivElement
 const calculateHill = (items: HTMLDivElement) => {
   if (!items) return
 
-  const activedIdx = icons.findIndex(item => item.text === active)
+  const activedIdx = icons.findIndex(item => item.id === active)
   const actived = items?.children[activedIdx]?.getBoundingClientRect()
   if (!actived) return
 
@@ -49,16 +45,15 @@ const resizeObserver = new ResizeObserver((entries) => {
 })
 
 
+$: if (active) calculateHill(items)
+
 onMount(() => {
-  calculateHill(items)
   resizeObserver.observe(container)
 })
 
 onDestroy(() => {
   resizeObserver.unobserve(container)
 })
-
-
 
 </script>
 
@@ -71,16 +66,18 @@ onDestroy(() => {
       alt='' 
     />
 
-    <div class='flex justify-around' style:box-shadow='0 0 10px 0 rgba(0,0,0,.1)' bind:this={items}>
+    <div class='flex justify-around bg-white' style:box-shadow='0 0 10px 0 rgba(0,0,0,.1)' bind:this={items}>
       {#each icons as item}
+
         <Item
           color={color}
-          ripple={ripple}
-          active={String(item.text) === String(active)}
+          ripple={!item.disabled && ripple}
+          active={item.id === active}
           icon={item.icon} 
           text={String(item.text)}
-          on:click={(e) => onClick(e, item)}
+          on:click={!item.disabled && item.onClick}
         />
+
       {/each}
     </div>
   </div>

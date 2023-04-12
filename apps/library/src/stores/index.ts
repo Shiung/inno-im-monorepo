@@ -1,4 +1,2 @@
-export { t, locale } from './locale'
-
-
+export { t, locale, type ITransStore } from './locale'
 
