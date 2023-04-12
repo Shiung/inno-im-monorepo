@@ -3,7 +3,7 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#4C9EEA'
+          DEFAULT: 'rgb(var(--im-monorepo-primary))'
         },
       },
     }

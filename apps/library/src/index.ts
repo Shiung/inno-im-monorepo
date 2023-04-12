@@ -1,5 +1,6 @@
 import './library.css'
 import './common.css'
+import './initVender'
 
 // Reexport your entry components here
 export { default as App } from './App.svelte'

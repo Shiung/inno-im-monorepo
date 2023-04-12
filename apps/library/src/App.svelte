@@ -6,6 +6,6 @@ $: console.log('=========[im-library] location==========', $location)
 
 </script>
 
-<main>
+<main class='im-library'>
   <Router {routes} />
 </main>

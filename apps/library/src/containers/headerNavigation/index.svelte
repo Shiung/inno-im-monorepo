@@ -4,7 +4,7 @@ import BonusPoint from './BonusPoint/index.svelte'
 </script>
 
 <div>
-  <div class='flex fixed w-full px-[8px] justify-between items-center h-[44px] im-shadow'>
+  <div class='flex fixed w-full px-[8px] justify-between items-center h-[44px] im-shadow bg-white z-10'>
     <BallSelection />
     <BonusPoint />
   </div>

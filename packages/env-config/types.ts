@@ -16,10 +16,22 @@ export type ILanguages = typeof languages[number]
 
 export type ENV = 'dev' | 'stg' | 'uat' | 'prod'
 
+export type VENDERID =
+  'vd001'
+| 'vd002'
+| 'vd003'
+| 'vd004'
+| 'vd005'
+| 'vd006'
+| 'vd007'
+| 'vd008'
+| 'vd009'
+
 export interface WindowEnv {
   ODDS_BOARD_API_URL: string
   ODDS_BOARD_WEBSOCKET_URL: string
   BE_CDN_URL: string
+  VENDERID: VENDERID
   DEPLOY_ENV: string
   RESOURCE_URL: string
   ECHO_URL: string
