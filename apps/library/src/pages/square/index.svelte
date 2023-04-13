@@ -3,23 +3,37 @@ import { params } from 'svelte-spa-router'
 import HeaderNavigation from '$containers/HeaderNavigation'
 import LiveStreaming from '$containers/LiveStreaming'
 
-import AnchorList from './AnchorList'
-import Expert from './Expert'
+import AnchorBlock from './AnchorBlock'
+import ExpertBlock from './ExpertBlock'
 
-import { SID } from '$types'
+import { convertSid, SID } from 'utils'
 
-const convertSid = (_sid: string): SID => {
-  if (_sid === 'all') return SID.all
-  return Number(_sid)
-  
-}
 $: sid = convertSid($params?.sid)
+
+const headNavIcons = [
+  {
+    sid: SID.soccer,
+    onClick: () => console.log(SID.soccer)
+  },
+  {
+    sid: SID.basketball,
+    onClick: () => console.log(SID.basketball)
+  },
+  {
+    sid: SID.tennis,
+    onClick: () => console.log(SID.tennis)
+  },
+  {
+    sid: SID.baseball,
+    onClick: () => console.log(SID.baseball)
+  },
+]
 
 </script>
 
 <div class='space-y-[10px]'>
-  <HeaderNavigation active={sid} />
+  <HeaderNavigation active={sid} icons={headNavIcons} />
   <LiveStreaming />
-  <AnchorList />
-  <Expert />
+  <AnchorBlock />
+  <ExpertBlock />
 </div>

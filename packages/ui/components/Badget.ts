@@ -2,12 +2,19 @@ import { createBadget } from '../core/badget'
 
 export default createBadget({
   primary: {
-    className: '',
+    className: 'text-[10px] h-[15px] rounded-[4px]',
   },
   onLine: {
     className: 'inline-flex items-center bg-[#80B100] rounded-[5px] h-[20px] px-[9px]'
   },
   hot: {
-    background: 'linear-gradient(to right, #F00, #FF0)'
+    className: 'font-semibold text-[10px] h-[15px] rounded-[4px] bg-[#ECE9EA] text-[#F03131]',
+  },
+  mega: {
+    className: 'font-semibold text-[10px] h-[15px] rounded-[4px] bg-[#F03131] text-white'
+  },
+  crazy: {
+    className: 'font-semibold text-[10px] h-[15px] rounded-[4px] text-white',
+    background: 'linear-gradient(to right, #F58918, #F03131)'
   }
 })

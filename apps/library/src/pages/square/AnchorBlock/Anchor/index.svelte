@@ -3,7 +3,7 @@ import type { IWebAnchor } from 'api/im/types'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 
-import Status from './Status.svelte'
+import AnchorStatus from '$containers/AnchorStatus'
 
 import Smile from '../images/smile.svg'
 
@@ -17,7 +17,7 @@ export let bg: string
 >
   <div class='text-primary'> { anchor.houseName } </div>
   <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
-  <Status liveStatus={anchor.liveStatus} />
+  <AnchorStatus liveStatus={anchor.liveStatus} />
 
   <div class='flex flex-1 justify-between items-end'>
     <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-primary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'>

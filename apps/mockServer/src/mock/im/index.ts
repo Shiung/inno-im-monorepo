@@ -38,15 +38,15 @@ export default [
               "releaseTime": 1667504351531,
               "closeTime": 1667504371531,
               "market": "獨贏",
-              "hotStreak": Random.integer(0, 12),
-              "hitRate": Random.integer(60, 100),
+              "hotStreak": () => Random.integer(0, 12),
+              "hitRate": () => Random.integer(60, 100),
               "articleId": "@word",
-              "articleStatus": Random.integer(1, 2),
+              "articleStatus": () => Random.integer(1, 2),
               "title": "@ctitle",
               "homeName": "@cname",
               "awayName": "@cname",
               "leagueName": "@cname",
-              "matchStatus": Random.integer(1, 8),
+              "matchStatus": () => Random.integer(1, 8),
               "matchTime": 1667504361531
           }
         ]

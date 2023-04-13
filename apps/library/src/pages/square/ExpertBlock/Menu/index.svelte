@@ -12,11 +12,11 @@ interface IItem {
 
 const items: IItem[] = [
   { i18n: 'export.hit', onClick: () => console.log('export.hit') },
-  { i18n: 'export.winningStreak', onClick: () => console.log('export.winningStreak') },
+  { i18n: 'export.winningStreakKing', onClick: () => console.log('export.winningStreakKing') },
   { i18n: 'export.followUp', onClick: () => console.log('export.followUp') },
 ]
 
-let actived = 'export.winningStreak'
+let actived = 'export.winningStreakKing'
 
 const onClick = (item: IItem) => {
   actived = item.i18n
@@ -46,7 +46,7 @@ onMount(() => {
 </script>
 
 <div class={twMerge('relative flex flex-col justify-center', $$props.class)}>
-  <div class='flex w-full items-center justify-around' bind:this={itemsConteiner}>
+  <div class='flex w-full items-center justify-around mt-[8px]' bind:this={itemsConteiner}>
     {#each items as item}
 
       <Ripple class={twMerge(

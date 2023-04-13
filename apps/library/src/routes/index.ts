@@ -16,11 +16,17 @@ const routes = {
       }
     ]
   }),
-  '/anchor': wrap({
+  '/anchor/:sid?': wrap({
     asyncComponent: () => import('$pages/anchor/index.svelte'),
     userData: {
       bottomNav: 'anchor'
     },
+    conditions: [
+      (detail) => {
+        if (!detail?.params?.sid) replace('/anchor/all')
+        return true
+      }
+    ]
   }),
   '/uikit': wrap({
     asyncComponent: () => import('$pages/uikit/index.svelte')

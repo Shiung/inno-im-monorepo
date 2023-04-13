@@ -7,7 +7,7 @@ import type { ILanguages } from 'env-config/types'
 export type ITransStore = (
   key: string,
   replace?: {
-    [key: string]: string
+    [key: string]: string | number
   }
 ) => string
 

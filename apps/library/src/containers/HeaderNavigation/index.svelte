@@ -2,15 +2,17 @@
 import BallSelection from './BallSelection/index.svelte'
 import BonusPoint from './BonusPoint/index.svelte'
 
-import type { SID } from '$types'
+import type { SID } from 'utils/types'
+import type { IIcon } from './types'
 
 export let active: SID
+export let icons: IIcon[]
 
 </script>
 
 <div>
   <div class='flex fixed w-full px-[8px] justify-between items-center h-[44px] im-shadow bg-white z-10'>
-    <BallSelection active={active} />
+    <BallSelection active={active} icons={icons} />
     <BonusPoint />
   </div>
 

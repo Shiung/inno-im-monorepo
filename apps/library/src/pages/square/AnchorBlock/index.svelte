@@ -12,10 +12,10 @@ import bg1 from './images/bg_style1_1.webp'
 import bg2 from './images/bg_style1_2.webp'
 import bg3 from './images/bg_style1_3.webp'
 
-import { fetchArchors } from '../service'
+import { fetchAnchors } from '../service'
 
-const archorsPromise = fetchArchors({ query: { pageSize: '4' } })
-const archorBgs = [ bg0, bg1, bg2, bg3 ]
+const anchorsPromise = fetchAnchors({ query: { pageSize: '4' } })
+const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 
 </script>
 
@@ -30,12 +30,12 @@ const archorBgs = [ bg0, bg1, bg2, bg3 ]
   </div>
 
   <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
-    {#await archorsPromise}
+    {#await anchorsPromise}
       <Loading />
     {:then anchors}
 
       {#each anchors?.list as anchor, idx}
-        <Anchor anchor={anchor} bg={archorBgs[idx % archorBgs.length]} />
+        <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
       {/each}
 
     {/await}
