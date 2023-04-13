@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run --concurrency 15 dev",
     "lint": "turbo run lint",
     "format": "prettier --write ."
   },
