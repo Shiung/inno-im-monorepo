@@ -22,16 +22,16 @@ let hillLeft: number
 let showHill: boolean
 
 let items: HTMLDivElement
-const calculateHill = (items: HTMLDivElement) => {
+const calculateHill = (active: string | undefined, items: HTMLDivElement) => {
   if (!items) return
 
   const activedIdx = icons.findIndex(item => item.id === active)
   const actived = items?.children[activedIdx]?.getBoundingClientRect()
+
   if (!actived) {
     showHill = false
     return 
   }
-
 
   const middle = actived.left + actived.width / 2 
   hillLeft = middle - hillWidth / 2
@@ -50,7 +50,7 @@ const resizeObserver = new ResizeObserver((entries) => {
 })
 
 
-$: if (active) calculateHill(items)
+$: calculateHill(active, items)
 
 onMount(() => {
   resizeObserver.observe(container)
