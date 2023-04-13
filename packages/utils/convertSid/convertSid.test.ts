@@ -11,13 +11,13 @@ test('convert to ball sid', () => {
   expect(soccer).toBe(SID.soccer)
 
   const basketball = convertSid('2')
-  expect(basketball).toBe(SID.basketBall)
+  expect(basketball).toBe(SID.basketball)
 
   const tennis = convertSid('3')
   expect(tennis).toBe(SID.tennis)
 
   const baseball = convertSid('4')
-  expect(baseball).toBe(SID.baseBall)
+  expect(baseball).toBe(SID.baseball)
 })
 
 test('Not All and Not Number is going to convert to NaN', () => {

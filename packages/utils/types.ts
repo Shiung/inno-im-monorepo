@@ -1,7 +1,7 @@
 export enum SID {
   all = 'all',
   soccer = 1,
-  basketBall = 2,
+  basketball = 2,
   tennis = 3,
-  baseBall = 4
+  baseball = 4
 }

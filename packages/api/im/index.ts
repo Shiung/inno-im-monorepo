@@ -9,6 +9,7 @@ class IM extends Base {
   webAnchorsDetail = this.apiGenerator({ url: '/anchor/web-anchor/detail' })
   webAnchorsMatchList = this.apiGenerator({ url: '/anchor/web-anchor/match-list' })
   webAnchorsLife = this.apiGenerator({ url: '/anchor/web-anchor/life' })
+  expertPredictions = this.apiGenerator({ url: '/expert/predictions' })
 }
 
 export default new IM()

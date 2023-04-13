@@ -11,7 +11,7 @@ Random.extend({
   }
 })
 
-export const genAnchorList = (size: number) => Array.from({ length: size || 10 }, () => ({
+export const genAnchorList = (size: number) => Array.from({ length: size || 20 }, () => ({
   "attentionStatus": 0,
   "fansCount": () => Random.natural(0, 10000000),
   "houseId": () => String(Random.natural(0, 99999)),
