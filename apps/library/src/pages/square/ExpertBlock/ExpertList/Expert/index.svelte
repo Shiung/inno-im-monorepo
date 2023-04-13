@@ -10,8 +10,8 @@ export let prodiction: IExpertPrediction
 </script>
 
 <div>
-  <div class='h-[80px] grid grid-rows-3 grid-cols-[2fr_1fr]'>
-    <div class='row-span-2'>
+  <div class='h-[65px] flex justify-between'>
+    <div class='flex flex-col justify-between'>
       <div class='grid grid-cols-[44px_auto]'>
         <img class='rounded-full border-[3px] border-white im-shadow' src={prodiction.expertImage} alt='' />
         <div>
@@ -20,23 +20,23 @@ export let prodiction: IExpertPrediction
         </div>
       </div>
 
-    </div>
-
-    <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('export.limitFree')} </Button>
-
-
-    <div class='row-span-2 self-end self-justify-end flex justify-between w-full'>
-      <div class='text-[10px]'>
-        <span class='text-[#666666]'> {$t('export.hitRate')} </span>
-        <span class='text-[26px] font-semibold'> {prodiction.hitRate} </span>
-        <span> % </span>
+      <div class='flex items-center space-x-[4px]'>
+        <Badget> {prodiction.market} </Badget> 
+        <Strack streak={prodiction.hotStreak} />
       </div>
     </div>
 
-    <div class='flex items-center space-x-[4px]'>
-      <Badget> {prodiction.market} </Badget> 
-      <Strack streak={prodiction.hotStreak} />
+    <div class='flex flex-col justify-between'>
+      <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('export.limitFree')} </Button>
+
+      <div class='flex text-[10px] items-end'>
+        <span class='text-[#666666]'> {$t('export.hitRate')} </span>
+        <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
+        <span> % </span>
+      </div>
     </div>
   </div>
+
+  <div> 1 </div>
 
 </div>
