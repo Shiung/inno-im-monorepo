@@ -16,6 +16,12 @@ const routes = {
       }
     ]
   }),
+  '/anchor': wrap({
+    asyncComponent: () => import('$pages/anchor/index.svelte'),
+    userData: {
+      bottomNav: 'anchor'
+    },
+  }),
   '/uikit': wrap({
     asyncComponent: () => import('$pages/uikit/index.svelte')
   }),

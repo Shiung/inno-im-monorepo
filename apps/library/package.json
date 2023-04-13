@@ -10,8 +10,8 @@
     "locales": "zx ./env_scripts/locales.mjs",
     "preview": "vite preview",
     "release": "zx ./env_scripts/releaseLibrary.mjs",
-    "test": "vitest run src",
-    "test:watch": "vitest src",
+    "test": "vitest run .",
+    "test:watch": "vitest .",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "lint": "prettier --check --ignore-path=../../.prettierignore . && eslint \"src\"",
     "format": "prettier --write --ignore-path=../../.prettierignore .",
@@ -25,7 +25,8 @@
     "localforage": "^1.10.0",
     "svelte-spa-router": "^3.3.0",
     "tailwind-merge": "^1.10.0",
-    "ui": "workspace:*"
+    "ui": "workspace:*",
+    "utils": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",

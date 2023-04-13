@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { BottomNavigation } from 'ui'
+import { push } from 'svelte-spa-router'
 import { t, type ITransStore } from '$stores'
 import { bottomNav } from '$stores/layout'
 
@@ -8,19 +9,19 @@ const genIcons = (_t: ITransStore) => ([
     id: 'home',
     icon: () => import('./images/home.svg'),
     text: _t('common.backToHome'),
-    onClick: () => console.log('home')
+    onClick: () => push('/')
   },
   {
     id: 'square',
     icon: () => import('./images/square.svg'),
     text: _t('common.square'),
-    onClick: () => console.log('2')
+    onClick: () => push('/square')
   },
   {
     id: 'anchor',
     icon: () => import('./images/anchor.svg'),
     text: _t('common.anchor'),
-    onClick: () => console.log('anchor')
+    onClick: () => push('/anchor')
   },
   {
     id: 'expert',

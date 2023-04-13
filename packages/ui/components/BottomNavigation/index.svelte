@@ -69,7 +69,7 @@ onDestroy(() => {
     )}
       src={hill} 
       style:left={`${hillLeft}px`}
-      style:top={`${showHill ? 0 : 15}px`}
+      style:top={`${showHill ? 1 : 15}px`}
       alt='' 
     />
 

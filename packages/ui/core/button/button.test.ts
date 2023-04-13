@@ -44,5 +44,4 @@ test('loading has loading circular', () => {
   const circular = screen.getByTestId('loading')
 
   expect(circular).toBeInTheDocument()
-
 })
