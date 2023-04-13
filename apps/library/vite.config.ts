@@ -32,7 +32,8 @@ export default defineConfig({
       $lib: resolve('./src/lib'),
       $containers: resolve('./src/containers'),
       $pages: resolve('./src/pages'),
-      $stores: resolve('./src/stores')
+      $stores: resolve('./src/stores'),
+      $types: resolve('./src/types'),
     }
   },
   ...(process.env.APP_ENV === 'library' && buildAsLibrary())

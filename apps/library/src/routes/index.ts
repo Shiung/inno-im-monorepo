@@ -3,7 +3,7 @@ import Entry from '$pages/entry.svelte'
 
 const routes = {
   '/': Entry,
-  '/square': wrap({
+  '/square/:sid': wrap({
     asyncComponent: () => import('$pages/square/index.svelte'),
     userData: {
       bottomNav: 'square'
@@ -16,7 +16,5 @@ const routes = {
     asyncComponent: () => import('$pages/test/index.svelte')
   })
 }
-
-  
 
 export default routes

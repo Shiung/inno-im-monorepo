@@ -12,7 +12,8 @@
       "$containers/*": ["./src/containers/*"],
       "$pages/*": ["./src/pages/*"],
       "$stores": ["./src/stores"],
-      "$stores/*": ["./src/stores/*"]
+      "$stores/*": ["./src/stores/*"],
+      "$types": ["./src/types"]
     },
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.

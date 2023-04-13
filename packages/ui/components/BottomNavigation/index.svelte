@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { onMount, onDestroy } from 'svelte'
+import { twMerge } from 'tailwind-merge'
 import Item from './Item.svelte'
 import hill from './images/iconSelect.png'
 
@@ -18,7 +19,7 @@ export let color: string
 
 const hillWidth = 125
 let hillLeft: number
-let hillTop: number = 15
+let showHill: boolean
 
 let items: HTMLDivElement
 const calculateHill = (items: HTMLDivElement) => {
@@ -26,11 +27,15 @@ const calculateHill = (items: HTMLDivElement) => {
 
   const activedIdx = icons.findIndex(item => item.id === active)
   const actived = items?.children[activedIdx]?.getBoundingClientRect()
-  if (!actived) return
+  if (!actived) {
+    showHill = false
+    return 
+  }
+
 
   const middle = actived.left + actived.width / 2 
   hillLeft = middle - hillWidth / 2
-  hillTop = 0
+  showHill = true
 }
 
 
@@ -59,14 +64,16 @@ onDestroy(() => {
 
 <div data-cid='BottomNavigation'>
   <div class='w-full fixed bottom-0' bind:this={container}>
-    <img class='relative duration-300 ease-out will-change-[left] will-change-[top]'
+    <img class={twMerge('relative duration-300 ease-out will-change-[left] will-change-[top]',
+      showHill && 'z-[11]'
+    )}
       src={hill} 
       style:left={`${hillLeft}px`}
-      style:top={`${hillTop}px`}
+      style:top={`${showHill ? 0 : 15}px`}
       alt='' 
     />
 
-    <div class='flex justify-around bg-white' style:box-shadow='0 0 10px 0 rgba(0,0,0,.1)' bind:this={items}>
+    <div class='flex relative justify-around bg-white z-10' style:box-shadow='0 0 10px 0 rgba(0,0,0,.1)' bind:this={items}>
       {#each icons as item}
 
         <Item
