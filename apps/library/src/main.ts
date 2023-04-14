@@ -1,6 +1,5 @@
 import './app.css'
-import './common.css'
-import './initVender'
+import './commonInit'
 import App from './App.svelte'
 
 const app = new App({

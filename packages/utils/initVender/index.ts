@@ -16,10 +16,13 @@ const vendorPrimary: { [key in VENDERID]: string } = {
   vd009: RuiYin
 }
 
-const initColor = () => {
+const initColor = (repoName: string) => {
   const style = document.createElement('style')
-  style.innerHTML = `:root {--im-monorepo-primary:${vendorPrimary[getConfig().VENDERID]}}`
+  style.innerHTML = `:root {--${repoName}-primary:${vendorPrimary[getConfig().VENDERID]}}`
   document.getElementsByTagName('head')[0].appendChild(style)
 }
 
-initColor()
+export default (props: { repoName: string }) => {
+  const { repoName } = props
+  initColor(repoName)
+}

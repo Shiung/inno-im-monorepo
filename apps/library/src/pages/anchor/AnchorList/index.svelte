@@ -1,6 +1,7 @@
 <script lang='ts'>
 import Loading from './Loading.svelte'
 import Anchor from './Anchor/index.svelte'
+import Search from './Search/index.svelte'
 
 import { fetchAnchors } from '../service'
 
@@ -15,7 +16,7 @@ const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 </script>
 
 <div data-cid='Anchor_AnchorList' class='bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]'>
-  <div class='h-[40px]'> search </div>
+  <Search />
 
   <div class='space-y-[12px]'>
     {#await fetchAnchorsPromise}

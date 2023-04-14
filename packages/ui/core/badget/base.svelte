@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
 export let variant: keyof typeof $$props.variants = 'primary'
-export let background: string
+export let background: string = null
 
 $: _variant = $$props.variants && $$props.variants[variant]
 $: _background = _variant?.background

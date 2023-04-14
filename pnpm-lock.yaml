@@ -339,6 +339,10 @@ importers:
         version: 3.57.0
 
   packages/utils:
+    dependencies:
+      env-config:
+        specifier: workspace:*
+        version: link:../env-config
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^5.16.5

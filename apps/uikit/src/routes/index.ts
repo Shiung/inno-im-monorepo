@@ -4,6 +4,7 @@ import Ripple from '../components/Ripple.svelte'
 import BottomSheet from '../components/BottomSheet.svelte'
 import BottomNavigation from '../components/BottomNavigation/index.svelte'
 import Badget from '../components/Badget.svelte'
+import Search from '../components/Search/index.svelte'
 
 
 const routes = {
@@ -12,7 +13,8 @@ const routes = {
   '/ripple': Ripple,
   '/bottomSheet': BottomSheet,
   '/bottomNavigation': BottomNavigation,
-  '/badget': Badget
+  '/badget': Badget,
+  '/search': Search
 }
 
 export default routes

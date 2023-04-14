@@ -5,7 +5,6 @@ import { twMerge } from 'tailwind-merge'
 export let url: string
 export let onClick: () => void
 export let active: boolean
-
 </script>
 
 <Ripple class={twMerge(
