@@ -2,12 +2,25 @@
 import { im } from 'api'
 import { Ripple } from 'ui'
 import BottomSheet, { Header, Content } from 'ui/components/BottomSheet'
+
+import DetailHeader from './Header.svelte'
+
+import Loading from './Loading.svelte'
 import Close from './images/close.svg'
+
+
+import type { withData, IWebAnchorDetail } from 'api/im/types'
 
 export let open: boolean
 export let houseId: string
 
-const detailPromise = im.webAnchorsDetail()
+const tabs = [ 'anchor.matches', 'anchor.personal', 'anchor.life' ]
+let activedTab: typeof tabs[number] = 'anchor.matches'
+$: console.log(activedTab)
+
+let detailPromise: Promise<withData<IWebAnchorDetail>>
+
+$: if (open) detailPromise = im.webAnchorsDetail({ query: { houseId }})
 
 </script>
 
@@ -17,22 +30,33 @@ const detailPromise = im.webAnchorsDetail()
   initHeight={(height) => height * 3/4}
   maxHeight={(height) => height + 20}
 >
-  <Header class='mt-[5px] flex justify-between px-[15px]'>
-    <div />
-    <Ripple on:click={() => open = false}>
-      <Close class='justify-self-end' width={20} height={20} fill='#666666' />
-    </Ripple>
+  <Header class='mt-[5px] bg-white px-[15px]'>
+    <div class='flex justify-between'>
+      <div />
+      <Ripple on:click={() => open = false}>
+        <Close width={20} height={20} fill='#666666' />
+      </Ripple>
+    </div>
   </Header>
 
-  <Content>
+  {#await detailPromise}
+    <Loading />
 
-    {#await detailPromise}
-      <div> loading </div>
-    {:then detail}
+  {:then detail}
+
+    <DetailHeader detail={detail.data} bind:activedTab={activedTab} tabs={tabs} />
+
+    <Content>
       <div> {JSON.stringify(detail)} </div>
-    {/await}
+      <div> {JSON.stringify(detail)} </div>
+      <div> {JSON.stringify(detail)} </div>
+      <div> {JSON.stringify(detail)} </div>
+      <div> {JSON.stringify(detail)} </div>
+      <div> {JSON.stringify(detail)} </div>
+    </Content>
 
-  </Content>
+  {/await}
+
 </BottomSheet>
 
 
