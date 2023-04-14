@@ -28,12 +28,6 @@ const routes = {
       }
     ]
   }),
-  '/uikit': wrap({
-    asyncComponent: () => import('$pages/uikit/index.svelte')
-  }),
-  '/test': wrap({
-    asyncComponent: () => import('$pages/test/index.svelte')
-  }),
   '*': wrap({
     asyncComponent: () => import('$pages/NotFound.svelte')
   })

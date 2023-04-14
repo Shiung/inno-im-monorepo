@@ -37,6 +37,6 @@ export let prodiction: IExpertPrediction
     </div>
   </div>
 
-  <div> 1 </div>
+  <p class='mt-[10px] text-[14px] font-semibold truncate'> {prodiction.title} </p>
 
 </div>

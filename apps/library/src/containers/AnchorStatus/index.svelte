@@ -12,5 +12,5 @@ export let liveStatus: IWebAnchor['liveStatus']
 {#if liveStatus === 2}
   <Badget class={twMerge('inline-flex', $$props.class)} variant='onLine'> {$t('anchor.online')} </Badget>
 {:else}
-  <div class='h-[20px]' />
+  <div class='inline-flex h-[20px]' />
 {/if}

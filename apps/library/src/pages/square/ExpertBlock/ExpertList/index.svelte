@@ -9,7 +9,7 @@ import { fetchExpertPredictions } from '../../service'
 const predictionsPromise = fetchExpertPredictions()
 </script>
 
-<div class='p-[20px] space-y-[8px]'>
+<div class='p-[20px] space-y-10'>
   {#await predictionsPromise}
     <Loading />
   {:then prodictions}

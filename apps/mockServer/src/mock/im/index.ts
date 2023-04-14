@@ -23,6 +23,36 @@ export default [
       "message": "",
     })
   },
+  // #3.主播播報賽事
+  {
+    url: '/anchor/web-anchor/match-list',
+    timeout: 2000,
+    response: () => mock({
+      "message": "",
+          "code": "0",
+          "data": {
+              "matchList|1-5": [
+                  {
+                "homeTeamName":"@cname",
+                "homeTeamLogo":"@image",
+                "homeTeamId":"@wordvmqy9i6jd3c4k9r",
+                "awayTeamName":"@cname",
+                "awayTeamLogo":"@image",
+                "awayTeamId":"@id",
+                "competitionName":"@cname",
+                "competitionLogo":"@image",
+                "competitionId":"mo07dnid08ixknx",
+                "sportId": () => Random.integer(1, 3),
+                "matchId":"@id",
+                "matchTime":1680769800,
+                "matchStatus": () => Random.integer(1, 8),
+                "homeScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
+                "awayScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
+              },
+          ]
+        }
+    })
+  },
   // #5.專家預測
   {
     url: '/expert/predictions',
@@ -33,7 +63,7 @@ export default [
         "list|5-20":[
           {
               "expertId": "@word",
-              "expertName": "@name",
+              "expertName": "@cname",
               "expertImage": "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
               "releaseTime": 1667504351531,
               "closeTime": 1667504371531,
@@ -42,7 +72,7 @@ export default [
               "hitRate": () => Random.integer(60, 100),
               "articleId": "@word",
               "articleStatus": () => Random.integer(1, 2),
-              "title": "@ctitle",
+              "title": "@cparagraph",
               "homeName": "@cname",
               "awayName": "@cname",
               "leagueName": "@cname",

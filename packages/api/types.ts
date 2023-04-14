@@ -19,4 +19,3 @@ export type Request = {
 } & {
   query?: { [key: string]: string }
 }
-

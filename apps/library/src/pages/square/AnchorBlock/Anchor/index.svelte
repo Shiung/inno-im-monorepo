@@ -17,7 +17,9 @@ export let bg: string
 >
   <div class='text-primary'> { anchor.houseName } </div>
   <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
-  <AnchorStatus liveStatus={anchor.liveStatus} />
+  <div class='flex items-center'>
+    <AnchorStatus liveStatus={anchor.liveStatus} />
+  </div>
 
   <div class='flex flex-1 justify-between items-end'>
     <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-primary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'>
