@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { params } from 'svelte-spa-router'
+import { params, replace } from 'svelte-spa-router'
 import HeaderNavigation from '$containers/HeaderNavigation'
 import LiveStreaming from '$containers/LiveStreaming'
 
@@ -13,19 +13,19 @@ $: sid = convertSid($params?.sid)
 const headNavIcons = [
   {
     sid: SID.soccer,
-    onClick: () => console.log(SID.soccer)
+    onClick: () => replace(`/square/${SID.soccer}`)
   },
   {
     sid: SID.basketball,
-    onClick: () => console.log(SID.basketball)
+    onClick: () => replace(`/square/${SID.basketball}`)
   },
   {
     sid: SID.tennis,
-    onClick: () => console.log(SID.tennis)
+    onClick: () => replace(`/square/${SID.tennis}`)
   },
   {
     sid: SID.baseball,
-    onClick: () => console.log(SID.baseball)
+    onClick: () => replace(`/square/${SID.baseball}`)
   },
 ]
 

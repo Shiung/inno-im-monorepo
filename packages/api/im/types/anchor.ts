@@ -42,3 +42,22 @@ export interface IWebAnchorMatch {
 export interface IWebAnchorMatches {
   matchList: IWebAnchorMatch[]
 }
+
+export interface IWebAnchorDetail {
+  userImage: string
+  nickName: string
+  houseName: string
+  houseId: string
+  userInfo: {
+    country: string
+    height: string
+    weight: string
+    birthday: string
+    favorite: string
+    state: string
+    photos: Array<{
+      data: number
+      image: string
+    }>
+  }
+}

@@ -1,17 +1,22 @@
 <script lang='ts'>
+import { params } from 'svelte-spa-router'
 import Loading from './Loading.svelte'
 import Anchor from './Anchor/index.svelte'
 import Search from './Search/index.svelte'
 
-import { fetchAnchors } from '../service'
+import { im } from 'api'
 
 import bg0 from '../images/bg_style2_0.webp'
 import bg1 from '../images/bg_style2_1.webp'
 import bg2 from '../images/bg_style2_2.webp'
 import bg3 from '../images/bg_style2_3.webp'
 
-const fetchAnchorsPromise = fetchAnchors()
+let fetchAnchorsPromise = im.webAnchors()
 const anchorBgs = [ bg0, bg1, bg2, bg3 ]
+
+$: {
+  if ($params?.sid) fetchAnchorsPromise = im.webAnchors()
+}
 
 </script>
 
@@ -24,7 +29,7 @@ const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 
     {:then anchors}
 
-      {#each anchors.list as anchor, idx}
+      {#each anchors?.data?.list as anchor, idx}
         <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
       {/each}
 

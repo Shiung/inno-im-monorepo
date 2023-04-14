@@ -6,5 +6,5 @@ export interface IMockData {
   url: string
   method?: IMethod
   timeout?: number
-  response?: (req: Request) => any
+  response?: <T>(req: Request) => T
 }

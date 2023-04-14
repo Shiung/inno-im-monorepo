@@ -63,7 +63,7 @@ $: {
   <div>
     <div
       class={twMerge('bg-white rounded-t-[30px]', $$props.class,
-        'flex flex-col w-full fixed bottom-0 z-50 overflow-hidden will-change-[height] duration-200 ease-out'
+        'flex flex-col w-full fixed left-0 right-0 bottom-0 z-50 overflow-hidden will-change-[height] duration-200 ease-out'
       )}
       style:height={`${height}px`}
     >

@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
 
-export let title: string
+export let title: string = ''
 let dom: HTMLDivElement
 
 $: blockHeignt = `${dom?.offsetHeight || 0}px`

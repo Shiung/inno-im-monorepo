@@ -1,11 +1,11 @@
 <script lang='ts'>
+import { im } from 'api'
 import { slide } from 'svelte/transition'
-import { fetchAnchorMatches } from '../../service'
 
 import Loading from './Loading.svelte'
 import Match from './Match/index.svelte'
 
-const matchesPromise = fetchAnchorMatches()
+const matchesPromise = im.webAnchorsMatchList()
 
 </script>
 
@@ -13,9 +13,9 @@ const matchesPromise = fetchAnchorMatches()
   {#await matchesPromise}
     <Loading />
 
-  {:then data}
+  {:then matches}
 
-    {#each data.matchList as match}
+    {#each matches?.data?.matchList as match}
       <Match match={match} />
     {/each}
 

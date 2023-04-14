@@ -34,7 +34,7 @@ export default class Base {
     return `?${urlParams}`
   }
 
-  protected apiGenerator<T>({ url, method }: IApiInit): (res: Request) => Promise<T> {
+  protected apiGenerator<T>({ url, method }: IApiInit): (req?: Request) => Promise<T> {
 
     return async (request?: Request) => {
       const _method = request?.method || method || 'get'
