@@ -28,6 +28,12 @@ const routes = {
       }
     ]
   }),
+  '/platformExpert/:sid?': wrap({
+    asyncComponent: () => import('$pages/platformExpert/index.svelte'),
+    userData: {
+      showBottomNav: false
+    }
+  }),
   '*': wrap({
     asyncComponent: () => import('$pages/NotFound.svelte')
   })
