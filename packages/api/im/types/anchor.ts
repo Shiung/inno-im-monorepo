@@ -61,3 +61,16 @@ export interface IWebAnchorDetail {
     }>
   }
 }
+
+export interface IWebAnchorLife {
+  userImage: string
+  nickName: string
+  houseName: string
+  houseId: string
+  lifeStory: Array<{
+    date: number
+    image: string
+    title: string
+    context: string
+  }>
+}

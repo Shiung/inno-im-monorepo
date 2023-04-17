@@ -4,7 +4,7 @@ import type { WindowEnv } from 'env-config/types'
 import type { IApiInit, Request } from './types'
 
 const mock = localStorage.getItem('mock') === 'true' || false
-const MOCK_SERVER = 'http://localhost:5174'
+const MOCK_SERVER = `http://${window.location.hostname}:5174`
 
 export default class Base {
   private baseUrl: string

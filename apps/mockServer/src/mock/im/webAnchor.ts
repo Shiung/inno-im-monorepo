@@ -62,16 +62,16 @@ export default [
                   {
                 "homeTeamName":"@cname",
                 "homeTeamLogo":"@image",
-                "homeTeamId":"@wordvmqy9i6jd3c4k9r",
+                "homeTeamId":"@word",
                 "awayTeamName":"@cname",
                 "awayTeamLogo":"@image",
                 "awayTeamId":"@id",
                 "competitionName":"@cname",
                 "competitionLogo":"@image",
-                "competitionId":"mo07dnid08ixknx",
+                "competitionId":"@word",
                 "sportId": () => Random.integer(1, 3),
                 "matchId":"@id",
-                "matchTime":1680769800,
+                "matchTime": 1680769800,
                 "matchStatus": () => Random.integer(1, 8),
                 "homeScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
                 "awayScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
@@ -80,4 +80,26 @@ export default [
         }
     })
   },
+  // #4.主播生活動態
+  {
+    url: '/anchor/web-anchor/life',
+    response: () => mock({
+      "message": "",
+      "code": "0",
+      "data": {
+      "userImage": "@image",
+      "nickName": "@ANCHORNICKNAME",
+      "houseName": "@ANCHORHOUSENAME",
+      "houseId": () => String(Random.natural(0, 99999)),
+        "lifeStory|10-20": [
+            {
+                "date": 1681282935,
+                "image": "@image",
+                "title": "@cword",
+                "context": "@cparagraph",
+            }
+          ]
+      }
+    })
+  }
 ] as IMockData[]

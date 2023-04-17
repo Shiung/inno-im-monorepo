@@ -1,9 +1,10 @@
 <script lang='ts'>
 import { Ripple } from 'ui'
+import { slide } from 'svelte/transition'
 import AnchorStatus from '$containers/AnchorStatus'
+import AnchorMatches from '$containers/AnchorMatches/index.svelte'
 import { t } from '$stores'
 
-import Matches from '../Matches/index.svelte'
 
 import Smile from '../../images/smile.svg'
 import Arrow from '../../images/arrow_down_small.svg'
@@ -55,7 +56,9 @@ let showMatchList: boolean
   </div>
 
   {#if showMatchList}
-    <Matches />
+    <div transition:slide|local>
+    <AnchorMatches houseId={anchor.houseId} />
+    </div>
   {/if}
 </div>
 

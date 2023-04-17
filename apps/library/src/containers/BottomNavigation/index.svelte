@@ -1,3 +1,7 @@
+<script context='module'>
+export const dataCid = 'BottomNavigation'
+</script>
+
 <script lang='ts'>
 import { BottomNavigation } from 'ui'
 import { push } from 'svelte-spa-router'
@@ -45,6 +49,7 @@ $: icons = genIcons($t)
 </script>
 
 <BottomNavigation 
+  dataCid={dataCid}
   icons={icons}
   active={$bottomNav}
   color='rgb(var(--im-monorepo-primary))'

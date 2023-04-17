@@ -4,6 +4,7 @@ import type {
   IWebAnchors,
   IWebAnchorMatches,
   IWebAnchorDetail,
+  IWebAnchorLife,
   IExpertPredictions
 } from './types'
 
@@ -15,7 +16,7 @@ class IM extends Base {
   webAnchors = this.apiGenerator<withData<IWebAnchors>>({ url: '/anchor/web-anchors' })
   webAnchorsDetail = this.apiGenerator<withData<IWebAnchorDetail>>({ url: '/anchor/web-anchor/detail' })
   webAnchorsMatchList = this.apiGenerator<withData<IWebAnchorMatches>>({ url: '/anchor/web-anchor/match-list' })
-  webAnchorsLife = this.apiGenerator({ url: '/anchor/web-anchor/life' })
+  webAnchorsLife = this.apiGenerator<withData<IWebAnchorLife>>({ url: '/anchor/web-anchor/life' })
   expertPredictions = this.apiGenerator<withData<IExpertPredictions>>({ url: '/expert/predictions' })
 }
 

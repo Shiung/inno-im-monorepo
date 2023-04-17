@@ -12,6 +12,7 @@ interface IIcon {
   onClick: () => void
 }
 
+export let dataCid: string = 'BottomNavigation'
 export let icons: IIcon[]
 export let ripple: boolean | string
 export let active: string | undefined
@@ -62,7 +63,7 @@ onDestroy(() => {
 
 </script>
 
-<div data-cid='BottomNavigation'>
+<div data-cid={dataCid}>
   <div class='w-full fixed bottom-0' bind:this={container}>
     <img class={twMerge('relative duration-300 ease-out will-change-[left] will-change-[top]',
       showHill && 'z-[11]'

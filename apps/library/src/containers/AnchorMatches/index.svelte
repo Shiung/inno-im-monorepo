@@ -1,15 +1,16 @@
 <script lang='ts'>
 import { im } from 'api'
-import { slide } from 'svelte/transition'
 
 import Loading from './Loading.svelte'
 import Match from './Match/index.svelte'
 
-const matchesPromise = im.webAnchorsMatchList()
+export let houseId: string
+
+const matchesPromise = im.webAnchorsMatchList({ query: { houseId }})
 
 </script>
 
-<div data-cid='Anchor_Matches' class='pt-[12px] space-y-[12px] px-[20px]' transition:slide|local>
+<div data-cid='Anchor_Matches' class='pt-[12px] space-y-[12px] px-[20px]'>
   {#await matchesPromise}
     <Loading />
 

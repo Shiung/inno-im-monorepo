@@ -3,10 +3,12 @@ export let open: boolean
 export let height: number
 export let maxHeight: number 
 export let opacity: number
+export let onMaxHeight: () => void
 
 export let closeH: number
 
 let moving: boolean = false
+let maxCalled: boolean = false
 
 const onTouchStart = () => {
   moving = true
@@ -25,7 +27,13 @@ const onTouchEnd = () => {
       open = false
     }, 200)
   }
-  if (height >= maxHeight) height = maxHeight
+  if (height >= maxHeight) {
+    height = maxHeight
+    if (!maxCalled) {
+      onMaxHeight()
+      maxCalled = true
+    }
+  }
 }
 
 </script>

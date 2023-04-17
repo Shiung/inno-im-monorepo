@@ -9,6 +9,8 @@ export let initHeight: (innerHeight: number ) => number
 export let maxHeight: (innerHeight: number) => number
 export let onDismiss: () => void = () => {}
 
+export let onMaxHeight: () => void = () => {}
+
 let _open: boolean = open
 let contentOpacity: number = 1
 let height: number
@@ -51,6 +53,7 @@ $: _opacity = height >= _maxHeight ? 0.8 : (height / _maxHeight) * 0.8
 
 const fadeH = 150
 const transparentH = 80
+
 $: {
   if (height >= fadeH) contentOpacity = 1
   else if (height <= transparentH) contentOpacity = 0
@@ -68,7 +71,9 @@ $: {
       style:height={`${height}px`}
     >
       {#if dragBar}
-        <DragBar bind:height={height} bind:open={open} maxHeight={_maxHeight} closeH={fadeH} bind:opacity={contentOpacity} />
+        <DragBar bind:height={height} bind:open={open} bind:opacity={contentOpacity}
+          maxHeight={_maxHeight} closeH={fadeH} onMaxHeight={onMaxHeight}
+        />
       {/if}
 
       <div class='flex flex-col flex-1 will-change-[opacity] overflow-hidden' style:opacity={contentOpacity}>
