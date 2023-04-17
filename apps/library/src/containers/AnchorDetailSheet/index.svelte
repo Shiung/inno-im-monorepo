@@ -2,7 +2,6 @@
 import { im } from 'api'
 import { Ripple } from 'ui'
 import { onDestroy } from 'svelte'
-import { twMerge } from 'tailwind-merge'
 import BottomSheet, { Header, Content } from 'ui/components/BottomSheet'
 import { dataCid } from '../BottomNavigation'
 
@@ -84,5 +83,3 @@ onDestroy(() => clearZIndexOfBottomNav())
   {/await}
 
 </BottomSheet>
-
-

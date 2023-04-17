@@ -3,6 +3,7 @@ import { Ripple } from 'ui'
 import { slide } from 'svelte/transition'
 import AnchorStatus from '$containers/AnchorStatus'
 import AnchorMatches from '$containers/AnchorMatches/index.svelte'
+import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 import { t } from '$stores'
 
 
@@ -15,6 +16,7 @@ export let anchor: IWebAnchor
 export let bg: string
 
 let showMatchList: boolean
+let openDetailSheet: boolean
 
 </script>
 
@@ -49,7 +51,9 @@ let showMatchList: boolean
     </div>
 
     <div class='py-[8px]'>
-      <Ripple class='flex items-center justify-center h-[30px] w-[30px] im-shadow rounded-[9px] bg-white'>
+      <Ripple class='flex items-center justify-center h-[30px] w-[30px] im-shadow rounded-[9px] bg-white'
+        on:click={() => openDetailSheet = true }
+      >
         <Smile width={18} height={18} fill='rgb(var(--im-monorepo-primary))' />
       </Ripple>
     </div>
@@ -60,5 +64,7 @@ let showMatchList: boolean
     <AnchorMatches houseId={anchor.houseId} />
     </div>
   {/if}
+
+  <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
 </div>
 
