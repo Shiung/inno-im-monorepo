@@ -10,11 +10,11 @@ export let prodiction: IExpertPrediction
 </script>
 
 <div>
-  <div class='h-[65px] flex justify-between'>
+  <div class='flex justify-between'>
     <div class='flex flex-col justify-between'>
-      <div class='grid grid-cols-[44px_auto]'>
+      <div class='grid gap-[10px]' style:grid-template-columns='44px auto'>
         <img class='rounded-full border-[3px] border-white im-shadow' src={prodiction.expertImage} alt='' />
-        <div>
+        <div class='self-center'>
           <div class='text-[14px] font-semibold'> {prodiction.expertName} </div>
           <div class='text-[10px] text-[#999999]'> {prodiction.releaseTime} </div>
         </div>
