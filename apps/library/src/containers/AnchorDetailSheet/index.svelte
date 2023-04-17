@@ -33,12 +33,14 @@ let onMax: boolean = false
 const clearZIndexOfBottomNav = () => {
   if (!onMax) return
   const bottomNav = document.querySelector(`[data-cid="${dataCid}"]`)?.firstChild as HTMLElement
+  if (!bottomNav) return
   bottomNav.style.zIndex = ''
   onMax = false
 }
 
 const setZIndexOfBottomNav = (zIndex: string) => {
   const bottomNav = document.querySelector(`[data-cid="${dataCid}"]`)?.firstChild as HTMLElement
+  if (!bottomNav) return
   bottomNav.style.zIndex = zIndex
   onMax = true
 }
