@@ -31,9 +31,11 @@ const headNavIcons = [
 
 </script>
 
-<div class='space-y-[10px]'>
+<div>
   <HeaderNavigation active={sid} icons={headNavIcons} />
-  <LiveStreaming />
-  <AnchorBlock />
-  <ExpertBlock />
+  <LiveStreaming url='' />
+  <div class='space-y-[10px]'>
+    <AnchorBlock />
+    <ExpertBlock />
+  </div>
 </div>
