@@ -5,6 +5,7 @@ import BottomSheet from '../components/BottomSheet.svelte'
 import BottomNavigation from '../components/BottomNavigation/index.svelte'
 import Badget from '../components/Badget.svelte'
 import Search from '../components/Search/index.svelte'
+import FlvPlayer from '../components/FlvPlayer/index.svelte'
 
 
 const routes = {
@@ -14,7 +15,8 @@ const routes = {
   '/bottomSheet': BottomSheet,
   '/bottomNavigation': BottomNavigation,
   '/badget': Badget,
-  '/search': Search
+  '/search': Search,
+  '/flvPlayer': FlvPlayer
 }
 
 export default routes
