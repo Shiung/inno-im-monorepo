@@ -23,3 +23,11 @@ export const genAnchorList = (size: number) => Array.from({ length: size || 20 }
   "userImage": "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
   "visitHistory": () => Random.natural(0, 999999999999)
 }))
+
+
+export const withData = (data: any) => ({
+  code: "0",
+  message: "",
+  serverTime: Math.round(Date.now() / 1000),
+  data
+})

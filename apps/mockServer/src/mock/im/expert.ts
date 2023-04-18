@@ -1,11 +1,12 @@
 import { mock, Random } from 'mockjs'
+import { withData } from './utils'
 import type { IMockData } from '../../types'
 
 export default [
   // #5.專家預測
   {
     url: '/expert/predictions',
-    response: () => mock({
+    response: () => mock(withData({
       "message": "",
       "code": "0",
       "data": {
@@ -30,6 +31,6 @@ export default [
           }
         ]
       }
-    })
+    }))
   }
 ] as IMockData[]

@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { genAnchorList } from './utils'
+import { genAnchorList, withData } from './utils'
 
 import type { IMockData } from '../../types'
 
@@ -8,27 +8,20 @@ export default [
   {
     url: '/anchor/web-anchors',
     timeout: 500,
-    response: ({ query }) => mock({
-      "code": "0",
-      "data": {
-          "list": genAnchorList(Number(query.pageSize)),
-          "pager": {
-              "pageIdx": Number(query.pageIdx) || 1,
-              "pageSize": Number(query.pageSize) || 20,
-              "totalPage": 1,
-              "totalRow": 2
-          }
-      },
-      "message": "",
-    })
+    response: ({ query }) => mock(withData({
+      "list": genAnchorList(Number(query.pageSize)),
+      "pager": {
+          "pageIdx": Number(query.pageIdx) || 1,
+          "pageSize": Number(query.pageSize) || 20,
+          "totalPage": 1,
+          "totalRow": 2
+      }
+    }))
   },
   // #2.主播詳情
   {
     url: '/anchor/web-anchor/detail',
-    response: () => mock({
-      "message": "",
-      "code": "0",
-      "data": {
+    response: () => mock(withData({
         "userImage": "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
         "nickName": "@ANCHORNICKNAME",
         "houseName": "@ANCHORHOUSENAME",
@@ -47,17 +40,13 @@ export default [
                     }
                 ]
         }
-      }
-    })
+    }))
   },
   // #3.主播播報賽事
   {
     url: '/anchor/web-anchor/match-list',
     timeout: 2000,
-    response: () => mock({
-      "message": "",
-          "code": "0",
-          "data": {
+    response: () => mock(withData({
               "matchList|1-5": [
                   {
                 "homeTeamName":"@cname",
@@ -77,29 +66,24 @@ export default [
                 "awayScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
               },
           ]
-        }
-    })
+    }))
   },
   // #4.主播生活動態
   {
     url: '/anchor/web-anchor/life',
-    response: () => mock({
-      "message": "",
-      "code": "0",
-      "data": {
+    response: () => mock(withData({
       "userImage": "@image",
       "nickName": "@ANCHORNICKNAME",
       "houseName": "@ANCHORHOUSENAME",
       "houseId": () => String(Random.natural(0, 99999)),
-        "lifeStory|10-20": [
-            {
-                "date": 1681282935,
-                "image": "@image",
-                "title": "@cword",
-                "context": "@cparagraph",
-            }
-          ]
-      }
-    })
+      "lifeStory|10-20": [
+          {
+              "date": 1681282935,
+              "image": "@image",
+              "title": "@cword",
+              "context": "@cparagraph",
+          }
+        ]
+    }))
   }
 ] as IMockData[]
