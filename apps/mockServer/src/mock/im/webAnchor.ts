@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { genAnchorList, withData } from './utils'
+import { genAnchorList, withData, randomPostTime } from './utils'
 
 import type { IMockData } from '../../types'
 
@@ -32,11 +32,12 @@ export default [
                 "weight": () => `${Random.natural(40, 60)}KG`,
                 "birthday": "@date",
                 "favorite": "烹飪,跳舞,旅行",
-                "state": "單身",
+                "state": () => Random.natural(1, 3),
                 "photos|1-10": [
                     {
-                        "date": 1681282935,
-                        "image": "@image"
+                        "date": () => randomPostTime(),
+                        "image": "@image",
+                        "imageDesc": "@word"
                     }
                 ]
         }
@@ -60,7 +61,7 @@ export default [
                 "competitionId":"@word",
                 "sportId": () => Random.integer(1, 3),
                 "matchId":"@id",
-                "matchTime": 1680769800,
+                "matchTime": () => randomPostTime(),
                 "matchStatus": () => Random.integer(1, 8),
                 "homeScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
                 "awayScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
@@ -78,7 +79,7 @@ export default [
       "houseId": () => String(Random.natural(0, 99999)),
       "lifeStory|10-20": [
           {
-              "date": 1681282935,
+              "date": () => randomPostTime(),
               "image": "@image",
               "title": "@cword",
               "context": "@cparagraph",

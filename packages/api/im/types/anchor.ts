@@ -54,10 +54,12 @@ export interface IWebAnchorDetail {
     weight: string
     birthday: string
     favorite: string
-    state: string
+    description: string
+    state: 1 | 2 | 3 // 感情狀態  1单身2恋爱中3保密
     photos: Array<{
       data: number
       image: string
+      imageDesc: string
     }>
   }
 }

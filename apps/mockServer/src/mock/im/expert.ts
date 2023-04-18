@@ -7,9 +7,6 @@ export default [
   {
     url: '/expert/predictions',
     response: () => mock(withData({
-      "message": "",
-      "code": "0",
-      "data": {
         "list|5-20":[
           {
               "expertId": "@word",
@@ -30,7 +27,6 @@ export default [
               "matchTime": 1667504361531
           }
         ]
-      }
     }))
   }
 ] as IMockData[]

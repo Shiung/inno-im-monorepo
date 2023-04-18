@@ -31,3 +31,8 @@ export const withData = (data: any) => ({
   serverTime: Math.round(Date.now() / 1000),
   data
 })
+
+export const randomPostTime = () => {
+  const timestamp = Math.round(Date.now() / 1000)
+  return timestamp - Random.integer(1, 60 * 60 * 24 * 14)
+} 
