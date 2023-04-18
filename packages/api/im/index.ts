@@ -10,7 +10,7 @@ import type {
 
 class IM extends Base {
   constructor() {
-    super({ API_KEY: 'IM_BE_URL' })
+    super({ API_KEY: 'IM_API_URL' })
   }
 
   webAnchors = this.apiGenerator<withData<IWebAnchors>>({ url: '/anchor/web-anchors' })
