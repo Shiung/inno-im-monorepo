@@ -51,7 +51,7 @@ export default class Base {
         ..._request,
         method: _method,
         headers: {
-          'Content-Type': 'application/json',
+          // 'Content-type': 'application/json', // 4/18 測試server 加上這行就會cors 先移掉等上正式再試試
           ...request?.headers
         },
         ...(getBody() && { body: JSON.stringify(getBody()) })
