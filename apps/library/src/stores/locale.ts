@@ -11,6 +11,16 @@ export type ITransStore = (
   }
 ) => string
 
+
+// 為了配合 universe-portal-wap 專案 的語系同步
+const getProtalLocalandSet = () => {
+  const locale = localStorage.getItem('locale.current')
+  if (locale) localStorage.setItem('locale', locale.replaceAll('"', ''))
+}
+
+getProtalLocalandSet()
+
+
 const fetchedName = writable(new Set())
 export const localeData = writable({})
 export const locale = writableSyncLocalStorage<ILanguages>('locale', 'zh_CN')
