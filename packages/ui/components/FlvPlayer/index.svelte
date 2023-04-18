@@ -7,16 +7,18 @@ export let flvPlayer: ReturnType<typeof flvjs.createPlayer>
 
 <script lang='ts'>
 import { onMount, onDestroy } from 'svelte'
+import { twMerge } from 'tailwind-merge'
 
-export let url: string
+export let url: string = ''
 let video: HTMLVideoElement
 
 const playFlv = (url: string) => {
+  if (!url) return
   if (!flvjs.isSupported()) return
   if (!video) return
 
   flvPlayer = flvjs.createPlayer({
-    type: 'flv' ,
+    type: 'flv',
     isLive: true,
     url
   })
@@ -41,7 +43,7 @@ onDestroy(() => {
 </script>
 
 
-<video autoplay bind:this={video}>
+<video class={twMerge('mt-0 w-full h-full', $$props.class)} autoplay bind:this={video}>
   <track kind='captions' />
   Your browser is too old which doesn't support HTML5 video.
 </video>
