@@ -3,6 +3,7 @@ import './commonInit'
 
 // Reexport your entry components here
 export { default as App } from './App.svelte'
+export * as store from '$stores/library'
 export { default as PlatformExpert } from '$pages/platformExpert'
 export * from '$pages/platformExpert'
 
