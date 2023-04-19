@@ -9,6 +9,7 @@ export let houseId: string
 export let detail: IWebAnchorDetail
 
 const promise = im.webAnchorsLife({ query: { houseId } })
+
 </script>
 
 <div class='px-[16px] space-y-[20px]'>
