@@ -26,7 +26,13 @@ export default [
               "matchStatus": () => Random.integer(1, 8),
               "matchTime": 1667504361531
           }
-        ]
+        ],
+        "pager":{
+          "pageIdx":1,
+          "pageSize":15,
+          "totalPage":30,
+          "totalRow":450,
+        }
     }))
   }
 ] as IMockData[]

@@ -1,3 +1,5 @@
+import type { IPager } from './common'
+
 export interface IWebAnchor {
   attentionStatus: number
   fansCount: number
@@ -13,12 +15,7 @@ export interface IWebAnchor {
 
 export interface IWebAnchors {
   list: IWebAnchor[]
-  pager: {
-    pageIdx: number
-    pageSize: number
-    totalPage: number
-    totalRow: number
-  }
+  pager: IPager
 }
 
 export interface IWebAnchorMatch {
@@ -72,7 +69,7 @@ export interface IWebAnchorLife {
   lifeStory: Array<{
     date: number
     image: string
-    title: string
     context: string
   }>
+  pager: IPager
 }

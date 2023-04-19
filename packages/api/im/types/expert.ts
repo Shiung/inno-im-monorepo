@@ -1,3 +1,4 @@
+import type { IPager } from './common'
 export interface IExpertPrediction {
   expertId: string
   expertName: string
@@ -18,4 +19,5 @@ export interface IExpertPrediction {
 }
 export interface IExpertPredictions {
   list: IExpertPrediction[]
+  pager: IPager
 }

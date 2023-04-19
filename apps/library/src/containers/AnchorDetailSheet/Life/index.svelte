@@ -22,7 +22,6 @@ const promise = im.webAnchorsLife({ query: { houseId } })
       <div class='text-[14px]'> {story.date} </div>
       <img class='w-[80px] h-[80px]' src={story.image} alt='' />
       <div class='text-[12px] h-full'>
-        <div> {story.title} </div>
         <div> {story.context} </div>
       </div>
     </div>

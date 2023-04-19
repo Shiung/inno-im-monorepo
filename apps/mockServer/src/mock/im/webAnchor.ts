@@ -81,10 +81,13 @@ export default [
           {
               "date": () => randomPostTime(),
               "image": "@image",
-              "title": "@cword",
               "context": "@cparagraph",
           }
-        ]
+        ],
+      "pageIdx":1,
+			"pageSize":15,
+			"totalPage":30,
+			"totalRow":450,
     }))
   }
 ] as IMockData[]
