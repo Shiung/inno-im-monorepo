@@ -1,14 +1,12 @@
 <script lang='ts'>
 import { im } from 'api'
-import { slide } from 'svelte/transition'
-import { Button } from 'ui'
-import { t } from '$stores'
+import Empty from '$containers/Empty'
+
 import Loading from './Loading.svelte'
-import Expert from './Expert/index.svelte'
+import Experts from './Experts.svelte'
 
-const predictionsPromise = im.expertPredictions()
+const predictionsPromise = im.expertPredictions({ query: { matchId: '34kgmi1552wieko' }})
 
-let showMore: boolean = false
 
 </script>
 
@@ -17,21 +15,11 @@ let showMore: boolean = false
     <Loading />
   {:then prodictions}
 
-    {#each prodictions?.data?.list.slice(0, 3) as prodiction}
-      <Expert prodiction={prodiction} /> 
-    {/each}
-
-    {#if showMore}
-      {#each prodictions?.data?.list.slice(3) as prodiction}
-        <div transition:slide>
-          <Expert prodiction={prodiction} /> 
-        </div>
-      {/each}
+    {#if prodictions?.data?.list?.length === 0}
+      <Empty class='h-[300px]'/>
+    {:else}
+      <Experts prodictions={prodictions.data} />
     {/if}
-
-    <Button class='h-[56px] rounded-[12px] w-full text-[16px]' on:click={() => showMore = true}>
-      {$t('common.openMore')}
-    </Button>
 
   {/await}
 

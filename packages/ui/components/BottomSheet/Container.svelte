@@ -21,6 +21,7 @@ let _maxHeight: number
 const mount = () => {
   const html = document.getElementsByTagName('html')[0]
   html.style.touchAction = 'none'
+  html.style.overflowY = 'hidden'
   _open = open
   _maxHeight = maxHeight ? maxHeight(window.innerHeight) : window.innerHeight / 4 * 3
   _initHeight = initHeight ? initHeight(window.innerHeight) : _maxHeight
@@ -34,13 +35,16 @@ const mount = () => {
 const destroy = () => {
   const html = document.getElementsByTagName('html')[0]
   html.style.touchAction = null
+  html.style.overflowY = null
   height = 50
   setTimeout(() => {
     _open = false
   }, 200)
 }
 
-onMount(mount)
+onMount(() => {
+  if (open) mount()
+})
 onDestroy(destroy)
 
 $: {

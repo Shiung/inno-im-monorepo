@@ -43,7 +43,7 @@ onDestroy(() => {
 </script>
 
 
-<video class={twMerge('mt-0 w-full h-full', $$props.class)} autoplay bind:this={video}>
+<video class={twMerge('w-full h-full', !url && 'h-0', $$props.class)} autoplay bind:this={video}>
   <track kind='captions' />
   Your browser is too old which doesn't support HTML5 video.
 </video>

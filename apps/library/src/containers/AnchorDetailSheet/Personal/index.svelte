@@ -6,14 +6,25 @@ import type { IWebAnchorDetail } from 'api/im/types'
 export const houseId: string = ''
 export let detail: IWebAnchorDetail
 
-let info = [
+
+const stateTrans = (state: typeof detail.userInfo.state): string => {
+  switch (state) {
+    case 1: return 'anchor.state.single' 
+    case 2: return 'anchor.state.inRelationship'
+    case 3: return 'anchor.state.secret'
+  }
+}
+
+$: info = [
   { i18n: 'anchor.country', value: detail?.userInfo?.country },
   { i18n: 'anchor.height', value: detail?.userInfo?.height },
   { i18n: 'anchor.weight', value: detail?.userInfo?.weight },
   { i18n: 'anchor.birthday', value: detail?.userInfo?.birthday },
   { i18n: 'anchor.favorite', value: detail?.userInfo?.favorite },
-  { i18n: 'anchor.state', vale: detail?.userInfo?.state }
+  { i18n: 'anchor.state', value: $t(stateTrans(detail?.userInfo?.state)) }
 ]
+
+
 </script>
 
 <div class='px-[24px]'>

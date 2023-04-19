@@ -1,10 +1,12 @@
 <script lang='ts'>
-import { twMerge } from 'tailwind-merge'
-import { push, params } from 'svelte-spa-router'
-import { t } from '$stores'
-
 import { im } from 'api'
 import { Ripple } from 'ui'
+import { twMerge } from 'tailwind-merge'
+import { push, params } from 'svelte-spa-router'
+
+import { t } from '$stores'
+import Empty from '$containers/Empty'
+
 import Anchor from './Anchor'
 import Loading from './Loading.svelte'
 import Arrow from './images/arrow_right_small.svg'
@@ -35,15 +37,20 @@ $: {
     </Ripple>
   </div>
 
-  <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
-    {#await anchorsPromise}
-      <Loading />
-    {:then anchors}
+  {#await anchorsPromise}
+    <Loading />
+  {:then anchors}
 
-      {#each anchors?.data?.list as anchor, idx}
-        <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
-      {/each}
+    {#if anchors?.data?.list?.length === 0}
+      <Empty class='h-[320px]' />
 
-    {/await}
-  </div>
+    {:else}
+      <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
+        {#each anchors?.data?.list as anchor, idx}
+          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
+        {/each}
+      </div>
+    {/if}
+
+  {/await}
 </div>

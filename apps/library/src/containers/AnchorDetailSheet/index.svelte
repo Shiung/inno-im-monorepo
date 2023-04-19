@@ -55,7 +55,7 @@ onDestroy(() => clearZIndexOfBottomNav())
 <BottomSheet
   class={onMax && 'rounded-none'}
   dragBar
-  open={open}
+  bind:open={open}
   initHeight={(height) => height * 3/4}
   maxHeight={(height) => height + 20}
   onMaxHeight={onMaxHeight}

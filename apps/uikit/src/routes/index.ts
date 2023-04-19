@@ -6,6 +6,7 @@ import BottomNavigation from '../components/BottomNavigation/index.svelte'
 import Badget from '../components/Badget.svelte'
 import Search from '../components/Search/index.svelte'
 import FlvPlayer from '../components/FlvPlayer/index.svelte'
+import Empty from '../components/Empty.svelte'
 
 
 const routes = {
@@ -16,7 +17,9 @@ const routes = {
   '/bottomNavigation': BottomNavigation,
   '/badget': Badget,
   '/search': Search,
-  '/flvPlayer': FlvPlayer
+  '/flvPlayer': FlvPlayer,
+  '/empty': Empty
+
 }
 
 export default routes

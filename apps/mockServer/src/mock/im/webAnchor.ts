@@ -46,7 +46,7 @@ export default [
   // #3.主播播報賽事
   {
     url: '/anchor/web-anchor/match-list',
-    timeout: 2000,
+    timeout: 500,
     response: () => mock(withData({
               "matchList|1-5": [
                   {
