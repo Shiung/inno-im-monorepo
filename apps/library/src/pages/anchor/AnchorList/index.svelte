@@ -21,7 +21,7 @@ $: {
 </script>
 
 <div data-cid='Anchor_AnchorList' class='bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]'>
-  <Search />
+<Search on:clear={() => console.log('clear')}/>
 
   <div class='space-y-[12px]'>
     {#await fetchAnchorsPromise}

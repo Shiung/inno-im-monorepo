@@ -22,6 +22,11 @@ $: {
 
 $: list = pinYin.search(value)
 
+const handleClearClick = () => {
+  value = ''
+  dispatch('clear')
+}
+
 </script>
 
 <div class={$$props.class} bind:this={dom}>
@@ -31,9 +36,15 @@ $: list = pinYin.search(value)
       bind:value={value}
       placeholder={placeholder} 
     />
-    <Ripple class='flex items-center justify-center absolute right-0 rounded-full w-[35px] h-[35px]'>
-      <SearchClear width={18} height={18} />
-    </Ripple>
+
+    {#if value}
+      <Ripple class='flex items-center justify-center absolute right-0 rounded-full w-[35px] h-[35px]'
+        on:click={handleClearClick}
+      >
+        <SearchClear width={18} height={18} />
+      </Ripple>
+    {/if}
+
   </div>
 
   <div class='absolute translate-y-1 bg-white max-h-[500px] overflow-scroll' style:width={`${dom?.getBoundingClientRect()?.width | 0}px`}>
