@@ -1,12 +1,12 @@
 <script lang='ts'>
-import { im } from 'api'
-
 import Loading from './Loading.svelte'
 import Match from './Match/index.svelte'
 
+import { getMatches } from './utils'
+
 export let houseId: string
 
-const matchesPromise = im.webAnchorsMatchList({ query: { houseId }})
+const matchesPromise = getMatches(houseId)
 
 </script>
 
@@ -14,9 +14,9 @@ const matchesPromise = im.webAnchorsMatchList({ query: { houseId }})
   {#await matchesPromise}
     <Loading />
 
-  {:then matches}
+  {:then data}
 
-    {#each matches?.data?.matchList as match}
+    {#each data?.matchList as match}
       <Match match={match} />
     {/each}
 

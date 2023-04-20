@@ -13,11 +13,12 @@ import Close from './images/close.svg'
 
 
 import type { withData, IWebAnchorDetail } from 'api/im/types'
+import type { ITabs } from './types'
 
 export let open: boolean
 export let houseId: string
 
-const tabs = {
+const tabs: ITabs = {
   'anchor.matches': () => import('$containers/AnchorMatches'),
   'anchor.personal': () => import('./Personal/index.svelte'),
   'anchor.life': () => import('./Life/index.svelte')

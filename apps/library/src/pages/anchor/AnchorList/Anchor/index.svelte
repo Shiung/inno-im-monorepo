@@ -60,9 +60,7 @@ let openDetailSheet: boolean
   </div>
 
   {#if showMatchList}
-    <div transition:slide|local>
     <AnchorMatches houseId={anchor.houseId} />
-    </div>
   {/if}
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
