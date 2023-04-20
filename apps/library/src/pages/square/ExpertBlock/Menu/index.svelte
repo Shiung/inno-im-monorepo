@@ -51,7 +51,7 @@ onMount(() => {
 
       <Ripple class={twMerge(
           'text-[#999999] text-[14px] p-2',
-          actived === item.i18n && 'text-primary'
+          actived === item.i18n && 'text-imprimary'
         )} 
         on:click={() => onClick(item)}
       >
@@ -61,7 +61,7 @@ onMount(() => {
     {/each}
   </div>
 
-  <div class='absolute will-change-position h-[2px] bg-primary duration-300 ease-out bottom-0' 
+  <div class='absolute will-change-position h-[2px] bg-imprimary duration-300 ease-out bottom-0' 
     style:left={`${barStyle?.left}px`}
     style:width={`${barStyle?.width}px`}
     style:opacity={barStyle ? 1 : 0}

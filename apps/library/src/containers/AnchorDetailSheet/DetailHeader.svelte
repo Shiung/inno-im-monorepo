@@ -25,7 +25,7 @@ export let tabs: string[]
 
       <!-- 主播標籤 (缺欄位)
       <div class='flex items-center absolute h-[26px] bottom-[5px] text-white
-        bg-primary font-semibold text-[14px] rounded-[14px] px-[10px]'
+        bg-imprimary font-semibold text-[14px] rounded-[14px] px-[10px]'
       >
         {detail.nickName}
       </div>

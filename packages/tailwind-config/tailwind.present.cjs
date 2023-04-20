@@ -2,7 +2,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
+        imprimary: {
           DEFAULT: 'rgb(var(--im-monorepo-primary))'
         },
       },

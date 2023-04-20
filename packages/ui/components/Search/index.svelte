@@ -32,7 +32,7 @@ const handleClearClick = () => {
 <div class={$$props.class} bind:this={dom}>
   <div class='relative flex items-center'>
     <Search class='absolute left-[8px]' width={18} height={18} fill='#333333' />
-    <input class='px-[35px] h-[40px] w-full bg-[#F7F8F9] rounded-[20px] outline-primary'
+    <input class='px-[35px] h-[40px] w-full bg-[#F7F8F9] rounded-[20px] outline-imprimary'
       bind:value={value}
       placeholder={placeholder} 
     />

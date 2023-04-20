@@ -28,7 +28,7 @@ let openDetailSheet: boolean
 
     <div class='flex flex-col py-[10px] justify-between'>
       <div>
-        <div class='text-primary text-[18px]'> {anchor.houseName} </div>
+        <div class='text-imprimary text-[18px]'> {anchor.houseName} </div>
         <div class='text-[12px] text-[#999999]'> {anchor.nickName} </div>
       </div>
     
@@ -36,7 +36,7 @@ let openDetailSheet: boolean
         <AnchorStatus class='mr-[5px]' liveStatus={anchor.liveStatus} />
 
         <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
-          <Ripple class='flex items-center text-primary text-[10px] h-[20px] pl-[10px]'
+          <Ripple class='flex items-center text-imprimary text-[10px] h-[20px] pl-[10px]'
             ripple='#eeeeee'
             on:click={() => showMatchList = !showMatchList}
           > 

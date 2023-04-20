@@ -13,7 +13,7 @@ export const createBadget = <T>(initVariants?: Variants<T, IComponentAttr>) => {
   return createInstance({
     baseComponent: Base,
     defaultAttr: {
-      className: 'inline-flex rounded-[5px] px-1 text-[12px] bg-primary text-white'
+      className: 'inline-flex rounded-[5px] px-1 text-[12px] bg-imprimary text-white'
     },
     initVariants,
     attrMerge: (def, item) => ({

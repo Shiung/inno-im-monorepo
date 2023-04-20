@@ -18,14 +18,14 @@ let openDetailSheet: boolean = false
 <div class='flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]'
   style:background-image={`url("${bg}")`}
 >
-  <div class='text-primary'> { anchor.houseName } </div>
+  <div class='text-imprimary'> { anchor.houseName } </div>
   <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
   <div class='flex items-center'>
     <AnchorStatus liveStatus={anchor.liveStatus} />
   </div>
 
   <div class='flex flex-1 justify-between items-end'>
-    <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-primary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
+    <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-imprimary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
       on:click={() => openDetailSheet = true}
     >
       <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />

@@ -16,7 +16,7 @@ export const createButton = <T>(initVariants?: Variants<T, IComponentAttr>) => {
     defaultAttr: {
       className: [
         'inline-flex items-center justify-center px-[15px] h-[32px] rounded-[5px] text-[12px] ',
-        'bg-primary text-[white] hover:bg-[#7EB8EE]',
+        'bg-imprimary text-[white] hover:bg-[#7EB8EE]',
       ].join(' '),
       ripple: true
     },

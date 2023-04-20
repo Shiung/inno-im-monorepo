@@ -5,7 +5,7 @@ import ButtonTest from './button.test.svelte'
 
 const Button = createButton({
   primary: {
-    className: 'primary'
+    className: 'imprimary'
   },
   test: {
     className: 'px-[20px]'
@@ -18,10 +18,10 @@ test('className has been merged.', async () => {
   expect(button.className).toMatch('px-[20px]')
 })
 
-test('variant default is primary.', () => {
+test('variant default is imprimary.', () => {
   render(Button)
   const button = screen.getByRole('button')  
-  expect(button.className).toMatch('primary')
+  expect(button.className).toMatch('imprimary')
 })
 
 test('slot work fine.', async () => {
