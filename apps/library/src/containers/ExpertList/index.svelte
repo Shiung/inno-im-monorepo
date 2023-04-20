@@ -5,7 +5,7 @@ import Empty from '$containers/Empty'
 import Loading from './Loading.svelte'
 import Experts from './Experts.svelte'
 
-const predictionsPromise = im.expertPredictions({ query: { matchId: '34kgmi1552wieko' }})
+const predictionsPromise = im.expertPredictions({ query: { pageIdx: '1', PageSize: '10' }})
 
 
 </script>
