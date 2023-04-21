@@ -27,7 +27,7 @@ const tabs: ITabs = {
 let activedTab: keyof typeof tabs = 'anchor.personal'
 
 let detailPromise: Promise<withData<IWebAnchorDetail>>
-$: if (open) detailPromise = im.webAnchorsDetail({ query: { houseId }})
+$: if (open) detailPromise = im.webAnchorDetail({ query: { houseId }})
 
 
 let onMax: boolean = false

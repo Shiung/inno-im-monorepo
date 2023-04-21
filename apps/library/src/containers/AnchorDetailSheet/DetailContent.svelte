@@ -38,7 +38,7 @@ $: if (activedTab === 'anchor.life') fetchAnchorsLife()
   {#if activedTab === 'anchor.matches'}
     <svelte:component this={comp} houseId={detail.houseId} />
   {:else if activedTab === 'anchor.personal'}
-    <svelte:component this={comp} houseId={detail.houseId} detail={detail} />
+    <svelte:component this={comp} detail={detail} />
   {:else if activedTab === 'anchor.life'}
     <svelte:component this={comp} life={life} />
   {/if}

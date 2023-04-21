@@ -13,7 +13,7 @@ interface IMatch {
 type IMatchDict = Map<string, IMatch>
 
 const fetchAnchorMatchList = async (houseId: string) => {
-  const res = await im.webAnchorsMatchList({ query: { houseId }})
+  const res = await im.webAnchorMatchList({ query: { houseId }})
   matchDict.set(houseId, {
     lastUpdated: Date.now(),
     data: res.data

@@ -5,7 +5,8 @@ import type {
   IWebAnchorMatches,
   IWebAnchorDetail,
   IWebAnchorLife,
-  IExpertPredictions
+  IExpertPredictions,
+  IWebAnchorRecommend
 } from './types'
 
 class IM extends Base {
@@ -14,10 +15,11 @@ class IM extends Base {
   }
 
   webAnchors = this.apiGenerator<withData<IWebAnchors>>({ url: '/anchor/web-anchors' })
-  webAnchorsDetail = this.apiGenerator<withData<IWebAnchorDetail>>({ url: '/anchor/web-anchor/detail' })
-  webAnchorsMatchList = this.apiGenerator<withData<IWebAnchorMatches>>({ url: '/anchor/web-anchor/match-list' })
+  webAnchorDetail = this.apiGenerator<withData<IWebAnchorDetail>>({ url: '/anchor/web-anchor/detail' })
+  webAnchorMatchList = this.apiGenerator<withData<IWebAnchorMatches>>({ url: '/anchor/web-anchor/match-list' })
   webAnchorsLife = this.apiGenerator<withData<IWebAnchorLife>>({ url: '/anchor/web-anchor/life' })
   expertPredictions = this.apiGenerator<withData<IExpertPredictions>>({ url: '/expert/predictions' })
+  webAnchorRecommend = this.apiGenerator<withData<IWebAnchorRecommend>>({ url: '/anchor/web-anchor/recommend' })
 }
 
 export default new IM()

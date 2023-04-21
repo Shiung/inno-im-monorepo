@@ -73,3 +73,14 @@ export interface IWebAnchorLife {
   }>
   pager: IPager
 }
+
+export interface IWebAnchorRecommend {
+  houseId: string
+  liveStatus: number // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
+  nickName: string
+  playStreamAddress: string
+  personalIntroduction: string
+  anchorTitle: string
+  houseIntroduction: string
+  userImage: string
+}
