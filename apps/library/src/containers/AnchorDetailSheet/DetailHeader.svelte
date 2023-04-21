@@ -8,7 +8,7 @@ import anchorBg from './images/anchorBg.webp'
 import mask from './images/mask.webp'
 
 import type { IWebAnchorDetail } from 'api/im/types'
-export let detail: IWebAnchorDetail
+export let detail: IWebAnchorDetail['res']['data']
 
 export let activedTab: typeof tabs[number]
 export let tabs: string[]

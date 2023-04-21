@@ -3,7 +3,7 @@ import Loading from './Loading.svelte'
 
 import type { IWebAnchorLife } from 'api/im/types'
 
-export let life: { loading: boolean, data: IWebAnchorLife }
+export let life: { loading: boolean, data: IWebAnchorLife['res']['data'] }
 </script>
 
 <div class='px-[16px] space-y-[20px]'>

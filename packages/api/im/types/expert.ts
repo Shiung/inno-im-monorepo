@@ -1,4 +1,5 @@
-import type { IPager } from './common'
+import type { IPager, withData } from './common'
+
 export interface IExpertPrediction {
   expertId: string
   expertName: string
@@ -18,6 +19,16 @@ export interface IExpertPrediction {
   matchTime: number
 }
 export interface IExpertPredictions {
-  list: IExpertPrediction[]
-  pager: IPager
+  query: {
+    matchId?: string
+    sid?: string
+    type?: 0 | 1 | 2 // 0: 命中王 1: 連紅王 2: 跟投王
+    pageIdx: number
+    pageSize: number
+  }
+  body: null
+  res: withData<{
+    list: IExpertPrediction[]
+    pager: IPager
+  }>
 }

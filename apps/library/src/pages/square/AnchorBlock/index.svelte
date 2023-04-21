@@ -16,11 +16,11 @@ import bg1 from './images/bg_style1_1.webp'
 import bg2 from './images/bg_style1_2.webp'
 import bg3 from './images/bg_style1_3.webp'
 
-let anchorsPromise = im.webAnchors({ query: { pageSize: '4' } })
+let anchorsPromise = im.webAnchors({ query: { pageIdx: 1, pageSize: 4 } })
 const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 
 $: {
-  if ($params?.sid) anchorsPromise = im.webAnchors({ query: { pageSize: '4' } })
+  if ($params?.sid) anchorsPromise = im.webAnchors({ query: {pageIdx: 1, pageSize: 4 } })
 }
 
 </script>

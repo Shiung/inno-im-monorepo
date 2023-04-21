@@ -5,6 +5,12 @@ export interface withData<T> {
   serverTime: number
 }
 
+export type ApiType<TRes> = {
+  query: {[key: string]: string | number},
+  body: {[key: string]: string | number}
+  res: TRes
+}
+
 export interface IPager {
   pageIdx: number
   pageSize: number

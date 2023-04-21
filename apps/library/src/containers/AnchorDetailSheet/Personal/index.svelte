@@ -3,7 +3,7 @@ import { t } from '$stores'
 
 import type { IWebAnchorDetail } from 'api/im/types'
 
-export let detail: IWebAnchorDetail
+export let detail: IWebAnchorDetail['res']['data']
 
 const stateTrans = (state: typeof detail.userInfo.state): string => {
   switch (state) {

@@ -6,7 +6,7 @@ import { slide } from 'svelte/transition'
 import Expert from './Expert/index.svelte'
 import type { IExpertPredictions } from 'api/im/types'
 
-export let prodictions: IExpertPredictions
+export let prodictions: IExpertPredictions['res']['data']
 let showMore: boolean = false
 
 </script>

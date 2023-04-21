@@ -6,7 +6,7 @@ import type { ITabs } from './types'
 
 export let tabs: ITabs
 export let activedTab: keyof typeof tabs
-export let detail: IWebAnchorDetail
+export let detail: IWebAnchorDetail['res']['data']
 
 const loadingComponent = async (_activeTab: typeof activedTab) => {
   if (!activedTab) return
@@ -18,18 +18,18 @@ const loadingComponent = async (_activeTab: typeof activedTab) => {
 $: lazyLoading = loadingComponent(activedTab)
 
 
-let life: { loading: boolean, data: IWebAnchorLife } = { loading: true, data: undefined }
+let life: { loading: boolean, data: IWebAnchorLife['res']['data'] } = { loading: true, data: undefined }
 
-const fetchAnchorsLife = async () => {
+const fetchAnchorLife = async () => {
   if (life.data) return
 
   life.loading = true
-  const res = await im.webAnchorsLife({ query: { houseId: detail.houseId } })
+  const res = await im.webAnchorLife({ query: { houseId: detail.houseId } })
   life.data = res?.data
   life.loading = false
 }
 
-$: if (activedTab === 'anchor.life') fetchAnchorsLife()
+$: if (activedTab === 'anchor.life') fetchAnchorLife()
 
 </script>
 

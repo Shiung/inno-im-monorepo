@@ -12,10 +12,14 @@ export type IApiInit = {
   mock?: IMockData
 }
 
-export type IApi = (o?: Request) => Promise<any>
+export type ApiType<TRes> = {
+  query: {[key: string]: string | number} | null,
+  body: {[key: string]: string | number} | null,
+  res: TRes
+}
 
-export type Request = {
-  [k in keyof RequestInit]: k extends 'body' ? { [key: string]: any } : RequestInit[k]
+export type Request<TQuery, TBody> = {
+  [k in keyof RequestInit]: k extends 'body' ? TBody : RequestInit[k]
 } & {
-  query?: { [key: string]: string }
+  query?: TQuery
 }

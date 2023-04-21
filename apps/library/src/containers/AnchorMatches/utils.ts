@@ -7,7 +7,7 @@ const matchDict: IMatchDict = new Map()
 
 interface IMatch {
   lastUpdated: number
-  data: IWebAnchorMatches
+  data: IWebAnchorMatches['res']['data']
 }
 
 type IMatchDict = Map<string, IMatch>

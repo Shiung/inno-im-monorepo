@@ -1,7 +1,7 @@
 import { getConfig } from 'env-config'
 import type { WindowEnv } from 'env-config/types'
 
-import type { IApiInit, Request } from './types'
+import type { IApiInit, Request, ApiType } from './types'
 
 const mock = localStorage.getItem('mock') === 'true' || false
 const MOCK_SERVER = `http://${window.location.hostname}:5174`
@@ -28,15 +28,15 @@ export default class Base {
     }
   }
 
-  private genParams(params?: { [k: string]: string }) {
+  private genParams<TQuery>(params?: TQuery) {
     if (!params) return ''
-    const urlParams = new URLSearchParams(params).toString()
+    const urlParams = new URLSearchParams(params as unknown as URLSearchParams).toString()
     return `?${urlParams}`
   }
 
-  protected apiGenerator<T>({ url, method }: IApiInit): (req?: Request) => Promise<T> {
+  protected apiGenerator<T extends ApiType<T['res']>>({ url, method }: IApiInit): (req?: Request<T['query'], T['body']>) => Promise<T['res']> {
 
-    return async (request?: Request) => {
+    return async (request?: Request<T['query'], T['body']>) => {
       const _method = request?.method || method || 'get'
       const _request = { ...request, body: null }
 

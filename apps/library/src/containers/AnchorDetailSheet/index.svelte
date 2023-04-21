@@ -12,7 +12,7 @@ import Loading from './Loading.svelte'
 import Close from './images/close.svg'
 
 
-import type { withData, IWebAnchorDetail } from 'api/im/types'
+import type { IWebAnchorDetail } from 'api/im/types'
 import type { ITabs } from './types'
 
 export let open: boolean
@@ -26,7 +26,7 @@ const tabs: ITabs = {
 
 let activedTab: keyof typeof tabs = 'anchor.personal'
 
-let detailPromise: Promise<withData<IWebAnchorDetail>>
+let detailPromise: Promise<IWebAnchorDetail['res']>
 $: if (open) detailPromise = im.webAnchorDetail({ query: { houseId }})
 
 

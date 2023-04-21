@@ -1,4 +1,4 @@
-import type { IPager } from './common'
+import type { IPager, withData } from './common'
 
 export interface IWebAnchor {
   attentionStatus: number
@@ -14,8 +14,17 @@ export interface IWebAnchor {
 }
 
 export interface IWebAnchors {
-  list: IWebAnchor[]
-  pager: IPager
+  query: {
+    sid?: number 
+    keyWord?: string
+    pageIdx: number
+    pageSize: number
+  }
+  body: null
+  res: withData<{
+    list: IWebAnchor[]
+    pager: IPager
+  }>
 }
 
 export interface IWebAnchorMatch {
@@ -37,50 +46,74 @@ export interface IWebAnchorMatch {
 }
 
 export interface IWebAnchorMatches {
-  matchList: IWebAnchorMatch[]
+  query: {
+    houseId: string
+  }
+  body: null
+  res: withData<{
+    matchList: IWebAnchorMatch[]
+  }>
 }
 
 export interface IWebAnchorDetail {
-  userImage: string
-  nickName: string
-  houseName: string
-  houseId: string
-  userInfo: {
-    country: string
-    height: string
-    weight: string
-    birthday: string
-    favorite: string
-    description: string
-    state: 1 | 2 | 3 // 感情狀態  1单身2恋爱中3保密
-    photos: Array<{
-      data: number
-      image: string
-      imageDesc: string
-    }>
+  query: {
+    houseId: string
   }
+  body: null
+  res: withData<{
+    userImage: string
+    nickName: string
+    houseName: string
+    houseId: string
+    userInfo: {
+      country: string
+      height: string
+      weight: string
+      birthday: string
+      favorite: string
+      description: string
+      state: 1 | 2 | 3 // 感情狀態  1单身2恋爱中3保密
+      photos: Array<{
+        data: number
+        image: string
+        imageDesc: string
+      }>
+    }
+  }>
 }
 
 export interface IWebAnchorLife {
-  userImage: string
-  nickName: string
-  houseName: string
-  houseId: string
-  lifeStory: Array<{
-    date: number
-    image: string
-    context: string
+  query: {
+    houseId: string
+  }
+  body: null
+  res: withData<{
+    userImage: string
+    nickName: string
+    houseName: string
+    houseId: string
+    lifeStory: Array<{
+      date: number
+      image: string
+      context: string
+    }>
+    pager: IPager
   }>
-  pager: IPager
 }
 
 export interface IWebAnchorRecommend {
-  houseId: string
-  liveStatus: number // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
-  nickName: string
-  playStreamAddress: string
-  personalIntroduction: string
-  anchorTitle: string
-  houseIntroduction: string
-  userImage: string
+  query: {
+    sid?: number
+  }
+  body: null
+  res: withData<{
+    houseId: string
+    liveStatus: number // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
+    nickName: string
+    playStreamAddress: string
+    personalIntroduction: string
+    anchorTitle: string
+    houseIntroduction: string
+    userImage: string
+  }>
 }
