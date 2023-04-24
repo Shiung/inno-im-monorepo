@@ -24,9 +24,9 @@ const tabs: ITabs = {
   'anchor.life': () => import('./Life/index.svelte')
 }
 
-let activedTab: keyof typeof tabs = 'anchor.personal'
+let activedTab: keyof typeof tabs = 'anchor.matches'
 
-let detailPromise: Promise<IWebAnchorDetail['res']>
+let detailPromise: ReturnType<typeof im.webAnchorDetail>
 $: if (open) detailPromise = im.webAnchorDetail({ query: { houseId }})
 
 

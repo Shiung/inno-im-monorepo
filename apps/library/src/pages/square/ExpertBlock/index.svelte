@@ -1,9 +1,10 @@
 <script lang='ts'>
-import Menu from './Menu/index.svelte'
-import ExpertList from '$containers/ExpertList'
+import { params } from 'svelte-spa-router'
+import ExpertWithMenu from '$containers/ExpertWithMenu'
+import { convertSid } from 'utils'
+
+$: sid = convertSid($params?.sid)
+
 </script>
 
-<div data-cid='Expert' class='bg-white rounded-[20px]'>
-  <Menu class='border-b divide-solid'/>
-  <ExpertList /> 
-</div>
+<ExpertWithMenu class='rounded-[20px]' sid={sid} />

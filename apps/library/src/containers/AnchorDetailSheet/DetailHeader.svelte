@@ -37,13 +37,11 @@ export let tabs: string[]
     {detail.nickName}
   </div>
 
-  <!-- 主播描述 (缺欄位先移除)
+  <div class='text-[14px] mt-[4px] text-[#999999] text-center'>
+    {detail.personalIntroduction}
   <div>
-    {detail}
-  <div>
-  -->
 
-  <div class='flex justify-around text-[14px] mb-[15px] duration-300'>
+  <div class='flex justify-around text-[14px] mt-[14px] mb-[15px] duration-300'>
     {#each tabs as tab}
       <div class='flex items-center duration-300 rounded-[20px]'
         style:background-color={activedTab === tab ? 'rgb(var(--im-monorepo-primary))' : 'white'}

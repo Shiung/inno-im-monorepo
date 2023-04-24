@@ -21,8 +21,11 @@ let showMore: boolean = false
       <Expert prodiction={prodiction} /> 
     </div>
   {/each}
-{/if}
 
-<Button class='h-[56px] rounded-[12px] w-full text-[16px]' on:click={() => showMore = true}>
-  {$t('common.openMore')}
-</Button>
+{:else}
+
+  <Button class='h-[56px] rounded-[12px] w-full text-[16px]' on:click={() => showMore = true}>
+    {$t('common.openMore')}
+  </Button>
+
+{/if}

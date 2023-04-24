@@ -5,30 +5,20 @@ import { Ripple } from 'ui'
 
 import { t, type ITransStore } from '$stores'
 
-interface IItem {
-  i18n: string
-  onClick: () => void
+import type { IExpertMenu } from '../types'
+
+export let menu: IExpertMenu[]
+export let actived: IExpertMenu['type']
+
+const onClick = (item: IExpertMenu) => {
+  actived = item.type
 }
-
-const items: IItem[] = [
-  { i18n: 'export.hit', onClick: () => console.log('export.hit') },
-  { i18n: 'export.winningStreakKing', onClick: () => console.log('export.winningStreakKing') },
-  { i18n: 'export.followUp', onClick: () => console.log('export.followUp') },
-]
-
-let actived = 'export.winningStreakKing'
-
-const onClick = (item: IItem) => {
-  actived = item.i18n
-}
-
-
 
 let itemsConteiner: HTMLDivElement
-const calBar = (actived: string, _t?: ITransStore): { width: number, left: number } => {
+const calBar = (actived: IExpertMenu['type'], _t?: ITransStore): { width: number, left: number } => {
   if (!itemsConteiner) return null
 
-  const idx = items.findIndex((item) => item.i18n === actived)
+  const idx = menu.findIndex((item) => item.type === actived)
   const target = itemsConteiner.children[idx] 
 
   if (!target) return null
@@ -47,11 +37,11 @@ onMount(() => {
 
 <div class={twMerge('relative flex flex-col justify-center', $$props.class)}>
   <div class='flex w-full items-center justify-around mt-[8px]' bind:this={itemsConteiner}>
-    {#each items as item}
+    {#each menu as item}
 
       <Ripple class={twMerge(
           'text-[#999999] text-[14px] p-2',
-          actived === item.i18n && 'text-imprimary'
+          actived === item.type && 'text-imprimary'
         )} 
         on:click={() => onClick(item)}
       >

@@ -20,12 +20,12 @@ const stateTrans = (state: typeof personal.data.state): string => {
 }
 
 $: info = [
-  { i18n: 'anchor.country', value: personal?.data?.country },
-  { i18n: 'anchor.height', value: personal?.data?.height },
-  { i18n: 'anchor.weight', value: personal?.data?.weight },
-  { i18n: 'anchor.birthday', value: personal?.data?.birthday },
-  { i18n: 'anchor.favorite', value: personal?.data?.favorite },
-  { i18n: 'anchor.state', value: $t(stateTrans(personal?.data?.state)) }
+  { i18n: 'anchor.country', value: personal?.data?.country || '' },
+  { i18n: 'anchor.height', value: personal?.data?.height || '' },
+  { i18n: 'anchor.weight', value: personal?.data?.weight || '' },
+  { i18n: 'anchor.birthday', value: personal?.data?.birthday || '' },
+  { i18n: 'anchor.favorite', value: personal?.data?.favorite || '' },
+  { i18n: 'anchor.state', value: $t(stateTrans(personal?.data?.state)) || '' }
 ]
 
 
@@ -49,7 +49,7 @@ $: info = [
       {:then photos}
 
         {#each photos?.data?.list as photo } 
-          <img class='w-[120px] h-[120px] rounded-[20px]' src={photo.image} alt='' />
+          <img class='w-[120px] min-w-[120px] h-[120px] min-h-[120px] rounded-[20px]' src={photo.image} alt='' />
         {/each}
 
       {/await}

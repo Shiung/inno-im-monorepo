@@ -5,8 +5,19 @@ import Empty from '$containers/Empty'
 import Loading from './Loading.svelte'
 import Experts from './Experts.svelte'
 
-const predictionsPromise = im.expertPredictions({ query: { pageIdx: 1, pageSize: 10 }})
+import type { SidType } from 'utils/types'
+import type { IExpertMenu } from '$containers/ExpertWithMenu/types'
 
+export let actived: IExpertMenu['type'] = 0
+export let sid: SidType
+
+$: predictionsPromise = im.expertPredictions({
+  query: {
+    ...(sid && { sid }),
+    ...(actived && { type: actived }),
+    pageIdx: 1,
+    pageSize: 10
+}})
 
 </script>
 
