@@ -1,38 +1,38 @@
 <script lang='ts'>
 import { params, replace } from 'svelte-spa-router'
 import HeaderNavigation from '$containers/HeaderNavigation'
-
-import AnchorList from './AnchorList'
+import ExpertWithMenu from '$containers/ExpertWithMenu'
 
 import { convertSid, type SidType } from 'utils'
 
-$: sid = convertSid($params?.anchorSid)
+$: sid = convertSid($params?.expertSid)
 
 const headNavIcons: {sid: SidType, onClick: () => void}[] = [
   {
     sid: 0,
-    onClick: () => replace('/anchor/0')
+    onClick: () => replace('/expert/0')
   },
   {
     sid: 1,
-    onClick: () => replace('/anchor/1')
+    onClick: () => replace('/expert/1')
   },
   {
     sid: 2,
-    onClick: () => replace('/anchor/2')
+    onClick: () => replace('/expert/2')
   },
   {
     sid: 3,
-    onClick: () => replace('/anchor/3')
+    onClick: () => replace('/expert/3')
   },
   {
     sid: 4,
-    onClick: () => replace('/anchor/4')
+    onClick: () => replace('/expert/4')
   },
 ]
 </script>
 
 <div>
   <HeaderNavigation active={sid} icons={headNavIcons} />
-  <AnchorList />
+  <ExpertWithMenu sid={sid} />
 </div>
+

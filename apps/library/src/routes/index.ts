@@ -28,6 +28,18 @@ const routes = {
       }
     ]
   }),
+  '/expert/:expertSid?': wrap({
+    asyncComponent: () => import('$pages/expert/index.svelte'),
+    userData: {
+      bottomNav: 'expert'
+    },
+    conditions: [
+      (detail) => {
+        if (!detail?.params?.expertSid) replace('/expert/0')
+        return true
+      }
+    ]
+  }),
   '/platformExpert/:sid?': wrap({
     asyncComponent: () => import('$pages/platformExpert/index.svelte'),
     userData: {

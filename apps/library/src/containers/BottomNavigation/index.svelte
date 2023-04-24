@@ -31,8 +31,7 @@ const genIcons = (_t: ITransStore) => ([
     id: 'expert',
     icon: () => import('./images/expert.svg'),
     text: _t('common.expert'),
-    disabled: true,
-    onClick: () => console.log('4')
+    onClick: () => push('/expert')
   },
   {
     id: 'match',

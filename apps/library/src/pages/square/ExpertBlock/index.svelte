@@ -7,4 +7,4 @@ $: sid = convertSid($params?.sid)
 
 </script>
 
-<ExpertWithMenu class='rounded-[20px]' sid={sid} />
+<ExpertWithMenu class='rounded-[20px]' sid={sid} folder />

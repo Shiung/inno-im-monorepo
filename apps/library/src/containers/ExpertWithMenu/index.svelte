@@ -7,6 +7,7 @@ import type { IExpertMenu } from './types'
 import type { SidType } from 'utils'
 
 export let sid: SidType
+export let folder: boolean = false
 let actived: IExpertMenu['type'] = 0
 
 const menu: IExpertMenu[] = [
@@ -32,5 +33,5 @@ const menu: IExpertMenu[] = [
 
 <div data-cid='ExpertWithMenu' class={twMerge('bg-white', $$props.class)}>
   <Menu class='border-b divide-solid' menu={menu} bind:actived={actived} />
-  <ExpertList actived={actived} sid={sid} /> 
+  <ExpertList actived={actived} sid={sid} folder={folder} /> 
 </div>
