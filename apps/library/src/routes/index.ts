@@ -16,14 +16,14 @@ const routes = {
       }
     ]
   }),
-  '/anchor/:sid?': wrap({
+  '/anchor/:anchorSid?': wrap({
     asyncComponent: () => import('$pages/anchor/index.svelte'),
     userData: {
       bottomNav: 'anchor'
     },
     conditions: [
       (detail) => {
-        if (!detail?.params?.sid) replace('/anchor/0')
+        if (!detail?.params?.anchorSid) replace('/anchor/0')
         return true
       }
     ]
