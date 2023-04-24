@@ -68,6 +68,7 @@ const expert: IMockData[] = [
         title: "@cword",
         homeName: "@cname",
         awayName: "@cname",
+        leagueName: "@cname"
       }))
     }))
   },

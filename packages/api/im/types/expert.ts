@@ -85,6 +85,7 @@ export interface IExpertArthcleNow {
       title: string
       homeName: string
       awayName: string
+      leagueName: string
     }>
   }>
 }
