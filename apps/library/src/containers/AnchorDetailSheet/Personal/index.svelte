@@ -1,11 +1,17 @@
 <script lang='ts'>
+import { im } from 'api'
 import { t } from '$stores'
 
-import type { IWebAnchorDetail } from 'api/im/types'
+import PhotoLoading from './PhotoLoading.svelte'
 
-export let detail: IWebAnchorDetail['res']['data']
+import type { IWebAnchorInfo } from 'api/im/types'
 
-const stateTrans = (state: typeof detail.userInfo.state): string => {
+export let personal: { loading: boolean, data: IWebAnchorInfo['res']['data'] }
+export let houseId: string
+
+const photosPromise = im.webAnchorPhotos({ query: { houseId }})
+
+const stateTrans = (state: typeof personal.data.state): string => {
   switch (state) {
     case 1: return 'anchor.state.single' 
     case 2: return 'anchor.state.inRelationship'
@@ -14,12 +20,12 @@ const stateTrans = (state: typeof detail.userInfo.state): string => {
 }
 
 $: info = [
-  { i18n: 'anchor.country', value: detail?.userInfo?.country },
-  { i18n: 'anchor.height', value: detail?.userInfo?.height },
-  { i18n: 'anchor.weight', value: detail?.userInfo?.weight },
-  { i18n: 'anchor.birthday', value: detail?.userInfo?.birthday },
-  { i18n: 'anchor.favorite', value: detail?.userInfo?.favorite },
-  { i18n: 'anchor.state', value: $t(stateTrans(detail?.userInfo?.state)) }
+  { i18n: 'anchor.country', value: personal?.data?.country },
+  { i18n: 'anchor.height', value: personal?.data?.height },
+  { i18n: 'anchor.weight', value: personal?.data?.weight },
+  { i18n: 'anchor.birthday', value: personal?.data?.birthday },
+  { i18n: 'anchor.favorite', value: personal?.data?.favorite },
+  { i18n: 'anchor.state', value: $t(stateTrans(personal?.data?.state)) }
 ]
 
 
@@ -38,10 +44,15 @@ $: info = [
   <div>
     <div class='mt-[16px] text-[18px] font-semibold'> {$t('anchor.photoWall')} </div>
     <div class='flex overflow-y-scroll space-x-[12px] my-[12px]'>
-      {#each detail?.userInfo?.photos as photo } 
-        <img class='w-[120px] h-[120px] rounded-[20px]' src={photo.image} alt='' />
-      {/each}
+      {#await photosPromise} 
+        <PhotoLoading />
+      {:then photos}
 
+        {#each photos?.data?.list as photo } 
+          <img class='w-[120px] h-[120px] rounded-[20px]' src={photo.image} alt='' />
+        {/each}
+
+      {/await}
     </div>
   </div>
 </div>

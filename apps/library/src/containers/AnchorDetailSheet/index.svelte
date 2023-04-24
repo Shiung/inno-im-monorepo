@@ -77,7 +77,7 @@ onDestroy(() => clearZIndexOfBottomNav())
 
     <DetailHeader detail={detail.data} bind:activedTab={activedTab} tabs={Object.keys(tabs)} />
     <Content>
-      <DetailContent activedTab={activedTab} tabs={tabs} detail={detail.data} />
+      <DetailContent activedTab={activedTab} tabs={tabs} houseId={houseId} />
       {#if onMax}
         <div class='min-h-[75px]' />
       {/if}

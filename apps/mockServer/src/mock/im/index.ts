@@ -5,5 +5,5 @@ import type { IMockData } from '../../types'
 
 export default [
   ...webAnchor,
-  ...expert
+  ...expert,
 ] as IMockData[]

@@ -1,12 +1,12 @@
 <script lang='ts'>
 import { im } from 'api'
 
-import type { IWebAnchorDetail, IWebAnchorLife } from 'api/im/types'
+import type { IWebAnchorLife, IWebAnchorInfo } from 'api/im/types'
 import type { ITabs } from './types'
 
 export let tabs: ITabs
 export let activedTab: keyof typeof tabs
-export let detail: IWebAnchorDetail['res']['data']
+export let houseId: string
 
 const loadingComponent = async (_activeTab: typeof activedTab) => {
   if (!activedTab) return
@@ -24,21 +24,35 @@ const fetchAnchorLife = async () => {
   if (life.data) return
 
   life.loading = true
-  const res = await im.webAnchorLife({ query: { houseId: detail.houseId } })
+  const res = await im.webAnchorLife({ query: { houseId } })
   life.data = res?.data
   life.loading = false
 }
 
-$: if (activedTab === 'anchor.life') fetchAnchorLife()
+let personal: { loading: boolean, data: IWebAnchorInfo['res']['data'] } = { loading: true, data: undefined}
+const fetchPersonal = async () => {
+  if (personal.data) return
+    
+    personal.loading = true
+    const res = await im.webAnchorInfo({ query: { houseId }})
+    personal.data = res?.data
+    personal.loading = false
+}
+
+$: {
+  if (activedTab === 'anchor.life') fetchAnchorLife()
+  else if (activedTab === 'anchor.personal') fetchPersonal()
+}
+
 
 </script>
 
 
 {#await lazyLoading then comp}
   {#if activedTab === 'anchor.matches'}
-    <svelte:component this={comp} houseId={detail.houseId} />
+    <svelte:component this={comp} houseId={houseId} />
   {:else if activedTab === 'anchor.personal'}
-    <svelte:component this={comp} detail={detail} />
+    <svelte:component this={comp} personal={personal} houseId={houseId} />
   {:else if activedTab === 'anchor.life'}
     <svelte:component this={comp} life={life} />
   {/if}

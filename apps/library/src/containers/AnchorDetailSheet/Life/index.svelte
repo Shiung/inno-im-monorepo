@@ -10,7 +10,7 @@ export let life: { loading: boolean, data: IWebAnchorLife['res']['data'] }
   {#if life.loading}
     <Loading />
   {:else}
-    {#each life?.data?.lifeStory as story}
+    {#each life?.data?.list as story}
 
     <div class='grid grid-cols-[45px_80px_auto] gap-[15px] h-[80px] overflow-y-hidden'>
       <div class='text-[14px]'> {story.date} </div>

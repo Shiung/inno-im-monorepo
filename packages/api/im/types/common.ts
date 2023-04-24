@@ -17,3 +17,5 @@ export interface IPager {
   totalPage: number
   totalRow: number
 }
+
+export type sidType = 0 | 1 | 2 | 3 | 4 // 0 or 不帶: all 1: 足球 2: 籃球 3: 網球 4: 棒球

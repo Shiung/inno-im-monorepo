@@ -1,21 +1,22 @@
-import type { IPager, withData } from './common'
+import type { IPager, withData, sidType } from './common'
 
 export interface IWebAnchor {
-  attentionStatus: number
-  fansCount: number
   houseId: string
   houseImage: string
-  houseName: string
-  liveStatus: 1 | 2 | 3 | 4 // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
-  nickName: number
-  playStreamAddress: string
   userImage: string
   visitHistory: number
+  houseName: string
+  nickName: string
+  playStreamAddress: string
+  liveStatus: 1 | 2 | 3 | 4 // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
+  fansCount: number
+  attentionStatus: 0 | 1 | 2 // 0:未关注 1:已关注 2:无需出现关注按钮(主播自己)
+  matchCount: number
 }
 
 export interface IWebAnchors {
   query: {
-    sid?: number 
+    sid?: sidType
     keyWord?: string
     pageIdx: number
     pageSize: number
@@ -63,22 +64,7 @@ export interface IWebAnchorDetail {
   res: withData<{
     userImage: string
     nickName: string
-    houseName: string
-    houseId: string
-    userInfo: {
-      country: string
-      height: string
-      weight: string
-      birthday: string
-      favorite: string
-      description: string
-      state: 1 | 2 | 3 // 感情狀態  1单身2恋爱中3保密
-      photos: Array<{
-        data: number
-        image: string
-        imageDesc: string
-      }>
-    }
+    personalIntroduction: string
   }>
 }
 
@@ -88,11 +74,7 @@ export interface IWebAnchorLife {
   }
   body: null
   res: withData<{
-    userImage: string
-    nickName: string
-    houseName: string
-    houseId: string
-    lifeStory: Array<{
+    list: Array<{
       date: number
       image: string
       context: string
@@ -101,17 +83,51 @@ export interface IWebAnchorLife {
   }>
 }
 
+export interface IWebAnchorPhoto {
+  date: number
+  imageDesc: string
+  image: string
+}
+
+export interface IWebAnchorPhotos {
+  query: {
+    houseId: string
+  }
+  body: null
+  res: withData<{
+    list: IWebAnchorPhoto[]
+    pager: IPager
+  }>
+}
+
+export interface IWebAnchorInfo {
+  query: {
+    houseId: string
+  }
+  body: null
+  res: withData<{
+    country: string
+    height: string
+    gender: 1 | 2 | 3 // 1男 2女 3保密
+    description: string
+    weight: string
+    birthday: string
+    favorite: string
+    state: 1 | 2 | 3 // 1单身 2恋爱中 3保密
+  }>
+}
+
 export interface IWebAnchorRecommend {
   query: {
-    sid?: number
+    sid?: sidType
   }
   body: null
   res: withData<{
     houseId: string
     liveStatus: number // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
     nickName: string
-    playStreamAddress: string
     personalIntroduction: string
+    playStreamAddress: string
     anchorTitle: string
     houseIntroduction: string
     userImage: string

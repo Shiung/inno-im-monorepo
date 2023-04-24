@@ -50,6 +50,7 @@ const putLocaleBeforeName = (data: { [key:string]: string }) => {
 }
 
 const fetchLocaleData = async (name: string) => {
+  if (!name) return
   const _name = name.split('.')[0]
   const path = `${get(locale)}_${_name.replace('/', '_')}` // 檔名不能有/
   if (get(fetchedName).has(path)) return

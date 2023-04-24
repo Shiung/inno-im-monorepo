@@ -1,93 +1,120 @@
 import { mock, Random } from 'mockjs'
-import { genAnchorList, withData, randomPostTime } from './utils'
+import { withData, randomPostTime, genPager, genHouseId } from './utils'
 
+import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
 
-export default [
-  // #1.主播列表
+Random.extend({
+  anchorhousename: function() {
+    const names = ['球球直播', '娟娟直播', '糖果直播', '君君直播']
+    return this.pick(names)
+  },
+  anchornickname: function() {
+    const names = ['翠花姑凉的小花', '娟娟', '糖果', '君君']
+    return this.pick(names)
+  }
+})
+
+const webAnchors: IMockData[] = [
   {
     url: '/anchor/web-anchors',
     timeout: 500,
-    response: ({ query }) => mock(withData({
-      "list": genAnchorList(Number(query.pageSize)),
-      "pager": {
-          "pageIdx": Number(query.pageIdx) || 1,
-          "pageSize": Number(query.pageSize) || 20,
-          "totalPage": 1,
-          "totalRow": 2
-      }
+    response: ({ query }) => mock(withData<Types.IWebAnchors>({
+      list: Array.from({ length: Number(query.pageSize) || 20 }, () => ({
+        houseId: genHouseId(),
+        houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
+        userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+        visitHistory: Random.natural(0, 999999999999),
+        houseName: "@ANCHORHOUSENAME",
+        nickName: "@ANCHORNICKNAME",
+        playStreamAddress: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
+        liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
+        fansCount: Random.natural(0, 10000000),
+        attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
+        matchCount: Random.natural(0, 10)
+      })),
+      pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
   },
-  // #2.主播詳情
   {
     url: '/anchor/web-anchor/detail',
-    response: () => mock(withData({
-        "userImage": "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
-        "nickName": "@ANCHORNICKNAME",
-        "houseName": "@ANCHORHOUSENAME",
-        "houseId": () => String(Random.natural(0, 99999)),
-        "userInfo": {
-                "country": "@region",
-                "height": () => `${Random.natural(140, 170)}CM`,
-                "weight": () => `${Random.natural(40, 60)}KG`,
-                "birthday": "@date",
-                "favorite": "烹飪,跳舞,旅行",
-                "state": () => Random.natural(1, 3),
-                "photos|1-10": [
-                    {
-                        "date": () => randomPostTime(),
-                        "image": "@image",
-                        "imageDesc": "@word"
-                    }
-                ]
-        }
+    response: () => mock(withData<Types.IWebAnchorDetail>({
+        userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+        nickName: "@ANCHORNICKNAME",
+        personalIntroduction: '@cparagraph'
     }))
   },
-  // #3.主播播報賽事
   {
     url: '/anchor/web-anchor/match-list',
     timeout: 500,
-    response: () => mock(withData({
-              "matchList|1-5": [
-                  {
-                "homeTeamName":"@cname",
-                "homeTeamLogo":"@image",
-                "homeTeamId":"@word",
-                "awayTeamName":"@cname",
-                "awayTeamLogo":"@image",
-                "awayTeamId":"@id",
-                "competitionName":"@cname",
-                "competitionLogo":"@image",
-                "competitionId":"@word",
-                "sportId": () => Random.integer(1, 3),
-                "matchId":"@id",
-                "matchTime": () => randomPostTime(),
-                "matchStatus": () => Random.integer(1, 8),
-                "homeScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
-                "awayScore": () => Array.from({ length: 7 }, () => Random.integer(0, 10)),
-              },
-          ]
+    response: () => mock(withData<Types.IWebAnchorMatches>({
+      matchList: Array.from({length: Random.natural(1, 5)}, () => ({
+          homeTeamName:"@cname",
+          homeTeamLogo:"@image",
+          homeTeamId:"@word",
+          awayTeamName:"@cname",
+          awayTeamLogo:"@image",
+          awayTeamId:"@id",
+          competitionName:"@cname",
+          competitionLogo:"@image",
+          competitionId:"@word",
+          sportId: Random.integer(1, 3) as Types.IWebAnchorMatch['sportId'],
+          matchId:"@id",
+          matchTime: randomPostTime(),
+          matchStatus: Random.integer(1, 8) as Types.IWebAnchorMatch['matchStatus'],
+          homeScore: Array.from({ length: 7 }, () => Random.integer(0, 10)) as Types.IWebAnchorMatch['homeScore'],
+          awayScore: Array.from({ length: 7 }, () => Random.integer(0, 10)) as Types.IWebAnchorMatch['awayScore'],
+      }))
     }))
   },
-  // #4.主播生活動態
   {
     url: '/anchor/web-anchor/life',
-    response: () => mock(withData({
-      "userImage": "@image",
-      "nickName": "@ANCHORNICKNAME",
-      "houseName": "@ANCHORHOUSENAME",
-      "houseId": () => String(Random.natural(0, 99999)),
-      "lifeStory|10-20": [
-          {
-              "date": () => randomPostTime(),
-              "image": "@image",
-              "context": "@cparagraph",
-          }
-        ],
-      "pageIdx":1,
-			"pageSize":15,
-			"totalPage":30,
-			"totalRow":450,
+    response: ({ query }) => mock(withData<Types.IWebAnchorLife>({
+      list: Array.from({ length: Random.natural(10, 20) }, () => ({
+        date: randomPostTime(),
+        image: "@image",
+        context: "@cparagraph",
+      })),
+      pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
+    }))
+  },
+  {
+    url: '/anchor/web-anchor/photos',
+    response: ({ query }) => mock(withData<Types.IWebAnchorPhotos>({
+      list: Array.from({ length: Random.natural(10, 20) }, () => ({
+        date: randomPostTime(),
+        imageDesc: "@image",
+        image: "@image",
+      })),
+      pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
+    }))
+  },
+  {
+    url: '/anchor/web-anchor/info',
+    response: () => mock(withData<Types.IWebAnchorInfo>({
+      country: "@region",
+      height: String(Random.natural(150, 170)),
+      gender: Random.natural(1, 3) as Types.IWebAnchorInfo['res']['data']['gender'],
+      weight: String(Random.natural(40, 60)),
+      birthday: "@datetime",
+      favorite: "@cword",
+      description: "@csentence",
+      state: Random.natural(1, 3) as Types.IWebAnchorInfo['res']['data']['state'],
+    }))
+  },
+  {
+    url: '/anchor/web-anchor/recommend',
+    response: () => mock(withData<Types.IWebAnchorRecommend>({
+      houseId: genHouseId(),
+      liveStatus: Random.natural(1, 4) as Types.IWebAnchorRecommend['res']['data']['liveStatus'],
+      nickName: "@cname",
+      playStreamAddress: "https://live5.sxjgyc.com/live/12277.flv?auth_key=1681809903-0-2277-4ee153e0776ecf93107780201d10e10a",
+      personalIntroduction: "@cword",
+      anchorTitle: "@csentence",
+      houseIntroduction: "@csentence",
+      userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/575/w-K5RvqqSqCmIrWD3p0xxA.png"
     }))
   }
-] as IMockData[]
+]
+
+export default webAnchors
