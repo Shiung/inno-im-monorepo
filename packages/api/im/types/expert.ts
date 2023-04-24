@@ -21,7 +21,7 @@ export interface IExpertPrediction {
 export interface IExpertPredictions {
   query: {
     matchId?: string
-    sid?: sidType
+    sid?: number
     type?: 0 | 1 | 2 // 0: 命中王 1: 連紅王 2: 跟投王
     pageIdx: number
     pageSize: number
@@ -37,7 +37,7 @@ export interface IExpertRecommand {
   query: {
     pageIdx: number
     pageSize: number
-    sid?: sidType
+    sid?: number
   }
   body: null
   res: withData<{

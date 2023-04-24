@@ -7,20 +7,20 @@ import tennis from '../images/tennis.webp'
 
 import Icon from './Icon.svelte'
 
-import { SID } from 'utils/types'
+import type { SidType } from 'utils/types'
 
 import type { IIcon } from '../types'
 
 
-export let active: SID
+export let active: SidType
 export let icons: IIcon[] = []
 
-const iconUrlDict: {[k in SID]: string} = {
-  [SID.all]: all,
-  [SID.soccer]: soccer,
-  [SID.basketball]: basketball,
-  [SID.tennis]: tennis,
-  [SID.baseball]: baseball
+const iconUrlDict = {
+  '0': all,
+  '1': soccer,
+  '2': basketball,
+  '3': tennis,
+  '4': baseball
 }
 
 </script>

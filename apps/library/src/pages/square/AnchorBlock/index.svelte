@@ -6,6 +6,7 @@ import { push, params } from 'svelte-spa-router'
 
 import { t } from '$stores'
 import Empty from '$containers/Empty'
+import convertSid from 'utils/convertSid'
 
 import Anchor from './Anchor'
 import Loading from './Loading.svelte'
@@ -16,11 +17,13 @@ import bg1 from './images/bg_style1_1.webp'
 import bg2 from './images/bg_style1_2.webp'
 import bg3 from './images/bg_style1_3.webp'
 
-let anchorsPromise = im.webAnchors({ query: { pageIdx: 1, pageSize: 4 } })
+let anchorsPromise: ReturnType<typeof im.webAnchors>
 const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 
 $: {
-  if ($params?.sid) anchorsPromise = im.webAnchors({ query: {pageIdx: 1, pageSize: 4 } })
+  if ($params?.sid && $params.sid !== '0') anchorsPromise = im.webAnchors({
+    query: { sid: convertSid($params?.sid), pageIdx: 1, pageSize: 4 }
+  })
 }
 
 </script>
@@ -46,7 +49,7 @@ $: {
 
     {:else}
       <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
-        {#each anchors?.data?.list as anchor, idx}
+        {#each anchors?.data?.list || [] as anchor, idx}
           <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
         {/each}
       </div>

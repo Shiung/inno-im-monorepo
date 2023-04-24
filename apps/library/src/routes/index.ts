@@ -23,7 +23,7 @@ const routes = {
     },
     conditions: [
       (detail) => {
-        if (!detail?.params?.sid) replace('/anchor/all')
+        if (!detail?.params?.sid) replace('/anchor/0')
         return true
       }
     ]

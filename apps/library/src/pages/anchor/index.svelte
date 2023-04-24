@@ -4,30 +4,30 @@ import HeaderNavigation from '$containers/HeaderNavigation'
 
 import AnchorList from './AnchorList'
 
-import { convertSid, SID } from 'utils'
+import { convertSid, type SidType } from 'utils'
 
 $: sid = convertSid($params?.sid)
 
-const headNavIcons = [
+const headNavIcons: {sid: SidType, onClick: () => void}[] = [
   {
-    sid: SID.all,
-    onClick: () => replace(`/anchor/${SID.all}`)
+    sid: 0,
+    onClick: () => replace('/anchor/0')
   },
   {
-    sid: SID.soccer,
-    onClick: () => replace(`/anchor/${SID.soccer}`)
+    sid: 1,
+    onClick: () => replace('/anchor/1')
   },
   {
-    sid: SID.basketball,
-    onClick: () => replace(`/anchor/${SID.basketball}`)
+    sid: 2,
+    onClick: () => replace('/anchor/2')
   },
   {
-    sid: SID.tennis,
-    onClick: () => replace(`/anchor/${SID.tennis}`)
+    sid: 3,
+    onClick: () => replace('/anchor/3')
   },
   {
-    sid: SID.baseball,
-    onClick: () => replace(`/anchor/${SID.baseball}`)
+    sid: 4,
+    onClick: () => replace('/anchor/4')
   },
 ]
 </script>

@@ -6,26 +6,26 @@ import LiveStreaming from '$containers/LiveStreaming'
 import AnchorBlock from './AnchorBlock'
 import ExpertBlock from './ExpertBlock'
 
-import { convertSid, SID } from 'utils'
+import { convertSid, type SidType } from 'utils'
 
 $: sid = convertSid($params?.sid)
 
-const headNavIcons = [
+const headNavIcons: { sid: SidType, onClick: () => void }[] = [
   {
-    sid: SID.soccer,
-    onClick: () => replace(`/square/${SID.soccer}`)
+    sid: 1,
+    onClick: () => replace('/square/1')
   },
   {
-    sid: SID.basketball,
-    onClick: () => replace(`/square/${SID.basketball}`)
+    sid: 2,
+    onClick: () => replace('/square/2')
   },
   {
-    sid: SID.tennis,
-    onClick: () => replace(`/square/${SID.tennis}`)
+    sid: 3,
+    onClick: () => replace('/square/3')
   },
   {
-    sid: SID.baseball,
-    onClick: () => replace(`/square/${SID.baseball}`)
+    sid: 4,
+    onClick: () => replace('/square/4')
   },
 ]
 

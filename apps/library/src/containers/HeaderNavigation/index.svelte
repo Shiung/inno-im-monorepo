@@ -2,10 +2,10 @@
 import BallSelection from './BallSelection/index.svelte'
 import BonusPoint from './BonusPoint/index.svelte'
 
-import type { SID } from 'utils/types'
+import type { SidType } from 'utils/types'
 import type { IIcon } from './types'
 
-export let active: SID
+export let active: SidType
 export let icons: IIcon[]
 
 </script>

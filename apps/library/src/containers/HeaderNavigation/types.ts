@@ -1,6 +1,6 @@
-import type { SID } from 'utils/types'
+import type { SidType } from 'utils/types'
 
 export interface IIcon {
-  sid: SID
+  sid: SidType
   onClick: () => void
 }

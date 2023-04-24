@@ -1,4 +1,4 @@
-import type { IPager, withData, sidType } from './common'
+import type { IPager, withData } from './common'
 
 export interface IWebAnchor {
   houseId: string
@@ -16,7 +16,7 @@ export interface IWebAnchor {
 
 export interface IWebAnchors {
   query: {
-    sid?: sidType
+    sid?: number
     keyWord?: string
     pageIdx: number
     pageSize: number
@@ -119,7 +119,7 @@ export interface IWebAnchorInfo {
 
 export interface IWebAnchorRecommend {
   query: {
-    sid?: sidType
+    sid?: number
   }
   body: null
   res: withData<{

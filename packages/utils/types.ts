@@ -1,7 +1,1 @@
-export enum SID {
-  all = 'all',
-  soccer = 1,
-  basketball = 2,
-  tennis = 3,
-  baseball = 4
-}
+export type SidType = 0 | 1 | 2 | 3 | 4 // 0: all 1: 足球 2: 籃球 3: 網球 4: 棒球
