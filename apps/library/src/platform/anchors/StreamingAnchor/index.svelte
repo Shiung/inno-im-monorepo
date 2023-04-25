@@ -31,7 +31,7 @@ let folder: boolean = false
 
     </div>
 
-    <div class='flex-1 ml-[10px] overflow-x-hidden'>
+    <div class='flex-1 ml-[10px] overflow-hidden'>
       <div class='flex items-center justify-between'>
         <div class='text-[16px] text-imprimary'> {$streaming.houseName} </div>
         <Ripple class='flex items-center justify-center w-[20px] h-[20px] rounded-full' on:click={() => folder = !folder}>
@@ -51,7 +51,7 @@ let folder: boolean = false
         </span>
       </div>
 
-      <div class='flex items-end mt-[20px]'>
+      <div class='flex items-end mt-[15px]'>
         <img class='w-[30px] mr-[10px]' src={fans} alt='' />
         <Tween value={amountSymbolTransformer($streaming.fansCount)} /> 
       </div>
