@@ -7,6 +7,7 @@ import Badget from '../components/Badget.svelte'
 import Search from '../components/Search/index.svelte'
 import FlvPlayer from '../components/FlvPlayer/index.svelte'
 import Empty from '../components/Empty.svelte'
+import Tween from '../components/Tween.svelte'
 
 
 const routes = {
@@ -18,6 +19,7 @@ const routes = {
   '/badget': Badget,
   '/search': Search,
   '/flvPlayer': FlvPlayer,
+  '/Tween': Tween,
   '/empty': Empty
 
 }

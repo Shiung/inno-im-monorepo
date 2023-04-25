@@ -11,8 +11,6 @@ import DetailContent from './DetailContent.svelte'
 import Loading from './Loading.svelte'
 import Close from './images/close.svg'
 
-
-import type { IWebAnchorDetail } from 'api/im/types'
 import type { ITabs } from './types'
 
 export let open: boolean
@@ -33,6 +31,7 @@ $: if (open) detailPromise = im.webAnchorDetail({ query: { houseId }})
 let onMax: boolean = false
 const clearZIndexOfBottomNav = () => {
   if (!onMax) return
+
   const bottomNav = document.querySelector(`[data-cid="${dataCid}"]`)?.firstChild as HTMLElement
   if (!bottomNav) return
   bottomNav.style.zIndex = ''

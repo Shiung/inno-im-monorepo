@@ -40,6 +40,12 @@ const routes = {
       }
     ]
   }),
+  '/platform/anchor': wrap({
+    asyncComponent: () => import('../platform/anchors'),
+    userData: {
+      showBottomNav: false
+    }
+  }),
   '/platformExpert/:sid?': wrap({
     asyncComponent: () => import('$pages/platformExpert/index.svelte'),
     userData: {
