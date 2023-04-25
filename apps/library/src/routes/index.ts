@@ -46,8 +46,14 @@ const routes = {
       showBottomNav: false
     }
   }),
-  '/platformExpert/:sid?': wrap({
-    asyncComponent: () => import('$pages/platformExpert/index.svelte'),
+  '/platform/streaming': wrap({
+    asyncComponent: () => import('../platform/streaming'),
+    userData: {
+      showBottomNav: false
+    }
+  }),
+  '/platform/streamingWithAnchor': wrap({
+    asyncComponent: () => import('../platform/streamingWithAnchor'),
     userData: {
       showBottomNav: false
     }

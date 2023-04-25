@@ -17,6 +17,7 @@ const genAnchor = (houseId: string) => ({
 })
 
 
+export const setAnchors = () => {
   list.set([
     genAnchor('111111'),
     genAnchor('222222'),
@@ -39,3 +40,4 @@ const genAnchor = (houseId: string) => ({
       genAnchor('000000'),
     ])
   }, 4000)
+}
