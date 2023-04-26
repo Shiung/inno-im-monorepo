@@ -13,5 +13,5 @@ export * from '$pages/platformExpert'
 // export * as store from '$stores/library'
 
 // 下面是測試用的 等正式上版到prod後要刪除
-export { default as Test } from '$pages/test/index.svelte'                                                                                                                                    
+export { default as Test } from '$pages/test/index.svelte'
 export { default as Uikit } from '$pages/test/index.svelte'
