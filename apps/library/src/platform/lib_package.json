@@ -8,6 +8,14 @@
       "import": "./index.js",
       "require": "./index.cjs"
     },
+    "./streaming": {
+      "import": "./streaming.js",
+      "require": "./streaming.cjs"
+    },
+    "./anchors": {
+      "import": "./anchors.js",
+      "require": "./anchors.cjs"
+    },
     "./style.css": "./style.css"
   }
 }
