@@ -1,10 +1,15 @@
-<script lang='ts'>
+<script lang='ts' context='module'>
 import { anchor } from '../store'
-import LiveStreaming from '$containers/LiveStreaming'
+export { onError, onReady, onLostData } from 'ui/components/FlvPlayer'
+
+export const setStreaming = anchor.streaming.set
+
+</script>
+
+<script lang='ts'>
+import FlvPlayer from 'ui/components/FlvPlayer'
 
 $: streaming = anchor.streaming
 </script>
 
-<div class='h-[214px]'>
-  <LiveStreaming url={$streaming?.playStreamAddress} />
-</div>
+<FlvPlayer url={$streaming?.playStreamAddress} />

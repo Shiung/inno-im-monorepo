@@ -40,6 +40,12 @@ const routes = {
       }
     ]
   }),
+  '/expertDetail/:expertId': wrap({
+    asyncComponent: () => import('$pages/expertDetail/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+  }),
   '/platform/anchor': wrap({
     asyncComponent: () => import('../platform/anchors'),
     userData: {

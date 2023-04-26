@@ -7,7 +7,7 @@ const readVersion = async () => {
 }
 
 const writeVersionToRelease = async (version) => {
-  let data = fs.readFileSync('./library_package.json', 'utf8')
+  let data = fs.readFileSync('./src/platform/lib_package.json', 'utf8')
   data = JSON.parse(data)
   data.version = version
   fs.writeFileSync('./release/package.json', JSON.stringify(data))

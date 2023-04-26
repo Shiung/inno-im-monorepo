@@ -1,7 +1,13 @@
+<script lang='ts' context='module'>
+import { list } from './store'
+export const setList = list.set
+export const updateList = list.update
+
+</script>
+
 <script lang='ts'>
 import Empty from '$containers/Empty'
 
-import { list } from './store'
 import StreamingAnchor from './StreamingAnchor/index.svelte'
 import Anchor from './Anchor/index.svelte'
 

@@ -1,42 +1,52 @@
 <script lang='ts'>
-import { Button, Badget } from 'ui'
-import type { IExpertPrediction } from 'api/im/types'
+import { Button, Badget, Ripple } from 'ui'
+import { push } from 'svelte-spa-router'
+import { t } from '$stores'
 
 import Strack from './Streak/index.svelte'
 
-import { t } from '$stores'
+import type { IExpertPrediction } from 'api/im/types'
+
 export let prodiction: IExpertPrediction
 
 </script>
 
-<div>
-  <div class='flex justify-between'>
-    <div class='flex flex-col justify-between'>
-      <div class='grid gap-[10px]' style:grid-template-columns='44px auto'>
-        <img class='rounded-full border-[3px] border-white im-shadow' src={prodiction.expertImage} alt='' />
-        <div class='self-center'>
-          <div class='text-[14px] font-semibold'> {prodiction.expertName} </div>
-          <div class='text-[10px] text-[#999999]'> {prodiction.releaseTime} </div>
+<div class='relative'>
+  <Ripple class='w-full' on:click={() => console.log('body')}>
+    <div class='flex justify-between'>
+      <div class='flex flex-col justify-between'>
+        <div class='grid gap-[10px] h-[50px]' style:grid-template-columns='44px auto'>
+
+          <div />
+
+          <div class='self-center'>
+            <div class='text-[14px] font-semibold text-start'> {prodiction.expertName} </div>
+            <div class='text-[10px] text-[#999999]'> {prodiction.releaseTime} </div>
+          </div>
+        </div>
+
+        <div class='flex items-center space-x-[4px]'>
+          <Badget> {prodiction.market} </Badget> 
+          <Strack streak={prodiction.hotStreak} />
         </div>
       </div>
 
-      <div class='flex items-center space-x-[4px]'>
-        <Badget> {prodiction.market} </Badget> 
-        <Strack streak={prodiction.hotStreak} />
+      <div class='flex flex-col justify-between'>
+        <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('export.limitFree')} </Button>
+
+        <div class='flex text-[10px] items-end'>
+          <span class='text-[#666666]'> {$t('export.hitRate')} </span>
+          <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
+          <span> % </span>
+        </div>
       </div>
     </div>
 
-    <div class='flex flex-col justify-between'>
-      <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('export.limitFree')} </Button>
+    <p class='mt-[10px] text-[14px] font-semibold truncate'> {prodiction.title} </p>
 
-      <div class='flex text-[10px] items-end'>
-        <span class='text-[#666666]'> {$t('export.hitRate')} </span>
-        <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
-        <span> % </span>
-      </div>
-    </div>
-  </div>
+  </Ripple>
 
-  <p class='mt-[10px] text-[14px] font-semibold truncate'> {prodiction.title} </p>
-
+  <Ripple class='w-[44px] absolute top-0 left-0 rounded-full' on:click={() => push(`/expertDetail/${prodiction.expertId}`)}>
+    <img class='rounded-full border-[3px] border-white im-shadow' src={prodiction.expertImage} alt='' />
+  </Ripple>
 </div>

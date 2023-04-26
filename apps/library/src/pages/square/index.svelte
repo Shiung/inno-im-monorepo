@@ -1,7 +1,7 @@
 <script lang='ts'>
+import FlvPlayer from 'ui/components/FlvPlayer'
 import { params, replace } from 'svelte-spa-router'
 import HeaderNavigation from '$containers/HeaderNavigation'
-import LiveStreaming from '$containers/LiveStreaming'
 
 import AnchorBlock from './AnchorBlock'
 import ExpertBlock from './ExpertBlock'
@@ -33,7 +33,7 @@ const headNavIcons: { sid: SidType, onClick: () => void }[] = [
 
 <div>
   <HeaderNavigation active={sid} icons={headNavIcons} />
-  <LiveStreaming url='' />
+  <FlvPlayer url='' />
   <div class='space-y-[10px]'>
     <AnchorBlock />
     <ExpertBlock />

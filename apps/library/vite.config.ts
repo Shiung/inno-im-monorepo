@@ -12,10 +12,17 @@ const buildAsLibrary = () => ({
   build: {
     lib: {
       // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, './src/index.ts'),
+      entry: {
+        index: resolve(__dirname, './src/platform/index.ts'),
+        anchors: resolve(__dirname, './src/platform/anchors/index.ts'),
+        streaming: resolve(__dirname, './src/platform/streaming/index.ts') 
+      },
       name: 'im-library',
       // the proper extensions will be added
-      fileName: 'index',
+      fileName: (format: string, entryName: string) => {
+        if (format === 'es') return `${entryName}.js`
+        if (format === 'cjs') return `${entryName}.cjs`
+      }
     }
   }
 })
