@@ -5,7 +5,7 @@ export let flvPlayer: ReturnType<typeof flvjs.createPlayer>
 
 let onReadyCallback: () => void = () => {}
 let onLostDataCallback: () => void = () => {}
-let onErrorCallback: (e: string) => void = (e) => console.log(e)
+let onErrorCallback: (e: string) => void = () => {} 
 
 export const onReady = (callback: typeof onReadyCallback) => {
   onReadyCallback = callback
