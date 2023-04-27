@@ -20,7 +20,7 @@ const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 $: {
   if ($params?.anchorSid) fetchAnchorsPromise = im.webAnchors({
     query: {
-      sid: convertSid($params?.anchorSid),
+      ...(convertSid($params?.anchorSid) && { sid: convertSid($params?.anchorSid) }),
       pageIdx: 1,
       pageSize: 20
     }
