@@ -1,24 +1,54 @@
 <script lang='ts'>
+import { timestampToFormat } from 'utils/convertDateAndTimestamp'
+import { t } from '$stores'
 import Loading from './Loading.svelte'
 
 import type { IWebAnchorLife } from 'api/im/types'
 
 export let life: { loading: boolean, data: IWebAnchorLife['res']['data'] }
+
+type IStories = {
+  [year: string]: Array<typeof life.data.list[number] & { day: string, time: string }>
+}
+
+const parseLifeData = (list?: typeof life.data.list) => {
+  const stories: IStories = {}
+
+  list.sort((a, b) => b.date - a.date)
+
+  for (const item of list) {
+    const datetime = timestampToFormat({ ts: item.date, format: 'YYYY MM-DD hh:mm' })
+    const [year, day, time] = datetime.split(' ')
+    
+    const story = { ...item, day, time }
+    if (stories[year]) stories[year].push(story)
+    else stories[year] = [story]
+  }
+
+  return Object.entries(stories)
+}
+
 </script>
 
-<div class='px-[16px] space-y-[20px]'>
+<div class='px-[16px]'>
   {#if life.loading}
     <Loading />
   {:else}
-    {#each life?.data?.list as story}
+    {#each parseLifeData(life?.data?.list) as [year, stories]}
+      <div class='font-semibold text-[18px]'> {$t('common.year', { num: year })} </div>
 
-    <div class='grid grid-cols-[45px_80px_auto] gap-[15px] h-[80px] overflow-y-hidden'>
-      <div class='text-[14px]'> {story.date} </div>
-      <img class='w-[80px] h-[80px]' src={story.image} alt='' />
-      <div class='text-[12px] h-full'>
-        <div> {story.context} </div>
+      <div class='space-y-[20px] mt-[16px]'>
+        {#each stories as story}
+          <div class='grid grid-cols-[45px_80px_auto] gap-[15px] h-[80px] overflow-y-hidden'>
+            <div>
+              <div class='text-[14px]'> {story.day} </div>
+              <div class='text-[10px] text-[#999999]'> {story.time} </div>
+            </div>
+            <img class='w-[80px] h-[80px]' src={story.image} alt='' />
+            <div class='text-[12px] h-full'> {story.context} </div>
+          </div>
+        {/each}
       </div>
-    </div>
 
     {/each}
   {/if}

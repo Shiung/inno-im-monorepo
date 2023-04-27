@@ -17,7 +17,7 @@ export let tabs: string[]
 
 <Header class='mt-[5px] bg-white px-[15px]'>
   <div class='flex justify-center'>
-    <div class='flex justify-center w-[375px] h-[193px] bg-cover bg-center bg-no-repeat'
+    <div class='relative flex justify-center w-[375px] h-[193px] bg-cover bg-center bg-no-repeat'
       style:background-image={`url(${anchorBg})`}
     >
       <img class='rounded-full mt-[12px] ml-[6px] w-[160px] h-[160px]' src={detail.userImage} alt='' />
@@ -47,7 +47,7 @@ export let tabs: string[]
         style:background-color={activedTab === tab ? 'rgb(var(--im-monorepo-primary))' : 'white'}
       >
         <Ripple 
-          class={twMerge('h-[32px] px-[20px]',
+          class={twMerge('text-[#333333] h-[32px] px-[20px]',
             activedTab === tab && 'text-white'
           )}
           ripple='#ffffff'
