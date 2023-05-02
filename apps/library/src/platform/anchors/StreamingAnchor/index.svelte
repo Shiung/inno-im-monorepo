@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { slide } from 'svelte/transition'
-import { Ripple, Tween } from 'ui'
+import { Tween } from 'ui'
 import { amountSymbolTransformer } from 'utils/amount'
 
 import ArrowUp from './images/arrow_up.svg' 
@@ -13,6 +13,8 @@ let folder: boolean = false
 
 {#if $streaming}
 <div class='flex py-[12px] px-[16px] bg-white im-shadow rounded-b-[18px] ease-out duration-300'
+  on:click={() => folder = !folder}
+  on:keypress={() => folder = !folder}
   style:height={folder ? '50px' : '125px'}
   transition:slide|local
 >
@@ -34,11 +36,9 @@ let folder: boolean = false
     <div class='flex-1 ml-[10px] overflow-hidden'>
       <div class='flex items-center justify-between'>
         <div class='text-[16px] text-imprimary'> {$streaming.houseName} </div>
-        <Ripple class='flex items-center justify-center w-[20px] h-[20px] rounded-full' on:click={() => folder = !folder}>
-          <div class='duration-300' style:transform={folder ? 'rotate(180deg)' : 'rotate(0deg)'}>
-            <ArrowUp width={14} height={14} fill='#333333' />
-          </div>
-        </Ripple>
+        <div class='duration-300' style:transform={folder ? 'rotate(180deg)' : 'rotate(0deg)'}>
+          <ArrowUp width={14} height={14} fill='#333333' />
+        </div>
       </div>
 
       <div class='truncate'>

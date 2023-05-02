@@ -1,7 +1,15 @@
 <script lang='ts' context='module'>
 import { list } from './store'
+
+import type { IPlatformAnchor } from './types'
+
 export const setList = list.set
 export const updateList = list.update
+let onChangeCallback = (_anchor: IPlatformAnchor) => {}
+
+export let onChange = (callback: typeof onChangeCallback) => {
+  onChangeCallback = callback  
+}
 
 </script>
 
@@ -13,6 +21,7 @@ import Anchor from './Anchor/index.svelte'
 
 let _list: string[] = []
 list.list.subscribe((value) => _list = value)
+
 </script>
 
 {#if !_list || _list?.length === 0}
@@ -23,7 +32,7 @@ list.list.subscribe((value) => _list = value)
 
     <div class='px-[12px] mt-[12px]'>
     {#each _list || [] as houseId}
-      <Anchor houseId={houseId} />
+      <Anchor houseId={houseId} on:change={(e) => onChangeCallback(e.detail)} />
     {/each}
     </div>
   </div>
