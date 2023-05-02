@@ -50,7 +50,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: 'expert/info',
+    url: '/expert/info',
     response: () => mock(withData<Types.IExpertInfo>({
         expertId: "@word",
         expertName: "@cname",

@@ -17,7 +17,7 @@ class IM extends Base {
   expertPredictions = this.apiGenerator<Types.IExpertPredictions>({ url: '/expert/predictions' })
   expertRecommend = this.apiGenerator<Types.IExpertRecommand>({ url: '/expert/recommend' })
   expertInfo = this.apiGenerator<Types.IExpertInfo>({ url: '/expert/info' })
-  expertArticleNow = this.apiGenerator<Types.IExpertArthcleNow>({ url: '/article/now' })
+  expertArticleNow = this.apiGenerator<Types.IExpertArthcleNow>({ url: '/expert/article/now' })
   expertArticleHistory = this.apiGenerator<Types.IExpertArthcleHistory>({ url: '/expert/article/history' })
   expertArticleHit = this.apiGenerator<Types.IExpertArthcleHit>({ url: '/expert/article/hit' })
   expertStatistics = this.apiGenerator<Types.IExpertStatistics>({ url: '/expert/statistics' })

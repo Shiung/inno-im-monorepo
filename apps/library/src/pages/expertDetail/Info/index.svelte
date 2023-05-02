@@ -1,0 +1,27 @@
+<script lang='ts'>
+import { params } from 'svelte-spa-router'
+import { im } from 'api'
+import Streak from '$containers/Streak'
+
+import bg from './images/bg.webp'
+import Loading from './Loading.svelte'
+
+let infoPromise: ReturnType<typeof im.expertInfo>
+$: if ($params?.expertId) infoPromise = im.expertInfo({ query: {  expertId: $params.expertId } })
+
+</script>
+
+<div class='flex h-[88px] bg-cover items-center px-[16px] bg-white rounded-b-[20px]'
+  style:background-image={`url(${bg})`}
+>
+  {#await infoPromise}
+    <Loading />
+  {:then info}
+    <img class='w-[60px] h-[60px] rounded-full' src={info?.data?.expertImage} alt='' />
+    <div class='ml-[8px]'>
+      <div class='text-[14px] font-semibold'> {info?.data?.expertName} </div>
+      <Streak streak={info?.data?.hotStreak} />
+    </div>
+
+  {/await}
+</div>
