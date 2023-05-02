@@ -22,11 +22,7 @@ const headNavIcons: { sid: SidType, onClick: () => void }[] = [
   {
     sid: 3,
     onClick: () => replace('/square/3')
-  },
-  {
-    sid: 4,
-    onClick: () => replace('/square/4')
-  },
+  }
 ]
 
 </script>
@@ -36,6 +32,8 @@ const headNavIcons: { sid: SidType, onClick: () => void }[] = [
   <FlvPlayer url='' />
   <div class='space-y-[10px]'>
     <AnchorBlock />
-    <ExpertBlock />
+    {#if sid === 1 || sid === 2}
+      <ExpertBlock />
+    {/if}
   </div>
 </div>

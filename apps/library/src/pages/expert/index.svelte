@@ -23,11 +23,7 @@ const headNavIcons: {sid: SidType, onClick: () => void}[] = [
   {
     sid: 3,
     onClick: () => replace('/expert/3')
-  },
-  {
-    sid: 4,
-    onClick: () => replace('/expert/4')
-  },
+  }
 ]
 </script>
 

@@ -24,11 +24,7 @@ const headNavIcons: {sid: SidType, onClick: () => void}[] = [
   {
     sid: 3,
     onClick: () => replace('/anchor/3')
-  },
-  {
-    sid: 4,
-    onClick: () => replace('/anchor/4')
-  },
+  }
 ]
 </script>
 
