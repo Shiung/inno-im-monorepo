@@ -5,7 +5,7 @@ const genAnchor = (houseId: string) => ({
   userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/1235/z5xMTdihT3O2K9C5oAvznQ.png",
   houseId: houseId,
   visitHistory: 2140,
-  playStreamAddress: "https://sf1-hscdn-tos.pstatp.com/obj/media-fe/xgplayer_doc_video/flv/xgplayer-demo-360p.flv",
+  playStreamAddress: "https://live5.js-mooc.com/live/52279.flv?auth_key=1682424264-0-2279-4ee2eeb922b9fa35e166d2af01e69688",
   liveStatus: 1 as IPlatformAnchor['liveStatus'],
   houseName: "直播",
   houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/1235/QNAIY4IgQNmJneMNQ1U_cw.png",
