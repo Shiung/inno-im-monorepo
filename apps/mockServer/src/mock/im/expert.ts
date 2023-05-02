@@ -61,11 +61,11 @@ const expert: IMockData[] = [
   {
     url: '/expert/article/now',
     response: ({ query}) => mock(withData<Types.IExpertArthcleNow>({
-      list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
+      list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
-        title: "@cword",
+        title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
         leagueName: "@cname"
@@ -75,11 +75,11 @@ const expert: IMockData[] = [
   {
     url: '/export/article/history',
     response: ({ query }) => mock(withData<Types.IExpertArthcleHistory>({
-      list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
+      list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
-        title: "@cword",
+        title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
         leagueName: "@cname"
@@ -90,11 +90,11 @@ const expert: IMockData[] = [
   {
     url: '/export/article/hit',
     response: ({ query }) => mock(withData<Types.IExpertArthcleHit>({
-      list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
+      list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
-        title: "@cword",
+        title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
         leagueName: "@cname"

@@ -22,9 +22,8 @@ const promise = im.expertArticleNow({ query: { expertId }})
 
       {#each now?.data?.list || [] as article}
         <div class='space-y-[8px] im-shadow rounded-[10px] p-[8px]'>
-          <div> {article.title} </div>
-          <!-- 玩法區塊 待討論
-          -->
+          <div class='truncate'> {article.title} </div>
+          <!-- 玩法區塊 待討論 -->
           <div class='flex items-center'>
             <Badget> {'market'} </Badget>
             <div class='text-[12px] ml-[4px]'> {`${article.homeName} vs ${article.awayName}`} </div>
