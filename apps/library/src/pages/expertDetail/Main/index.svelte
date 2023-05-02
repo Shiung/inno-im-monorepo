@@ -21,7 +21,7 @@ $: fetchComponent(method)
 </script>
 
 <div class={twMerge('bg-[white] rounded-t-[20px]', $$props.class)}>
-  <Menu bind:method={method} />
+  <Menu class='mb-[16px]' bind:method={method} />
 
   {#await promise then comp}
     <svelte:component this={comp?.default} />

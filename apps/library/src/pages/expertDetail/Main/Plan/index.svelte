@@ -1,9 +1,12 @@
 <script lang='ts'>
 import { params } from 'svelte-spa-router'
-import { im } from 'api'
+// import { im } from 'api'
+
+import Ongoing from './Ongoing/index.svelte'
 console.log('plan component')
 
-im.expertArticleNow({ query: { expertId: $params.expertId }})
 </script>
 
-<div>  plan </div>
+<div data-cid='expertDetail_Main_Plan' class='mx-[16px]'>
+  <Ongoing expertId={$params.expertId} />
+</div>
