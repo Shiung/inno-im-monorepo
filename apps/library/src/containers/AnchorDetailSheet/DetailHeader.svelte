@@ -39,7 +39,7 @@ export let tabs: string[]
 
   <div class='text-[14px] mt-[4px] text-[#999999] text-center'>
     {detail.personalIntroduction}
-  <div>
+  </div>
 
   <div class='flex justify-around text-[14px] mt-[14px] mb-[15px] duration-300'>
     {#each tabs as tab}
