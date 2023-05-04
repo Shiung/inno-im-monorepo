@@ -1,6 +1,5 @@
 <script lang='ts'>
 import { Ripple } from 'ui'
-import { slide } from 'svelte/transition'
 import AnchorStatus from '$containers/AnchorStatus'
 import AnchorMatches from '$containers/AnchorMatches/index.svelte'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'

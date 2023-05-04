@@ -40,12 +40,12 @@ const routes = {
       }
     ]
   }),
-  // '/expertDetail/:expertId': wrap({
-  //   asyncComponent: () => import('$pages/expertDetail/index.svelte'),
-  //   userData: {
-  //     showBottomNav: false
-  //   },
-  // }),
+  '/expertDetail/:expertId/:method?': wrap({
+    asyncComponent: () => import('$pages/expertDetail/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+  }),
   '/platform/anchor': wrap({
     asyncComponent: () => import('../platform/anchors'),
     userData: {

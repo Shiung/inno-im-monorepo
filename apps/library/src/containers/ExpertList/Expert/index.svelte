@@ -3,7 +3,7 @@ import { Button, Badget, Ripple } from 'ui'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
 
-import Strack from './Streak/index.svelte'
+import Strack from '$containers/Streak'
 
 import type { IExpertPrediction } from 'api/im/types'
 
@@ -32,10 +32,10 @@ export let prodiction: IExpertPrediction
       </div>
 
       <div class='flex flex-col justify-between'>
-        <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('export.limitFree')} </Button>
+        <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('expert.limitFree')} </Button>
 
         <div class='flex text-[10px] items-end'>
-          <span class='text-[#666666]'> {$t('export.hitRate')} </span>
+          <span class='text-[#666666]'> {$t('expert.hitRate')} </span>
           <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
           <span> % </span>
         </div>

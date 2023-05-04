@@ -12,19 +12,19 @@ let actived: IExpertMenu['type'] = 0
 
 const menu: IExpertMenu[] = [
   { 
-    i18n: 'export.hit',
+    i18n: 'expert.hit',
     type: 0,
-    onClick: () => console.log('export.hit') 
+    onClick: () => console.log('expert.hit') 
   },
   {
-    i18n: 'export.winningStreakKing',
+    i18n: 'expert.winningStreakKing',
     type: 1,
-    onClick: () => console.log('export.winningStreakKing') 
+    onClick: () => console.log('expert.winningStreakKing') 
   },
   {
-    i18n: 'export.followUp',
+    i18n: 'expert.followUp',
     type: 2,
-    onClick: () => console.log('export.followUp')
+    onClick: () => console.log('expert.followUp')
     },
 ]
 
