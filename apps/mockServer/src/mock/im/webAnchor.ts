@@ -1,5 +1,6 @@
 import { mock, Random } from 'mockjs'
 import { withData, randomPostTime, genPager, genHouseId } from './utils'
+import { getRandomItemFromArray } from 'utils'
 
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
@@ -23,7 +24,11 @@ const webAnchors: IMockData[] = [
       list: Array.from({ length: Number(query.pageSize) || 20 }, () => ({
         houseId: genHouseId(),
         houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
-        userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+        userImage: getRandomItemFromArray([
+          "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+          "https://oss-",
+          "",
+        ]),
         visitHistory: Random.natural(0, 999999999999),
         houseName: "@ANCHORHOUSENAME",
         nickName: "@ANCHORNICKNAME",

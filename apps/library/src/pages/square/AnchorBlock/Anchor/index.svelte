@@ -6,6 +6,8 @@ import { t } from '$stores'
 import AnchorStatus from '$containers/AnchorStatus'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 
+import person from './images/person_none.webp'
+
 import Smile from '../images/smile.svg'
 
 export let anchor: IWebAnchor
@@ -24,14 +26,14 @@ let openDetailSheet: boolean = false
     <AnchorStatus liveStatus={anchor.liveStatus} />
   </div>
 
-  <div class='flex flex-1 justify-between items-end'>
+  <div class='flex flex-1 justify-between items-end overflow-hidden'>
     <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-imprimary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
       on:click={() => openDetailSheet = true}
     >
       <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />
       <div>{$t('anchor.detail')}</div>
     </Ripple>
-    <img class='w-[75px] h-[75px]' src={anchor.userImage} alt='' />
+    <img class='w-[75px]' src={anchor.userImage} on:error={() => anchor.userImage = person} alt='' />
   </div>
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
