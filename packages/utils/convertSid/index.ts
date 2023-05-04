@@ -1,6 +1,6 @@
 import type { SidType } from '../types'
 
-export default (_sid: string): SidType => {
+export default (_sid: string): SidType | null => {
   switch(_sid) {
     case '0': return 0
     case '1': return 1

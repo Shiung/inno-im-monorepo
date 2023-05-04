@@ -2,7 +2,6 @@
   "name": "utils",
   "version": "0.0.0",
   "description": "common utils for use in svelte websites",
-  "type": "module",
   "module": "index.ts",
   "svelte": "index.ts",
   "license": "MIT",

@@ -8,25 +8,30 @@ const expert: IMockData[] = [
   {
     url: '/expert/predictions',
     response: ({ query }) => mock(withData<Types.IExpertPredictions>({
-      list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
-        expertId: "@word",
-        expertName: "@cname",
-        expertImage: "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
-        releaseTime: randomPostTime(),
-        closeTime: randomPostTime(),
-        market: genMarket(),
-        hotStreak: Random.integer(0, 12),
-        hitRate: Random.integer(60, 100),
-        articleId: "@word",
-        articleStatus: Random.integer(1, 2) as Types.IExpertPrediction['articleStatus'],
-        title: "@cparagraph",
-        homeName: "@cname",
-        awayName: "@cname",
-        leagueName: "@cname",
-        matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
-        matchTime: randomPostTime(),
-        sportId: Random.integer(1, 2) as Types.IExpertPrediction['sportId']
-      })),
+      list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
+        const market = genMarket()
+        const sportId = Number(market.status[0]) as Types.IExpertPrediction['sportId']
+
+        return {
+          expertId: "@word",
+          expertName: "@cname",
+          expertImage: "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
+          releaseTime: randomPostTime(),
+          closeTime: randomPostTime(),
+          market,
+          hotStreak: Random.integer(0, 12),
+          hitRate: Random.integer(60, 100),
+          articleId: "@word",
+          articleStatus: Random.integer(1, 2) as Types.IExpertPrediction['articleStatus'],
+          title: "@cparagraph",
+          homeName: "@cname",
+          awayName: "@cname",
+          leagueName: "@cname",
+          matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
+          matchTime: randomPostTime(),
+          sportId,
+        }
+      }),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
   },

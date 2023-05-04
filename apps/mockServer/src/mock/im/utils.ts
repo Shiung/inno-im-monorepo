@@ -1,4 +1,5 @@
 import { Random } from 'mockjs'
+import { getRandomItemFromArray } from 'utils'
 
 import type { IMarket } from 'api/im/types'
 
@@ -20,11 +21,6 @@ export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({
   totalPage: 100,
   totalRow: 20
 })
-
-const getRandomItemFromArray = <T>(array: T[]): T => {
-  const idx = Math.floor(Math.random() * array.length)
-  return array[idx]
-}
 
 const marketTypes = {
   '11': ['h', 'a', 'd'],

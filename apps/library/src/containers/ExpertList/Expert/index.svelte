@@ -26,7 +26,7 @@ export let prodiction: IExpertPrediction
         </div>
 
         <div class='flex items-center space-x-[4px]'>
-          <Badget> {prodiction.market} </Badget> 
+          <Badget> {prodiction.market.status} </Badget> 
           <Strack streak={prodiction.hotStreak} />
         </div>
       </div>

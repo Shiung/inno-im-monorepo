@@ -498,7 +498,7 @@ export default {
     const arrPY = []
     const arrPYS = []
 
-    let ssht: ISsht
+    let ssht: ISsht | ''
     let wordWithSpace = ''
 
     for (let i = 0; i < arr.length; i++) {
