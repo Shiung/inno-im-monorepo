@@ -45,12 +45,21 @@ const build = async () => {
   await $`cp ./dist/*.* ./release`
 }
 
+const runCheck = async () => {
+  try {
+    await $`pnpm check`
+  } catch (e) {
+    await $`exit ${e.exitCode}`
+  }
+}
+
 const pushToGit = async (version) => {
   await $`cd release && git add * && git commit -m "v${version}" && git push`
   await $`cd release && git tag v${version} && git push --tag`
 }
 
 
+await runCheck()
 await renewReleaseFolder()
 const releasedVer = await getReleasedVersion()
 console.log('releasedVer', releasedVer)
