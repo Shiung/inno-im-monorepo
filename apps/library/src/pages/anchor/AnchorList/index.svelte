@@ -30,7 +30,7 @@ $: {
 </script>
 
 <div data-cid='Anchor_AnchorList' class='bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]'>
-<Search on:clear={() => console.log('clear')}/>
+<Search on:clear={() => console.log('clear')} on:select={(e) => console.log(e.detail)}/>
 
   <div class='space-y-[12px]'>
     {#await fetchAnchorsPromise}
