@@ -48,7 +48,7 @@ const webAnchors: IMockData[] = [
     url: '/anchor/web-anchor/match-list',
     timeout: 500,
     response: () => mock(withData<Types.IWebAnchorMatches>({
-      matchList: Array.from({length: Random.natural(1, 5)}, () => ({
+      matchList: Array.from({length: Random.natural(0, 5)}, () => ({
           homeTeamName:"@cname",
           homeTeamLogo:"@image",
           homeTeamId:"@word",
@@ -70,7 +70,7 @@ const webAnchors: IMockData[] = [
   {
     url: '/anchor/web-anchor/life',
     response: ({ query }) => mock(withData<Types.IWebAnchorLife>({
-      list: Array.from({ length: Random.natural(10, 20) }, () => ({
+      list: Array.from({ length: Random.natural(0, 20) }, () => ({
         date: randomPostTime(),
         image: "@image",
         context: "@cparagraph",
@@ -81,7 +81,7 @@ const webAnchors: IMockData[] = [
   {
     url: '/anchor/web-anchor/photos',
     response: ({ query }) => mock(withData<Types.IWebAnchorPhotos>({
-      list: Array.from({ length: Random.natural(10, 20) }, () => ({
+      list: Array.from({ length: Random.natural(0, 20) }, () => ({
         date: randomPostTime(),
         imageDesc: "@image",
         image: "@image",

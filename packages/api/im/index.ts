@@ -21,6 +21,7 @@ class IM extends Base {
   expertArticleHistory = this.apiGenerator<Types.IExpertArthcleHistory>({ url: '/expert/article/history' })
   expertArticleHit = this.apiGenerator<Types.IExpertArthcleHit>({ url: '/expert/article/hit' })
   expertStatistics = this.apiGenerator<Types.IExpertStatistics>({ url: '/expert/statistics' })
+  expertMatchArticle = this.apiGenerator<Types.IExpertMacthArticle>({ url: '/expert/match/article' })
 }
 
 export default new IM()

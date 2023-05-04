@@ -1,7 +1,9 @@
 import { Random } from 'mockjs'
 
+import type { IMarket } from 'api/im/types'
+
 export const withData = <T extends { res: { data: any } }>(data: T['res']['data']) => ({
-  code: "0",
+  code: 0,
   message: "",
   serverTime: Math.round(Date.now() / 1000),
   data
@@ -18,5 +20,32 @@ export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({
   totalPage: 100,
   totalRow: 20
 })
+
+const getRandomItemFromArray = <T>(array: T[]): T => {
+  const idx = Math.floor(Math.random() * array.length)
+  return array[idx]
+}
+
+const marketTypes = {
+  '11': ['h', 'a', 'd'],
+  '12': ['h', 'a'],
+  '13': ['ov', 'ud'],
+  '21': ['h', 'a', 'd'],
+  '22': ['h', 'a'],
+  '23': ['ov', 'ud'],
+}
+
+export const genMarket = (): IMarket => {
+  const status = getRandomItemFromArray(Object.keys(marketTypes)) as IMarket['status']
+  const item = marketTypes[status] || []
+  const type = getRandomItemFromArray(item) as IMarket['type']
+  return {
+    status,
+    type,
+    odds: String(Random.float(0.01, 50, 0, 2)),
+    k: ''
+  }
+}
+  
 
 export const genHouseId = () => String(Random.natural(0, 99999))

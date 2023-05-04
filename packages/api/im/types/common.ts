@@ -1,6 +1,6 @@
 export interface withData<T> {
   message: string
-  code: string
+  code: number
   data: T
   serverTime: number
 }
@@ -19,3 +19,17 @@ export interface IPager {
 }
 
 export type sidType = 0 | 1 | 2 | 3 | 4 // 0 or 不帶: all 1: 足球 2: 籃球 3: 網球 4: 棒球
+
+export interface IMarket {
+  // 盤口類型
+  // 足球：獨贏(11)、讓球(12)、大小(13)
+  // 篮球：獨贏(21)、讓球(22)、大小(23)
+  status: '11' | '12' | '13' | '21' | '22' | '23'
+  // 投注類型
+  // 獨贏: 主隊(h)、客隊(a)、和局(d)
+  // 讓球: 主隊(h)、客隊(a)
+  // 大小: 大(ov)、小(ud)
+  type: 'h' | 'a' | 'd' | 'ov' | 'ud'
+  odds: string
+  k: string
+}
