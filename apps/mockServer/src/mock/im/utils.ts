@@ -42,6 +42,13 @@ export const genMarket = (): IMarket => {
     k: ''
   }
 }
-  
+
+export const getExpertImage = () => {
+  return getRandomItemFromArray([
+    "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
+    "http://file",
+    ''
+  ])
+}
 
 export const genHouseId = () => String(Random.natural(0, 99999))

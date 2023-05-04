@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { withData, genPager, randomPostTime, genMarket } from './utils'
+import { withData, genPager, randomPostTime, genMarket, getExpertImage } from './utils'
 
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
@@ -15,7 +15,7 @@ const expert: IMockData[] = [
         return {
           expertId: "@word",
           expertName: "@cname",
-          expertImage: "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
+          expertImage: getExpertImage(),
           releaseTime: randomPostTime(),
           closeTime: randomPostTime(),
           market,
@@ -41,7 +41,7 @@ const expert: IMockData[] = [
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
         expertId: "@word",
         expertName: "@cname",
-        expertImage: "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
+        expertImage: getExpertImage(),
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
         market: "獨贏",
@@ -60,7 +60,7 @@ const expert: IMockData[] = [
     response: () => mock(withData<Types.IExpertInfo>({
         expertId: "@word",
         expertName: "@cname",
-        expertImage: "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
+        expertImage: getExpertImage(),
         hotStreak: Random.integer(0, 12),
     }))
   },
@@ -133,7 +133,7 @@ const expert: IMockData[] = [
       list: Array.from({ length: 10 }, () => ({
         expertId: "@word",
         expertName: "@cname",
-        expertImage: "http://file.fengkuangtiyu.cn/imagesER/010/01016777388541379038.png",
+        expertImage: getExpertImage(),
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
         market: genMarket(),
