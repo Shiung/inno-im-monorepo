@@ -20,7 +20,18 @@ $: {
   pinYin.updateOrCreateDict(dict)
 }
 
-$: list = pinYin.search(value)
+
+let list: string[] = []
+let timeout: ReturnType<typeof setTimeout>
+
+// $: list = pinYin.search(value)
+
+$: if (value) {
+  clearTimeout(timeout)
+  timeout = setTimeout(() => {
+    list = pinYin.search(value)
+  }, 100)
+}
 
 const handleClearClick = () => {
   value = ''
@@ -47,12 +58,12 @@ const handleClearClick = () => {
 
   </div>
 
-  <div class='absolute translate-y-1 bg-white max-h-[500px] overflow-scroll' style:width={`${dom?.getBoundingClientRect()?.width | 0}px`}>
-    {#if list}
+  <div class='absolute translate-y-1 bg-white max-h-[500px] overflow-scroll im-shadow z-10' style:width={`${dom?.getBoundingClientRect()?.width | 0}px`}>
+    {#if list && value}
       {#each list as item}
-        <div transition:slide|local class='h-[40px] w-full bg-white border-b border-[#eeeeee] last:border-none'>
+        <div class='h-[40px] w-full bg-white border-b border-[#eeeeee] last:border-none'>
           <Ripple class='flex items-center w-full h-full text-start text-[#333333]' on:click={() => dispatch('select', item)}>
-            <Search class='mr-[10px]' width={18} height={18} fill='#666666' />
+            <Search class='m-[10px]' width={18} height={18} fill='#666666' />
             {item} 
           </Ripple>
         </div>
