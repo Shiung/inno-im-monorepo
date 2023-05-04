@@ -24,7 +24,7 @@ const fetchAnchorLife = async () => {
   if (life.data) return
 
   life.loading = true
-  const res = await im.webAnchorLife({ query: { houseId } })
+  const res = await im.webAnchorLife({ query: { houseId, pageIdx: 1, pageSize: 10 } })
   life.data = res?.data
   life.loading = false
 }

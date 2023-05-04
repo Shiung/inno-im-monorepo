@@ -71,6 +71,8 @@ export interface IWebAnchorDetail {
 export interface IWebAnchorLife {
   query: {
     houseId: string
+    pageIdx?: number
+    pageSize?: number
   }
   body: null
   res: withData<{
@@ -92,6 +94,8 @@ export interface IWebAnchorPhoto {
 export interface IWebAnchorPhotos {
   query: {
     houseId: string
+    pageIdx?: number
+    pageSize?: number
   }
   body: null
   res: withData<{
