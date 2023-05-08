@@ -1,7 +1,11 @@
+<script lang='ts'>
+export let stroke = '#eee'
+</script>
+
 <div data-testId='loading' class='showbox'>
   <div class='loader'>
     <svg class='circular' viewBox='25 25 50 50'>
-      <circle class='path' cx='50' cy='50' r='20' fill='none' stroke-width='3' stroke-miterlimit='10' />
+      <circle class='path' cx='50' cy='50' r='20' fill='none' stroke-width='3' stroke-miterlimit='10' stroke={stroke} />
     </svg>
   </div>
 </div>
@@ -40,7 +44,6 @@
 .path {
   stroke-dasharray: 1, 200;
   stroke-dashoffset: 0;
-  stroke: #eee;
   animation: dash 1.5s ease-in-out infinite; // , color 6s ease-in-out infinite;
   stroke-linecap: round;
 }
