@@ -1,3 +1,12 @@
+<script lang='ts' context='module'>
+import { push } from 'svelte-spa-router'
+let goHomeCallback: () => void = () => push('/')
+
+export let setGoHome = (callback?: () => void) => {
+  if (callback) goHomeCallback = callback
+}
+</script>
+
 <script lang="ts">
 import Router, { location } from 'svelte-spa-router'
 import BottomNavigation from '$containers/BottomNavigation'
@@ -13,12 +22,11 @@ const routeLoading = (event: CustomEvent) => {
   if (event?.detail?.userData?.showBottomNav === false) showBottomNav.set(false)
   else showBottomNav.set(true)
 }
-
 </script>
 
 <main class='im-library'>
   <Router {routes} on:routeLoading={routeLoading} />
   {#if $showBottomNav}
-    <BottomNavigation />
+    <BottomNavigation goHome={() => goHomeCallback()} />
   {/if}
 </main>
