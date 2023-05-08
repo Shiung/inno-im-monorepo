@@ -13,14 +13,17 @@ import bg1 from '../images/bg_style2_1.webp'
 import bg2 from '../images/bg_style2_2.webp'
 import bg3 from '../images/bg_style2_3.webp'
 
+let keyWork = ''
 let fetchAnchorsPromise: ReturnType<typeof im.webAnchors>
 
 const anchorBgs = [ bg0, bg1, bg2, bg3 ]
+
 
 $: {
   if ($params?.anchorSid) fetchAnchorsPromise = im.webAnchors({
     query: {
       ...(convertSid($params?.anchorSid) && { sid: convertSid($params?.anchorSid) }),
+      ...(keyWork && { keyWork }),
       pageIdx: 1,
       pageSize: 20
     }
@@ -30,7 +33,10 @@ $: {
 </script>
 
 <div data-cid='Anchor_AnchorList' class='bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]'>
-<Search on:clear={() => console.log('clear')} on:select={(e) => console.log(e.detail)}/>
+<Search
+  on:searchEvent={e => keyWork = e.detail.keyWork}
+  on:submit={e => console.log('enter', e)}
+/>
 
   <div class='space-y-[12px]'>
     {#await fetchAnchorsPromise}

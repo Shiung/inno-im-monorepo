@@ -1,6 +1,5 @@
 <script lang='ts'>
 import { createEventDispatcher } from 'svelte'
-import { slide } from 'svelte/transition'
 import Ripple from '../Ripple'
 import { pinYin } from 'utils'
 import Search from './search.svg'
@@ -13,6 +12,7 @@ export let dict: string[] = []
 
 export let placeholder: string = ''
 export let value: string
+let isFocused = false
 let dom: HTMLDivElement
 
 $: {
@@ -24,7 +24,6 @@ $: {
 let list: string[] = []
 let timeout: ReturnType<typeof setTimeout>
 
-// $: list = pinYin.search(value)
 
 $: if (value) {
   clearTimeout(timeout)
@@ -35,7 +34,11 @@ $: if (value) {
 
 const handleClearClick = () => {
   value = ''
-  dispatch('clear')
+  dispatch('clear', { isFocused })
+}
+
+const onKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Enter') dispatch('submit')
 }
 
 </script>
@@ -44,8 +47,11 @@ const handleClearClick = () => {
   <div class='relative flex items-center'>
     <Search class='absolute left-[8px]' width={18} height={18} fill='#333333' />
     <input class='px-[35px] h-[40px] w-full bg-[#F7F8F9] rounded-[20px] outline-imprimary'
+      on:focus={() => isFocused= true}
+      on:blur={() => setTimeout(() => isFocused = false, 100)}
+      on:keydown={onKeydown}
       bind:value={value}
-      placeholder={placeholder} 
+      placeholder={placeholder}
     />
 
     {#if value}
@@ -59,7 +65,7 @@ const handleClearClick = () => {
   </div>
 
   <div class='absolute translate-y-1 bg-white max-h-[500px] overflow-scroll im-shadow z-10' style:width={`${dom?.getBoundingClientRect()?.width | 0}px`}>
-    {#if list && value}
+    {#if isFocused && list && value}
       {#each list as item}
         <div class='h-[40px] w-full bg-white border-b border-[#eeeeee] last:border-none'>
           <Ripple class='flex items-center w-full h-full text-start text-[#333333]' on:click={() => dispatch('select', item)}>

@@ -1,6 +1,9 @@
 <script lang='ts'>
+import { createEventDispatcher } from 'svelte'
 import { Search } from 'ui'
 import { t, locale } from '$stores'
+
+const dispatch = createEventDispatcher()
 
 const en = () => import('./dict/en')
 const cn = () => import('./dict/cn')
@@ -29,7 +32,13 @@ $: changeDict($locale)
 </script>
 
 <Search class='mb-[10px] text-[11px]' dict={dict} bind:value={value}
-  on:select
-  on:clear
+  on:submit={() => dispatch('searchEvent', { keyWork: value })}
+  on:select={e => {
+    value = e.detail
+    dispatch('searchEvent', { keyWork: e.detail })
+  }}
+  on:clear={e => {
+    if (!e.detail.isFocused) dispatch('searchEvent', { keyWork: '' })
+  }}
   placeholder={$t('anchor.search.placeholder')}
 />
