@@ -15,7 +15,7 @@ let folder: boolean = false
 <div class='flex py-[12px] px-[16px] bg-white im-shadow rounded-b-[18px] ease-out duration-300'
   on:click={() => folder = !folder}
   on:keypress={() => folder = !folder}
-  style:height={folder ? '50px' : '125px'}
+  style:height={folder ? '50px' : '130px'}
   transition:slide|local
 >
     <div class='relative flex flex-col items-center'>
