@@ -143,7 +143,12 @@ export interface IExpertStatistics {
   body: null
   res: withData<{
     list: Array<{
-      hitStatus: 0 | 1 | 2 | 3 // 0: 待确定 1: 命中 2: 未中 3: 比赛取消
+      hitStatus: 1 | 2 // 1: 命中 2: 未中
+    }>
+    info: Array<{
+      type: 1 | 2 | 3 // 1: 週 2: 月 3: 季
+      hotStreak: number // 連紅次數
+      hitRate: number
     }>
   }>
 }
