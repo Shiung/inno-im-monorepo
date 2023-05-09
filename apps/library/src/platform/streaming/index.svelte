@@ -1,6 +1,10 @@
 <script lang='ts' context='module'>
 import { anchor } from '../store'
-export { onError, onReady, onLostData } from 'ui/components/FlvPlayer'
+import { onError as _onError, onReady as _onReady, onLostData as _onLostData } from 'ui/components/FlvPlayer'
+
+export const onError = _onError
+export const onReady = _onReady
+export const onLostData = _onLostData
 
 export const setStreaming = anchor.streaming.set
 

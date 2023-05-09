@@ -16,7 +16,8 @@
     "lint": "prettier --check --ignore-path=../../.prettierignore . && eslint \"src\"",
     "format": "prettier --write --ignore-path=../../.prettierignore .",
     "_dev": "vite dev --port 5173 --open --host",
-    "_build": "vite build"
+    "_build": "vite build",
+    "dts-generate": "node ./env_scripts/generateDts.mjs"
   },
   "dependencies": {
     "api": "workspace:*",
@@ -46,6 +47,7 @@
     "sass": "^1.59.3",
     "svelte": "^3.55.1",
     "svelte-check": "^3.1.4",
+    "svelte2tsx": "^0.6.12",
     "tailwind-config": "workspace:*",
     "tailwindcss": "^3.2.7",
     "tslib": "^2.5.0",
