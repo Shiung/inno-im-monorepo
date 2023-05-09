@@ -6,13 +6,13 @@ import type { IMarket } from 'api/im/types'
 export const withData = <T extends { res: { data: any } }>(data: T['res']['data']) => ({
   code: 0,
   message: "",
-  serverTime: Math.round(Date.now() / 1000),
+  serverTime: Date.now(),
   data
 })
 
 export const randomPostTime = () => {
-  const timestamp = Math.round(Date.now() / 1000)
-  return timestamp - Random.integer(1, 60 * 60 * 24 * 14)
+  const now = Date.now()
+  return now - Random.integer(1, 60 * 60 * 24 * 14)
 } 
 
 export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({
