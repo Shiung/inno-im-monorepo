@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { Button, Badget, Ripple } from 'ui'
+import { convertTimeDiffToPast } from 'utils/convertTimeDiff'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
 
@@ -10,6 +11,18 @@ import avatar from './images/avatar.webp'
 import type { IExpertPrediction } from 'api/im/types'
 
 export let prodiction: IExpertPrediction
+
+const convertReleaseTime = (releaseTime: number) => {
+  const time = convertTimeDiffToPast({now: Date.now(), past: releaseTime})
+
+  switch (time.unit) {
+    case 'sec': return $t('common.secsPast', { num: time.text })
+    case 'min': return $t('common.minsPast', { num: time.text })
+    case 'hour': return $t('common.hoursPast', { num: time.text })
+    case 'date': return time.text
+    default: return time.text
+  }
+}
 
 </script>
 
@@ -23,7 +36,7 @@ export let prodiction: IExpertPrediction
 
           <div class='self-center'>
             <div class='text-[14px] font-semibold text-start'> {prodiction.expertName} </div>
-            <div class='text-[10px] text-[#999999]'> {prodiction.releaseTime} </div>
+            <div class='text-[10px] text-[#999999] text-left'> {convertReleaseTime(prodiction.releaseTime)} </div>
           </div>
         </div>
 
@@ -36,7 +49,7 @@ export let prodiction: IExpertPrediction
       <div class='flex flex-col justify-between'>
         <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('expert.limitFree')} </Button>
 
-        <div class='flex text-[10px] items-end'>
+        <div class='flex text-[10px] items-end self-end'>
           <span class='text-[#666666]'> {$t('expert.hitRate')} </span>
           <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
           <span> % </span>
