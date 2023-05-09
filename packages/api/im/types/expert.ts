@@ -145,6 +145,11 @@ export interface IExpertStatistics {
     list: Array<{
       hitStatus: 0 | 1 | 2 | 3 // 0: 待确定 1: 命中 2: 未中 3: 比赛取消
     }>
+    info: {
+      type: 1 | 2 | 3 // 數據日期 1: 週 2: 月 3: 季
+      hotStreak: number
+      hitRate: number
+    }
   }>
 }
 

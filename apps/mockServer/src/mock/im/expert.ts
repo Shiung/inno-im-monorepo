@@ -20,7 +20,7 @@ const expert: IMockData[] = [
           closeTime: randomPostTime(),
           market,
           hotStreak: Random.integer(0, 12),
-          hitRate: Random.integer(60, 100),
+          hitRate: Random.float(60, 100, 0, 2),
           articleId: "@word",
           articleStatus: Random.integer(1, 2) as Types.IExpertPrediction['articleStatus'],
           title: "@cparagraph",
@@ -46,7 +46,7 @@ const expert: IMockData[] = [
         closeTime: randomPostTime(),
         market: "獨贏",
         hotStreak: Random.integer(0, 12),
-        hitRate: Random.integer(60, 100),
+        hitRate: Random.float(60, 100, 0, 2),
         articleId: "@word",
         homeName: "@cname",
         awayName: "@cname",
@@ -116,7 +116,12 @@ const expert: IMockData[] = [
     response: () => mock(withData<Types.IExpertStatistics>({
       list: Array.from({ length: 10 }, () => ({
         hitStatus: Random.natural(0, 3) as Types.IExpertStatistics['res']['data']['list'][number]['hitStatus']
-      }))
+      })),
+      info: {
+        type: Random.natural(1, 3) as Types.IExpertStatistics['res']['data']['info']['type'],
+        hotStreak: Random.natural(1, 12),
+        hitRate: Random.float(60, 100, 0, 2),
+      }
     }))
   },
   {
@@ -138,7 +143,7 @@ const expert: IMockData[] = [
         closeTime: randomPostTime(),
         market: genMarket(),
         hotStreak: Random.integer(0, 12),
-        hitRate: Random.integer(60, 100),
+        hitRate: Random.float(60, 100, 0, 2),
         articleId: "@word",
         articleStatus: Random.integer(1, 2) as Types.IExpertMacthArticle['res']['data']['list'][number]['articleStatus'],
         title: "@cparagraph",
