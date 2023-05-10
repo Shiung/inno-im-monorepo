@@ -130,22 +130,24 @@
   })
 </script>
 
-<div
-  bind:this={sliderContainer}
-  class="mb-5 h-[68px] overflow-hidden"
-  on:touchstart|nonpassive={onTouchStart}
-  on:touchmove|nonpassive={onTouchMove}
-  on:touchend|nonpassive={onTouchEnd}
->
+{#if data.length}
   <div
-    bind:this={slider}
-    class="h-[63px] flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
-    style:width={`${slides.length * (calWidth + padding)}px`}
+    bind:this={sliderContainer}
+    class="mb-5 h-[68px] overflow-hidden"
+    on:touchstart|nonpassive={onTouchStart}
+    on:touchmove|nonpassive={onTouchMove}
+    on:touchend|nonpassive={onTouchEnd}
   >
-    {#each slides as slide}
-      <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${padding}px`}>
-        <slot item={slide}></slot>
-      </div>
-    {/each}
+    <div
+      bind:this={slider}
+      class="h-[63px] flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
+      style:width={`${slides.length * (calWidth + padding)}px`}
+    >
+      {#each slides as slide}
+        <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${padding}px`}>
+          <slot item={slide}></slot>
+        </div>
+      {/each}
+    </div>
   </div>
-</div>
+{/if}

@@ -6,4 +6,10 @@
   export let data: StatisticsLists
 </script>
 
-<div>HittingRecord</div>
+<div>
+  <div class="px-4">
+    <Title>{$t('expert.statistics.hitRecord')}</Title>
+  </div>
+
+  
+</div>

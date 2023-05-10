@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { IExpertStatistics } from 'api/im/types'
-  import Slider from './Slider/index.svelte'
-  import StatsBlock from './StatsBlock/index.svelte'
+  import Slider from './components/Slider/index.svelte'
+  import StatsBlock from './components/StatsBlock/index.svelte'
 
   export let infos: IExpertStatistics['res']['data']['info'] = []
 </script>
