@@ -8,6 +8,10 @@
       "import": "./index.js",
       "require": "./index.cjs"
     },
+    "./app": {
+      "import": "./app.js",
+      "require": "./app.cjs"
+    },
     "./streaming": {
       "import": "./streaming.js",
       "require": "./streaming.cjs"
