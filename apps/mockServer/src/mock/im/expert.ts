@@ -6,7 +6,7 @@ import type { IMockData } from '../../types'
 
 const expert: IMockData[] = [
   {
-    url: '/expert/predictions',
+    url: '/v1/expert/predictions',
     response: ({ query }) => mock(withData<Types.IExpertPredictions>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
         const market = genMarket()
@@ -36,7 +36,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/recommend',
+    url: '/v1/expert/recommend',
     response: ({ query }) => mock(withData<Types.IExpertRecommand>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
         expertId: "@word",
@@ -56,7 +56,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/info',
+    url: '/v1/expert/info',
     response: () => mock(withData<Types.IExpertInfo>({
         expertId: "@word",
         expertName: "@cname",
@@ -65,7 +65,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/article/now',
+    url: '/v1/expert/article/now',
     response: ({ query}) => mock(withData<Types.IExpertArthcleNow>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
@@ -80,7 +80,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/article/history',
+    url: '/v1/expert/article/history',
     response: ({ query }) => mock(withData<Types.IExpertArthcleHistory>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
@@ -96,7 +96,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/article/hit',
+    url: '/v1/expert/article/hit',
     response: ({ query }) => mock(withData<Types.IExpertArthcleHit>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
@@ -112,7 +112,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/statistics',
+    url: '/v1/expert/statistics',
     response: () => mock(withData<Types.IExpertStatistics>({
       list: Array.from({ length: 10 }, () => ({
         hitStatus: Random.natural(0, 3) as Types.IExpertStatistics['res']['data']['list'][number]['hitStatus']
@@ -125,7 +125,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/expert/match/article',
+    url: '/v1/expert/match/article',
     response: () => mock(withData<Types.IExpertMacthArticle>({
       match: {
         homeName: "@cname",
