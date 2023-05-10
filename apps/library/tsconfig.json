@@ -7,9 +7,11 @@
     "resolveJsonModule": true,
     "baseUrl": "./",
     "paths": {
+      "$src/*": ["./src/*"],
       "$assets/*": ["./src/assets/*"],
       "$lib/*": ["./src/lib/*"],
       "$containers/*": ["./src/containers/*"],
+      "$components/*": ["./src/components/*"],
       "$pages/*": ["./src/pages/*"],
       "$stores": ["./src/stores"],
       "$stores/*": ["./src/stores/*"],

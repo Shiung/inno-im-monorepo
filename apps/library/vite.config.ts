@@ -35,9 +35,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      $src: resolve('./src'),
       $assets: resolve('./src/assets'),
       $lib: resolve('./src/lib'),
       $containers: resolve('./src/containers'),
+      $components: resolve('./src/components'),
       $pages: resolve('./src/pages'),
       $stores: resolve('./src/stores'),
       $types: resolve('./src/types'),

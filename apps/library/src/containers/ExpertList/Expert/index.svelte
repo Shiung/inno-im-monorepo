@@ -5,8 +5,7 @@ import { push } from 'svelte-spa-router'
 import { t } from '$stores'
 
 import Strack from '$containers/Streak'
-
-import avatar from './images/avatar.webp'
+import ExpertImage from '$src/components/ExpertImage'
 
 import type { IExpertPrediction } from 'api/im/types'
 
@@ -62,10 +61,6 @@ const convertReleaseTime = (releaseTime: number) => {
   </Ripple>
 
   <Ripple class='w-[44px] absolute top-0 left-0 rounded-full' on:click={() => push(`/expertDetail/${prodiction.expertId}`)}>
-    <img class='rounded-full border-[3px] border-white im-shadow'
-      src={prodiction.expertImage}
-      on:error={() => prodiction.expertImage = avatar}
-      alt='' 
-    />
+    <ExpertImage class='border-[3px] border-white im-shadow' src={prodiction.expertImage} />
   </Ripple>
 </div>

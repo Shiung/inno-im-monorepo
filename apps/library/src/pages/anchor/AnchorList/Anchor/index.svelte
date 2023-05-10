@@ -3,9 +3,8 @@ import { Ripple } from 'ui'
 import AnchorStatus from '$containers/AnchorStatus'
 import AnchorMatches from '$containers/AnchorMatches/index.svelte'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+import AnchorImage from '$src/components/AnchorImage'
 import { t } from '$stores'
-
-import person from './images/person_none.webp'
 
 import Smile from '../../images/smile.svg'
 import Arrow from '../../images/arrow_down_small.svg'
@@ -23,7 +22,7 @@ let openDetailSheet: boolean
 <div>
   <div class='grid grid-cols-[100px_1fr_30px] im-shadow h-[100px] rounded-[10px] px-[8px]'>
     <div class='w-[95px] flex items-end bg-contain bg-no-repeat bg-bottom overflow-hidden' style:background-image={`url("${bg}")`}> 
-      <img src={anchor.userImage} on:error={() => anchor.userImage = person} alt='' />
+      <AnchorImage src={anchor?.userImage} />
     </div>
 
     <div class='flex flex-col py-[10px] justify-between'>
