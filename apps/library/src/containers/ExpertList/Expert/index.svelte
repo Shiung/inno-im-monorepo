@@ -46,7 +46,7 @@ const convertReleaseTime = (releaseTime: number) => {
       </div>
 
       <div class='flex flex-col justify-between'>
-        <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('expert.limitFree')} </Button>
+        <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.limitFree')} </Button>
 
         <div class='flex text-[10px] items-end self-end'>
           <span class='text-[#666666]'> {$t('expert.hitRate')} </span>
