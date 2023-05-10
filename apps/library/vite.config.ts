@@ -14,7 +14,7 @@ const buildAsLibrary = () => ({
       // Could also be a dictionary or array of multiple entry points
       entry: {
         index: resolve(__dirname, './src/platform/index.ts'),
-        app: resolve(__dirname, './src/platform/index.ts'),
+        app: resolve(__dirname, './src/platform/app.ts'),
         anchors: resolve(__dirname, './src/platform/anchors/index.ts'),
         streaming: resolve(__dirname, './src/platform/streaming/index.ts') 
       },
