@@ -1,4 +1,4 @@
-import '../library.css'
-import '../../commonInit'
+import './library.css'
+import '../commonInit'
 export { default } from '../App.svelte'
-export * from './App.svelte'
+export * from '../App.svelte'
