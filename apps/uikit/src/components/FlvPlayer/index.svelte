@@ -1,8 +1,20 @@
 <script lang='ts'>
-import FlvPlayer from 'ui/components/FlvPlayer'
+import FlvPlayer, { onMuted, onPaused, setMuteHandler, setPauseHandler } from 'ui/components/FlvPlayer'
 import { Button } from 'ui'
 
 let url: string
+let paused: boolean
+let muted: boolean
+
+onPaused((p) => {
+  console.log('pause *** out', p)
+  paused = p
+})
+
+onMuted((m) => {
+  console.log('mute *** out', m)
+  muted = m
+})
 
 </script>
 
@@ -13,6 +25,14 @@ let url: string
   西瓜Demo 
 </Button>
 
-<Button on:click={() => url = 'https://live5.js-mooc.com/live/52279.flv?auth_key=1682424264-0-2279-4ee2eeb922b9fa35e166d2af01e69688'}>
+<Button on:click={() => url = 'https://live5.js-mooc.com/live/52252.flv?auth_key=1683656703-0-2252-5870ae820251806966ad693fba3fbfb6'}>
   測試Demo 
+</Button>
+
+
+<Button on:click={setMuteHandler}>
+  {muted ? '開聲音' : '靜音'}
+</Button>
+<Button on:click={setPauseHandler.bind(null, true)}>
+  {paused ? '播放': '暫停'}
 </Button>
