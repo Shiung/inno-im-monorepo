@@ -6,6 +6,7 @@ let onPausedCallback: (p: boolean) => void = () => {}
 let onMutedCallback: (p: boolean) => void = () => {}
 let muteHandler: () => void
 let pauseHandler: (l: boolean) => void
+let fullScreenHandler: () => void
 
 export const onReady = (callback: typeof onReadyCallback) => {
   onReadyCallback = callback
@@ -29,6 +30,7 @@ export const setMuteHandler = () => typeof muteHandler === 'function' && muteHan
 
 export const setPauseHandler = (isLive: boolean = false) => typeof pauseHandler === 'function' && pauseHandler(isLive)
 
+export const setFullScreenHandler = () => typeof fullScreenHandler === 'function' && fullScreenHandler()
 
 </script>
 
@@ -101,6 +103,8 @@ muteHandler = () => {
   if (!flvPlayer) return
   flvPlayer.muted = !muted
 }
+
+fullScreenHandler = () => ('requestFullscreen' in video) && video.requestFullscreen()
 
 onMount(() => {
   playFlv(url)
