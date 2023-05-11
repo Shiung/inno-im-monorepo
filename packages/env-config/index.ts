@@ -1,6 +1,7 @@
 import type { ENV, WindowEnv } from './types'
 export type { ENV, ILanguages } from './types'
 export { languages } from './types'
+export { activedVenders } from './constants'
 
 const env = 'dev'
 

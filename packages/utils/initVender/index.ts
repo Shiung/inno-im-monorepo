@@ -9,7 +9,7 @@ const vendorPrimary: { [key in VENDERID]: string } = {
   vd002: GuGoo,
   vd003: GuGoo,
   vd004: RuiYin,
-  vd005: GuGoo,
+  // vd005: GuGoo,
   vd006: GuGoo,
   vd007: RuiYin,
   vd008: GuGoo,
