@@ -55,10 +55,10 @@ const webAnchors: IMockData[] = [
     response: () => mock(withData<Types.IWebAnchorMatches>({
       matchList: Array.from({length: Random.natural(0, 5)}, () => ({
           homeTeamName:"@cname",
-          homeTeamLogo:"@image",
+          homeTeamLogo: getRandomItemFromArray(["@image", ""]),
           homeTeamId:"@word",
           awayTeamName:"@cname",
-          awayTeamLogo:"@image",
+          awayTeamLogo: getRandomItemFromArray(["@image", ""]),
           awayTeamId:"@id",
           competitionName:"@cname",
           competitionLogo:"@image",
