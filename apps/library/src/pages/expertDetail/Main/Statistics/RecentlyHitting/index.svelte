@@ -1,7 +1,7 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import Title from '$pages/expertDetail/Main/components/Title.svelte'
-  import Loading from './components/Loading/index.svelte'
+  import ExpertArticleLoading from '../../components/ExpertArticle/Loading.svelte'
   import { t } from '$stores'
   import ExpertArticle from '../../components/ExpertArticle/index.svelte'
   import { im } from 'api'
@@ -15,7 +15,7 @@
 
 <div class="px-3">
   {#await promise}
-    <Loading />
+    <ExpertArticleLoading />
   {:then articles}
     <ExpertArticle data={articles?.data?.list} />
   {/await}
