@@ -5,8 +5,7 @@ import { t } from '$stores'
 
 import AnchorStatus from '$containers/AnchorStatus'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
-
-import person from './images/person_none.webp'
+import AnchorImage from '$src/components/AnchorImage'
 
 import Smile from '../images/smile.svg'
 
@@ -33,7 +32,7 @@ let openDetailSheet: boolean = false
       <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />
       <div>{$t('anchor.detail')}</div>
     </Ripple>
-    <img class='w-[75px]' src={anchor.userImage} on:error={() => anchor.userImage = person} alt='' />
+    <AnchorImage class='w-[75px]' src={anchor.userImage} />
   </div>
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />

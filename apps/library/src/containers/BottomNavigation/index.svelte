@@ -8,12 +8,14 @@ import { push } from 'svelte-spa-router'
 import { t, type ITransStore } from '$stores'
 import { bottomNav } from '$stores/layout'
 
-const genIcons = (_t: ITransStore) => ([
+export let goHome: () => void = () => {}
+
+let genIcons = (_t: ITransStore) => ([
   {
     id: 'home',
     icon: () => import('./images/home.svg'),
     text: _t('common.backToHome'),
-    onClick: () => push('/')
+    onClick: goHome
   },
   {
     id: 'square',

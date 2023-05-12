@@ -14,6 +14,7 @@ const buildAsLibrary = () => ({
       // Could also be a dictionary or array of multiple entry points
       entry: {
         index: resolve(__dirname, './src/platform/index.ts'),
+        app: resolve(__dirname, './src/platform/app.ts'),
         anchors: resolve(__dirname, './src/platform/anchors/index.ts'),
         streaming: resolve(__dirname, './src/platform/streaming/index.ts') 
       },
@@ -35,9 +36,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      $src: resolve('./src'),
       $assets: resolve('./src/assets'),
       $lib: resolve('./src/lib'),
       $containers: resolve('./src/containers'),
+      $components: resolve('./src/components'),
       $pages: resolve('./src/pages'),
       $stores: resolve('./src/stores'),
       $types: resolve('./src/types'),

@@ -8,9 +8,12 @@ const MOCK_SERVER = `http://${window.location.hostname}:5174`
 
 export default class Base {
   private baseUrl: string
+  private apiPrefix: string
 
-  constructor({ API_KEY }: { API_KEY: keyof WindowEnv }) {
+
+  constructor({ API_KEY, API_PREFIX }: { API_KEY: keyof WindowEnv, API_PREFIX?: string }) {
     this.baseUrl = ''
+    this.apiPrefix = API_PREFIX || ''
 
     try {
       if (mock) {
@@ -45,7 +48,7 @@ export default class Base {
         return request?.body
       }
 
-      const _url = `${this.baseUrl}${url}${this.genParams(request?.query)}`
+      const _url = `${this.baseUrl}${this.apiPrefix}${url}${this.genParams(request?.query)}`
 
       const res = await fetch(_url, {
         ..._request,

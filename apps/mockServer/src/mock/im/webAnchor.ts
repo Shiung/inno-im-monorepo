@@ -18,7 +18,7 @@ Random.extend({
 
 const webAnchors: IMockData[] = [
   {
-    url: '/anchor/web-anchors',
+    url: '/v1/anchor/web-anchors',
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IWebAnchors>({
       list: Array.from({ length: Number(query.pageSize) || 20 }, () => ({
@@ -42,7 +42,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/anchor/web-anchor/detail',
+    url: '/v1/anchor/web-anchor/detail',
     response: () => mock(withData<Types.IWebAnchorDetail>({
         userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
         nickName: "@ANCHORNICKNAME",
@@ -50,15 +50,15 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/anchor/web-anchor/match-list',
+    url: '/v1/anchor/web-anchor/match-list',
     timeout: 500,
     response: () => mock(withData<Types.IWebAnchorMatches>({
       matchList: Array.from({length: Random.natural(0, 5)}, () => ({
           homeTeamName:"@cname",
-          homeTeamLogo:"@image",
+          homeTeamLogo: getRandomItemFromArray(["@image", ""]),
           homeTeamId:"@word",
           awayTeamName:"@cname",
-          awayTeamLogo:"@image",
+          awayTeamLogo: getRandomItemFromArray(["@image", ""]),
           awayTeamId:"@id",
           competitionName:"@cname",
           competitionLogo:"@image",
@@ -73,7 +73,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/anchor/web-anchor/life',
+    url: '/v1/anchor/web-anchor/life',
     response: ({ query }) => mock(withData<Types.IWebAnchorLife>({
       list: Array.from({ length: Random.natural(0, 20) }, () => ({
         date: randomPostTime(),
@@ -84,7 +84,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/anchor/web-anchor/photos',
+    url: '/v1/anchor/web-anchor/photos',
     response: ({ query }) => mock(withData<Types.IWebAnchorPhotos>({
       list: Array.from({ length: Random.natural(0, 20) }, () => ({
         date: randomPostTime(),
@@ -95,7 +95,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/anchor/web-anchor/info',
+    url: '/v1/anchor/web-anchor/info',
     response: () => mock(withData<Types.IWebAnchorInfo>({
       country: "@region",
       height: String(Random.natural(150, 170)),
@@ -108,7 +108,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/anchor/web-anchor/recommend',
+    url: '/v1/anchor/web-anchor/recommend',
     response: () => mock(withData<Types.IWebAnchorRecommend>({
       houseId: genHouseId(),
       liveStatus: Random.natural(1, 4) as Types.IWebAnchorRecommend['res']['data']['liveStatus'],

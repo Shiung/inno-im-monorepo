@@ -6,13 +6,21 @@ import type { IMarket } from 'api/im/types'
 export const withData = <T extends { res: { data: any } }>(data: T['res']['data']) => ({
   code: 0,
   message: "",
-  serverTime: Math.round(Date.now() / 1000),
+  serverTime: Date.now(),
   data
 })
 
 export const randomPostTime = () => {
-  const timestamp = Math.round(Date.now() / 1000)
-  return timestamp - Random.integer(1, 60 * 60 * 24 * 14)
+  const now = Date.now()
+  const unit = getRandomItemFromArray(['sec', 'min', 'hour', 'day']) 
+
+  switch (unit) {
+    case 'sec': return now - Random.integer(1000, 59 * 1000)
+    case 'min': return now - Random.integer(60 * 1000, 60 * 59 * 1000)
+    case 'hour': return now - Random.integer(60 * 60 * 1000, 60 * 60 * 23 * 1000)
+    case 'day': return now - Random.integer(60 * 60 * 24 * 1000, 60 * 60 * 24* 30 * 1000)
+    default: return now
+  }
 } 
 
 export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({

@@ -1,0 +1,22 @@
+{
+  "name": "vd-resource",
+  "version": "0.0.0",
+  "description": "all of vander resource put in here for easy replace.",
+  "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "resource": "zx env_scripts/genIndexes.mjs"
+  },
+  "dependencies": {
+    "env-config": "workspace:*",
+    "svelte": "^3.59.1"
+  },
+  "devDependencies": {
+    "directory-tree": "^3.5.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2",
+    "zx": "^7.2.1"
+  }
+}

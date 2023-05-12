@@ -1,15 +1,27 @@
 <script lang='ts'>
 import { Button, Badget, Ripple } from 'ui'
+import { convertTimeDiffToPast } from 'utils/convertTimeDiff'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
 
 import Strack from '$containers/Streak'
-
-import avatar from './images/avatar.webp'
+import ExpertImage from '$src/components/ExpertImage'
 
 import type { IExpertPrediction } from 'api/im/types'
 
 export let prodiction: IExpertPrediction
+
+const convertReleaseTime = (releaseTime: number) => {
+  const time = convertTimeDiffToPast({now: Date.now(), past: releaseTime})
+
+  switch (time.unit) {
+    case 'sec': return $t('common.secsPast', { num: time.text })
+    case 'min': return $t('common.minsPast', { num: time.text })
+    case 'hour': return $t('common.hoursPast', { num: time.text })
+    case 'date': return time.text
+    default: return time.text
+  }
+}
 
 </script>
 
@@ -23,7 +35,7 @@ export let prodiction: IExpertPrediction
 
           <div class='self-center'>
             <div class='text-[14px] font-semibold text-start'> {prodiction.expertName} </div>
-            <div class='text-[10px] text-[#999999]'> {prodiction.releaseTime} </div>
+            <div class='text-[10px] text-[#999999] text-left'> {convertReleaseTime(prodiction.releaseTime)} </div>
           </div>
         </div>
 
@@ -34,9 +46,9 @@ export let prodiction: IExpertPrediction
       </div>
 
       <div class='flex flex-col justify-between'>
-        <Button class='row-span-1 h-[28px] rounded-[8px]'> {$t('expert.limitFree')} </Button>
+        <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.limitFree')} </Button>
 
-        <div class='flex text-[10px] items-end'>
+        <div class='flex text-[10px] items-end self-end'>
           <span class='text-[#666666]'> {$t('expert.hitRate')} </span>
           <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
           <span> % </span>
@@ -49,10 +61,6 @@ export let prodiction: IExpertPrediction
   </Ripple>
 
   <Ripple class='w-[44px] absolute top-0 left-0 rounded-full' on:click={() => push(`/expertDetail/${prodiction.expertId}`)}>
-    <img class='rounded-full border-[3px] border-white im-shadow'
-      src={prodiction.expertImage}
-      on:error={() => prodiction.expertImage = avatar}
-      alt='' 
-    />
+    <ExpertImage class='border-[3px] border-white im-shadow' src={prodiction.expertImage} />
   </Ripple>
 </div>

@@ -1,8 +1,10 @@
 <script lang='ts'>
-import type { IWebAnchorMatch } from 'api/im/types'
 import { Ripple } from 'ui'
+import TeamLogo from '$src/components/TeamLogo'
 
 import Status from './Status.svelte'
+
+import type { IWebAnchorMatch } from 'api/im/types'
 
 export let match: IWebAnchorMatch
 </script>
@@ -18,14 +20,14 @@ export let match: IWebAnchorMatch
     <div class='flex justify-around'>
 
       <div>  
-        <img class='w-[24px] h-[24px] mb-[5px]' src={match.homeTeamLogo} alt='' />
+        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={match.homeTeamLogo} />
         <div class='text-[10px] text-center'> {match.homeTeamName} </div>
       </div>
 
       <Status match={match} />
 
       <div>  
-        <img class='w-[24px] h-[24px] mb-[5px]' src={match.awayTeamLogo} alt='' />
+        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={match.awayTeamLogo} />
         <div class='text-[10px] text-center'> {match.awayTeamName} </div>
       </div>
       

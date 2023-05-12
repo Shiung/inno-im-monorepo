@@ -1,3 +1,5 @@
+import type { activedVenders } from './constants'
+
 export const languages = [
   'zh_CN',
   'en_US',
@@ -16,16 +18,7 @@ export type ILanguages = typeof languages[number]
 
 export type ENV = 'dev' | 'stg' | 'uat' | 'prod'
 
-export type VENDERID =
-  'vd001'
-| 'vd002'
-| 'vd003'
-| 'vd004'
-| 'vd005'
-| 'vd006'
-| 'vd007'
-| 'vd008'
-| 'vd009'
+export type VENDERID = typeof activedVenders[number]
 
 export interface WindowEnv {
   ODDS_BOARD_API_URL: string

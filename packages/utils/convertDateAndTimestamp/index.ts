@@ -1,5 +1,5 @@
 export const timestampToDatetime = (timestamp: number) => {
-  const date = new Date(timestamp * 1000)
+  const date = new Date(timestamp)
   const month = `0${date.getMonth() + 1}`
   const day = `0${date.getDate()}`
   const hours = `0${date.getHours()}`
@@ -9,7 +9,7 @@ export const timestampToDatetime = (timestamp: number) => {
 }
 
 export const timestampToDate = (timestamp: number) => {
-  const date = new Date(timestamp * 1000)
+  const date = new Date(timestamp)
   const year = date.getFullYear()
   const month = `0${date.getMonth() + 1}`
   const day = `0${date.getDate()}`
@@ -19,7 +19,7 @@ export const timestampToDate = (timestamp: number) => {
 
 export const timestampToFormat = (props: { ts: number, format?: string }): string => {
   const { ts, format = 'YYYY-MM-DD hh-mm-ss' } = props
-  const date = new Date(ts * 1000)
+  const date = new Date(ts)
   const year = date.getFullYear()
   const month = `0${date.getMonth() + 1}`.slice(-2)
   const day = `0${date.getDate()}`.slice(-2)
@@ -39,11 +39,11 @@ export const timestampToFormat = (props: { ts: number, format?: string }): strin
 
 export const dateTimeToTimestamp = (date: string) => {  
   const timestamp = new Date(date).getTime()
-  return (timestamp / 1000)
+  return timestamp
 }
 
 export const getTime = (timestamp: number) => {
-  const date = new Date(timestamp * 1000)
+  const date = new Date(timestamp)
   const hours = `0${date.getHours()}`
   const minutes = `0${date.getMinutes()}`
   return `${hours.slice(-2)}:${minutes.slice(-2)}`

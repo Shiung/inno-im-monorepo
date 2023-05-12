@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import { Ripple } from 'ui'
 import { Header } from 'ui/components/BottomSheet'
 import { t } from '$stores'
+import AnchorImage from '$src/components/AnchorImage'
 
 import anchorBg from './images/anchorBg.webp'
 import mask from './images/mask.webp'
@@ -20,7 +21,7 @@ export let tabs: string[]
     <div class='relative flex justify-center w-[375px] h-[193px] bg-cover bg-center bg-no-repeat'
       style:background-image={`url(${anchorBg})`}
     >
-      <img class='rounded-full mt-[12px] ml-[6px] w-[160px] h-[160px]' src={detail.userImage} alt='' />
+      <AnchorImage class='rounded-full mt-[12px] ml-[6px] w-[160px] h-[160px]' src={detail.userImage} />
       <img class='absolute top-[14px] w-[160px] h-[160px]' src={mask} alt='' />
 
       <!-- 主播標籤 (缺欄位)
