@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Title from '$pages/expertDetail/Main/components/Title.svelte'
-  import { t } from '$stores'
   import type { StatisticsLists } from '../types'
   import { calculateRecordData } from './utils'
 	import LineChart from './components/LineChart/index.svelte'
@@ -19,14 +17,8 @@
 
 </script>
 
-<div>
-  <div class="px-4">
-    <Title>{$t('expert.statistics.hitRecord')}</Title>
-  </div>
-
-  <LineChart
-    cid="LineChart"
-    chartOptions={lineChartOptions}
-    chartData={chartData}
-  />
-</div>
+<LineChart
+  cid="LineChart"
+  chartOptions={lineChartOptions}
+  chartData={chartData}
+/>

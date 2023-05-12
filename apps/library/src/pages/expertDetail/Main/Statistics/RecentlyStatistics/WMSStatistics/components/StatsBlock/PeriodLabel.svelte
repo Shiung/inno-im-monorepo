@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$stores'
-  import type { StatisticsInfo } from '$pages/expertDetail/Main/Statistics/types'
+  import type { StatisticsInfo } from '$src/pages/expertDetail/Main/Statistics/RecentlyStatistics/types'
   
   export let data: StatisticsInfo['type']
 

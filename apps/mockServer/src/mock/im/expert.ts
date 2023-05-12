@@ -66,7 +66,7 @@ const expert: IMockData[] = [
   },
   {
     url: '/v1/expert/article/now',
-    response: ({ query}) => mock(withData<Types.IExpertArthcleNow>({
+    response: ({ query}) => mock(withData<Types.IExpertArticleNow>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
         releaseTime: randomPostTime(),
@@ -81,7 +81,7 @@ const expert: IMockData[] = [
   },
   {
     url: '/v1/expert/article/history',
-    response: ({ query }) => mock(withData<Types.IExpertArthcleHistory>({
+    response: ({ query }) => mock(withData<Types.IExpertArticleHistory>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
         releaseTime: randomPostTime(),
@@ -97,7 +97,7 @@ const expert: IMockData[] = [
   },
   {
     url: '/v1/expert/article/hit',
-    response: ({ query }) => mock(withData<Types.IExpertArthcleHit>({
+    response: ({ query }) => mock(withData<Types.IExpertArticleHit>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         articleId: "@word",
         releaseTime: randomPostTime(),

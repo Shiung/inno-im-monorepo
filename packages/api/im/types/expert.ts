@@ -73,7 +73,7 @@ export interface IExpertInfo {
   }>
 }
 
-export interface IExpertArthcleNow {
+export interface IExpertArticleNow {
   query: {
     expertId: string
   }
@@ -92,7 +92,7 @@ export interface IExpertArthcleNow {
   }>
 }
 
-export interface IExpertArthcleHistory {
+export interface IExpertArticleHistory {
   query: {
     expertId: string 
     pageIdx: number
@@ -114,7 +114,7 @@ export interface IExpertArthcleHistory {
   }>
 }
 
-export interface IExpertArthcleHit {
+export interface IExpertArticleHit {
   query: {
     expertId: string
     pageIdx: number
@@ -151,11 +151,6 @@ export interface IExpertStatistics {
       hotStreak: number // 連紅次數
       hitRate: number
     }>
-    info: {
-      type: 1 | 2 | 3 // 數據日期 1: 週 2: 月 3: 季
-      hotStreak: number
-      hitRate: number
-    }
   }>
 }
 
