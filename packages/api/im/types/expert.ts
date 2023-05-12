@@ -144,6 +144,7 @@ export interface IExpertStatistics {
   res: withData<{
     list: Array<{
       hitStatus: 1 | 2 // 1: 命中 2: 未中
+      releaseTime: number
     }>
     info: Array<{
       type: 1 | 2 | 3 // 1: 週 2: 月 3: 季

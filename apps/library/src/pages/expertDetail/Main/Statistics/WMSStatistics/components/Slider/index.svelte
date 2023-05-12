@@ -35,7 +35,7 @@
       console.warn('Invalid Width property!', width)
       retWidth = 0
     }
-    console.log('⛔️⛔️⛔️⛔️⛔️ retWidth', retWidth)
+
     return retWidth
   }
 

@@ -115,7 +115,8 @@ const expert: IMockData[] = [
     url: '/expert/statistics',
     response: () => mock(withData<Types.IExpertStatistics>({
       list: Array.from({ length: 10 }, () => ({
-        hitStatus: Random.natural(1, 2) as Types.IExpertStatistics['res']['data']['list'][number]['hitStatus']
+        hitStatus: Random.natural(1, 2) as Types.IExpertStatistics['res']['data']['list'][number]['hitStatus'],
+        releaseTime: randomPostTime()
       })),
       info: Array.from({ length: 3 }, (_, idx) => ({
         type: idx + 1 as Types.IExpertStatistics['res']['data']['info'][number]['type'],
