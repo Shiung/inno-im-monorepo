@@ -8,6 +8,7 @@
   export let swipeThreshold: number = 0.3
 
   let movable = false
+  let moveDisabled = false
   let slider: HTMLDivElement | null = null
   let sliderContainer: HTMLDivElement | null = null
   let transitioning: boolean = false
@@ -42,7 +43,7 @@
 
   const onTouchStart = (e: TouchEvent) => {
     e.preventDefault()
-    if(!('touches' in e) || transitioning) return
+    if(!('touches' in e) || moveDisabled) return
 
     touchStartX = e.touches[0].clientX || null
     movable = true
@@ -80,10 +81,14 @@
 
   const setTransitioning = (val: boolean) => {
     transitioning = val
+    if(!val) moveDisabled = false
   }
 
   const setIndex = (val: number) => {
     currentIndex = val
+    if(currentIndex === slidesEndIndex - 1 || currentIndex === slidesBeginIndex + 1) {
+      moveDisabled = true
+    }
   }
 
   const handleTransitionEnd = () => {
