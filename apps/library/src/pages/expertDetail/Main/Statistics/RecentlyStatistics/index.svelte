@@ -20,7 +20,7 @@
   {#await promise}
     <WMSStatisticsLoading />
   {:then statisticData} 
-    <WMSStatistics infos={statisticData.data.info} />
+    <WMSStatistics data={statisticData.data.info} />
   {/await}
 
   <div class="px-4">

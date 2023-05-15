@@ -162,12 +162,10 @@
 			gradient
 				.append('stop')
 				.attr('offset', '0%')
-				.attr('style', 'stop-color:#bfe0ff;stop-opacity:0.5');
 
 			gradient
 				.append('stop')
 				.attr('offset', '100%')
-				.attr('style', 'stop-color:#ffffff;stop-opacity:1');
 
 			path = el
 				.append('path')
@@ -217,6 +215,25 @@
 
 		const pathLength = path.node()?.getTotalLength() || 0
 		const transitionFunc: any = transition().duration(1000).ease(easeSinIn)
+
+		gradient
+			.selectAll('stop')
+			.each(function(_, i) {
+				if(i === 0) {
+					select(this)
+						.attr('style', 'stop-color:#bfe0ff;stop-opacity:0')
+						.transition(transitionFunc)
+						.delay(1000)
+						.attr('style', 'stop-color:#bfe0ff;stop-opacity:0.5');
+				}
+				else {
+					select(this)
+						.attr('style', 'stop-color:#bfe0ff;stop-opacity:0')
+						.transition(transitionFunc)
+						.delay(1000)
+						.attr('style', 'stop-color:#ffffff;stop-opacity:1');
+				}
+			})
 
 		gradient
 			.attr('y2', '0')
