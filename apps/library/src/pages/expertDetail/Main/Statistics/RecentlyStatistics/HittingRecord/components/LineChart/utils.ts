@@ -9,12 +9,6 @@ export function cleanChart(el: BaseSelection): void {
 	}
 }
 
-export function setChartDimension(
-	el: BaseSelection,
-	options: {
-		width: number
-		height: number
-	}
-): void {
+export function setChartDimension(el: BaseSelection, options: {width: number; height: number }): void {
 	el.attr('width', options.width).attr('height', options.height)
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { StatisticsLists } from '../type'
-  export let data: StatisticsLists
+  import type { StatisticsList } from '../type'
+  export let data: StatisticsList
 </script>
 
 <div data-cid='RecentTenRecords' class="px-4 py-[14px]">

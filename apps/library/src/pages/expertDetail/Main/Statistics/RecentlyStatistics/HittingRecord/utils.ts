@@ -1,8 +1,9 @@
-import type { StatisticsLists } from '../type'
+import type { StatisticsList } from '../type'
 import BigNumber from 'bignumber.js'
-import type { ILineChartDataItem } from './components/LineChart/types'
 
-export const calculateRecordData = (data: StatisticsLists): Array<ILineChartDataItem> => {
+export interface ILineChartDataItem { day: number; hit: number; total: number; percent: number}
+
+export const calculateRecordData = (data: StatisticsList): Array<ILineChartDataItem> => {
   let accumulates = []
 
   data
