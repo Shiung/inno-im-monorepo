@@ -3,7 +3,8 @@ import { im } from 'api'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 
-import BetType from '../../components/BetType'
+import MarketInfo from '$src/components/MarketInfo'
+
 import Title from '../../components/Title.svelte'
 import Filter from '../../images/filter.svg'
 
@@ -43,7 +44,12 @@ const promise = im.expertArticleHistory({ query: { expertId, pageIdx: 1, pageSiz
 
           <div class='truncate text-[14px] font-semibold'> {article.title} </div>
           
-          <BetType market={article.market} />
+          <MarketInfo market={{
+              marketType: article.marketType,
+              matchResult: article.matchResult,
+              odds: article.odds
+            }} 
+          />
 
         </div>
       {/each}

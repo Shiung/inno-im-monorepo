@@ -10,15 +10,15 @@ const expert: IMockData[] = [
     response: ({ query }) => mock(withData<Types.IExpertPredictions>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
         const market = genMarket()
-        const sportId = Number(market.status[0]) as Types.IExpertPrediction['sportId']
+        const sportId = Number(market.marketType[0]) as Types.IExpertPrediction['sportId']
 
         return {
+          ...market,
           expertId: "@word",
           expertName: "@cname",
           expertImage: getExpertImage(),
           releaseTime: randomPostTime(),
           closeTime: randomPostTime(),
-          market,
           hotStreak: Random.integer(0, 12),
           hitRate: Random.float(60, 100, 0, 2),
           articleId: "@word",
@@ -68,10 +68,10 @@ const expert: IMockData[] = [
     url: '/v1/expert/article/now',
     response: ({ query}) => mock(withData<Types.IExpertArthcleNow>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
+        ...genMarket(),
         articleId: "@word",
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
-        market: genMarket(),
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
@@ -83,10 +83,10 @@ const expert: IMockData[] = [
     url: '/v1/expert/article/history',
     response: ({ query }) => mock(withData<Types.IExpertArthcleHistory>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
+        ...genMarket(),
         articleId: "@word",
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
-        market: genMarket(),
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
@@ -99,10 +99,10 @@ const expert: IMockData[] = [
     url: '/v1/expert/article/hit',
     response: ({ query }) => mock(withData<Types.IExpertArthcleHit>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
+        ...genMarket(),
         articleId: "@word",
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
-        market: genMarket(),
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
@@ -124,33 +124,6 @@ const expert: IMockData[] = [
       }
     }))
   },
-  {
-    url: '/v1/expert/match/article',
-    response: () => mock(withData<Types.IExpertMacthArticle>({
-      match: {
-        homeName: "@cname",
-        awayName: "@cname",
-        leagueName: "@cname",
-        matchStatus: Random.integer(1, 8) as Types.IExpertMacthArticle['res']['data']['match']['matchStatus'],
-        matchTime: randomPostTime(),
-        sportId: Random.integer(1, 2) as Types.IExpertMacthArticle['res']['data']['match']['sportId'],
-      },
-      list: Array.from({ length: 10 }, () => ({
-        expertId: "@word",
-        expertName: "@cname",
-        expertImage: getExpertImage(),
-        releaseTime: randomPostTime(),
-        closeTime: randomPostTime(),
-        market: genMarket(),
-        hotStreak: Random.integer(0, 12),
-        hitRate: Random.float(60, 100, 0, 2),
-        articleId: "@word",
-        articleStatus: Random.integer(1, 2) as Types.IExpertMacthArticle['res']['data']['list'][number]['articleStatus'],
-        title: "@cparagraph",
-        
-      }))
-    }))
-  }
 ]
 
 export default expert

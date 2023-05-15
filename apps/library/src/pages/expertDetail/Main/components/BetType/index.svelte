@@ -1,11 +1,11 @@
 <script lang='ts'>
 import MarketBadget from '$src/components/MarketBadget'
 
-import type { IMarket } from 'api/im/types/common'
-export let market: IMarket
+import type { IPredictionMarket } from 'api/im/types/common'
+export let market: IPredictionMarket
 
 </script>
 
 <div>
-  <MarketBadget status={market.status} />
+  <MarketBadget marketType={market.marketType} />
 </div>

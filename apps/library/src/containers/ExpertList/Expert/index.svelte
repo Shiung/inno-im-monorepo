@@ -41,7 +41,7 @@ const convertReleaseTime = (releaseTime: number) => {
         </div>
 
         <div class='flex items-center space-x-[4px]'>
-          <MarketBadget status={prodiction.market.status} /> 
+          <MarketBadget marketType={prodiction.marketType} /> 
           <Strack streak={prodiction.hotStreak} />
         </div>
       </div>

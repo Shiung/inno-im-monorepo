@@ -1,12 +1,11 @@
-import type { IPager, withData, IMarket } from './common'
+import type { IPager, withData, IPredictionMarket } from './common'
 
-export interface IExpertPrediction {
+export interface IExpertPrediction extends IPredictionMarket {
   expertId: string
   expertName: string
   expertImage: string
   releaseTime: number
   closeTime: number
-  market: IMarket
   hotStreak: number
   hitRate: number
   articleId: string
@@ -73,67 +72,48 @@ export interface IExpertInfo {
   }>
 }
 
-export interface IExpertArthcleNow {
+interface IArthcleList {
+  list: Array<{
+    articleId: string
+    releaseTime: number
+    closeTime: number
+    title: string
+    homeName: string
+    awayName: string
+    leagueName: string
+  } & IPredictionMarket>
+}
+
+type IExpertArthcleRes<T> = T extends 'pager'
+? { res: withData<IArthcleList & { pager: IPager }> } 
+: { res: withData<IArthcleList> }
+
+
+export interface IExpertArthcleNow extends IExpertArthcleRes<null> {
   query: {
     expertId: string
   }
   body: null
-  res: withData<{
-    list: Array<{
-      articleId: string
-      releaseTime: number
-      closeTime: number
-      title: string
-      homeName: string
-      awayName: string
-      leagueName: string
-      market: IMarket
-    }>
-  }>
+  // res defined in IExpertArthcleRes
 }
 
-export interface IExpertArthcleHistory {
+export interface IExpertArthcleHistory extends IExpertArthcleRes<'pager'> {
   query: {
     expertId: string 
     pageIdx: number
     pageSize: number
   }
   body: null
-  res: withData<{
-    list: Array<{
-      articleId: string
-      releaseTime: number
-      closeTime: number
-      title: string
-      homeName: string
-      awayName: string
-      leagueName: string
-      market: IMarket
-    }>
-    pager: IPager
-  }>
+  // res defined in IExpertArthcleRes
 }
 
-export interface IExpertArthcleHit {
+export interface IExpertArthcleHit extends IExpertArthcleRes<'pager'> {
   query: {
     expertId: string
     pageIdx: number
     pageSize: number
   }
   body: null
-  res: withData<{
-    list: Array<{
-      articleId: string
-      releaseTime: number
-      closeTime: number
-      title: string
-      homeName: string
-      awayName: string
-      leagueName: string
-      market: IMarket
-    }>
-    pager: IPager
-  }>
 }
 
 export interface IExpertStatistics {
@@ -153,33 +133,3 @@ export interface IExpertStatistics {
   }>
 }
 
-export interface IExpertMacthArticle {
-  query: {
-    matchId?: string
-  }
-  body: null
-  res: withData<{
-    match: {
-      homeName: string
-      awayName: string
-      leagueName: string 
-      // 比賽狀態 1: 未開始 2: 進行中 3: 結束 4: 延期 5: 中斷 6: 腰斬 7: 取消 8: 待定
-      matchStatus: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-      matchTime: number
-      sportId: 1 | 2 // 球類類型 1: 足球 2: 籃球
-    }
-    list: Array<{
-      expertId: string
-      expertName: string
-      expertImage: string
-      releaseTime: number
-      closeTime: number
-      market: IMarket
-      hotStreak: number
-      hitRate: number
-      articleId: string
-      articleStatus: 1 | 2 // 文章狀態 1: 開放 2: 未開放
-      title: string
-    }>
-  }>
-}

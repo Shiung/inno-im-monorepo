@@ -1,7 +1,7 @@
 import { Random } from 'mockjs'
 import { getRandomItemFromArray } from 'utils'
 
-import type { IMarket } from 'api/im/types'
+import type { IPredictionMarket } from 'api/im/types'
 
 export const withData = <T extends { res: { data: any } }>(data: T['res']['data']) => ({
   code: 0,
@@ -31,23 +31,29 @@ export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({
 })
 
 const marketTypes = {
-  '11': ['h', 'a', 'd'],
+  '11': ['h', 'a'],
   '12': ['h', 'a'],
   '13': ['ov', 'ud'],
-  '21': ['h', 'a', 'd'],
+  '21': ['h', 'a'],
   '22': ['h', 'a'],
   '23': ['ov', 'ud'],
 }
 
-export const genMarket = (): IMarket => {
-  const status = getRandomItemFromArray(Object.keys(marketTypes)) as IMarket['status']
-  const item = marketTypes[status] || []
-  const type = getRandomItemFromArray(item) as IMarket['type']
+export const genMarket = (): IPredictionMarket => {
+  const marketType = getRandomItemFromArray(Object.keys(marketTypes)) as IPredictionMarket['marketType']
+  const item = marketTypes[marketType] || []
+  const matchResult = getRandomItemFromArray(item) as IPredictionMarket['matchResult']
   return {
-    status,
-    type,
-    odds: String(Random.float(0.01, 50, 0, 2)),
-    k: ''
+    marketType,
+    matchResult,
+    odds: [{
+      h: String(Random.float(0.01, 50, 0, 2)),
+      a: String(Random.float(0.01, 50, 0, 2)),
+      d: String(Random.float(0.01, 50, 0, 2)),
+      k: 'k',
+      ov: String(Random.float(0.01, 50, 0, 2)),
+      ud: String(Random.float(0.01, 50, 0, 2)),
+    }]
   }
 }
 
