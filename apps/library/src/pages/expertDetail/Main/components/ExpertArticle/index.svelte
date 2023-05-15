@@ -5,7 +5,7 @@
 </script>
 
 {#if data.length}
-  <div class='space-y-[12px]'>
+  <div class='space-y-3'>
     {#each data || [] as article}
       <div class='rounded-[10px] im-shadow p-[8px]'>
         <div class='text-[14px] font-semibold'> {article.releaseTime} </div>

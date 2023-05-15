@@ -13,7 +13,7 @@
   <Title> {$t('expert.plan.history')} </Title>
 </div>
 
-<div class="px-3">
+<div class="px-3 mb-3">
   {#await promise}
     <ExpertArticleLoading />
   {:then articles}
