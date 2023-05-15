@@ -9,26 +9,26 @@ let pauseHandler: (l: boolean) => void
 let fullScreenHandler: () => void
 
 export const onReady = (callback: typeof onReadyCallback) => {
-  if (typeof callback !== 'function') return
+  if (typeof callback !== 'function') return console.warn('onReady callback MUST be function')
   onReadyCallback = callback
 }
 export const onLostData = (callback: typeof onLostDataCallback) => {
-  if (typeof callback !== 'function') return
+  if (typeof callback !== 'function') return console.warn('onLostData callback MUST be function')  
   onLostDataCallback = callback
 }
 export const onError = (callback: typeof onErrorCallback) => {
-  if (typeof callback !== 'function') return
+  if (typeof callback !== 'function') return console.warn('onError callback MUST be function') 
   onErrorCallback = callback
 }
 
 export const onPaused = (callback: typeof onPausedCallback) => {
-  if (typeof callback !== 'function') return
-  onPausedCallback = callback
+  if (typeof callback !== 'function') return console.warn('onPaused callback MUST be function') 
+   onPausedCallback = callback
 }
 
 export const onMuted = (callback: typeof onMutedCallback) => {
-  if (typeof callback !== 'function') return
-  onMutedCallback = callback
+  if (typeof callback !== 'function') return console.warn('onMuted callback MUST be function') 
+   onMutedCallback = callback
 }
 
 export const setMute = () => typeof muteHandler === 'function' && muteHandler()
