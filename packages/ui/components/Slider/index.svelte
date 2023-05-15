@@ -2,9 +2,10 @@
   import { onDestroy, onMount } from 'svelte'
 
   export let data: any[]
-  export let padding: number = 8
+  export let xPadding: number = 8
+  export let yPadding: number = 6
   export let width: string | number = '90%'
-  export let height: number = 63
+  export let height: string | number  = 63
   export let swipeThreshold: number = 0.3
 
   let movable = false
@@ -20,6 +21,17 @@
   $: slidesEndIndex = slides.length - 1
   $: slidesLastIndex = slidesEndIndex - 2
   let currentIndex = slidesFirstIndex
+
+  $: calHeight = calculateHeight(height)
+
+  const calculateHeight = (height: number | string): string => {
+    if(typeof height === 'number' || /^\d+$/.test(height)) return `${height}px`
+
+    if(/%/.test(height) || /px/.test(height)) return height
+
+    console.warn('Invalid Height property!', height)
+    return ''
+  }
 
   const calculateWidth = (width: string | number, parent: HTMLDivElement | null): number => {
     if(typeof width === 'number') return width
@@ -113,7 +125,7 @@
   }
 
   const calculateDistance = (index: number) => {
-    return -index * (calWidth + padding) + Math.floor((window.innerWidth - calWidth) / 2)
+    return -index * (calWidth + xPadding) + Math.floor((window.innerWidth - calWidth) / 2)
   }
 
   $: handleTransition(currentIndex, transitioning)
@@ -135,7 +147,9 @@
 {#if data.length}
   <div
     bind:this={sliderContainer}
-    class="mb-5 h-[68px] overflow-hidden"
+    class="overflow-hidden"
+    style:padding-top={`${yPadding}px`}
+    style:padding-bottom={`${yPadding}px`}
     on:touchstart|nonpassive={onTouchStart}
     on:touchmove|nonpassive={onTouchMove}
     on:touchend|nonpassive={onTouchEnd}
@@ -143,12 +157,12 @@
   >
     <div
       bind:this={slider}
-      class="h-[63px] flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
-      style:width={`${slides.length * (calWidth + padding)}px`}
-      style:height={height}
+      class="flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
+      style:width={`${slides.length * (calWidth + xPadding)}px`}
+      style:height={calHeight}
     >
       {#each slides as slide}
-        <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${padding}px`}>
+        <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${xPadding}px`}>
           <slot item={slide}></slot>
         </div>
       {/each}

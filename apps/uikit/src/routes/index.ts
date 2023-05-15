@@ -8,6 +8,7 @@ import Search from '../components/Search/index.svelte'
 import FlvPlayer from '../components/FlvPlayer/index.svelte'
 import Empty from '../components/Empty.svelte'
 import Tween from '../components/Tween.svelte'
+import Slider from '../components/Slider.svelte'
 
 
 const routes = {
@@ -20,8 +21,8 @@ const routes = {
   '/search': Search,
   '/flvPlayer': FlvPlayer,
   '/Tween': Tween,
-  '/empty': Empty
-
+  '/empty': Empty,
+  '/slider': Slider
 }
 
 export default routes
