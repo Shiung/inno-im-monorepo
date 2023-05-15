@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$stores'
   import { amountThousandthTransformer } from 'utils/amount'
-  import type { StatisticsInfo } from '$src/pages/expertDetail/Main/Statistics/RecentlyStatistics/types'
+  import type { StatisticsInfo } from '$src/pages/expertDetail/Main/Statistics/RecentlyStatistics/type'
   import InfoText from './InfoText.svelte'
   import PeriodLabel from './PeriodLabel.svelte'
 

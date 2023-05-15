@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { StatisticsLists } from '../types'
+  import type { StatisticsLists } from '../type'
   import { calculateRecordData } from './utils'
 	import LineChart from './components/LineChart/index.svelte'
   export let data: StatisticsLists

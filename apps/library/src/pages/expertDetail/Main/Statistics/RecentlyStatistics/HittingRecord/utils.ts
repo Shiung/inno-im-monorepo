@@ -1,4 +1,4 @@
-import type { StatisticsLists } from '../types'
+import type { StatisticsLists } from '../type'
 import BigNumber from 'bignumber.js'
 import type { ILineChartDataItem } from './components/LineChart/types'
 
