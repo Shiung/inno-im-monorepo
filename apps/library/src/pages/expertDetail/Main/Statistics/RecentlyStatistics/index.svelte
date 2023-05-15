@@ -40,6 +40,6 @@
   {#await promise}
     <RecentTenRecordsLoading />
   {:then statisticData}
-    <RecentTenRecords />
+    <RecentTenRecords data={statisticData.data.list} />
   {/await}
 </div>
