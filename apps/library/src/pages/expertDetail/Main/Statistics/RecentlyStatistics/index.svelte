@@ -12,6 +12,7 @@
 
   import RecentTenRecords from './RecentTenRecords/index.svelte'
   import RecentTenRecordsLoading from './RecentTenRecords/components/Loading/index.svelte'
+  import SubTitleItem from './RecentTenRecords/components/SubTitleItem/index.svelte'
 
   const promise = im.expertStatistics({ query: { expertId: '1234' } })
 </script>
@@ -33,8 +34,13 @@
     <HittingRecord data={statisticData.data.list} />
   {/await}
   
-  <div class="px-4">
+  <div class="flex items-center justify-between px-4">
     <Title>{$t('expert.statistics.recentRecord', { num: 10 })}</Title>
+
+    <div class="flex space-x-3">
+      <SubTitleItem title={$t('expert.statistics.hit')} color={'rgba(var(--im-monorepo-primary))'} />
+      <SubTitleItem title={$t('expert.statistics.none')} color={'#ddd'} />
+    </div>
   </div>
 
   {#await promise}
