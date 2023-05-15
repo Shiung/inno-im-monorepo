@@ -6,9 +6,9 @@ import {
   onLostData as _onLostData,
   onMuted as _onMuted,
   onPaused as _onPaused,
-  setMuteHandler as _setMuteHandler,
-  setPauseHandler as _setPauseHandler,
-  setFullScreenHandler as _setFullScreenHandler
+  setMute as _setMute,
+  setPause as _setPause,
+  setFullScreen as _setFullScreen
 } from 'ui/components/FlvPlayer'
 
 export const onError = _onError
@@ -17,9 +17,9 @@ export const onLostData = _onLostData
 export const onMuted = _onMuted
 export const onPaused = _onPaused
 
-export const setMuteHandler = _setMuteHandler
-export const setPauseHandler = _setPauseHandler
-export const setFullScreenHandler = _setFullScreenHandler
+export const setMute = _setMute
+export const setPause = _setPause
+export const setFullScreen = _setFullScreen
 
 export const setStreaming = anchor.streaming.set
 export const getStreaming = anchor.streaming.subscribe

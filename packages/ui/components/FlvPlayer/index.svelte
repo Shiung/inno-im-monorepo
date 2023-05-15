@@ -9,28 +9,33 @@ let pauseHandler: (l: boolean) => void
 let fullScreenHandler: () => void
 
 export const onReady = (callback: typeof onReadyCallback) => {
+  if (typeof callback !== 'function') return
   onReadyCallback = callback
 }
 export const onLostData = (callback: typeof onLostDataCallback) => {
+  if (typeof callback !== 'function') return
   onLostDataCallback = callback
 }
 export const onError = (callback: typeof onErrorCallback) => {
+  if (typeof callback !== 'function') return
   onErrorCallback = callback
 }
 
 export const onPaused = (callback: typeof onPausedCallback) => {
+  if (typeof callback !== 'function') return
   onPausedCallback = callback
 }
 
 export const onMuted = (callback: typeof onMutedCallback) => {
+  if (typeof callback !== 'function') return
   onMutedCallback = callback
 }
 
-export const setMuteHandler = () => typeof muteHandler === 'function' && muteHandler()
+export const setMute = () => typeof muteHandler === 'function' && muteHandler()
 
-export const setPauseHandler = (isLive: boolean = false) => typeof pauseHandler === 'function' && pauseHandler(isLive)
+export const setPause = (isLive: boolean = false) => typeof pauseHandler === 'function' && pauseHandler(isLive)
 
-export const setFullScreenHandler = () => typeof fullScreenHandler === 'function' && fullScreenHandler()
+export const setFullScreen = () => typeof fullScreenHandler === 'function' && fullScreenHandler()
 
 </script>
 

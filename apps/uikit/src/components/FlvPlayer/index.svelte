@@ -1,5 +1,5 @@
 <script lang='ts'>
-import FlvPlayer, { onMuted, onPaused, setMuteHandler, setPauseHandler, setFullScreenHandler } from 'ui/components/FlvPlayer'
+import FlvPlayer, { onMuted, onPaused, setMute, setPause, setFullScreen } from 'ui/components/FlvPlayer'
 import { Button } from 'ui'
 
 let url: string
@@ -30,13 +30,13 @@ onMuted((m) => {
 </Button>
 
 
-<Button on:click={setMuteHandler}>
+<Button on:click={setMute}>
   {muted ? '開聲音' : '靜音'}
 </Button>
-<Button on:click={setPauseHandler.bind(null, false)}>
+<Button on:click={setPause.bind(null, false)}>
   {paused ? '播放': '暫停'}
 </Button>
 
-<Button on:click={setFullScreenHandler}>
+<Button on:click={setFullScreen}>
   全螢幕
 </Button>
