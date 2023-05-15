@@ -4,6 +4,7 @@
   export let data: any[]
   export let padding: number = 8
   export let width: string | number = '90%'
+  export let height: number = 63
   export let swipeThreshold: number = 0.3
 
   let movable = false
@@ -55,11 +56,9 @@
     const distance = touchMoveX - touchStartX
     slider.style.transform = `translateX(${calculateDistance(currentIndex) + distance}px)`
 
-    if(touchMoveX < 0) {
-      setIndex(currentIndex + 1)
-      movable = false
-    } else if (touchMoveX > window.innerWidth) {
-      setIndex(currentIndex - 1)
+    if (touchMoveX < 0 || touchMoveX > window.innerWidth) {
+      const newIndex = touchMoveX < 0 ? currentIndex + 1 : currentIndex - 1
+      setIndex(newIndex)
       movable = false
     }
   }
@@ -119,14 +118,12 @@
       calWidth = calculateWidth(width, sliderContainer)
     }
     if(slider) {
-      slider.style.transform = `translateX(${calculateDistance(currentIndex)}px)`
       slider.style.transitionProperty = 'none'
-      slider.addEventListener('transitionend', handleTransitionEnd)
+      slider.style.transform = `translateX(${calculateDistance(currentIndex)}px)`
     }
   })
 
   onDestroy(() => {
-    slider && slider.removeEventListener('transitionend', handleTransitionEnd)
   })
 </script>
 
@@ -137,11 +134,13 @@
     on:touchstart|nonpassive={onTouchStart}
     on:touchmove|nonpassive={onTouchMove}
     on:touchend|nonpassive={onTouchEnd}
+    on:transitionend={handleTransitionEnd}
   >
     <div
       bind:this={slider}
       class="h-[63px] flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
       style:width={`${slides.length * (calWidth + padding)}px`}
+      style:height={height}
     >
       {#each slides as slide}
         <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${padding}px`}>
