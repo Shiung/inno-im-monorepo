@@ -146,3 +146,11 @@ export interface IExpertMatchArticle {
     pager: IPager
   }>
 }
+
+export interface IExpertArticleDetail {
+  query: {
+    articleId: string
+  }
+  body: null
+  res: withData<IArticle>
+}
