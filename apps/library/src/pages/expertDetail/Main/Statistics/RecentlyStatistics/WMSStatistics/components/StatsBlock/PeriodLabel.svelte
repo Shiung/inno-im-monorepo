@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '$stores'
+  import { Badget } from 'ui'
   import type { StatisticsInfo } from '$src/pages/expertDetail/Main/Statistics/RecentlyStatistics/type'
   
   export let data: StatisticsInfo['type']
@@ -11,9 +12,8 @@
   }
 </script>
 
-<div
-  class="rounded-[4px] flex justify-center items-center px-[9px] py-[1px]"
-  style="background: linear-gradient(90deg, #4C9EEA 0%, #50BDFF 100%);"
->
-  <span class="text-white font-semibold text-[10px] leading-[15px]">{ data && $t(`expert.statistics.${mapping[data]}`) }</span>
-</div>
+{#if data}
+  <Badget class='rounded-[4px] px-[9px] py-[1px] h-auto flex'>
+    <span class="text-white font-semibold leading-[15px]">{$t(`expert.statistics.${mapping[data]}`)}</span>
+  </Badget>
+{/if}
