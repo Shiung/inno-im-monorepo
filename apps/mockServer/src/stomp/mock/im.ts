@@ -2,7 +2,7 @@ import { mock, Random } from 'mockjs'
 import { sendData } from './utils'
 
 import type { WebSocket } from 'ws'
-import type { IChatRoom } from 'api/im/types'
+import type { IChatMessage } from 'api/im/types'
 import type { IStompData } from '../types'
 
 const genChatRoomBody = () => mock({
@@ -22,7 +22,7 @@ const genChatRoomBody = () => mock({
     message: "@sentence",
     reply: null
   }
-} as IChatRoom)
+} as IChatMessage)
 
 let interval: ReturnType<typeof setInterval>
 

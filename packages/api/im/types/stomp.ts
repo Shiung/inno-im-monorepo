@@ -1,6 +1,6 @@
 import type { ILanguages } from 'env-config'
 
-export interface IChatRoom {
+export interface IChatMessage {
   type: 'message'
   blackList: boolean
   source: string
