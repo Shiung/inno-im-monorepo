@@ -124,6 +124,36 @@ const expert: IMockData[] = [
       }
     }))
   },
+  {
+    url: '/v1/expert/match/article',
+    response: ({ query }) => mock(withData<Types.IExpertPredictions>({
+      list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
+        const market = genMarket()
+        const sportId = Number(market.marketType[0]) as Types.IExpertPrediction['sportId']
+
+        return {
+          ...market,
+          expertId: "@word",
+          expertName: "@cname",
+          expertImage: getExpertImage(),
+          releaseTime: randomPostTime(),
+          closeTime: randomPostTime(),
+          hotStreak: Random.integer(0, 12),
+          hitRate: Random.float(60, 100, 0, 2),
+          articleId: "@word",
+          articleStatus: Random.integer(1, 2) as Types.IExpertPrediction['articleStatus'],
+          title: "@cparagraph",
+          homeName: "@cname",
+          awayName: "@cname",
+          leagueName: "@cname",
+          matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
+          matchTime: randomPostTime(),
+          sportId,
+        }
+      }),
+      pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
+    }))
+  },
 ]
 
 export default expert
