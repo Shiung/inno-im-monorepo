@@ -9,7 +9,7 @@
 </script>
 
 <div class="px-4">
-  <Title> {$t('expert.plan.history')} </Title>
+  <Title> {$t('expert.statistics.recentHitRecord')} </Title>
 </div>
 
 <div class="px-3 mb-3">
