@@ -24,4 +24,4 @@ $: i18n = getI18n(marketType)
 </script>
 
 
-<Badget> {$t(i18n)} </Badget>
+<Badget class={$$props.class}> {$t(i18n)} </Badget>

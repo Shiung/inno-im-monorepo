@@ -72,21 +72,23 @@ export interface IExpertInfo {
   }>
 }
 
-interface IArthcleList {
-  list: Array<{
-    articleId: string
-    releaseTime: number
-    closeTime: number
-    title: string
-    homeName: string
-    awayName: string
-    leagueName: string
-  } & IPredictionMarket>
+export interface IArticle extends IPredictionMarket {
+  articleId: string
+  releaseTime: number
+  closeTime: number
+  title: string
+  homeName: string
+  awayName: string
+  leagueName: string
+  hitStatus: 1 | 2  // 命中狀態 1: 命中 2: 未中
+}
+export interface IArticleList {
+  list: Array<IArticle>
 }
 
 type IExpertArthcleRes<T> = T extends 'pager'
-? { res: withData<IArthcleList & { pager: IPager }> } 
-: { res: withData<IArthcleList> }
+? { res: withData<IArticleList & { pager: IPager }> } 
+: { res: withData<IArticleList> }
 
 
 export interface IExpertArthcleNow extends IExpertArthcleRes<null> {
