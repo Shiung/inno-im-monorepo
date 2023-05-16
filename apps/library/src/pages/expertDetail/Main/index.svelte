@@ -1,6 +1,7 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
 
+import Info from '../Info/index.svelte'
 import Menu from './Menu.svelte'
 
 const Plan = () => import('./Plan/index.svelte')
@@ -19,6 +20,8 @@ const fetchComponent = (_method: typeof method) => {
 $: fetchComponent(method)
 
 </script>
+
+<Info />
 
 <div class={twMerge('bg-[white] rounded-t-[20px]', $$props.class)}>
   <Menu class='mb-[16px]' bind:method={method} />

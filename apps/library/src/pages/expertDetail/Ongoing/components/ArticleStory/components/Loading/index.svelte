@@ -1,0 +1,1 @@
+<div class='h-[84px] animate-pulse bg-[#eee] rounded-[10px]'></div>
