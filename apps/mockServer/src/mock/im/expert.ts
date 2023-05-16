@@ -154,6 +154,21 @@ const expert: IMockData[] = [
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
   },
+  {
+    url: '/v1/expert/article/detail',
+    response: () => mock(withData<Types.IExpertArticleDetail>(
+      {
+        ...genMarket(),
+        articleId: "@word",
+        releaseTime: randomPostTime(),
+        closeTime: randomPostTime(),
+        title: "@cparagraph",
+        homeName: "@cname",
+        awayName: "@cname",
+        leagueName: "@cname"
+      }
+    ))
+  },
 ]
 
 export default expert

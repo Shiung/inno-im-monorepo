@@ -71,16 +71,18 @@ export interface IExpertInfo {
   }>
 }
 
+interface IArticle extends IPredictionMarket {
+  articleId: string
+  releaseTime: number
+  closeTime: number
+  title: string
+  homeName: string
+  awayName: string
+  leagueName: string
+}
+
 interface IArthcleList {
-  list: Array<{
-    articleId: string
-    releaseTime: number
-    closeTime: number
-    title: string
-    homeName: string
-    awayName: string
-    leagueName: string
-  } & IPredictionMarket>
+  list: Array<IArticle>
 }
 
 type IExpertArthcleRes<T> = T extends 'pager'
@@ -143,4 +145,12 @@ export interface IExpertMatchArticle {
     list: IExpertPrediction[]
     pager: IPager
   }>
+}
+
+export interface IExpertArticleDetail {
+  query: {
+    articleId: string
+  }
+  body: null
+  res: withData<IArticle>
 }
