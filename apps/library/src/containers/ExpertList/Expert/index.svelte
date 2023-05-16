@@ -1,11 +1,12 @@
 <script lang='ts'>
-import { Button, Badget, Ripple } from 'ui'
+import { Button, Ripple } from 'ui'
 import { convertTimeDiffToPast } from 'utils/convertTimeDiff'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
 
 import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
+import MarketBadget from '$src/components/MarketBadget'
 
 import type { IExpertPrediction } from 'api/im/types'
 
@@ -40,7 +41,7 @@ const convertReleaseTime = (releaseTime: number) => {
         </div>
 
         <div class='flex items-center space-x-[4px]'>
-          <Badget> {prodiction.market.status} </Badget> 
+          <MarketBadget marketType={prodiction.marketType} /> 
           <Strack streak={prodiction.hotStreak} />
         </div>
       </div>

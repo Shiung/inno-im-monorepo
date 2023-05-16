@@ -1,9 +1,8 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import Title from '$pages/expertDetail/Main/components/Title.svelte'
-  import ExpertArticleLoading from '../../components/ExpertArticle/Loading.svelte'
+  import ArticleList, {Loading} from '$src/containers/ArticleList'
   import { t } from '$stores'
-  import ExpertArticle from '../../components/ExpertArticle/index.svelte'
   import { im } from 'api'
 
   const promise = im.expertArticleHit({ query: { expertId: $params.expertId, pageIdx: 1, pageSize: 10 }})
@@ -15,8 +14,8 @@
 
 <div class="px-3 mb-3">
   {#await promise}
-    <ExpertArticleLoading />
+    <Loading />
   {:then articles}
-    <ExpertArticle data={articles?.data?.list} />
+    <ArticleList articles={articles?.data?.list} />
   {/await}
 </div>

@@ -1,12 +1,12 @@
 <script lang='ts'>
 import { Badget } from 'ui'
 import { t } from '$stores'
-import type { IMarket } from 'api/im/types/common'
+import type { IPredictionMarket } from 'api/im/types/common'
 
-export let status: IMarket['status']
+export let marketType: IPredictionMarket['marketType']
 
-const getI18n = (_status: typeof status) => {
-  switch (_status) {
+const getI18n = (_marketTypes: typeof marketType) => {
+  switch (_marketTypes) {
     case '11':
     case '21':
       return 'common.1x2'
@@ -20,8 +20,8 @@ const getI18n = (_status: typeof status) => {
   }
 }
 
-$: i18n = getI18n(status)
+$: i18n = getI18n(marketType)
 </script>
 
 
-<Badget> {$t(i18n)} </Badget>
+<Badget class={$$props.class}> {$t(i18n)} </Badget>
