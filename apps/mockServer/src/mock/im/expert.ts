@@ -169,7 +169,8 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname"
+        leagueName: "@cname",
+        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
       }
     ))
   },
