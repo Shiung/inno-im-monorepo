@@ -67,7 +67,7 @@ const expert: IMockData[] = [
   },
   {
     url: '/v1/expert/article/now',
-    response: ({ query}) => mock(withData<Types.IExpertArthcleNow>({
+    response: ({ query }) => mock(withData<Types.IExpertArthcleNow>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         ...genMarket(),
         articleId: "@word",
