@@ -4,6 +4,8 @@ import { Badget, Button } from 'ui'
 import { im } from 'api'
 import { t } from '$stores'
 
+import MarkInfo from '$src/components/MarketInfo'
+
 import Loading from './Loading.svelte'
 import Title from '../../components/Title.svelte'
 
@@ -26,7 +28,7 @@ const promise = im.expertArticleNow({ query: { expertId }})
           <div class='truncate'> {article.title} </div>
           <!-- 玩法區塊 待討論 -->
           <div class='flex items-center'>
-            <Badget> {'market'} </Badget>
+            <MarkInfo article={article} />
             <div class='text-[12px] ml-[4px]'> {`${article.homeName} vs ${article.awayName}`} </div>
           </div>
 

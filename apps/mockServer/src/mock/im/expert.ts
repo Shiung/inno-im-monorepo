@@ -3,6 +3,7 @@ import { withData, genPager, randomPostTime, genMarket, getExpertImage } from '.
 
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
+import { IArticle } from 'api/im/types'
 
 const expert: IMockData[] = [
   {
@@ -75,7 +76,8 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname"
+        leagueName: "@cname",
+        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
       }))
     }))
   },
@@ -90,7 +92,8 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname"
+        leagueName: "@cname",
+        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
@@ -106,7 +109,8 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname"
+        leagueName: "@cname",
+        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
