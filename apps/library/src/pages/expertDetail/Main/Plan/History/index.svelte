@@ -3,7 +3,8 @@ import { im } from 'api'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 
-import ArticleList, {Loading} from '$src/containers/ArticleList'
+import List from './components/List.svelte'
+import Loading from './components/Loading.svelte'
 
 import Title from '../../components/Title.svelte'
 import Filter from '../../images/filter.svg'
@@ -25,7 +26,7 @@ const promise = im.expertArticleHistory({ query: { expertId, pageIdx: 1, pageSiz
   {#await promise}
     <Loading />
   {:then articles}
-    <ArticleList  articles={articles.data.list} />
+    <List articles={articles.data.list} />
   {/await}
 
 </div>

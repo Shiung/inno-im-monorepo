@@ -1,11 +1,13 @@
-import express from 'express'
-import cors from 'cors'
+// import express from 'express'
+import { createServer } from 'http'
+import { URLSearchParams, parse } from 'url'
 
+import { createWebSocketServer } from './stomp'
 import moduleDict from './moduleDict'
 import type { IMockData, IMethod } from'./types'
 
-let app = express()
-app.use(cors())
+const app = createServer()
+const wss = createWebSocketServer()
 
 const getPathAndModule = (path: string) => {
   const pathArray = path.split('/')
@@ -30,23 +32,41 @@ const getMockData = (module: IMockData[], method: IMethod, path: string) => {
   return mockData
 }
 
-app.all('*', async (req, res) => {
-  const method = req.method.toLocaleLowerCase() as IMethod
+app.on('request', async (req, res) => {
+  const { pathname, query: _query } = parse(req?.url || '')
+  const query = Object.fromEntries(new URLSearchParams(_query || ''))
+  const method = req.method?.toLocaleLowerCase() as IMethod
 
-  const { path, module } = getPathAndModule(req.path)
-  if (!module) return res.status(404).json({ data: 'no such API_URL' })
+  if (!req.url) return res.end()
+
+  res.writeHead(200, {
+    'Access-Control-Allow-Origin': req.headers.origin,
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+  })
+
+  const { path, module } = getPathAndModule(pathname || '')
 
   const mod = await module()
   const mockData = getMockData(mod.default, method, path)
-  if (!mockData?.response) return res.status(404).json({ data: 'no such MockData' })
-  
+
+  if (method === 'options') return res.end()
 
   setTimeout(() => {
-    const mockData = getMockData(mod.default, method, path)
-    if (!mockData?.response) return res.status(404).json({ data: 'no such MockData' })
-  
-    res.json(mockData.response(req))
-  }, mockData.timeout || 200)
+    if (!mockData) return res.end(JSON.stringify({ data: 'no such mock data.' }))
+    else return res.end(JSON.stringify(mockData?.response({ query })))
+  }, mockData?.timeout || 200)
 })
+
+
+app.on('upgrade', (req, socket, head) => {
+  const { pathname } = parse(req?.url || '')
+
+  if (pathname?.match('/stomp')) {
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit('connection', ws, req)
+    })
+  }
+})  
 
 app.listen(5174)

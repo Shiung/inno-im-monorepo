@@ -1,10 +1,8 @@
-import type { Request } from 'express'
-
-export type IMethod = 'get' | 'post' | 'put' | 'patch' | 'delete'
+export type IMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'options'
 
 export interface IMockData {
   url: string
   method?: IMethod
   timeout?: number
-  response: (req: Request) => any
+  response: (req: { query: {[key: string]: string}}) => any
 }
