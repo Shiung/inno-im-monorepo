@@ -20,7 +20,6 @@ export interface IExpertPrediction extends IPredictionMarket {
 }
 export interface IExpertPredictions {
   query: {
-    matchId?: string
     sid?: number
     type?: 0 | 1 | 2 // 0: 命中王 1: 連紅王 2: 跟投王
     pageIdx?: number
@@ -135,3 +134,15 @@ export interface IExpertStatistics {
   }>
 }
 
+export interface IExpertMatchArticle {
+  query: {
+    matchId: string
+    pageIdx: number
+    pageSize: number
+  }
+  body: null
+  res: withData<{
+    list: IExpertPrediction[]
+    pager: IPager
+  }>
+}
