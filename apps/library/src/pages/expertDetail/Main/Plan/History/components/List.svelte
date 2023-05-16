@@ -1,7 +1,7 @@
 <script lang="ts">
   import Empty from '$src/containers/Empty'
 
-  import ExpertArticle from '$src/components/ExpertArticle/index.svelte'
+  import ExpertArticle from '$src/containers/ExpertArticle/index.svelte'
 
   import type { IArticle } from 'api/im/types/expert'
 
