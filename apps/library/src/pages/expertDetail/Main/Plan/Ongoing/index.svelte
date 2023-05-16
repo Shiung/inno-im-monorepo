@@ -1,4 +1,5 @@
 <script lang='ts'>
+import { push } from 'svelte-spa-router'
 import { Badget, Button } from 'ui'
 import { im } from 'api'
 import { t } from '$stores'
@@ -29,7 +30,7 @@ const promise = im.expertArticleNow({ query: { expertId }})
             <div class='text-[12px] ml-[4px]'> {`${article.homeName} vs ${article.awayName}`} </div>
           </div>
 
-          <Button class='w-full rounded-[12px] h-[44px]'>
+          <Button class='w-full rounded-[12px] h-[44px]' on:click={() => push(`/expertDetail/${expertId}/${article.articleId}`)}>
             {$t('expert.plan.prediction')}
           </Button>
         </div>
