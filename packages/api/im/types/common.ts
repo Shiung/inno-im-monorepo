@@ -1,6 +1,8 @@
 import type { SidType } from 'utils/types'
 
+/** 1: 足球 2: 籃球 3: 網球 4: 棒球 */
 export type SportId =  Exclude<SidType, 0>
+
 export interface withData<T> {
   message: string
   code: number
