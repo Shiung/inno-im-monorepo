@@ -42,7 +42,7 @@ export const genChatRoomBody = (props?: {message?: string, userId?: string}) => 
         message: _message || "@sentence",
         reply: null
       }
-  } as IChatMessage)
+    } as IChatMessage)
   }
 
 export const sendData = (props: { ws: WebSocket, data: IStompData, body: object }) => {

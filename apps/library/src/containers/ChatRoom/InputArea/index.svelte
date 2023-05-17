@@ -17,6 +17,7 @@ let message: string
 
 const publishMessage = () => {
   stomp.publish({ destination, headers: { id: subId }, body: JSON.stringify({ message, userId }) })
+  message = ''
 }
 
 </script>

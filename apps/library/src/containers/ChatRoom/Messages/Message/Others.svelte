@@ -5,7 +5,7 @@ export let message: IChatMessage
 
 </script>
 
-<div class='flex'>
+<div data-id={message.id} class='flex'>
   <div class='min-w-[30px] h-[30px] rounded-full bg-[#999999] flex items-center justify-center'>
     {message.sourceInfo.avatar}
   </div>

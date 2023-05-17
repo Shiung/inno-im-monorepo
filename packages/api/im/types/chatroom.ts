@@ -1,4 +1,5 @@
 import type { ILanguages } from 'env-config'
+import type { withData } from '../types'
 
 export interface IChatMessage {
   type: 'message'
@@ -18,4 +19,16 @@ export interface IChatMessage {
     message: string
     reply: null | string
   }
+}
+
+export interface IChatroomPastMessage {
+  query: {
+    roomId: number
+    cursor?: string 
+    quantity?: number
+  }
+  body: null
+  res: withData<{
+    list: IChatMessage[]
+  }>
 }

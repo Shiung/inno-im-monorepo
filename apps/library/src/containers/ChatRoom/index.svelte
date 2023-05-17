@@ -1,12 +1,14 @@
 <script lang='ts'>
 import { onMount, onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
+import { im } from 'api'
 import stomp, { activate } from 'api/stompMaster'
 
 import { t } from '$stores'
 import Empty from '$src/containers/Empty'
 
 import Header from './Header/index.svelte'
+import Loading from './Loading.svelte'
 import Messages from './Messages/index.svelte'
 import InputArea from './InputArea/index.svelte'
 
@@ -33,7 +35,15 @@ const subscribeRoom = (_roomId: number) => {
 
 $: if (roomId) subscribeRoom(roomId)
 
+let initFetchLoading: boolean = true
+const initFetch = async () => {
+  const res = await im.chatroomPastMessage({ query: { roomId, quantity: 30 }})
+  chatMessages.update(messages => [...res.data.list, ...messages])
+  initFetchLoading = false
+}
+
 onMount(() => {
+  initFetch()
   activate()
 })
 
@@ -47,10 +57,16 @@ onDestroy(() => {
 <div class='flex flex-col bg-white min-h-[100vh] max-h-[100vh]'>
   <Header />
 
-  {#if $chatMessages.length === 0}
-    <Empty class='flex-1' title={$t('chat.empty')} />
+  {#if initFetchLoading}
+    <Loading />
   {:else}
-    <Messages messages={$chatMessages} userId={userId} />
+
+    {#if $chatMessages.length === 0}
+      <Empty class='flex-1' title={$t('chat.empty')} />
+    {:else}
+      <Messages chatMessages={chatMessages} userId={userId} roomId={roomId} />
+    {/if}
+
   {/if}
 
   <InputArea userId={userId} subId={subId} destination={destination} />
