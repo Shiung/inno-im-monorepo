@@ -1,9 +1,16 @@
 <script lang="ts">
-  import Info from '../Info/index.svelte'
-  import ArticleStoryLoading from './components/ArticleStory/components/Loading/index.svelte'
-  import ArticleStory from './components/ArticleStory/index.svelte'
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
+  import { t } from '$stores'
+
+  import Info from '../Info/index.svelte'
+  import Title from '../Main/components/Title.svelte'
+
+  import ArticleStoryLoading from './components/ArticleStory/components/Loading/index.svelte'
+  import ArticleStory from './components/ArticleStory/index.svelte'
+
+  import MatchPanelLoading from './components/MatchPanel/Loading.svelte'
+  import MatchPanel from './components/MatchPanel/index.svelte'
 
   const fetchData = async (articleId: string) => {
     if(!articleId) return
@@ -14,11 +21,29 @@
   $: console.log('promise', promise)
 </script>
 
-<div>
-  {#await promise}
-    <ArticleStoryLoading />
-  {:then detail}
-    <ArticleStory data={detail.data} />
-  {/await}
-  <Info />
+<div class='space-y-3'>
+  <div>
+    {#await promise}
+      <ArticleStoryLoading />
+    {:then detail}
+      <ArticleStory data={detail.data} />
+    {/await}
+    <Info />
+  </div>
+
+  <div class='rounded-[20px] bg-white'>
+    <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
+    
+    {#await promise}
+      <MatchPanelLoading />
+    {:then detail}
+      <MatchPanel data={detail.data} />
+    {/await}
+
+    <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
+  </div>
+
+  <div class='rounded-t-[20px] bg-white'>
+    <div class='px-4'><Title>{$t('expert.planDetail.othersPrediction')}</Title></div>
+  </div>
 </div>
