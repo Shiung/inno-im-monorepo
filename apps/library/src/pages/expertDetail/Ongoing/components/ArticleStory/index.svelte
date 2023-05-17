@@ -1,11 +1,11 @@
 <script lang='ts'>
   import { t } from '$stores'
-  import type { IArticle } from 'api/im/types'
+  import type { IArticleDetail } from 'api/im/types'
   import MarketBadget from '$src/components/MarketBadget'
   import TimerLabel from './components/TimerLabel/index.svelte'
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
 
-  export let data: IArticle = null
+  export let data: IArticleDetail
 </script>
 
 <div class='bg-white px-3 pt-3 pb-2'>
