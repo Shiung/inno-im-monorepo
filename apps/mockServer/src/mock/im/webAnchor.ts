@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { withData, randomPostTime, genPager, genHouseId } from './utils'
+import { withData, randomPostTime, genPager, genHouseId, genTeamInfo } from './utils'
 import { getRandomItemFromArray } from 'utils'
 
 import type * as Types from 'api/im/types'
@@ -54,21 +54,16 @@ const webAnchors: IMockData[] = [
     timeout: 500,
     response: () => mock(withData<Types.IWebAnchorMatches>({
       matchList: Array.from({length: Random.natural(0, 5)}, () => ({
-          homeTeamName:"@cname",
-          homeTeamLogo: getRandomItemFromArray(["@image", ""]),
-          homeTeamId:"@word",
-          awayTeamName:"@cname",
-          awayTeamLogo: getRandomItemFromArray(["@image", ""]),
-          awayTeamId:"@id",
+          ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeTeamId' | 'homeTeamName' | 'awayTeamId' | 'awayTeamName'>,
           competitionName:"@cname",
-          competitionLogo:"@image",
-          competitionId:"@word",
+          competitionId: Random.integer(10000, 50000),
           sportId: Random.integer(1, 3) as Types.IWebAnchorMatch['sportId'],
           matchId:"@id",
           matchTime: randomPostTime(),
           matchStatus: Random.integer(1, 8) as Types.IWebAnchorMatch['matchStatus'],
-          homeScore: Array.from({ length: 7 }, () => Random.integer(0, 10)) as Types.IWebAnchorMatch['homeScore'],
-          awayScore: Array.from({ length: 7 }, () => Random.integer(0, 10)) as Types.IWebAnchorMatch['awayScore'],
+          mid: Random.integer(10000, 50000),
+          vd: Random.word(1),
+          score: "@integer(1,10)-@integer(1,10)"
       }))
     }))
   },
@@ -117,7 +112,10 @@ const webAnchors: IMockData[] = [
       personalIntroduction: "@cword",
       anchorTitle: "@csentence",
       houseIntroduction: "@csentence",
-      userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/575/w-K5RvqqSqCmIrWD3p0xxA.png"
+      userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/575/w-K5RvqqSqCmIrWD3p0xxA.png",
+      homeTeamName: "@cname",
+      awayTeamName: "@cname",
+      competitionName: "@cname"
     }))
   }
 ]

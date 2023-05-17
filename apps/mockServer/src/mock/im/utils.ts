@@ -67,11 +67,20 @@ export const getExpertImage = () => {
 
 export const genHouseId = () => String(Random.natural(0, 99999))
 
-export const genTeamInfo = () => {
+export const genTeamInfo = (isAnchor?: boolean) => {
   const homeId = Random.integer(1, 5)
   let awayId = Random.integer(1, 5)
   while (awayId === homeId) {
     awayId = Random.integer(1, 5)
+  }
+
+  if (isAnchor) {
+    return {
+      homeTeamName: "@cname",
+      homeTeamId: homeId,
+      awayTeamName: "@cname",
+      awayTeamId: awayId
+    }
   }
 
   return {
