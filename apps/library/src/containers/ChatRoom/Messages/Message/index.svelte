@@ -26,6 +26,6 @@ $: if (dom) observer.observe(dom)
 
 </script>
 
-<div data-id={message.id} bind:this={dom}>
+<div data-id={message.id} class='rounded-[10px]' bind:this={dom}>
   <svelte:component this={self ? Self : Others} message={message} />
 </div>

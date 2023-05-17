@@ -5,6 +5,7 @@ import { im } from 'api'
 import Circle from 'ui/core/button/loading.svelte'
 import { t } from '$stores'
 
+import flash from './flash'
 import Message from './Message'
 import Arrow from '../images/arrow_down_small.svg'
 
@@ -47,8 +48,12 @@ $: if (dom) observer.observe(dom, { childList: true })
 
 let allWatched: boolean = true
 const scrollToUnread = () => {
-  const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`)
-  if (unreadDom) unreadDom.scrollIntoView()
+  const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
+  if (unreadDom) {
+    unreadDom.scrollIntoView()
+    flash(unreadDom)
+    dom.scrollTo({ top: dom.scrollTop - 200 })
+  }
 }
 
 $: if (dom) scrollToUnread()
