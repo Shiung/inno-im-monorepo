@@ -26,7 +26,7 @@ export const genChatRoomBody = (props?: {message?: string, userId?: string}) => 
 
   return mock({
     type: "message",
-    id: '@sentence',
+    id: String(Date.now()),
     blackList: false,
     source: _userId || "@name",
     sourceInfo: {

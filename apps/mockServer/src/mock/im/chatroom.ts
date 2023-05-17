@@ -11,7 +11,7 @@ const expert: IMockData[] = [
     response: ({ query }) => mock(withData<Types.IChatroomPastMessage>({
       list: Array.from({ length: Number(query.quantity) || 30 }, () => ({
         type: "message",
-        id: '@sentence',
+        id: String(Date.now()),
         blackList: false,
         source: "@name",
         sourceInfo: {

@@ -7,6 +7,7 @@ import stomp, { activate } from 'api/stompMaster'
 import { t } from '$stores'
 import Empty from '$src/containers/Empty'
 
+import Minimize from './Minimize/index.svelte'
 import Header from './Header/index.svelte'
 import Loading from './Loading.svelte'
 import Messages from './Messages/index.svelte'
@@ -15,6 +16,8 @@ import InputArea from './InputArea/index.svelte'
 import type { IChatMessage } from 'api/im/types'
 import type { Subscription } from 'api/stompMaster'
 
+export let minimize: boolean = true
+
 export let roomId: number = 124
 export let userId: string = 'loki'
 export let userVip: number = 6
@@ -22,6 +25,8 @@ export let isLogin: boolean = true
 export let isCharged: boolean = true
 export let vipLimit: number = 6
 export let frequency: number = 5000
+
+let lastReadId: string
 
 $: destination = `/topic/chat-room/${roomId}`
 
@@ -59,20 +64,27 @@ onDestroy(() => {
 
 </script>
 
-<div class='flex flex-col bg-white min-h-[100vh] max-h-[100vh]'>
-  <Header />
+{#if minimize}
 
-  {#if initFetchLoading}
-    <Loading />
-  {:else}
+  <Minimize {lastReadId} {chatMessages} on:click={() => minimize = false} />
 
-    {#if $chatMessages.length === 0}
-      <Empty class='flex-1' title={$t('chat.empty')} />
+{:else}
+
+  <div class='flex flex-col bg-white min-h-[100vh] max-h-[100vh]'>
+    <Header on:close={() => minimize = true}/>
+
+    {#if initFetchLoading}
+      <Loading />
     {:else}
-      <Messages {chatMessages} {userId} {roomId} />
+
+      {#if $chatMessages.length === 0}
+        <Empty class='flex-1' title={$t('chat.empty')} />
+      {:else}
+        <Messages bind:lastReadId={lastReadId} {chatMessages} {userId} {roomId} />
+      {/if}
+
     {/if}
 
-  {/if}
-
-  <InputArea {userId} {userVip} {subId} {destination} {isLogin} {isCharged} {vipLimit} {frequency} />
-</div>
+    <InputArea {userId} {userVip} {subId} {destination} {isLogin} {isCharged} {vipLimit} {frequency} />
+  </div>
+{/if}

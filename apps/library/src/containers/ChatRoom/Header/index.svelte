@@ -1,10 +1,13 @@
 <script lang="ts">
 import { fade } from 'svelte/transition'
+import { createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'
+
+const dispatch = createEventDispatcher()
 
 let showRemind: boolean = false
 
@@ -28,7 +31,7 @@ let showRemind: boolean = false
   </div>
 
 
-  <Ripple class='rounded-full' on:click={() => console.log('close')}>
-    <Close width={20} height=[20] fill='#333333' />
+  <Ripple class='rounded-full' on:click={() => dispatch('close')}>
+    <Close width={20} height={20} fill='#333333' />
   </Ripple>
 </div>

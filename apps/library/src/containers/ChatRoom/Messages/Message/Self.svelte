@@ -4,7 +4,7 @@ import type { IChatMessage } from 'api/im/types'
 export let message: IChatMessage
 </script>
 
-<div data-id={message.id} class='flex justify-between'>
+<div class='flex justify-between'>
   <div />
 
   <div class='flex'>

@@ -14,10 +14,10 @@ import type { IChatMessage } from 'api/im/types'
 export let userId: string
 export let roomId: number
 export let chatMessages: Writable<IChatMessage[]>
+export let lastReadId: string
 
 let dom: HTMLDivElement
-let scrollToNewest: boolean = true
-let newestId: string
+let scrollToNewest: boolean = false
 
 const getNewestMessage = () => $chatMessages[$chatMessages.length - 1]
 
@@ -25,7 +25,7 @@ const onDomScroll = (e: UIEvent) => {
   const target = e.target as HTMLDivElement
   if (target.scrollTop + target.clientHeight === target.scrollHeight) {
     scrollToNewest = true 
-    newestId = getNewestMessage().id
+    lastReadId = getNewestMessage().id
   } else scrollToNewest = false
 }
 
@@ -36,19 +36,25 @@ const observer = new MutationObserver(mutations => {
   const target = mutation.target as HTMLDivElement
 
   if (scrollToNewest) {
-    newestId = getNewestMessage().id
+    lastReadId = getNewestMessage().id
     target.scrollTo({top: target.scrollHeight})
   } 
   checkWatched()
 })
 
 $: if (dom) observer.observe(dom, { childList: true })
-$: if (dom) dom.scrollTo({ top: dom.scrollHeight })
+// $: if (dom) dom.scrollTo({ top: dom.scrollHeight })
 
 let allWatched: boolean = true
+const scrollToUnread = () => {
+  const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`)
+  if (unreadDom) unreadDom.scrollIntoView()
+}
+
+$: if (dom) scrollToUnread()
 
 const checkWatched = () => {
-  if (newestId === getNewestMessage().id) allWatched = true
+  if (lastReadId === getNewestMessage().id) allWatched = true
   else allWatched = false
 }
 
@@ -56,20 +62,21 @@ const gotoNewest = () => {
   dom.scrollTo({ top: dom.scrollHeight })
 }
 
+// 拉到最上面載入新訊息用的區域
 let pastQuantity = 30
 let loadDom: HTMLDivElement
 const intersectionObserver = new IntersectionObserver(async entries => {
   for (const entry of entries) {
     if (entry.intersectionRatio <= 0) return
 
-    const targetId = $chatMessages[pastQuantity].id
-    const targetDom = document.querySelector(`div[data-id='${targetId}']`)
+    // const targetId = $chatMessages[pastQuantity].id
+    // const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
-    const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
-    chatMessages.update(messages => [...res.data.list, ...messages])
+    // const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
+    // chatMessages.update(messages => [...res.data.list, ...messages])
 
-    targetDom.scrollIntoView()
-    dom.scrollTo({ top: dom.scrollTop - loadDom.clientHeight - 10 })
+    // targetDom.scrollIntoView()
+    // dom.scrollTo({ top: dom.scrollTop - loadDom.clientHeight - 10 })
   }
 })
 
@@ -84,7 +91,7 @@ $: if (dom && loadDom) intersectionObserver.observe(loadDom)
   </div>
 
   {#each $chatMessages as message}
-    <Message message={message} self={userId === message.source} />
+    <Message {message} bind:lastReadId={lastReadId} self={userId === message.source} />
   {/each}
 
   {#if !scrollToNewest && !allWatched}

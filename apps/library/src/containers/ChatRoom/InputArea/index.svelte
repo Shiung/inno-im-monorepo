@@ -1,6 +1,5 @@
 <script lang='ts'>
 import { fly } from 'svelte/transition'
-import { elasticOut } from 'svelte/easing'
 import stomp from 'api/stompMaster'
 import { Ripple } from 'ui'
 import { t } from '$stores'
@@ -76,7 +75,10 @@ const publishMessage = () => {
           maxlength="300"
         />
 
-        <Ripple class='absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]' on:click={publishMessage}>
+        <Ripple class='absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]'
+          disabled={!message}
+          on:click={publishMessage}
+        >
           <Send width={18} height={18} fill='rgb(var(--im-monorepo-primary))'/>
         </Ripple>
       </div>
