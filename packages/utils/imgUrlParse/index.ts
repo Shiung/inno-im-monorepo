@@ -1,6 +1,6 @@
 import { getConfig } from 'env-config'
 
-export enum BadgeType {
+export enum ImageType {
   /** 區域 id ==> cid */
   categories = 1,
   /** 聯賽 id ==> tid */
@@ -13,11 +13,11 @@ export enum BadgeType {
 
 type PropsType = {
   /**
-   * Badge類型:
-   * 區域(categories) | 聯賽(tournaments) | 隊伍(competitors)
+   * Image 類型:
+   * 區域(categories) | 聯賽(tournaments) | 隊伍(competitors) | 國旗(countryFlags)
    */
-  type: BadgeType,
-  /** 未設定則取預設值, ex: vd001 */
+  type: ImageType,
+  /** 未傳入則使用預設業主 icon */
   id?: number
 }
 
@@ -26,11 +26,13 @@ type PropsType = {
  * @param {PropsType} props icon Type
  * @returns {string} Absolute Url
  */
-export const badgeUrlParse = (props: PropsType) => {
-  const badgeBase = getConfig().BE_CDN_URL
-  const vid = getConfig().VENDERID
+export const beImgUrlParse = (props: PropsType) => {
+  const badgeBase = getConfig()?.BE_CDN_URL
+  const vid = getConfig()?.VENDERID
 
-  return badgeBase && typeof props.id === 'number'
-    ? `${badgeBase}/badge/${BadgeType[props.type]}/${props.id}.png`
-    : (vid ? `${badgeBase}/badge/${BadgeType[props.type]}/${vid}.png` : '')
+  if (!badgeBase) return ''
+
+  if (typeof props.id === 'number') return `${badgeBase}/badge/${ImageType[props.type]}/${props.id}.png`
+  if (vid) return `${badgeBase}/badge/${ImageType[props.type]}/${vid}.png`
+  return ''
 }
