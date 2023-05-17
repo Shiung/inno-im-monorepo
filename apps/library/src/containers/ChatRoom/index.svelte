@@ -17,6 +17,11 @@ import type { Subscription } from 'api/stompMaster'
 
 export let roomId: number = 124
 export let userId: string = 'loki'
+export let userVip: number = 6
+export let isLogin: boolean = true
+export let isCharged: boolean = true
+export let vipLimit: number = 6
+export let frequency: number = 5000
 
 $: destination = `/topic/chat-room/${roomId}`
 
@@ -64,10 +69,10 @@ onDestroy(() => {
     {#if $chatMessages.length === 0}
       <Empty class='flex-1' title={$t('chat.empty')} />
     {:else}
-      <Messages chatMessages={chatMessages} userId={userId} roomId={roomId} />
+      <Messages {chatMessages} {userId} {roomId} />
     {/if}
 
   {/if}
 
-  <InputArea userId={userId} subId={subId} destination={destination} />
+  <InputArea {userId} {userVip} {subId} {destination} {isLogin} {isCharged} {vipLimit} {frequency} />
 </div>

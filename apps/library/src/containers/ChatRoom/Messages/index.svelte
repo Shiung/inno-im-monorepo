@@ -1,4 +1,5 @@
 <script lang="ts">
+import { fly } from 'svelte/transition'
 import { Ripple } from 'ui'
 import { im } from 'api'
 import Circle from 'ui/core/button/loading.svelte'
@@ -87,7 +88,7 @@ $: if (dom && loadDom) intersectionObserver.observe(loadDom)
   {/each}
 
   {#if !scrollToNewest && !allWatched}
-    <div class='flex justify-center sticky bottom-0 w-full !mt-0'> 
+    <div in:fly={{y: 50, duration: 300}} class='flex justify-center sticky bottom-0 w-full !mt-0'> 
       <Ripple
         class='flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]'
         ripple='white'

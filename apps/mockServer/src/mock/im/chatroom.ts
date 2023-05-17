@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { withData, genPager, randomPostTime, genMarket, getExpertImage } from './utils'
+import { withData } from './utils'
 
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
