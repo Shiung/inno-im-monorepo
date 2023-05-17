@@ -54,7 +54,7 @@ const webAnchors: IMockData[] = [
     timeout: 500,
     response: () => mock(withData<Types.IWebAnchorMatches>({
       matchList: Array.from({length: Random.natural(0, 5)}, () => ({
-          ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeTeamId' | 'homeTeamName' | 'awayTeamId' | 'awayTeamName'>,
+          ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeId' | 'homeName' | 'awayId' | 'awayName'>,
           competitionName:"@cname",
           competitionId: Random.integer(10000, 50000),
           sportId: Random.integer(1, 3) as Types.IWebAnchorMatch['sportId'],
@@ -113,8 +113,8 @@ const webAnchors: IMockData[] = [
       anchorTitle: "@csentence",
       houseIntroduction: "@csentence",
       userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/575/w-K5RvqqSqCmIrWD3p0xxA.png",
-      homeTeamName: "@cname",
-      awayTeamName: "@cname",
+      homeName: "@cname",
+      awayName: "@cname",
       competitionName: "@cname"
     }))
   }
