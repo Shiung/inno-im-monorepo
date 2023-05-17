@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws'
 // import { parse } from 'url'
 
 import { headersParse, bodyParse } from './utils'
-import { connectHandler, subscribeHandler, messageHandler } from './handlers'
+import { connectHandler, subscribeHandler, sendHandler } from './handlers'
 
 export const createWebSocketServer = () => {
   const wss = new WebSocketServer({ noServer: true })
@@ -17,7 +17,7 @@ export const createWebSocketServer = () => {
       switch (type) {
         case 'CONNECT': return connectHandler(ws, stompData)
         case 'SUBSCRIBE': return subscribeHandler(ws, stompData, req.url)
-        // case 'SEND': return ws.send(JSON.stringify(stompData))
+        case 'SEND': return sendHandler(ws, stompData, req.url)
         // case 'MESSAGE': return messageHandler(ws, stompData)
       }
     })

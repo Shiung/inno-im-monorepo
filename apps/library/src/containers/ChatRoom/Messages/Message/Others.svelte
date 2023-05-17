@@ -2,7 +2,6 @@
 import type { IChatMessage } from 'api/im/types'
 
 export let message: IChatMessage
-export let self: boolean
 
 </script>
 

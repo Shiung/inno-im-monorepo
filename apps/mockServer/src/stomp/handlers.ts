@@ -1,7 +1,7 @@
 import type { WebSocket } from 'ws'
 import type { IStompData } from './types'
 
-import stompMap from './stompDict'
+import { subscribe, send } from './handlerDict'
 
 let heartBeat: NodeJS.Timer
 
@@ -17,7 +17,15 @@ export const connectHandler = (ws: WebSocket, _data: IStompData) => {
 export const subscribeHandler = (ws: WebSocket, data: IStompData, url?: string) => {
   if (!url) return ws.send('no url.')
 
-  const handler = stompMap.get(url.replace('/stomp/', ''))
+  const handler = subscribe.get(url.replace('/stomp/', ''))
+  if (!handler) return ws.send('no such handler.')
+  return handler(ws, data)
+}
+
+export const sendHandler = (ws: WebSocket, data: IStompData, url?: string) => {
+    if (!url) return ws.send('no url.')
+
+  const handler = send.get(url.replace('/stomp/', ''))
   if (!handler) return ws.send('no such handler.')
   return handler(ws, data)
 }

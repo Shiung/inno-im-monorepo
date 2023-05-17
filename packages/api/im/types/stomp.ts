@@ -2,6 +2,7 @@ import type { ILanguages } from 'env-config'
 
 export interface IChatMessage {
   type: 'message'
+  id: string
   blackList: boolean
   source: string
   sourceInfo: {
