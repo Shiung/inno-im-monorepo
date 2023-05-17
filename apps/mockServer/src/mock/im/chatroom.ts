@@ -9,9 +9,9 @@ const expert: IMockData[] = [
     url: '/v1/chat-room/past-message',
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IChatroomPastMessage>({
-      list: Array.from({ length: Number(query.quantity) || 30 }, () => ({
+      list: Array.from({ length: Number(query.quantity) || 30 }, (_, idx) => ({
         type: "message",
-        id: String(Date.now()),
+        id: String(Date.now() + idx),
         blackList: false,
         source: "@name",
         sourceInfo: {
