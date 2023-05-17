@@ -21,15 +21,15 @@ export let match: IWebAnchorMatch
     <div class='flex justify-around'>
 
       <div>  
-        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.homeTeamId, type: ImageType.competitors })} />
-        <div class='text-[10px] text-center'> {match.homeTeamName} </div>
+        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.homeId, type: ImageType.competitors })} />
+        <div class='text-[10px] text-center'> {match.homeName} </div>
       </div>
 
       <Status match={match} />
 
       <div>  
-        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.awayTeamId, type: ImageType.competitors })} />
-        <div class='text-[10px] text-center'> {match.awayTeamName} </div>
+        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.awayId, type: ImageType.competitors })} />
+        <div class='text-[10px] text-center'> {match.awayName} </div>
       </div>
       
     </div>

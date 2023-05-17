@@ -29,10 +29,10 @@ export interface IWebAnchors {
 }
 
 export interface IWebAnchorMatch {
-  homeTeamName: string
-  homeTeamId: number
-  awayTeamName: string
-  awayTeamId: number
+  homeName: string
+  homeId: number
+  awayName: string
+  awayId: number
   competitionName: string
   competitionId: number
   sportId: SportId,
@@ -132,8 +132,8 @@ export interface IWebAnchorRecommend {
     anchorTitle: string
     houseIntroduction: string
     userImage: string
-    homeTeamName: string
-    awayTeamName: string
+    homeName: string
+    awayName: string
     competitionName: string
   }>
 }

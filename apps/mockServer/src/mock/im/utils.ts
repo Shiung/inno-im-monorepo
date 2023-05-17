@@ -76,10 +76,10 @@ export const genTeamInfo = (isAnchor?: boolean) => {
 
   if (isAnchor) {
     return {
-      homeTeamName: "@cname",
-      homeTeamId: homeId,
-      awayTeamName: "@cname",
-      awayTeamId: awayId
+      homeName: "@cname",
+      homeId: homeId,
+      awayName: "@cname",
+      awayId: awayId
     }
   }
 
