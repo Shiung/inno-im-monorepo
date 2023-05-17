@@ -1,4 +1,4 @@
-import type { IPager, withData, MatchStatus, SportId } from './common'
+import type { IPager, withData, IMatch, MatchStatus, SportId } from './common'
 
 export interface IWebAnchor {
   houseId: string
@@ -28,13 +28,7 @@ export interface IWebAnchors {
   }>
 }
 
-export interface IWebAnchorMatch {
-  homeName: string
-  homeId: number
-  awayName: string
-  awayId: number
-  competitionName: string
-  competitionId: number
+export interface IWebAnchorMatch extends IMatch {
   sportId: SportId,
   matchTime: number
   matchStatus: MatchStatus,

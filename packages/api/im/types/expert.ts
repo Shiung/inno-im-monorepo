@@ -5,7 +5,8 @@ import type {
   SportId,
   MatchStatus,
   HitStatus,
-  ArticleStatus
+  ArticleStatus,
+  IMatch
 } from './common'
 
 export interface IExpertPrediction extends IPredictionMarket {
@@ -155,19 +156,13 @@ export interface IExpertMatchArticle {
   }>
 }
 
-export interface IArticleDetail extends IPredictionMarket {
+export interface IArticleDetail extends IPredictionMarket, IMatch {
   releaseTime: number,
   closeTime: number,
   articleId: string,
   articleStatus: ArticleStatus,
   title: string,
   content: string,
-  homeName: string,
-  homeId: number,
-  awayName: string,
-  awayId: number,
-  leagueName: string,
-  leagueId: number,
   mid: number,
   vd: string
   matchStatus: MatchStatus,

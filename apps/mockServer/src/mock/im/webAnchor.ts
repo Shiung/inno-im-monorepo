@@ -55,8 +55,8 @@ const webAnchors: IMockData[] = [
     response: () => mock(withData<Types.IWebAnchorMatches>({
       matchList: Array.from({length: Random.natural(0, 5)}, () => ({
           ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeId' | 'homeName' | 'awayId' | 'awayName'>,
-          competitionName:"@cname",
-          competitionId: Random.integer(10000, 50000),
+          tnName: "@cname",
+          tid: Random.integer(10000, 50000),
           sportId: Random.integer(1, 3) as Types.IWebAnchorMatch['sportId'],
           matchId:"@id",
           matchTime: randomPostTime(),

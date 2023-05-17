@@ -53,3 +53,12 @@ export type HitStatus = 1 | 2
 
 /** 1: 開放 2: 未開放 */
 export type ArticleStatus = 1 | 2
+
+export interface IMatch {
+  homeName: string
+  homeId: number
+  awayName: string
+  awayId: number
+  tid: number
+  tnName: string
+}
