@@ -12,13 +12,15 @@
   import MatchPanelLoading from './components/MatchPanel/Loading.svelte'
   import MatchPanel from './components/MatchPanel/index.svelte'
 
+  import PlanAnalysisLoading from './components/PlanAnalysis/components/Loading.svelte'
+  import PlanAnalysis from './components/PlanAnalysis/index.svelte'
+
   const fetchData = async (articleId: string) => {
     if(!articleId) return
     return im.expertArticleDetail({ query: { articleId }})
   }
 
   $: promise = fetchData($params?.articleId)
-  $: console.log('promise', promise)
 </script>
 
 <div class='space-y-3'>
@@ -41,6 +43,12 @@
     {/await}
 
     <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
+
+    {#await promise}
+      <PlanAnalysisLoading />
+    {:then detail}
+      <PlanAnalysis data={detail.data} />
+    {/await}
   </div>
 
   <div class='rounded-t-[20px] bg-white'>
