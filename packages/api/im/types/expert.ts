@@ -1,4 +1,12 @@
-import type { IPager, withData, IPredictionMarket } from './common'
+import type {
+  IPager,
+  withData,
+  IPredictionMarket,
+  SportId,
+  MatchStatus,
+  HitStatus,
+  ArticleStatus
+} from './common'
 
 export interface IExpertPrediction extends IPredictionMarket {
   expertId: string
@@ -9,14 +17,14 @@ export interface IExpertPrediction extends IPredictionMarket {
   hotStreak: number
   hitRate: number
   articleId: string
-  articleStatus: 1 | 2 // 1: 開放 2: 未開放
+  articleStatus: ArticleStatus,
   title: string
   homeName: string
   awayName: string
   leagueName: string
-  matchStatus: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 // 1: 未開始 2: 進行中 3: 結束 4: 延期 5: 中斷 6: 腰斬 7: 取消 8: 待定
+  matchStatus: MatchStatus,
   matchTime: number
-  sportId: 1 | 2 // 1: 足球 2: 籃球
+  sportId: SportId
 }
 export interface IExpertPredictions {
   query: {
@@ -79,7 +87,7 @@ export interface IArticle extends IPredictionMarket {
   homeName: string
   awayName: string
   leagueName: string
-  hitStatus: 1 | 2  // 命中狀態 1: 命中 2: 未中
+  hitStatus: HitStatus
 }
 export interface IArticleList {
   list: Array<IArticle>
@@ -124,7 +132,7 @@ export interface IExpertStatistics {
   body: null
   res: withData<{
     list: Array<{
-      hitStatus: 0 | 1 | 2 | 3 // 0: 待确定 1: 命中 2: 未中 3: 比赛取消
+      hitStatus: HitStatus,
     }>
     info: {
       type: 1 | 2 | 3 // 數據日期 1: 週 2: 月 3: 季
@@ -147,10 +155,30 @@ export interface IExpertMatchArticle {
   }>
 }
 
+export interface IArticleDetail extends IPredictionMarket {
+  releaseTime: number,
+  closeTime: number,
+  articleId: string,
+  articleStatus: ArticleStatus,
+  title: string,
+  content: string,
+  homeName: string,
+  homeId: number,
+  awayName: string,
+  awayId: number,
+  leagueName: string,
+  leagueId: number,
+  mid: number,
+  vd: string
+  matchStatus: MatchStatus,
+  matchTime: number,
+  sportId: SportId
+}
+
 export interface IExpertArticleDetail {
   query: {
     articleId: string
   }
   body: null
-  res: withData<IArticle>
+  res: withData<IArticleDetail>
 }
