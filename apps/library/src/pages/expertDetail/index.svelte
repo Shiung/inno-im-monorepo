@@ -10,5 +10,5 @@ import Main from './Main/index.svelte'
 <div data-cid='expertDetail'>
   <BackBar title={$t('expert.detail')} />
   <Info />
-  <Main />
+  <Main class='mt-2' />
 </div>
