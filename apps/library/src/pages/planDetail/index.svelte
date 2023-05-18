@@ -6,14 +6,14 @@
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
 
-  import ArticleStoryLoading from './components/ArticleStory/components/Loading/index.svelte'
-  import ArticleStory from './components/ArticleStory/index.svelte'
+  import ArticleStoryLoading from './ArticleStory/components/Loading/index.svelte'
+  import ArticleStory from './ArticleStory/index.svelte'
 
-  import MatchPanelLoading from './components/MatchPanel/Loading.svelte'
-  import MatchPanel from './components/MatchPanel/index.svelte'
+  import MatchPanelLoading from './MatchPanel/Loading.svelte'
+  import MatchPanel from './MatchPanel/index.svelte'
 
-  import PlanAnalysisLoading from './components/PlanAnalysis/components/Loading.svelte'
-  import PlanAnalysis from './components/PlanAnalysis/index.svelte'
+  import PlanAnalysisLoading from './PlanAnalysis/components/Loading.svelte'
+  import PlanAnalysis from './PlanAnalysis/index.svelte'
 
   $: promise = im.expertArticleDetail({ query: { articleId: $params?.articleId }})
 </script>
