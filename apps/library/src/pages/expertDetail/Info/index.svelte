@@ -1,6 +1,7 @@
 <script lang='ts'>
 import { params } from 'svelte-spa-router'
 import { im } from 'api'
+
 import Streak from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
 
@@ -8,7 +9,12 @@ import bg from './images/bg.webp'
 import Loading from './Loading.svelte'
 
 let infoPromise: ReturnType<typeof im.expertInfo>
-$: if ($params?.expertId) infoPromise = im.expertInfo({ query: {  expertId: $params.expertId } })
+let prevExpertId: string = ''
+
+$: if ($params?.expertId && $params?.expertId !== prevExpertId) {
+  infoPromise = im.expertInfo({ query: {  expertId: $params.expertId } })
+  prevExpertId = $params?.expertId
+}
 
 </script>
 
