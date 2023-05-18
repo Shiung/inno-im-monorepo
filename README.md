@@ -1,35 +1,7 @@
-# Turborepo Svelte starter
+### z-index 規範
+- 50: ```loading``` ```mask``` ```toast``` ```popup-message```
+- 40: ```sidebar```
+- 30: ```header``` ```bottomNav``` ```fixed``` ```menu```
+- 10, 20: 個別頁面內使用
 
-This is an official starter Turborepo.
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [svelte-kit](https://kit.svelte.dev/) app
-- `web`: another [svelte-kit](https://kit.svelte.dev/) app
-- `ui`: a stub Svelte component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-plugin-svelte` and `eslint-config-prettier`)
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx degit vercel/turbo/examples/with-svelte with-svelte
-cd with-svelte
-pnpm install
-git init . && git add . && git commit -m "Init"
-```
+細部差異調整先由 ```5``` 為單位增減
