@@ -1,12 +1,14 @@
 <script lang="ts">
+import { tweened } from 'svelte/motion'
 import { fly } from 'svelte/transition'
+import { expoOut } from 'svelte/easing'
 import { Ripple } from 'ui'
 import { im } from 'api'
-import Circle from 'ui/core/button/loading.svelte'
 import { t } from '$stores'
 
 import flash from './flash'
 import Message from './Message'
+import DropdownLoader from './DropdownLoader.svelte'
 import Arrow from '../images/arrow_down_small.svg'
 
 import type { Writable } from 'svelte/store'
@@ -64,7 +66,11 @@ const checkWatched = () => {
 }
 
 const gotoNewest = () => {
-  dom.scrollTo({ top: dom.scrollHeight })
+  const top = tweened(dom.scrollTop, { easing: expoOut })
+  top.subscribe((top) => {
+    dom.scrollTo({ top })
+  })
+  top.set(dom.scrollHeight)
 }
 
 // 拉到最上面載入新訊息用的區域
@@ -91,9 +97,9 @@ $: if (dom && loadDom) intersectionObserver.observe(loadDom)
 
 <div class='relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]' on:scroll={onDomScroll} bind:this={dom}>
 
-  <div class='relative h-[30px] overflow-hidden' bind:this={loadDom}>
-    <Circle stroke='rgb(var(--im-monorepo-primary))' />
-  </div>
+  <!--<div class='flex items-center justify-center' bind:this={loadDom}>-->
+    <DropdownLoader />
+  <!--</div>-->
 
   {#each $chatMessages as message}
     <Message {message} bind:lastReadId={lastReadId} self={userId === message.source} />

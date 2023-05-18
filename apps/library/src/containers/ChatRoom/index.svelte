@@ -16,7 +16,7 @@ import InputArea from './InputArea/index.svelte'
 import type { IChatMessage } from 'api/im/types'
 import type { Subscription } from 'api/stompMaster'
 
-export let minimize: boolean = true
+export let minimize: boolean = false
 
 export let roomId: number = 124
 export let userId: string = 'loki'
