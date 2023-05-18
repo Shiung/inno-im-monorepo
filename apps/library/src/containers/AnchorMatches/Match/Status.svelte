@@ -8,9 +8,9 @@ export let match: IWebAnchorMatch
 
   <div>
     <div class='text-imprimary text-center mb-[5px]'>
-      <span> {match.homeScore[0]} </span>
+      <span> {match?.score?.split('-')?.[0] || '-'} </span>
       <span> : </span>
-      <span> {match.awayScore[0]} </span>
+      <span> {match?.score?.split('-')?.[1] || '-'} </span>
     </div>
 
     <div class='text-[10px] text-center font-semibold'> {getTime(match.matchTime)} </div>

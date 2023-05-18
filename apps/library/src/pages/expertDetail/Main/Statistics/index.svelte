@@ -1,5 +1,9 @@
 <script lang='ts'>
-console.log('statistics component')
+  import RecentlyStatistics from './RecentlyStatistics/index.svelte'
+
+  import RecentlyHitting from './RecentlyHitting/index.svelte'
 </script>
 
-<div> statistics </div>
+<RecentlyStatistics />
+
+<RecentlyHitting />
