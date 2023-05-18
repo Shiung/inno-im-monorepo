@@ -146,9 +146,9 @@ export interface IExpertStatistics {
 
 export interface IExpertMatchArticle {
   query: {
-    matchId: string
-    pageIdx: number
-    pageSize: number
+    matchId: number
+    pageIdx?: number
+    pageSize?: number
   }
   body: null
   res: withData<{
