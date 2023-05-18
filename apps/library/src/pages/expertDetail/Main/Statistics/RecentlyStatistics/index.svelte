@@ -1,6 +1,7 @@
 <script lang='ts'>
   import { im } from 'api'
   import { t } from '$stores'
+  import { params } from 'svelte-spa-router'
 
   import Title from '$pages/expertDetail/Main/components/Title.svelte'
 
@@ -14,7 +15,7 @@
   import RecentTenRecordsLoading from './RecentTenRecords/components/Loading/index.svelte'
   import SubTitleItem from './RecentTenRecords/components/SubTitleItem/index.svelte'
 
-  const promise = im.expertStatistics({ query: { expertId: '1234' } })
+  const promise = im.expertStatistics({ query: { expertId: $params.expertId } })
 </script>
 
 <div>
