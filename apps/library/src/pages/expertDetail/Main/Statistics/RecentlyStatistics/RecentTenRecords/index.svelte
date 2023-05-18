@@ -10,7 +10,7 @@
     {#each data as item}
       <div
         class="w-4 h-4 rounded-full flex-none"
-        style:background-color="{item.hitStatus === 1 ? 'rgba(var(--im-monorepo-primary))' : '#DDD'}">
+        style:background-color="{item?.hitStatus === 1 ? 'rgba(var(--im-monorepo-primary))' : '#DDD'}">
       </div>
     {/each}
   </div>

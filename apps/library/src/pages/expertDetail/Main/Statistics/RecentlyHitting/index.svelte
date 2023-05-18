@@ -6,7 +6,7 @@
   import { t } from '$stores'
   import { im } from 'api'
 
-  const promise = im.expertArticleHit({ query: { expertId: $params.expertId, pageIdx: 1, pageSize: 10 }})
+  const promise = im.expertArticleHit({ query: { expertId: $params?.expertId, pageIdx: 1, pageSize: 10 }})
 </script>
 
 <div class="px-4">
@@ -17,6 +17,6 @@
   {#await promise}
     <Loading />
   {:then articles}
-    <List articles={articles?.data?.list} />
+    <List articles={articles?.data?.list || []} />
   {/await}
 </div>

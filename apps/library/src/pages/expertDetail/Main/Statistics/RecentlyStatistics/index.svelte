@@ -15,14 +15,14 @@
   import RecentTenRecordsLoading from './RecentTenRecords/components/Loading/index.svelte'
   import SubTitleItem from './RecentTenRecords/components/SubTitleItem/index.svelte'
 
-  const promise = im.expertStatistics({ query: { expertId: $params.expertId } })
+  const promise = im.expertStatistics({ query: { expertId: $params?.expertId } })
 </script>
 
 <div>
   {#await promise}
     <WMSStatisticsLoading />
   {:then statisticData} 
-    <WMSStatistics data={statisticData.data.info} />
+    <WMSStatistics data={statisticData?.data?.info || []} />
   {/await}
 
   <div class="px-4">
@@ -32,7 +32,7 @@
   {#await promise}
     <HittingRecordLoading />
   {:then statisticData}
-    <HittingRecord data={statisticData.data.list} />
+    <HittingRecord data={statisticData?.data?.list || []} />
   {/await}
   
   <div class="flex items-center justify-between px-4">
@@ -47,6 +47,6 @@
   {#await promise}
     <RecentTenRecordsLoading />
   {:then statisticData}
-    <RecentTenRecords data={statisticData.data.list} />
+    <RecentTenRecords data={statisticData?.data?.list || []} />
   {/await}
 </div>
