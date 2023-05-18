@@ -1,15 +1,18 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
+import { im } from 'api'
+
+import ExpertList, { Loading } from '$containers/ExpertList'
+
 import Menu from './Menu/index.svelte'
-import ExpertList from '$containers/ExpertList'
 
 import type { IExpertMenu } from './types'
 import type { SidType } from 'utils'
 
 export let sid: SidType
 export let folder: boolean = false
-let actived: IExpertMenu['type'] = 0
 
+let actived: IExpertMenu['type'] = 0
 const menu: IExpertMenu[] = [
   { 
     i18n: 'expert.hit',
@@ -28,10 +31,32 @@ const menu: IExpertMenu[] = [
     },
 ]
 
+let predictionsPromise: ReturnType<typeof im.expertPredictions>
+
+const fetchPredictions = (sid: SidType, type: typeof actived) => {
+  if (sid === null) return
+  predictionsPromise = im.expertPredictions({
+    query: {
+      ...(sid && { sid }),
+      ...(type && { type }),
+      pageIdx: 1,
+      pageSize: 10
+  }})
+}
+
+$: fetchPredictions(sid, actived)
+
 </script>
 
 
 <div data-cid='ExpertWithMenu' class={twMerge('bg-white', $$props.class)}>
   <Menu class='border-b divide-solid' menu={menu} bind:actived={actived} />
-  <ExpertList actived={actived} sid={sid} folder={folder} /> 
+
+  <div class='p-[20px] space-y-10'>
+    {#await predictionsPromise}
+      <Loading />
+    {:then predictions}
+      <ExpertList list={predictions?.data?.list || []} folder={folder} /> 
+    {/await}
+  </div>
 </div>
