@@ -1,4 +1,4 @@
-<div class='flex-1 space-y-[12px] px-[12px]'>
+<div class='flex-1 space-y-[12px] px-[12px] overflow-y-scroll'>
   {#each { length: 5} as _}
     <div class='flex'>
       <div class='rounded-full min-w-[30px] h-[30px] animate-pulse bg-[#999]' />

@@ -46,8 +46,8 @@ const routes = {
       showBottomNav: false
     },
   }),
-  '/chatRoom': wrap({
-    asyncComponent: () => import('$src/containers/ChatRoom'),
+  '/platform/chatroom': wrap({
+    asyncComponent: () => import('../platform/chatroom'),
     userData: {
       showBottomNav: false
     },

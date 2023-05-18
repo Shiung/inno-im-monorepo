@@ -16,6 +16,8 @@ import InputArea from './InputArea/index.svelte'
 import type { IChatMessage } from 'api/im/types'
 import type { Subscription } from 'api/stompMaster'
 
+export let fixed: boolean = false
+export let height: number
 export let minimize: boolean = false
 
 export let roomId: number = 124
@@ -70,7 +72,7 @@ onDestroy(() => {
 
 {:else}
 
-  <div class='flex flex-col bg-white min-h-[100vh] max-h-[100vh]'>
+  <div class='flex-1 flex flex-col bg-white overflow-y-scroll' style:max-height={fixed ? 'auto' : `calc(100vh - ${height}px)`}>
     <Header on:close={() => minimize = true}/>
 
     {#if initFetchLoading}

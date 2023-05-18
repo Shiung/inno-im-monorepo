@@ -3,7 +3,7 @@ import { tweened } from 'svelte/motion'
 import { fly } from 'svelte/transition'
 import { expoOut } from 'svelte/easing'
 import { Ripple } from 'ui'
-import { im } from 'api'
+// import { im } from 'api'
 import { t } from '$stores'
 
 import flash from './flash'
@@ -74,31 +74,33 @@ const gotoNewest = () => {
 }
 
 // 拉到最上面載入新訊息用的區域
-let pastQuantity = 30
-let loadDom: HTMLDivElement
-const intersectionObserver = new IntersectionObserver(async entries => {
-  for (const entry of entries) {
-    if (entry.intersectionRatio <= 0) return
+// let pastQuantity = 30
+// let loadDom: HTMLDivElement
+// const intersectionObserver = new IntersectionObserver(async entries => {
+//   for (const entry of entries) {
+//     if (entry.intersectionRatio <= 0) return
+// 
+//     // const targetId = $chatMessages[pastQuantity].id
+//     // const targetDom = document.querySelector(`div[data-id='${targetId}']`)
+// 
+//     // const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
+//     // chatMessages.update(messages => [...res.data.list, ...messages])
+// 
+//     // targetDom.scrollIntoView()
+//     // dom.scrollTo({ top: dom.scrollTop - loadDom.clientHeight - 10 })
+//   }
+// })
 
-    // const targetId = $chatMessages[pastQuantity].id
-    // const targetDom = document.querySelector(`div[data-id='${targetId}']`)
-
-    // const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
-    // chatMessages.update(messages => [...res.data.list, ...messages])
-
-    // targetDom.scrollIntoView()
-    // dom.scrollTo({ top: dom.scrollTop - loadDom.clientHeight - 10 })
-  }
-})
-
-$: if (dom && loadDom) intersectionObserver.observe(loadDom)
+// $: if (dom && loadDom) intersectionObserver.observe(loadDom)
 
 </script>
 
-<div class='relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]' on:scroll={onDomScroll} bind:this={dom}>
+<div class='relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]' 
+  on:scroll={onDomScroll} bind:this={dom}
+>
 
   <!--<div class='flex items-center justify-center' bind:this={loadDom}>-->
-    <DropdownLoader />
+    <DropdownLoader {roomId} root={dom} />
   <!--</div>-->
 
   {#each $chatMessages as message}

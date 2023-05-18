@@ -32,7 +32,7 @@ $: {
 }
 
 let dom: HTMLDivElement
-// $: blockHeight = dom?.getBoundingClientRect().height
+$: blockHeight = dom?.getBoundingClientRect().height
 
 let message: string
 let showTooOften: boolean = false
@@ -63,7 +63,7 @@ const publishMessage = () => {
     </div>
   {/if}
 
-  <div class='im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]' bind:this={dom}>
+  <div class='fixed im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]' bind:this={dom}>
     <div class='flex items-center'>
 
       <div class='flex-1 flex items-center relative'>
@@ -92,5 +92,5 @@ const publishMessage = () => {
     </div>
   </div>
 
-  <!--<div style:height={`${blockHeight}px`}/>-->
+  <div style:height={`${blockHeight}px`}/>
 </div>
