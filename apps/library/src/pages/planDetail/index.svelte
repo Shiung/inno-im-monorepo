@@ -3,8 +3,8 @@
   import { im } from 'api'
   import { t } from '$stores'
 
-  import Info from '../Info/index.svelte'
-  import Title from '../Main/components/Title.svelte'
+  import Info from '$src/pages/expertDetail/Info/index.svelte'
+  import Title from '$src/pages/expertDetail/Main/components/Title.svelte'
 
   import ArticleStoryLoading from './components/ArticleStory/components/Loading/index.svelte'
   import ArticleStory from './components/ArticleStory/index.svelte'
@@ -15,12 +15,7 @@
   import PlanAnalysisLoading from './components/PlanAnalysis/components/Loading.svelte'
   import PlanAnalysis from './components/PlanAnalysis/index.svelte'
 
-  const fetchData = async (articleId: string) => {
-    if(!articleId) return
-    return im.expertArticleDetail({ query: { articleId }})
-  }
-
-  $: promise = fetchData($params?.articleId)
+  $: promise = im.expertArticleDetail({ query: { articleId: $params?.articleId }})
 </script>
 
 <div class='space-y-3'>
@@ -28,7 +23,7 @@
     {#await promise}
       <ArticleStoryLoading />
     {:then detail}
-      <ArticleStory data={detail.data} />
+      <ArticleStory data={detail?.data} />
     {/await}
     <Info />
   </div>
@@ -39,7 +34,7 @@
     {#await promise}
       <MatchPanelLoading />
     {:then detail}
-      <MatchPanel data={detail.data} />
+      <MatchPanel data={detail?.data} />
     {/await}
 
     <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
@@ -47,7 +42,7 @@
     {#await promise}
       <PlanAnalysisLoading />
     {:then detail}
-      <PlanAnalysis data={detail.data} />
+      <PlanAnalysis data={detail?.data} />
     {/await}
   </div>
 

@@ -40,7 +40,7 @@ const routes = {
       }
     ]
   }),
-  '/expertDetail/:expertId/:articleId?': wrap({
+  '/expertDetail/:expertId/:method?': wrap({
     asyncComponent: () => import('$pages/expertDetail/index.svelte'),
     userData: {
       showBottomNav: false
@@ -52,6 +52,12 @@ const routes = {
         return true
       }
     ]
+  }),
+  '/planDetail/:expertId/:articleId': wrap({
+    asyncComponent: () => import('$pages/planDetail/index.svelte'),
+    userData: {
+      showBottomNav: false
+    }
   }),
   '/chatRoom': wrap({
     asyncComponent: () => import('$src/containers/ChatRoom'),
