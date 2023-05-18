@@ -25,7 +25,7 @@ const expert: IMockData[] = [
           title: "@cparagraph",
           homeName: "@cname",
           awayName: "@cname",
-          leagueName: "@cname",
+          tnName: "@cname",
           matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
           matchTime: randomPostTime(),
           sportId: Random.integer(1, 4) as Types.IExpertPrediction['sportId'],
@@ -49,7 +49,7 @@ const expert: IMockData[] = [
         articleId: "@word",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname"
+        tnName: "@cname"
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
@@ -74,7 +74,7 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname",
+        tnName: "@cname",
         hitStatus: Random.integer(1, 2) as Types.IArticle['hitStatus']
       }))
     }))
@@ -90,7 +90,7 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname",
+        tnName: "@cname",
         hitStatus: Random.integer(1, 2) as Types.IArticle['hitStatus']
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
@@ -107,7 +107,7 @@ const expert: IMockData[] = [
         title: "@cparagraph",
         homeName: "@cname",
         awayName: "@cname",
-        leagueName: "@cname",
+        tnName: "@cname",
         hitStatus: Random.integer(1, 2) as Types.IArticle['hitStatus']
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
@@ -146,7 +146,7 @@ const expert: IMockData[] = [
           title: "@cparagraph",
           homeName: "@cname",
           awayName: "@cname",
-          leagueName: "@cname",
+          tnName: "@cname",
           matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
           matchTime: randomPostTime(),
           sportId: Random.integer(1, 4) as Types.IExpertPrediction['sportId']

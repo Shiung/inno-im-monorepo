@@ -22,7 +22,7 @@ export interface IExpertPrediction extends IPredictionMarket {
   title: string
   homeName: string
   awayName: string
-  leagueName: string
+  tnName: string
   matchStatus: MatchStatus,
   matchTime: number
   sportId: SportId
@@ -61,7 +61,7 @@ export interface IExpertRecommand {
       articleId: string
       homeName: string
       awayName: string
-      leagueName: string
+      tnName: string
     }>
     pager: IPager
   }>
@@ -87,7 +87,7 @@ export interface IArticle extends IPredictionMarket {
   title: string
   homeName: string
   awayName: string
-  leagueName: string
+  tnName: string
   hitStatus: HitStatus
 }
 export interface IArticleList {
