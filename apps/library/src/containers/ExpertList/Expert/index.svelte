@@ -61,7 +61,7 @@ const convertReleaseTime = (releaseTime: number) => {
 
   </Ripple>
 
-  <Ripple class='w-[44px] absolute top-0 left-0 rounded-full' on:click={() => push(`/expertDetail/${prodiction.expertId}`)}>
+  <Ripple class='w-[44px] absolute top-0 left-0 rounded-full' on:click={() => push(`/expertDetail/${prodiction.expertId}/plan`)}>
     <ExpertImage class='border-[3px] border-white im-shadow' src={prodiction.expertImage} />
   </Ripple>
 </div>

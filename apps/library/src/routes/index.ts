@@ -45,6 +45,13 @@ const routes = {
     userData: {
       showBottomNav: false
     },
+    conditions: [
+      (detail) => {
+        const { expertId, method } = detail?.params || {}
+        if (!method) replace(`/expertDetail/${expertId}/plan`)
+        return true
+      }
+    ]
   }),
   '/chatRoom': wrap({
     asyncComponent: () => import('$src/containers/ChatRoom'),
