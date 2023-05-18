@@ -22,7 +22,7 @@ export interface IExpertPrediction extends IPredictionMarket {
   title: string
   homeName: string
   awayName: string
-  leagueName: string
+  tnName: string
   matchStatus: MatchStatus,
   matchTime: number
   sportId: SportId
@@ -61,7 +61,7 @@ export interface IExpertRecommand {
       articleId: string
       homeName: string
       awayName: string
-      leagueName: string
+      tnName: string
     }>
     pager: IPager
   }>
@@ -87,37 +87,37 @@ export interface IArticle extends IPredictionMarket {
   title: string
   homeName: string
   awayName: string
-  leagueName: string
+  tnName: string
   hitStatus: HitStatus
 }
 export interface IArticleList {
   list: Array<IArticle>
 }
 
-type IExpertArthcleRes<T> = T extends 'pager'
+type IExpertArticleRes<T> = T extends 'pager'
 ? { res: withData<IArticleList & { pager: IPager }> } 
 : { res: withData<IArticleList> }
 
 
-export interface IExpertArthcleNow extends IExpertArthcleRes<null> {
+export interface IExpertArticleNow extends IExpertArticleRes<null> {
   query: {
     expertId: string
   }
   body: null
-  // res defined in IExpertArthcleRes
+  // res defined in IExpertArticleRes
 }
 
-export interface IExpertArthcleHistory extends IExpertArthcleRes<'pager'> {
+export interface IExpertArticleHistory extends IExpertArticleRes<'pager'> {
   query: {
     expertId: string 
     pageIdx: number
     pageSize: number
   }
   body: null
-  // res defined in IExpertArthcleRes
+  // res defined in IExpertArticleRes
 }
 
-export interface IExpertArthcleHit extends IExpertArthcleRes<'pager'> {
+export interface IExpertArticleHit extends IExpertArticleRes<'pager'> {
   query: {
     expertId: string
     pageIdx: number
@@ -134,12 +134,13 @@ export interface IExpertStatistics {
   res: withData<{
     list: Array<{
       hitStatus: HitStatus,
+      releaseTime: number
     }>
-    info: {
-      type: 1 | 2 | 3 // 數據日期 1: 週 2: 月 3: 季
-      hotStreak: number
+    info: Array<{
+      type: 1 | 2 | 3 // 1: 週 2: 月 3: 季
+      hotStreak: number // 連紅次數
       hitRate: number
-    }
+    }>
   }>
 }
 

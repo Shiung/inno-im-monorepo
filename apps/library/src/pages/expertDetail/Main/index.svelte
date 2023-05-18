@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
+import { params } from 'svelte-spa-router'
 
 import Info from '../Info/index.svelte'
 import Menu from './Menu.svelte'
@@ -7,24 +8,24 @@ import Menu from './Menu.svelte'
 const Plan = () => import('./Plan/index.svelte')
 const Statistics = () => import('./Statistics/index.svelte')
 
-let method: 'plan' | 'statistics'
-let promise: ReturnType<typeof Plan>
+let promise: ReturnType<typeof Plan | typeof Statistics>
 
-const fetchComponent = (_method: typeof method) => {
+const fetchComponent = (_method: string) => {
+
   switch (_method) {
     case 'plan': return promise = Plan()
     case 'statistics': return promise = Statistics()
   }
 }
 
-$: fetchComponent(method)
+$: fetchComponent($params?.method)
 
 </script>
 
 <Info />
 
 <div class={twMerge('bg-[white] rounded-t-[20px]', $$props.class)}>
-  <Menu class='mb-[16px]' bind:method={method} />
+  <Menu class='mb-[16px]' />
 
   {#await promise then comp}
     <svelte:component this={comp?.default} />

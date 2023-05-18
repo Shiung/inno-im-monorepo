@@ -1,7 +1,7 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.26",
+  "version": "0.0.27",
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
@@ -22,6 +22,8 @@
   "dependencies": {
     "api": "workspace:*",
     "assets": "workspace:*",
+    "bignumber.js": "^9.1.1",
+    "d3": "^7.8.4",
     "env-config": "workspace:*",
     "localforage": "^1.10.0",
     "svelte-spa-router": "^3.3.0",
@@ -35,6 +37,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
     "@tsconfig/svelte": "^3.0.0",
+    "@types/d3": "^7.4.0",
     "@types/node": "^18.15.6",
     "@types/testing-library__jest-dom": "^5.14.5",
     "autoprefixer": "^10.4.14",
