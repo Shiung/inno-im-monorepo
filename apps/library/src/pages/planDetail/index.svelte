@@ -5,6 +5,7 @@
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
+  import ExpertList, { Loading as ExpertListLoading } from '$containers/ExpertList'
 
   import ArticleStoryLoading from './ArticleStory/components/Loading/index.svelte'
   import ArticleStory from './ArticleStory/index.svelte'
@@ -15,12 +16,25 @@
   import PlanAnalysisLoading from './PlanAnalysis/components/Loading.svelte'
   import PlanAnalysis from './PlanAnalysis/index.svelte'
 
-  $: promise = im.expertArticleDetail({ query: { articleId: $params?.articleId }})
+  let detailPromise: ReturnType<typeof im.expertArticleDetail>
+  let othersPromise: ReturnType<typeof im.expertMatchArticle>
+
+  const fetchArticleDetail = async (articleId: string) => {
+    detailPromise = im.expertArticleDetail({ query: { articleId }})
+      .then(response => {
+        const matchId = response?.data?.mid
+        if (matchId) othersPromise = im.expertMatchArticle({ query: { matchId }})
+
+        return response
+      })
+  }
+
+  $: fetchArticleDetail($params?.articleId)
 </script>
 
 <div class='space-y-3'>
   <div>
-    {#await promise}
+    {#await detailPromise}
       <ArticleStoryLoading />
     {:then detail}
       <ArticleStory data={detail?.data} />
@@ -31,7 +45,7 @@
   <div class='rounded-[20px] bg-white'>
     <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
     
-    {#await promise}
+    {#await detailPromise}
       <MatchPanelLoading />
     {:then detail}
       <MatchPanel data={detail?.data} />
@@ -39,7 +53,7 @@
 
     <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
 
-    {#await promise}
+    {#await detailPromise}
       <PlanAnalysisLoading />
     {:then detail}
       <PlanAnalysis data={detail?.data} />
@@ -48,5 +62,11 @@
 
   <div class='rounded-t-[20px] bg-white'>
     <div class='px-4'><Title>{$t('expert.planDetail.othersPrediction')}</Title></div>
+
+    {#await othersPromise}
+      <ExpertListLoading />
+    {:then response}
+      <ExpertList list={response?.data?.list || []} />
+    {/await}
   </div>
 </div>
