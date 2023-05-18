@@ -6,6 +6,8 @@
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
   import ExpertList, { Loading as ExpertListLoading } from '$containers/ExpertList'
+  import BackBar from '$containers/BackBar'
+  import BonusPoint from '$containers/HeaderNavigation/BonusPoint/index.svelte'
 
   import ArticleStoryLoading from './ArticleStory/components/Loading/index.svelte'
   import ArticleStory from './ArticleStory/index.svelte'
@@ -18,6 +20,7 @@
 
   let detailPromise: ReturnType<typeof im.expertArticleDetail>
   let othersPromise: ReturnType<typeof im.expertMatchArticle>
+  let bonus: number = 100000
 
   const fetchArticleDetail = async (articleId: string) => {
     detailPromise = im.expertArticleDetail({ query: { articleId }})
@@ -32,41 +35,47 @@
   $: fetchArticleDetail($params?.articleId)
 </script>
 
-<div class='space-y-3'>
-  <div>
-    {#await detailPromise}
-      <ArticleStoryLoading />
-    {:then detail}
-      <ArticleStory data={detail?.data} />
-    {/await}
-    <Info />
-  </div>
+<div data-cid='expertDetail'>
+  <BackBar>
+    <BonusPoint slot='right' {bonus} />
+  </BackBar>
 
-  <div class='rounded-[20px] bg-white'>
-    <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
-    
-    {#await detailPromise}
-      <MatchPanelLoading />
-    {:then detail}
-      <MatchPanel data={detail?.data} />
-    {/await}
+  <div class='space-y-3'>
+    <div>
+      {#await detailPromise}
+        <ArticleStoryLoading />
+      {:then detail}
+        <ArticleStory data={detail?.data} />
+      {/await}
+      <Info />
+    </div>
 
-    <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
+    <div class='rounded-[20px] bg-white'>
+      <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
+      
+      {#await detailPromise}
+        <MatchPanelLoading />
+      {:then detail}
+        <MatchPanel data={detail?.data} />
+      {/await}
 
-    {#await detailPromise}
-      <PlanAnalysisLoading />
-    {:then detail}
-      <PlanAnalysis data={detail?.data} />
-    {/await}
-  </div>
+      <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
 
-  <div class='rounded-t-[20px] bg-white'>
-    <div class='px-4'><Title>{$t('expert.planDetail.othersPrediction')}</Title></div>
+      {#await detailPromise}
+        <PlanAnalysisLoading />
+      {:then detail}
+        <PlanAnalysis data={detail?.data} />
+      {/await}
+    </div>
 
-    {#await othersPromise}
-      <ExpertListLoading />
-    {:then response}
-      <ExpertList list={response?.data?.list || []} />
-    {/await}
+    <div class='rounded-t-[20px] bg-white'>
+      <div class='px-4'><Title>{$t('expert.planDetail.othersPrediction')}</Title></div>
+
+      {#await othersPromise}
+        <ExpertListLoading />
+      {:then response}
+        <ExpertList list={response?.data?.list || []} />
+      {/await}
+    </div>
   </div>
 </div>
