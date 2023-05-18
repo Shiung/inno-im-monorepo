@@ -12,8 +12,8 @@ const mlAndAhResult = (_result: IArticle['matchResult']): string => {
 }
 
 const ouResult = (_result: IArticle['matchResult']): string => {
-  if (_result === 'ov') return `${$t('common.over')} ${article?.odds[0]?.ov ? '@' + article?.odds[0]?.ov : ''}`
-  else if (_result === 'ud') return `${$t('common.under')} ${article?.odds[0]?.ud ? '@' + article?.odds[0]?.ud : ''}`
+  if (_result === 'ov') return `${$t('common.over')} ${article?.odds?.[0]?.ov ? '@' + article?.odds?.[0]?.ov : ''}`
+  else if (_result === 'ud') return `${$t('common.under')} ${article?.odds?.[0]?.ud ? '@' + article?.odds?.[0]?.ud : ''}`
   else return ''
 }
 
