@@ -11,14 +11,16 @@ export let list: IExpertPrediction[]
 
 </script>
 
-{#if list.length === 0}
-  <Empty class='h-[300px]'/>
-{:else}
-
-  {#if folder}
-    <FoldedExperts list={list} />
+<div class='p-[20px] space-y-10'>
+  {#if list.length === 0}
+    <Empty class='h-[300px]'/>
   {:else}
-    <Experts list={list} />
-  {/if}
 
-{/if}
+    {#if folder}
+      <FoldedExperts list={list} />
+    {:else}
+      <Experts list={list} />
+    {/if}
+
+  {/if}
+</div>

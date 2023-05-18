@@ -52,11 +52,9 @@ $: fetchPredictions(sid, actived)
 <div data-cid='ExpertWithMenu' class={twMerge('bg-white', $$props.class)}>
   <Menu class='border-b divide-solid' menu={menu} bind:actived={actived} />
 
-  <div class='p-[20px] space-y-10'>
-    {#await predictionsPromise}
-      <Loading />
-    {:then predictions}
-      <ExpertList list={predictions?.data?.list || []} folder={folder} /> 
-    {/await}
-  </div>
+  {#await predictionsPromise}
+    <Loading />
+  {:then predictions}
+    <ExpertList list={predictions?.data?.list || []} folder={folder} /> 
+  {/await}
 </div>
