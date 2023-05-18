@@ -1,9 +1,8 @@
 import { mock, Random } from 'mockjs'
-import { withData, genPager, randomPostTime, genMarket, getExpertImage } from './utils'
+import { withData, genPager, randomPostTime, genMarket, getExpertImage, genTeamInfo } from './utils'
 
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
-import { IArticle } from 'api/im/types'
 
 const expert: IMockData[] = [
   {
@@ -11,7 +10,6 @@ const expert: IMockData[] = [
     response: ({ query }) => mock(withData<Types.IExpertPredictions>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
         const market = genMarket()
-        const sportId = Number(market.marketType[0]) as Types.IExpertPrediction['sportId']
 
         return {
           ...market,
@@ -30,7 +28,7 @@ const expert: IMockData[] = [
           leagueName: "@cname",
           matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
           matchTime: randomPostTime(),
-          sportId,
+          sportId: Random.integer(1, 4) as Types.IExpertPrediction['sportId'],
         }
       }),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
@@ -77,7 +75,7 @@ const expert: IMockData[] = [
         homeName: "@cname",
         awayName: "@cname",
         leagueName: "@cname",
-        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
+        hitStatus: Random.integer(1, 2) as Types.IArticle['hitStatus']
       }))
     }))
   },
@@ -93,7 +91,7 @@ const expert: IMockData[] = [
         homeName: "@cname",
         awayName: "@cname",
         leagueName: "@cname",
-        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
+        hitStatus: Random.integer(1, 2) as Types.IArticle['hitStatus']
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
@@ -110,7 +108,7 @@ const expert: IMockData[] = [
         homeName: "@cname",
         awayName: "@cname",
         leagueName: "@cname",
-        hitStatus: Random.integer(1, 2) as IArticle['hitStatus']
+        hitStatus: Random.integer(1, 2) as Types.IArticle['hitStatus']
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))
@@ -128,6 +126,56 @@ const expert: IMockData[] = [
         hitRate: Random.float(60, 100, 0, 2),
       })),
     }))
+  },
+  {
+    url: '/v1/expert/match/article',
+    response: ({ query }) => mock(withData<Types.IExpertPredictions>({
+      list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
+        const market = genMarket()
+        return {
+          ...market,
+          expertId: "@word",
+          expertName: "@cname",
+          expertImage: getExpertImage(),
+          releaseTime: randomPostTime(),
+          closeTime: randomPostTime(),
+          hotStreak: Random.integer(0, 12),
+          hitRate: Random.float(60, 100, 0, 2),
+          articleId: "@word",
+          articleStatus: Random.integer(1, 2) as Types.IExpertPrediction['articleStatus'],
+          title: "@cparagraph",
+          homeName: "@cname",
+          awayName: "@cname",
+          leagueName: "@cname",
+          matchStatus: Random.integer(1, 8) as Types.IExpertPrediction['matchStatus'],
+          matchTime: randomPostTime(),
+          sportId: Random.integer(1, 4) as Types.IExpertPrediction['sportId']
+        }
+      }),
+      pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
+    }))
+  },
+  {
+    url: '/v1/expert/article/detail',
+    response: () => mock(withData<Types.IExpertArticleDetail>(
+      {
+        articleId: "@word",
+        releaseTime: randomPostTime(),
+        closeTime: randomPostTime(),
+        articleStatus: Random.integer(1, 2) as Types.IArticleDetail['articleStatus'],
+        title: "@cparagraph",
+        content: "@cparagraph",
+        tnName: "@cname",
+        tid: Random.integer(10000, 50000),
+        matchStatus: Random.integer(1, 8) as Types.IArticleDetail['matchStatus'],
+        matchTime: randomPostTime(),
+        sportId: Random.integer(1, 4) as Types.IArticleDetail['sportId'],
+        mid: Random.integer(10000, 50000),
+        vd: Random.word(1),
+        ...(genTeamInfo() as Pick<Types.IArticleDetail, 'homeName' | 'homeId' | 'awayName' | 'awayId'>),
+        ...genMarket(),
+      }
+    ))
   },
 ]
 

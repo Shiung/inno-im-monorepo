@@ -1,3 +1,8 @@
+import type { SidType } from 'utils/types'
+
+/** 1: 足球 2: 籃球 3: 網球 4: 棒球 */
+export type SportId =  Exclude<SidType, 0>
+
 export interface withData<T> {
   message: string
   code: number
@@ -17,8 +22,6 @@ export interface IPager {
   totalPage: number
   totalRow: number
 }
-
-export type sidType = 0 | 1 | 2 | 3 | 4 // 0 or 不帶: all 1: 足球 2: 籃球 3: 網球 4: 棒球
 
 export interface IOdds {
   h: string
@@ -42,16 +45,20 @@ export interface IPredictionMarket {
   odds: IOdds[]
 }
 
-// export interface IMarket {
-//   // 盤口類型
-//   // 足球：獨贏(11)、讓球(12)、大小(13)
-//   // 篮球：獨贏(21)、讓球(22)、大小(23)
-//   status: '11' | '12' | '13' | '21' | '22' | '23'
-//   // 投注類型
-//   // 獨贏: 主隊(h)、客隊(a)、和局(d)
-//   // 讓球: 主隊(h)、客隊(a)
-//   // 大小: 大(ov)、小(ud)
-//   type: 'h' | 'a' | 'd' | 'ov' | 'ud'
-//   odds: string
-//   k: string
-// }
+/** 1: 未開始 2: 進行中 3: 結束 4: 延期 5: 中斷 6: 腰斬 7: 取消 8: 待定 */
+export type MatchStatus = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+
+/** 1: 命中 2: 未中 */
+export type HitStatus = 1 | 2
+
+/** 1: 開放 2: 未開放 */
+export type ArticleStatus = 1 | 2
+
+export interface IMatch {
+  homeName: string
+  homeId: number
+  awayName: string
+  awayId: number
+  tid: number
+  tnName: string
+}

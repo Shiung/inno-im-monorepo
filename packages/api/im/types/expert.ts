@@ -1,4 +1,13 @@
-import type { IPager, withData, IPredictionMarket } from './common'
+import type {
+  IPager,
+  withData,
+  IPredictionMarket,
+  SportId,
+  MatchStatus,
+  HitStatus,
+  ArticleStatus,
+  IMatch
+} from './common'
 
 export interface IExpertPrediction extends IPredictionMarket {
   expertId: string
@@ -9,18 +18,17 @@ export interface IExpertPrediction extends IPredictionMarket {
   hotStreak: number
   hitRate: number
   articleId: string
-  articleStatus: 1 | 2 // 1: 開放 2: 未開放
+  articleStatus: ArticleStatus,
   title: string
   homeName: string
   awayName: string
   leagueName: string
-  matchStatus: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 // 1: 未開始 2: 進行中 3: 結束 4: 延期 5: 中斷 6: 腰斬 7: 取消 8: 待定
+  matchStatus: MatchStatus,
   matchTime: number
-  sportId: 1 | 2 // 1: 足球 2: 籃球
+  sportId: SportId
 }
 export interface IExpertPredictions {
   query: {
-    matchId?: string
     sid?: number
     type?: 0 | 1 | 2 // 0: 命中王 1: 連紅王 2: 跟投王
     pageIdx?: number
@@ -80,7 +88,7 @@ export interface IArticle extends IPredictionMarket {
   homeName: string
   awayName: string
   leagueName: string
-  hitStatus: 1 | 2  // 命中狀態 1: 命中 2: 未中
+  hitStatus: HitStatus
 }
 export interface IArticleList {
   list: Array<IArticle>
@@ -125,7 +133,7 @@ export interface IExpertStatistics {
   body: null
   res: withData<{
     list: Array<{
-      hitStatus: 1 | 2 // 1: 命中 2: 未中
+      hitStatus: HitStatus,
       releaseTime: number
     }>
     info: Array<{
@@ -136,3 +144,37 @@ export interface IExpertStatistics {
   }>
 }
 
+export interface IExpertMatchArticle {
+  query: {
+    matchId: string
+    pageIdx: number
+    pageSize: number
+  }
+  body: null
+  res: withData<{
+    list: IExpertPrediction[]
+    pager: IPager
+  }>
+}
+
+export interface IArticleDetail extends IPredictionMarket, IMatch {
+  releaseTime: number,
+  closeTime: number,
+  articleId: string,
+  articleStatus: ArticleStatus,
+  title: string,
+  content: string,
+  mid: number,
+  vd: string
+  matchStatus: MatchStatus,
+  matchTime: number,
+  sportId: SportId
+}
+
+export interface IExpertArticleDetail {
+  query: {
+    articleId: string
+  }
+  body: null
+  res: withData<IArticleDetail>
+}
