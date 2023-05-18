@@ -17,10 +17,12 @@ class IM extends Base {
   expertPredictions = this.apiGenerator<Types.IExpertPredictions>({ url: '/v1/expert/predictions' })
   expertRecommend = this.apiGenerator<Types.IExpertRecommand>({ url: '/v1/expert/recommend' })
   expertInfo = this.apiGenerator<Types.IExpertInfo>({ url: '/v1/expert/info' })
-  expertArticleNow = this.apiGenerator<Types.IExpertArthcleNow>({ url: '/v1/expert/article/now' })
-  expertArticleHistory = this.apiGenerator<Types.IExpertArthcleHistory>({ url: '/v1/expert/article/history' })
-  expertArticleHit = this.apiGenerator<Types.IExpertArthcleHit>({ url: '/v1/expert/article/hit' })
+  expertArticleNow = this.apiGenerator<Types.IExpertArticleNow>({ url: '/v1/expert/article/now' })
+  expertArticleHistory = this.apiGenerator<Types.IExpertArticleHistory>({ url: '/v1/expert/article/history' })
+  expertArticleHit = this.apiGenerator<Types.IExpertArticleHit>({ url: '/v1/expert/article/hit' })
   expertStatistics = this.apiGenerator<Types.IExpertStatistics>({ url: '/v1/expert/statistics' })
+  expertMatchArticle = this.apiGenerator<Types.IExpertMatchArticle>({ url: '/v1/expert/match/article' })
+  expertArticleDetail = this.apiGenerator<Types.IExpertArticleDetail>({ url: '/v1/expert/article/detail' })
   // expertMatchArticle = this.apiGenerator<Types.IExpertMacthArticle>({ url: '/v1/expert/match/article' })
 
   // for testing

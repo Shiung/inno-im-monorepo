@@ -1,6 +1,7 @@
 <script lang='ts'>
 import { Ripple } from 'ui'
 import TeamLogo from '$src/components/TeamLogo'
+import { beImgUrlParse, ImageType } from 'utils/imgUrlParse'
 
 import Status from './Status.svelte'
 
@@ -13,22 +14,22 @@ export let match: IWebAnchorMatch
   style:background-color={'rgb(var(--im-monorepo-primary) / 0.1)'}
 >
   <Ripple class='w-full py-[12px] rounded-[16px] border border-imprimary'
-    on:click={() => console.log(match.matchId)}
+    on:click={() => console.log(match.mid)}
   >
-    <div class='text-[12px] text-center font-semibold mb-[10px]'> {match.competitionName} </div>
+    <div class='text-[12px] text-center font-semibold mb-[10px]'> {match.tnName} </div>
 
     <div class='flex justify-around'>
 
       <div>  
-        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={match.homeTeamLogo} />
-        <div class='text-[10px] text-center'> {match.homeTeamName} </div>
+        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.homeId, type: ImageType.competitors })} />
+        <div class='text-[10px] text-center'> {match.homeName} </div>
       </div>
 
       <Status match={match} />
 
       <div>  
-        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={match.awayTeamLogo} />
-        <div class='text-[10px] text-center'> {match.awayTeamName} </div>
+        <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.awayId, type: ImageType.competitors })} />
+        <div class='text-[10px] text-center'> {match.awayName} </div>
       </div>
       
     </div>

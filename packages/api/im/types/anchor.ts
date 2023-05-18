@@ -1,4 +1,4 @@
-import type { IPager, withData } from './common'
+import type { IPager, withData, IMatch, MatchStatus, SportId } from './common'
 
 export interface IWebAnchor {
   houseId: string
@@ -28,22 +28,13 @@ export interface IWebAnchors {
   }>
 }
 
-export interface IWebAnchorMatch {
-  homeTeamName: string
-  homeTeamLogo: string
-  homeTeamId: string
-  awayTeamName: string
-  awayTeamLogo: string
-  awayTeamId: string
-  competitionName: string
-  competitionLogo: string
-  competitionId: string
-  sportId: 1 | 2 | 3 // 1: 足球 2: 籃球 3: 網球
-  matchId: string
+export interface IWebAnchorMatch extends IMatch {
+  sportId: SportId,
   matchTime: number
-  matchStatus: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 // 1: 未開始 2: 進行中 3: 結束 4: 延期 5: 中斷 7: 取消 8: 待定
-  homeScore: [number, number, number, number, number, number, number, number]
-  awayScore: [number, number, number, number, number, number, number, number]
+  matchStatus: MatchStatus,
+  mid: number,
+  vd: string,
+  score: string
 }
 
 export interface IWebAnchorMatches {
@@ -135,5 +126,8 @@ export interface IWebAnchorRecommend {
     anchorTitle: string
     houseIntroduction: string
     userImage: string
+    homeName: string
+    awayName: string
+    competitionName: string
   }>
 }

@@ -30,7 +30,7 @@
     {timestampToFormat({ ts: article.releaseTime, format: 'MM-DD' }) } </div>
 
   <div class='flex items-center justify-between mt-[8px]'>
-    <div class='text-[#999999] text-[12px]'> {article.leagueName} </div>
+    <div class='text-[#999999] text-[12px]'> {article.tnName} </div>
     <div class='text-[12px]'>
       <span> {article.homeName} </span>
       <span> vs </span>
