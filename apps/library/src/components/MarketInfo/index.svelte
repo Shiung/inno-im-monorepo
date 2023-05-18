@@ -6,8 +6,8 @@ import MarketBadget from '$src/components/MarketBadget'
 export let article: IArticle
 
 const mlAndAhResult = (_result: IArticle['matchResult']): string => {
-  if (_result === 'h') return `${article.homeName} ${article?.odds[0]?.h ? '@' + article?.odds[0]?.h : ''}`
-  else if (_result === 'a') return `${article.awayName} ${article?.odds[0]?.a ? '@' + article?.odds[0]?.a : ''}`
+  if (_result === 'h') return `${article.homeName} ${article?.odds?.[0]?.h ? '@' + article?.odds?.[0]?.h : ''}`
+  else if (_result === 'a') return `${article.awayName} ${article?.odds?.[0]?.a ? '@' + article?.odds?.[0]?.a : ''}`
   else return ''
 }
 
