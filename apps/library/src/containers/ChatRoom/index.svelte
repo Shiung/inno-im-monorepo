@@ -16,7 +16,7 @@ import InputArea from './InputArea/index.svelte'
 import type { IChatMessage } from 'api/im/types'
 import type { Subscription } from 'api/stompMaster'
 
-export let fixed: boolean = false
+export let fixed: boolean = true
 export let height: number
 export let minimize: boolean = false
 
@@ -72,8 +72,11 @@ onDestroy(() => {
 
 {:else}
 
-  <div class='flex-1 flex flex-col bg-white overflow-y-scroll' style:max-height={fixed ? 'auto' : `calc(100vh - ${height}px)`}>
-    <Header on:close={() => minimize = true}/>
+  <div class='flex-1 flex flex-col bg-white overflow-y-scroll' 
+    style:min-height={fixed ? 'auto' : `calc(100vh - ${height}px)`} 
+    style:max-height={fixed ? 'auto' : `calc(100vh - ${height}px)`}
+  >
+    <Header {fixed} on:close={() => minimize = true}/>
 
     {#if initFetchLoading}
       <Loading />
@@ -82,11 +85,11 @@ onDestroy(() => {
       {#if $chatMessages.length === 0}
         <Empty class='flex-1' title={$t('chat.empty')} />
       {:else}
-        <Messages bind:lastReadId={lastReadId} {chatMessages} {userId} {roomId} />
+        <Messages bind:lastReadId={lastReadId} {chatMessages} {userId} {roomId} {fixed} />
       {/if}
 
     {/if}
 
-    <InputArea {userId} {userVip} {subId} {destination} {isLogin} {isCharged} {vipLimit} {frequency} />
+    <InputArea {userId} {userVip} {subId} {destination} {isLogin} {isCharged} {vipLimit} {frequency} {fixed} />
   </div>
 {/if}

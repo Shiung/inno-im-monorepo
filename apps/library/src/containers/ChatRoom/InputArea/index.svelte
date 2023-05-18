@@ -1,4 +1,5 @@
 <script lang='ts'>
+import { twMerge } from 'tailwind-merge'
 import { fly } from 'svelte/transition'
 import stomp from 'api/stompMaster'
 import { Ripple } from 'ui'
@@ -8,6 +9,7 @@ import Send from '../images/send.svg'
 import ShowS from '../images/show_s.svg'
 import Plus from '../images/plus.svg'
 
+export let fixed: boolean = true
 export let userId: string
 export let userVip: number
 export let subId: string
@@ -63,7 +65,12 @@ const publishMessage = () => {
     </div>
   {/if}
 
-  <div class='fixed im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]' bind:this={dom}>
+  <div class={twMerge(
+    'im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]',
+    fixed ? 'fixed' : 'sticky'
+  )}
+    bind:this={dom}
+  >
     <div class='flex items-center'>
 
       <div class='flex-1 flex items-center relative'>
@@ -92,5 +99,5 @@ const publishMessage = () => {
     </div>
   </div>
 
-  <div style:height={`${blockHeight}px`}/>
+  <div style:height={fixed && `${blockHeight}px`}/>
 </div>

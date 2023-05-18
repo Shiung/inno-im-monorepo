@@ -1,9 +1,10 @@
 <script lang="ts">
+import { twMerge } from 'tailwind-merge'
 import { tweened } from 'svelte/motion'
 import { fly } from 'svelte/transition'
 import { expoOut } from 'svelte/easing'
 import { Ripple } from 'ui'
-// import { im } from 'api'
+import { im } from 'api'
 import { t } from '$stores'
 
 import flash from './flash'
@@ -14,6 +15,7 @@ import Arrow from '../images/arrow_down_small.svg'
 import type { Writable } from 'svelte/store'
 import type { IChatMessage } from 'api/im/types'
 
+export let fixed: boolean
 export let userId: string
 export let roomId: number
 export let chatMessages: Writable<IChatMessage[]>
@@ -26,7 +28,8 @@ const getNewestMessage = () => $chatMessages[$chatMessages.length - 1]
 
 const onDomScroll = (e: UIEvent) => {
   const target = e.target as HTMLDivElement
-  if (target.scrollTop + target.clientHeight === target.scrollHeight) {
+
+  if (target.scrollTop + target.clientHeight >= target.scrollHeight - 50) {
     scrollToNewest = true 
     lastReadId = getNewestMessage().id
   } else scrollToNewest = false
@@ -46,7 +49,6 @@ const observer = new MutationObserver(mutations => {
 })
 
 $: if (dom) observer.observe(dom, { childList: true })
-// $: if (dom) dom.scrollTo({ top: dom.scrollHeight })
 
 let allWatched: boolean = true
 const scrollToUnread = () => {
@@ -73,42 +75,36 @@ const gotoNewest = () => {
   top.set(dom.scrollHeight)
 }
 
-// 拉到最上面載入新訊息用的區域
-// let pastQuantity = 30
-// let loadDom: HTMLDivElement
-// const intersectionObserver = new IntersectionObserver(async entries => {
-//   for (const entry of entries) {
-//     if (entry.intersectionRatio <= 0) return
-// 
-//     // const targetId = $chatMessages[pastQuantity].id
-//     // const targetDom = document.querySelector(`div[data-id='${targetId}']`)
-// 
-//     // const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
-//     // chatMessages.update(messages => [...res.data.list, ...messages])
-// 
-//     // targetDom.scrollIntoView()
-//     // dom.scrollTo({ top: dom.scrollTop - loadDom.clientHeight - 10 })
-//   }
-// })
+let pastQuantity = 10
+let fetchMoreLoading: boolean = false
+const fetchMore = async () => {
+  const targetId = $chatMessages[pastQuantity].id
+  const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
-// $: if (dom && loadDom) intersectionObserver.observe(loadDom)
+  fetchMoreLoading = true
+  const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
+  chatMessages.update(messages => [...res.data.list, ...messages])
+  fetchMoreLoading = false
+
+  targetDom.scrollIntoView()
+  dom.scrollTo({ top: dom.scrollTop - 34 - 10 })
+}
 
 </script>
 
 <div class='relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]' 
   on:scroll={onDomScroll} bind:this={dom}
 >
-
-  <!--<div class='flex items-center justify-center' bind:this={loadDom}>-->
-    <DropdownLoader {roomId} root={dom} />
-  <!--</div>-->
+  <DropdownLoader quantity={pastQuantity} loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
 
   {#each $chatMessages as message}
     <Message {message} bind:lastReadId={lastReadId} self={userId === message.source} />
   {/each}
 
   {#if !scrollToNewest && !allWatched}
-    <div in:fly={{y: 50, duration: 300}} class='flex justify-center sticky bottom-0 w-full !mt-0'> 
+    <div in:fly={{y: 50, duration: 300}} 
+      class={twMerge('flex justify-center bottom-[90px] w-full !mt-0 z-10', fixed ? 'fixed' : 'sticky')}
+    > 
       <Ripple
         class='flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]'
         ripple='white'
@@ -119,4 +115,5 @@ const gotoNewest = () => {
       </Ripple>
     </div>
   {/if}
+
 </div>

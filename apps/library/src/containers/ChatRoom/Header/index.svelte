@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge'
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'
 
-export const fixed: boolean = false
+export let fixed: boolean
 
 const dispatch = createEventDispatcher()
 
@@ -22,7 +22,7 @@ $: blockHeight = dom?.getBoundingClientRect().height
 <div>
   <div class={twMerge(
       'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30',
-      fixed && 'fixed'
+      fixed ? 'fixed' : 'sticky'
     )}
     bind:this={dom}
   >
