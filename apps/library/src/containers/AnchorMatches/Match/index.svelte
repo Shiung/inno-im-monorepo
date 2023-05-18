@@ -16,7 +16,7 @@ export let match: IWebAnchorMatch
   <Ripple class='w-full py-[12px] rounded-[16px] border border-imprimary'
     on:click={() => console.log(match.mid)}
   >
-    <div class='text-[12px] text-center font-semibold mb-[10px]'> {match.competitionName} </div>
+    <div class='text-[12px] text-center font-semibold mb-[10px]'> {match.tnName} </div>
 
     <div class='flex justify-around'>
 
