@@ -4,7 +4,7 @@
   import { t } from '$stores'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
-  import Title from '$src/pages/expertDetail/Main/components/Title.svelte'
+  import Title from '$src/components/Title/index.svelte'
 
   import ArticleStoryLoading from './components/ArticleStory/components/Loading/index.svelte'
   import ArticleStory from './components/ArticleStory/index.svelte'

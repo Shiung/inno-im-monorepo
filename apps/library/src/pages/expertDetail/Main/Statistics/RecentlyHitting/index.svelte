@@ -1,6 +1,6 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
-  import Title from '$pages/expertDetail/Main/components/Title.svelte'
+  import Title from '$src/components/Title/index.svelte'
   import List from './components/List.svelte'
   import Loading from './components/Loading.svelte'
   import { t } from '$stores'

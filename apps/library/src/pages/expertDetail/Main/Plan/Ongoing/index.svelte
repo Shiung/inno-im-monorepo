@@ -7,7 +7,7 @@ import { t } from '$stores'
 import MarkInfo from '$src/components/MarketInfo'
 
 import Loading from './Loading.svelte'
-import Title from '../../components/Title.svelte'
+import Title from '$src/components/Title/index.svelte'
 
 export let expertId: string
 

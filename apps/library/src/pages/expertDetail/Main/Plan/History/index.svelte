@@ -6,7 +6,7 @@ import { t } from '$stores'
 import List from './components/List.svelte'
 import Loading from './components/Loading.svelte'
 
-import Title from '../../components/Title.svelte'
+import Title from '$src/components/Title/index.svelte'
 import Filter from '../../images/filter.svg'
 
 export let expertId: string
