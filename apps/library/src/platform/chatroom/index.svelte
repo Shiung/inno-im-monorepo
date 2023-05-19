@@ -12,7 +12,7 @@ $: blockHeight = dom?.getBoundingClientRect().height
     this platform area
   </div>
 
-  <div style:height={fixed && `${blockHeight}px`}/>
+  <div style:height={fixed ? `${blockHeight}px` : ''}/>
 </div>
 
-<Chatroom height={0} {fixed} />
+<Chatroom height={200} {fixed} />

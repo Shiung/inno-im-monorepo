@@ -85,7 +85,7 @@ onDestroy(() => {
       {#if $chatMessages.length === 0}
         <Empty class='flex-1' title={$t('chat.empty')} />
       {:else}
-        <Messages bind:lastReadId={lastReadId} {chatMessages} {userId} {roomId} {fixed} />
+        <Messages bind:lastReadId={lastReadId} {chatMessages} {userId} {roomId} {fixed} {height} />
       {/if}
 
     {/if}

@@ -18,6 +18,7 @@ import type { IChatMessage } from 'api/im/types'
 export let fixed: boolean
 export let userId: string
 export let roomId: number
+export let height: number
 export let chatMessages: Writable<IChatMessage[]>
 export let lastReadId: string
 
@@ -26,13 +27,21 @@ let scrollToNewest: boolean = false
 
 const getNewestMessage = () => $chatMessages[$chatMessages.length - 1]
 
-const onDomScroll = (e: UIEvent) => {
-  const target = e.target as HTMLDivElement
+const onScroll = (scrollTop: number, clientHeight:number, scrollHeight: number) => {
 
-  if (target.scrollTop + target.clientHeight >= target.scrollHeight - 50) {
+  if (scrollTop + clientHeight >= scrollHeight - 50) {
     scrollToNewest = true 
     lastReadId = getNewestMessage().id
   } else scrollToNewest = false
+}
+
+const onDomScroll = (e: UIEvent) => {
+  const target = e.target as HTMLDivElement
+  onScroll(target.scrollTop, target.clientHeight, target.scrollHeight)
+}
+
+const onWindowScroll = () => {
+  onScroll(window.scrollY, window.innerHeight, document.documentElement.scrollHeight)
 }
 
 const observer = new MutationObserver(mutations => {
@@ -56,7 +65,10 @@ const scrollToUnread = () => {
   if (unreadDom) {
     unreadDom.scrollIntoView()
     flash(unreadDom)
-    dom.scrollTo({ top: dom.scrollTop - 200 })
+
+    const offset = 200
+    if (fixed) window.scrollTo({ top: window.scrollY - offset - height })
+    else dom.scrollTo({ top: dom.scrollTop - offset })
   }
 }
 
@@ -68,11 +80,14 @@ const checkWatched = () => {
 }
 
 const gotoNewest = () => {
-  const top = tweened(dom.scrollTop, { easing: expoOut })
+  const target = fixed ? window : dom
+  const _scrollY = fixed ? window.scrollY : dom.scrollTop
+  const _scrollH = fixed ? document.documentElement.scrollHeight : dom.scrollHeight
+  const top = tweened(_scrollY, { easing: expoOut })
   top.subscribe((top) => {
-    dom.scrollTo({ top })
+    target.scrollTo({ top })
   })
-  top.set(dom.scrollHeight)
+  top.set(_scrollH)
 }
 
 let pastQuantity = 10
@@ -87,13 +102,20 @@ const fetchMore = async () => {
   fetchMoreLoading = false
 
   targetDom.scrollIntoView()
-  dom.scrollTo({ top: dom.scrollTop - 34 - 10 })
+
+  const headerHeight = 44
+  const loadmoreHeight = 34
+  const offset = 10
+  if (fixed) window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - height })
+  else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
 }
 
 </script>
 
+<svelte:window on:scroll={fixed && onWindowScroll} />
+
 <div class='relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]' 
-  on:scroll={onDomScroll} bind:this={dom}
+  on:scroll={!fixed && onDomScroll} bind:this={dom}
 >
   <DropdownLoader quantity={pastQuantity} loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
 
@@ -103,7 +125,10 @@ const fetchMore = async () => {
 
   {#if !scrollToNewest && !allWatched}
     <div in:fly={{y: 50, duration: 300}} 
-      class={twMerge('flex justify-center bottom-[90px] w-full !mt-0 z-10', fixed ? 'fixed' : 'sticky')}
+      class={twMerge('flex justify-center mx-auto !mt-0 z-10',
+        fixed ? 'fixed bottom-[90px] translate-x-[-50%]' : ' bottom-[10px] sticky'
+      )}
+      style:left={fixed && 'calc(50% - 16px)'}
     > 
       <Ripple
         class='flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]'

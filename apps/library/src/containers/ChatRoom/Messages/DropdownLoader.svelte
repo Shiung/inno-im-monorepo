@@ -37,7 +37,6 @@ const onTouchmove = (e: TouchEvent) => {
   if (!canLoadmore) return
   loadIconYMove = e.touches[0].clientY
   if (offsetY < 0 && document.body.style.overflow) document.body.style.overflow = null
-  console.log(offsetY)
 }
 
 const onTouchend = () => {
