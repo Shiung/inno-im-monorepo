@@ -48,11 +48,12 @@ const observer = new MutationObserver(mutations => {
   const mutation = mutations[0]
   if (!mutation) return
 
-  const target = mutation.target as HTMLDivElement
+  const target = fixed ? window : mutation.target as HTMLDivElement
+  const _scrollH = fixed ? document.documentElement.scrollHeight : (mutation.target as HTMLDivElement).scrollHeight
 
   if (scrollToNewest) {
     lastReadId = getNewestMessage().id
-    target.scrollTo({top: target.scrollHeight})
+    target.scrollTo({top: _scrollH})
   } 
   checkWatched()
 })
