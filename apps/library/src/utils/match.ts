@@ -14,7 +14,6 @@ export const marketTypeDispatcher = (marketType: MarketType, ...rest: any[]) => 
       case '23':
         return resolver?.['ou']?.(...rest)
       default:
-        console.warn('no match marketType.')
         return undefined
     }
   }
