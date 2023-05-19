@@ -11,7 +11,6 @@ $: blockHeight = dom?.getBoundingClientRect().height
   <div class={twMerge('w-full bg-white h-[200px] z-30', fixed && 'fixed')} bind:this={dom}> 
     this platform area
   </div>
-
   <div style:height={fixed ? `${blockHeight}px` : ''}/>
 </div>
 

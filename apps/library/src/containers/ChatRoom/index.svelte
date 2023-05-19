@@ -18,7 +18,7 @@ import type { Subscription } from 'api/stompMaster'
 
 export let fixed: boolean = true
 export let height: number
-export let minimize: boolean = false
+export let minimize: boolean = true
 
 export let roomId: number = 124
 export let userId: string = 'loki'
