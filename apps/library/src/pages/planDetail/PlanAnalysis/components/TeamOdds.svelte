@@ -62,7 +62,7 @@
 >
   {#if active}
     <div class='absolute -top-[1px] -left-[1px]'>
-      <Badget class='flex'> { $t('common.recommend') } </Badget>
+      <Badget variant='gradientPrimary'> { $t('common.recommend') } </Badget>
     </div>
   {/if}
   <div class="text-center">
