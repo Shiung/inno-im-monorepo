@@ -3,6 +3,7 @@
   import { twMerge } from 'tailwind-merge';
   import { beImgUrlParse, ImageType } from 'utils/imgUrlParse'
   import { t } from '$src/stores';
+  import { marketTypeDispatcher } from '$src/utils/match'
 
   import { Badget } from 'ui';
   import TeamLogo from '$src/components/TeamLogo'
@@ -15,52 +16,39 @@
   $: info = {
     name: type === 'home' ? data.homeName : data.awayName,
     id: type === 'home' ? data.homeId : data.awayId,
-    ...marketTypeDispatcher(data, type)(getKAndOdds)
+    ...dispatcher(getKAndOdds)
   }
   
-  $: active = marketTypeDispatcher(data, type)(getMatchResult)
+  $: active = dispatcher(getMatchResult)
+
+  $: dispatcher = marketTypeDispatcher(data?.marketType, data, type)
 
   const getKAndOdds = {
     ml(data, type) {
       if (type === 'home') return { k: data?.homeName, odd: data?.odds?.[0]?.h }
-      else return { k: data?.awayName, odd: data?.odds?.[0]?.a }
+      return { k: data?.awayName, odd: data?.odds?.[0]?.a }
     },
     ah(data, type) {
       if (type === 'home') return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.h }
-      else return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.a }
+      return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.a }
     },
     ou(data, type) {
       if (type === 'home') return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.ov }
-      else return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.ud }
+      return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.ud }
     },
   }
   const getMatchResult = {
     ml(data, type) {
       if (type === 'home') return data?.matchResult === 'h'
-      else return data?.matchResult === 'a'
+      return data?.matchResult === 'a'
     },
     ah(data, type) {
       if (type === 'home') return data?.matchResult === 'h'
-      else return data?.matchResult === 'a'
+      return data?.matchResult === 'a'
     },
     ou(data, type) {
       if (type === 'home') return data?.matchResult === 'ov'
-      else return data?.matchResult === 'ud'
-    },
-  }
-  const marketTypeDispatcher = (data, type) => {
-    return (resolver) => {
-      switch (data?.marketType) {
-        case '11':
-        case '21':
-        return resolver['ml'](data, type)
-        case '12':
-        case '22':
-          return resolver['ah'](data, type)
-        case '13':
-        case '23':
-          return resolver['ou'](data, type)
-      }
+      return data?.matchResult === 'ud'
     }
   }
 </script>
