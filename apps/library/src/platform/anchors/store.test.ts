@@ -1,7 +1,7 @@
 import { list } from './store'
 import type { IPlatformAnchor } from './types'
 
-const genAnchor = (houseId: string) => ({
+const genAnchor = (houseId: string): IPlatformAnchor => ({
   userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/1235/z5xMTdihT3O2K9C5oAvznQ.png",
   houseId: houseId,
   visitHistory: 2140,
@@ -13,7 +13,7 @@ const genAnchor = (houseId: string) => ({
   anchorTypeName: "篮球1",
   fansCount: 2,
   anchorTitle: "",
-  description: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
+  houseIntroduction: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
 })
 
 
