@@ -39,7 +39,7 @@
     console.log('onButtonClick')
   }
 
-  $: fetchArticleDetail($params?.articleId)
+  $: $params?.articleId && fetchArticleDetail($params?.articleId)
 </script>
 
 <div data-cid='expertDetail'>
