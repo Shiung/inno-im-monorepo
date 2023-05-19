@@ -168,7 +168,8 @@ export interface IArticleDetail extends IPredictionMarket, IMatch {
   vd: string
   matchStatus: MatchStatus,
   matchTime: number,
-  sportId: SportId
+  sportId: SportId,
+  past: boolean
 }
 
 export interface IExpertArticleDetail {
