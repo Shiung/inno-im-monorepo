@@ -18,6 +18,9 @@
   import PlanAnalysisLoading from './PlanAnalysis/components/Loading.svelte'
   import PlanAnalysis from './PlanAnalysis/index.svelte'
 
+  import BottomPanel from './BottomPanel/index.svelte'
+  
+  let coin: number = 1500
   let detailPromise: ReturnType<typeof im.expertArticleDetail>
   let othersPromise: ReturnType<typeof im.expertMatchArticle>
   let bonus: number = 100000
@@ -30,6 +33,10 @@
 
         return response
       })
+  }
+
+  const onButtonClick = () => {
+    console.log('onButtonClick')
   }
 
   $: fetchArticleDetail($params?.articleId)
@@ -78,4 +85,6 @@
       {/await}
     </div>
   </div>
+
+  <BottomPanel {coin} {onButtonClick} />
 </div>
