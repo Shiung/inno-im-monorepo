@@ -2,12 +2,14 @@
 import { slide } from 'svelte/transition'
 import { Tween } from 'ui'
 import { amountSymbolTransformer } from 'utils/amount'
+import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 
 import ArrowUp from './images/arrow_up.svg' 
 import fans from './images/fans_on.webp'
 import { streaming } from '../store'
 
 let folder: boolean = false
+let openDetailSheet: boolean
 
 </script>
 
@@ -18,7 +20,9 @@ let folder: boolean = false
   style:height={folder ? '50px' : '130px'}
   transition:slide|local
 >
-    <div class='relative flex flex-col items-center'>
+    <div class='relative flex flex-col items-center'
+      on:click|stopPropagation={() => openDetailSheet = !openDetailSheet}
+      on:keypress >
       <div class='absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]'
         style:z-index='1'
         style:bottom={folder ? '3px' : '0px'}
@@ -58,4 +62,5 @@ let folder: boolean = false
 
     </div>
   </div>
+<AnchorDetailSheet bind:open={openDetailSheet}  houseId={$streaming.houseId}/>
 {/if}
