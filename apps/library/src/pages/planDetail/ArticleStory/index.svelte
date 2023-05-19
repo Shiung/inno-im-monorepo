@@ -1,9 +1,18 @@
 <script lang='ts'>
   import { t } from '$stores'
   import type { IArticleDetail } from 'api/im/types'
+
   import MarketBadget from '$src/components/MarketBadget'
+
   import TimerLabel from './components/TimerLabel/index.svelte'
+
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
+  
+  import { getContext } from 'svelte'
+  import { isPastContextKey } from '../context'
+  
+  const { getIsPast } = getContext(isPastContextKey) as any
+  const isPast = getIsPast()
 
   export let data: IArticleDetail
 </script>
@@ -14,11 +23,17 @@
     <div class='flex items-center justify-between'>
       <div class='flex items-center space-x-1'>
         <MarketBadget marketType={data?.marketType} />
-        <TimerLabel />
+        {#if !isPast}
+          <TimerLabel />
+        {/if}
       </div>
 
       <span class='text-[10px] leading-[15px] text-[#999]'>
-        {timestampToFormat({ ts: data?.releaseTime, format: 'DD-MM mm:ss' })} {$t('common.publish')}
+        {#if !isPast}
+          {timestampToFormat({ ts: data?.releaseTime, format: 'DD-MM mm:ss' })} {$t('common.publish')}
+        {:else}
+          {timestampToFormat({ ts: data?.releaseTime, format: 'DD-MM' })}
+        {/if}
       </span>
     </div>
 

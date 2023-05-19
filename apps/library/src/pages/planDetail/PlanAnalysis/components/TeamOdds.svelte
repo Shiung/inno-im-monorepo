@@ -8,6 +8,9 @@
   import { Badget } from 'ui';
   import TeamLogo from '$src/components/TeamLogo'
 
+  import { getContext } from 'svelte'
+  import { isPastContextKey } from '../../context'
+  
   export let data: IArticleDetail
   export let type: 'home' | 'away'
 
@@ -51,6 +54,9 @@
       return data?.matchResult === 'ud'
     }
   }
+
+  const { getIsPast } = getContext(isPastContextKey) as any
+  const isPast = getIsPast()
 </script>
 
 <div
@@ -71,7 +77,9 @@
   </div>
 
   <div class='text-[15px] leading-[23px] text-center space-x-2 mt-1'>
-    <span style:color={kColor}> {info.k} </span>
-    <span class='font-semibold'> {info.odd} </span>
+    {#if !isPast}
+      <span style:color={kColor}> {info.k} </span>
+      <span class='font-semibold'> {info.odd} </span>
+    {/if}
   </div>
 </div>
