@@ -14,8 +14,8 @@
   $: kColor = type === 'home' ? '#80B100' : '#CB0202'
 
   $: info = {
-    name: type === 'home' ? data.homeName : data.awayName,
-    id: type === 'home' ? data.homeId : data.awayId,
+    name: type === 'home' ? data?.homeName : data?.awayName,
+    id: type === 'home' ? data?.homeId : data?.awayId,
     ...dispatcher(getKAndOdds)
   }
   

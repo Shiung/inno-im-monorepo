@@ -18,11 +18,11 @@
       </div>
 
       <span class='text-[10px] leading-[15px] text-[#999]'>
-        {timestampToFormat({ ts: data.releaseTime, format: 'DD-MM mm:ss' })} {$t('common.publish')}
+        {timestampToFormat({ ts: data?.releaseTime, format: 'DD-MM mm:ss' })} {$t('common.publish')}
       </span>
     </div>
 
     <!-- title -->
-    <p class='text-[#333] text-[14px] leading-normal font-semibold'>{data.title}</p>
+    <p class='text-[#333] text-[14px] leading-normal font-semibold'>{data?.title}</p>
   </div>
 </div>
