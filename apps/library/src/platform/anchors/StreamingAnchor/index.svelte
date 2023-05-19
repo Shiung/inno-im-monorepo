@@ -42,7 +42,7 @@ let folder: boolean = false
       </div>
 
       <div class='truncate'>
-        {$streaming.description}
+        {$streaming.houseIntroduction}
       </div>
 
       <div class='flex'>
