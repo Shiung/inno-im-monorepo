@@ -20,6 +20,10 @@
       "import": "./anchors.js",
       "require": "./anchors.cjs"
     },
+    "./chatroom": {
+      "import": "./chatroom.js",
+      "require": "./chatroom.cjs"
+    },
     "./style.css": "./style.css"
   }
 }

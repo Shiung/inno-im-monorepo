@@ -315,7 +315,7 @@ importers:
         version: 8.8.0(eslint@8.40.0)
       eslint-config-turbo:
         specifier: latest
-        version: 1.9.6(eslint@8.40.0)
+        version: 1.8.8(eslint@8.28.0)
       eslint-plugin-svelte3:
         specifier: ^4.0.0
         version: 4.0.0(eslint@8.40.0)(svelte@3.59.1)
@@ -382,6 +382,9 @@ importers:
       env-config:
         specifier: workspace:*
         version: link:../env-config
+      svelte:
+        specifier: ^3.59.1
+        version: 3.59.1
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^5.16.5
@@ -2456,13 +2459,13 @@ packages:
       eslint: 8.40.0
     dev: false
 
-  /eslint-config-turbo@1.9.6(eslint@8.40.0):
-    resolution: {integrity: sha512-ZIIfcUZ3kW8owIdC1ykebSGJOmVjUidOin1j7ZxpFDGSGcRc2/r5MBNQ7z347lsJs0rNXk/LpOiFHNbdtE+n6w==}
+  /eslint-config-turbo@1.8.8(eslint@8.28.0):
+    resolution: {integrity: sha512-+yT22sHOT5iC1sbBXfLIdXfbZuiv9bAyOXsxTxFCWelTeFFnANqmuKB3x274CFvf7WRuZ/vYP/VMjzU9xnFnxA==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
-      eslint: 8.40.0
-      eslint-plugin-turbo: 1.9.6(eslint@8.40.0)
+      eslint: 8.28.0
+      eslint-plugin-turbo: 1.8.8(eslint@8.28.0)
     dev: false
 
   /eslint-plugin-svelte3@4.0.0(eslint@8.40.0)(svelte@3.59.1):
@@ -2474,8 +2477,8 @@ packages:
       eslint: 8.40.0
       svelte: 3.59.1
 
-  /eslint-plugin-turbo@1.9.6(eslint@8.40.0):
-    resolution: {integrity: sha512-xxa+gfTg3CG7wKJbkOIqdZw2eXhriORjw/55GDjJiUrNhU4vo1tA+9HDo/glTQygZ22Pj3nxYhxINFnQ/IU3lg==}
+  /eslint-plugin-turbo@1.8.8(eslint@8.28.0):
+    resolution: {integrity: sha512-zqyTIvveOY4YU5jviDWw9GXHd4RiKmfEgwsjBrV/a965w0PpDwJgEUoSMB/C/dU310Sv9mF3DSdEjxjJLaw6rA==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
@@ -3955,7 +3958,6 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
-    dev: true
 
   /sander@0.5.1:
     resolution: {integrity: sha512-3lVqBir7WuKDHGrKRDn/1Ye3kwpXaDOMsiRP1wd6wpZW56gJhsbp5RqQpA6JG/P+pkXizygnr1dKR8vzWaVsfA==}
