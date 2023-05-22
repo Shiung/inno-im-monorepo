@@ -53,8 +53,11 @@ const routes = {
       }
     ]
   }),
-  '/chatRoom': wrap({
-    asyncComponent: () => import('$src/containers/ChatRoom'),
+  '/platform/chatroom': wrap({
+    asyncComponent: () => import('../pages/platformChatroom/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
   }),
   '/platform/anchor': wrap({
     asyncComponent: () => import('../platform/anchors'),

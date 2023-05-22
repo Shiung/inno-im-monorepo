@@ -1,7 +1,9 @@
 import type { ILanguages } from 'env-config'
+import type { withData } from '../types'
 
-export interface IChatRoom {
+export interface IChatMessage {
   type: 'message'
+  id: string
   blackList: boolean
   source: string
   sourceInfo: {
@@ -17,4 +19,16 @@ export interface IChatRoom {
     message: string
     reply: null | string
   }
+}
+
+export interface IChatroomPastMessage {
+  query: {
+    roomId: number
+    cursor?: string 
+    quantity?: number
+  }
+  body: null
+  res: withData<{
+    list: IChatMessage[]
+  }>
 }
