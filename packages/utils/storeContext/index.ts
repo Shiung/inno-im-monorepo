@@ -16,7 +16,7 @@ export const createStoreContext = <T extends Object>(key: string | symbol, props
 
   const set = (_props?: Partial<T>) => {
     for (const [_key, _val] of Object.entries(_props || {})) {
-      if (context[_key as keyof T])  context[_key].set(_val)
+      if (context[_key as keyof T]) context[_key as keyof T].set(_val)
     }
 
     if (!getContext(key)) setContext(key, context)
