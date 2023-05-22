@@ -57,7 +57,13 @@ const routes = {
     asyncComponent: () => import('$pages/planDetail/index.svelte'),
     userData: {
       showBottomNav: false
-    }
+    },
+    conditions: [
+      () => {
+        window.scrollTo(0, 0)
+        return true
+      }
+    ]
   }),
   '/platform/chatroom': wrap({
     asyncComponent: () => import('../pages/platformChatroom/index.svelte'),
