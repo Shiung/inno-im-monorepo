@@ -54,7 +54,7 @@ const routes = {
     ]
   }),
   '/platform/chatroom': wrap({
-    asyncComponent: () => import('../platform/chatroom'),
+    asyncComponent: () => import('../pages/platformChatroom/index.svelte'),
     userData: {
       showBottomNav: false
     },

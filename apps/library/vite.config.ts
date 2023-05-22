@@ -16,7 +16,8 @@ const buildAsLibrary = () => ({
         index: resolve(__dirname, './src/platform/index.ts'),
         app: resolve(__dirname, './src/platform/app.ts'),
         anchors: resolve(__dirname, './src/platform/anchors/index.ts'),
-        streaming: resolve(__dirname, './src/platform/streaming/index.ts') 
+        streaming: resolve(__dirname, './src/platform/streaming/index.ts'),
+        chartroom: resolve(__dirname, './src/platform/chatroom/index.ts') 
       },
       name: 'im-library',
       // the proper extensions will be added

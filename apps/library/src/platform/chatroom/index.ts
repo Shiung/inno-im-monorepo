@@ -1,4 +1,4 @@
 import '../library.css'
 import '../../commonInit'
-export { default } from './index.svelte'
-export * from './index.svelte'
+export { default } from '../../containers/Chatroom'
+export * from '../../containers/Chatroom'
