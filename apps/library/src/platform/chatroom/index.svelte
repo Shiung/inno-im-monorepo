@@ -2,14 +2,14 @@
 import { twMerge } from 'tailwind-merge'
 import Chatroom, { setChatEnv } from '$src/containers/Chatroom'
 
-const isWindow: boolean = true
+const isWindow: boolean = false
 let dom: HTMLDivElement
 $: blockHeight = dom?.getBoundingClientRect().height
 
-setChatEnv({
+$: if (dom) setChatEnv({
   displayType: isWindow ? 'window' : 'block',
-  height: dom?.getBoundingClientRect().height,
-  minimize: false 
+  height: blockHeight,
+  minimize: false
 })
 
 </script>
@@ -21,4 +21,6 @@ setChatEnv({
   <div style:height={isWindow ? `${blockHeight}px` : ''}/>
 </div>
 
-<Chatroom />
+<div class={twMerge(isWindow && 'fixed w-full')}>
+  <Chatroom />
+</div>

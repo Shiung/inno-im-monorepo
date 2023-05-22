@@ -1,18 +1,18 @@
 <script lang='ts' context='module'>
+import { writable } from 'svelte/store'
 import { initEnv, initInfo } from './context'
 import type { IChatroomEnv, IChatroomInfo } from './context'
 
-let env = initEnv
-export const setChatEnv = (_env: IChatroomEnv) => env = _env
+let env = writable(initEnv)
+export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update(e => ({ ...e, ..._env }))
 
-let info = initInfo
-export const setChatInfo = (_info: IChatroomInfo) => info = _info
+let info = writable(initInfo)
+export const setChatInfo = (_info: Partial<IChatroomInfo>) => info.update(e => ({ ...e, ..._info }))
 
 </script>
 
 <script lang='ts'>
 import { onMount, onDestroy } from 'svelte'
-import { writable } from 'svelte/store'
 import { im } from 'api'
 import stomp, { activate } from 'api/stompMaster'
 
@@ -29,8 +29,10 @@ import InputArea from './InputArea/index.svelte'
 import type { IChatMessage } from 'api/im/types'
 import type { Subscription } from 'api/stompMaster'
 
-const { roomId } = setInfo(info)
-const { minimize, displayType, height } = setEnv(env)
+const { roomId } = setInfo($info)
+const { minimize, displayType, height } = setEnv($env)
+$: setEnv($env)
+$: setInfo($info)
 
 let lastReadId: string
 
@@ -85,7 +87,6 @@ onDestroy(() => {
     {#if initFetchLoading}
       <Loading />
     {:else}
-
       {#if $chatMessages.length === 0}
         <Empty class='flex-1' title={$t('chat.empty')} />
       {:else}
