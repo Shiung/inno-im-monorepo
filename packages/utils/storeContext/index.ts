@@ -2,12 +2,12 @@ import { getContext, setContext} from 'svelte'
 import { writable } from 'svelte/store'
 import type { Writable } from 'svelte/store'
 
-export type SetStoreContextReturn<T> = [
+export type CreateStoreContextReturn<T> = [
   (props?: T) => {[k in keyof T]: Writable<T[k]>},
   () => ReturnType<typeof getContext<{[k in keyof T]: Writable<T[k]>}>>
 ]
 
-export const createStoreContext = <T extends Object>(key: string | symbol, props: T): SetStoreContextReturn<T> => {
+export const createStoreContext = <T extends Object>(key: string | symbol, props: T): CreateStoreContextReturn<T> => {
 
   const context = Object.fromEntries(
     Object.entries(props).map(([k, v]) => [k, writable(v)])
