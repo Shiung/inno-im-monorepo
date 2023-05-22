@@ -3,7 +3,7 @@
   import { twMerge } from 'tailwind-merge';
   import { beImgUrlParse, ImageType } from 'utils/imgUrlParse'
   import { t } from '$src/stores';
-  import { marketTypeDispatcher } from '$src/utils/match'
+  import { marketTypeDispatcher, type TResolver } from '$src/utils/match'
 
   import { Badget } from 'ui';
   import TeamLogo from '$src/components/TeamLogo'
@@ -11,22 +11,15 @@
   import { getContext } from 'svelte'
   import { isPastContextKey } from '../../context'
   
+  type TeamType = 'home' | 'away'
   export let data: IArticleDetail
-  export let type: 'home' | 'away'
+  export let type: TeamType
 
   $: kColor = type === 'home' ? '#80B100' : '#CB0202'
 
-  $: info = {
-    name: type === 'home' ? data?.homeName : data?.awayName,
-    id: type === 'home' ? data?.homeId : data?.awayId,
-    ...dispatcher(getKAndOdds)
-  }
-  
-  $: active = dispatcher(getMatchResult)
+  $: dispatcher = marketTypeDispatcher(data?.marketType)
 
-  $: dispatcher = marketTypeDispatcher(data?.marketType, data, type)
-
-  const getKAndOdds = {
+  const getKAndOdds: TResolver<[IArticleDetail, TeamType], { k: string, odd: string }> = {
     ml(data, type) {
       if (type === 'home') return { k: data?.homeName, odd: data?.odds?.[0]?.h }
       return { k: data?.awayName, odd: data?.odds?.[0]?.a }
@@ -40,7 +33,7 @@
       return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.ud }
     },
   }
-  const getMatchResult = {
+  const getMatchResult: TResolver<[IArticleDetail, TeamType], boolean> = {
     ml(data, type) {
       if (type === 'home') return data?.matchResult === 'h'
       return data?.matchResult === 'a'
@@ -54,6 +47,14 @@
       return data?.matchResult === 'ud'
     }
   }
+
+  $: info = {
+    name: type === 'home' ? data?.homeName : data?.awayName,
+    id: type === 'home' ? data?.homeId : data?.awayId,
+    ...dispatcher(getKAndOdds, data, type)
+  }
+  
+  $: active = dispatcher(getMatchResult, data, type)
 
   const { getIsPast } = getContext(isPastContextKey) as any
   const isPast = getIsPast()
