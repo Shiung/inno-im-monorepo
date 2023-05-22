@@ -71,12 +71,6 @@ const routes = {
       showBottomNav: false
     }
   }),
-  '/platform/streamingWithAnchor': wrap({
-    asyncComponent: () => import('../platform/streamingWithAnchor'),
-    userData: {
-      showBottomNav: false
-    }
-  }),
   '*': wrap({
     asyncComponent: () => import('$pages/NotFound.svelte')
   })
