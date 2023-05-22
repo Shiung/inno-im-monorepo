@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "bignumber.js": "^9.1.1",
-    "env-config": "workspace:*"
+    "env-config": "workspace:*",
+    "svelte": "^3.59.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

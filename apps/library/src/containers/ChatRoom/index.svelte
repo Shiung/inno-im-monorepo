@@ -1,3 +1,15 @@
+<script lang='ts' context='module'>
+import { initEnv, initInfo } from './context'
+import type { IChatroomEnv, IChatroomInfo } from './context'
+
+let env = initEnv
+export const setChatEnv = (_env: IChatroomEnv) => env = _env
+
+let info = initInfo
+export const setChatInfo = (_info: IChatroomInfo) => info = _info
+
+</script>
+
 <script lang='ts'>
 import { onMount, onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
@@ -7,6 +19,7 @@ import stomp, { activate } from 'api/stompMaster'
 import { t } from '$stores'
 import Empty from '$src/containers/Empty'
 
+import { setInfo, setEnv } from './context'
 import Minimize from './Minimize/index.svelte'
 import Header from './Header/index.svelte'
 import Loading from './Loading.svelte'
@@ -16,17 +29,8 @@ import InputArea from './InputArea/index.svelte'
 import type { IChatMessage } from 'api/im/types'
 import type { Subscription } from 'api/stompMaster'
 
-export let fixed: boolean = true
-export let height: number
-export let minimize: boolean = true
-
-export let roomId: number = 124
-export let userId: string = 'loki'
-export let userVip: number = 6
-export let isLogin: boolean = true
-export let isCharged: boolean = true
-export let vipLimit: number = 6
-export let frequency: number = 5000
+const { roomId } = setInfo(info)
+const { minimize, displayType, height } = setEnv(env)
 
 let lastReadId: string
 
@@ -45,11 +49,11 @@ const subscribeRoom = (_roomId: number) => {
     })
 }
 
-$: if (roomId) subscribeRoom(roomId)
+$: if ($roomId) subscribeRoom($roomId)
 
 let initFetchLoading: boolean = true
 const initFetch = async () => {
-  const res = await im.chatroomPastMessage({ query: { roomId, quantity: 30 }})
+  const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: 30 }})
   chatMessages.update(messages => [...res.data.list, ...messages])
   initFetchLoading = false
 }
@@ -66,17 +70,17 @@ onDestroy(() => {
 
 </script>
 
-{#if minimize}
+{#if $minimize}
 
-  <Minimize {lastReadId} {chatMessages} on:click={() => minimize = false} />
+  <Minimize {lastReadId} {chatMessages} on:click={() => $minimize = false} />
 
 {:else}
 
   <div class='flex-1 flex flex-col bg-white overflow-y-scroll' 
-    style:min-height={fixed ? 'auto' : `calc(100vh - ${height}px)`} 
-    style:max-height={fixed ? 'auto' : `calc(100vh - ${height}px)`}
+    style:min-height={$displayType === 'window' ? 'auto' : `calc(100vh - ${$height}px)`} 
+    style:max-height={$displayType === 'window' ? 'auto' : `calc(100vh - ${$height}px)`}
   >
-    <Header {fixed} on:close={() => minimize = true}/>
+    <Header on:close={() => $minimize = true} />
 
     {#if initFetchLoading}
       <Loading />
@@ -85,11 +89,11 @@ onDestroy(() => {
       {#if $chatMessages.length === 0}
         <Empty class='flex-1' title={$t('chat.empty')} />
       {:else}
-        <Messages bind:lastReadId={lastReadId} {chatMessages} {userId} {roomId} {fixed} {height} />
+        <Messages bind:lastReadId={lastReadId} {chatMessages} />
       {/if}
 
     {/if}
 
-    <InputArea {userId} {userVip} {subId} {destination} {isLogin} {isCharged} {vipLimit} {frequency} {fixed} />
+    <InputArea {destination} {subId} />
   </div>
 {/if}

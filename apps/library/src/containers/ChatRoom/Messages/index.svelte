@@ -12,13 +12,17 @@ import Message from './Message'
 import DropdownLoader from './DropdownLoader.svelte'
 import Arrow from '../images/arrow_down_small.svg'
 
+import { getInfo, getEnv } from '../context'
+
 import type { Writable } from 'svelte/store'
 import type { IChatMessage } from 'api/im/types'
 
-export let fixed: boolean
-export let userId: string
-export let roomId: number
-export let height: number
+const { userId, roomId } = getInfo()
+
+const { displayType, height } = getEnv()
+
+$: isWindow = $displayType === 'window'
+
 export let chatMessages: Writable<IChatMessage[]>
 export let lastReadId: string
 
@@ -48,8 +52,8 @@ const observer = new MutationObserver(mutations => {
   const mutation = mutations[0]
   if (!mutation) return
 
-  const target = fixed ? window : mutation.target as HTMLDivElement
-  const _scrollH = fixed ? document.documentElement.scrollHeight : (mutation.target as HTMLDivElement).scrollHeight
+  const target = isWindow ? window : mutation.target as HTMLDivElement
+  const _scrollH = isWindow ? document.documentElement.scrollHeight : (mutation.target as HTMLDivElement).scrollHeight
 
   if (scrollToNewest) {
     lastReadId = getNewestMessage().id
@@ -68,7 +72,7 @@ const scrollToUnread = () => {
     flash(unreadDom)
 
     const offset = 200
-    if (fixed) window.scrollTo({ top: window.scrollY - offset - height })
+    if (isWindow) window.scrollTo({ top: window.scrollY - offset - $height })
     else dom.scrollTo({ top: dom.scrollTop - offset })
   }
 }
@@ -81,9 +85,9 @@ const checkWatched = () => {
 }
 
 const gotoNewest = () => {
-  const target = fixed ? window : dom
-  const _scrollY = fixed ? window.scrollY : dom.scrollTop
-  const _scrollH = fixed ? document.documentElement.scrollHeight : dom.scrollHeight
+  const target = isWindow ? window : dom
+  const _scrollY = isWindow ? window.scrollY : dom.scrollTop
+  const _scrollH = isWindow ? document.documentElement.scrollHeight : dom.scrollHeight
   const top = tweened(_scrollY, { easing: expoOut })
   top.subscribe((top) => {
     target.scrollTo({ top })
@@ -98,7 +102,7 @@ const fetchMore = async () => {
   const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
   fetchMoreLoading = true
-  const res = await im.chatroomPastMessage({ query: { roomId, quantity: pastQuantity }})
+  const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: pastQuantity }})
   chatMessages.update(messages => [...res.data.list, ...messages])
   fetchMoreLoading = false
 
@@ -107,30 +111,30 @@ const fetchMore = async () => {
   const headerHeight = 44
   const loadmoreHeight = 34
   const offset = 10
-  if (fixed) window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - height })
+  if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
   else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
 }
 
 </script>
 
-<svelte:window on:scroll={fixed && onWindowScroll} />
+<svelte:window on:scroll={isWindow && onWindowScroll} />
 
 <div class='relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]' 
-  on:scroll={!fixed && onDomScroll} bind:this={dom}
+  on:scroll={!isWindow && onDomScroll} bind:this={dom}
 >
   <DropdownLoader quantity={pastQuantity} loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
 
   {#each $chatMessages as message}
-    <Message {message} bind:lastReadId={lastReadId} self={userId === message.source} />
+    <Message {message} bind:lastReadId={lastReadId} self={$userId === message.source} />
   {/each}
 
   {#if !scrollToNewest && !allWatched}
     <div in:fly={{y: 50, duration: 300}} 
       class={twMerge('flex justify-center mx-auto !mt-0 z-10',
-        fixed ? 'fixed bottom-[90px] translate-x-[-50%]' : ' bottom-[10px] sticky'
+        isWindow ? 'fixed bottom-[90px] translate-x-[-50%]' : ' bottom-[10px] sticky'
       )}
-      style:left={fixed && 'calc(50% - 16px)'}
-    > 
+      style:left={isWindow && 'calc(50% - 16px)'}
+    >
       <Ripple
         class='flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]'
         ripple='white'

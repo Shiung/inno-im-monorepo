@@ -8,9 +8,12 @@ import { twMerge } from 'tailwind-merge'
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'
 
-export let fixed: boolean
+import { getEnv } from '../context'
+
+// export let fixed: boolean
 
 const dispatch = createEventDispatcher()
+const { displayType }  = getEnv()
 
 let showRemind: boolean = false
 
@@ -22,7 +25,7 @@ $: blockHeight = dom?.getBoundingClientRect().height
 <div>
   <div class={twMerge(
       'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30',
-      fixed ? 'fixed' : 'sticky'
+      $displayType === 'window' ? 'fixed' : 'sticky'
     )}
     bind:this={dom}
   >
@@ -47,5 +50,5 @@ $: blockHeight = dom?.getBoundingClientRect().height
     </Ripple>
   </div>
 
-  <div style:height={fixed ? `${blockHeight}px` : 0} />
+  <div style:height={$displayType === 'window' ? `${blockHeight}px` : 0} />
 </div>

@@ -9,24 +9,22 @@ import Send from '../images/send.svg'
 import ShowS from '../images/show_s.svg'
 import Plus from '../images/plus.svg'
 
+import { getInfo } from '../context'
+
 export let fixed: boolean = true
-export let userId: string
-export let userVip: number
-export let subId: string
 export let destination: string
-export let isLogin: boolean
-export let isCharged: boolean
-export let vipLimit: number
-export let frequency: number
+export let subId: string
+
+const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
 
 let placeHolder: string = ''
 let disabled: boolean = true
 let lastSend: number = 0
 
 $: {
-  if (!isLogin) placeHolder = $t('chat.needLogin')
-  else if (!isCharged) placeHolder = $t('chat.needCharge')
-  else if (userVip < vipLimit) placeHolder = $t('chat.needVip', { vip: vipLimit })
+  if (!$isLogin) placeHolder = $t('chat.needLogin')
+  else if (!$isCharged) placeHolder = $t('chat.needCharge')
+  else if ($userVip < $vipLimit) placeHolder = $t('chat.needVip', { vip: $vipLimit })
   else {
     placeHolder = $t('chat.normalPlaceholder')
     disabled = false
@@ -47,10 +45,10 @@ $: if (showTooOften) {
 const publishMessage = () => {
   if (!message) return
   const now = Date.now()
-  if (now - lastSend <= frequency) return showTooOften = true
+  if (now - lastSend <= $frequency) return showTooOften = true
 
   lastSend = now
-  stomp.publish({ destination, headers: { id: subId }, body: JSON.stringify({ message, userId }) })
+  stomp.publish({ destination, headers: { id: subId }, body: JSON.stringify({ message, userId: $userId }) })
   message = ''
 }
 
