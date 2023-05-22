@@ -7,7 +7,7 @@ export type SetStoreContextReturn<T> = [
   () => ReturnType<typeof getContext<{[k in keyof T]: Writable<T[k]>}>>
 ]
 
-export const setStoreContext = <T extends Object>(key: string | symbol, props: T): SetStoreContextReturn<T> => {
+export const createStoreContext = <T extends Object>(key: string | symbol, props: T): SetStoreContextReturn<T> => {
 
   const context = Object.fromEntries(
     Object.entries(props).map(([k, v]) => [k, writable(v)])

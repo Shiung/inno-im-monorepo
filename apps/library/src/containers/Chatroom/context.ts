@@ -1,4 +1,4 @@
-import { setStoreContext } from 'utils/storeContext'
+import { createStoreContext } from 'utils/storeContext'
 
 export interface IChatroomInfo {
   roomId: number
@@ -26,7 +26,7 @@ export const initInfo: IChatroomInfo = {
   frequency: 5000
 }
 
-export const [setInfo, getInfo] = setStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
+export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
 
 export const initEnv: IChatroomEnv = {
   displayType: 'window',
@@ -34,4 +34,4 @@ export const initEnv: IChatroomEnv = {
   minimize: true
 }
 
-export const [setEnv, getEnv] = setStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
+export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
