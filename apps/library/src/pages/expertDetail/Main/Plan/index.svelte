@@ -4,7 +4,6 @@ import { params } from 'svelte-spa-router'
 
 import Ongoing from './Ongoing/index.svelte'
 import History from './History/index.svelte'
-console.log('plan component')
 
 </script>
 
