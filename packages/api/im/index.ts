@@ -23,7 +23,6 @@ class IM extends Base {
   expertStatistics = this.apiGenerator<Types.IExpertStatistics>({ url: '/v1/expert/statistics' })
   expertMatchArticle = this.apiGenerator<Types.IExpertMatchArticle>({ url: '/v1/expert/match/article' })
   expertArticleDetail = this.apiGenerator<Types.IExpertArticleDetail>({ url: '/v1/expert/article/detail' })
-  // expertMatchArticle = this.apiGenerator<Types.IExpertMacthArticle>({ url: '/v1/expert/match/article' })
 
   // for testing
   chatroomPastMessage = this.apiGenerator<Types.IChatroomPastMessage>({ url: '/v1/chat-room/past-message' })

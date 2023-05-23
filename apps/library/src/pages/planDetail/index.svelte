@@ -32,8 +32,8 @@
   const fetchArticleDetail = async (articleId: string) => {
     detailPromise = im.expertArticleDetail({ query: { articleId }})
       .then(response => {
-        const { mid: matchId, past } = response?.data
-        if (matchId) othersPromise = im.expertMatchArticle({ query: { matchId }})
+        const { mid, past, vd } = response?.data
+        if (mid) othersPromise = im.expertMatchArticle({ query: { mid, vd }})
         if (past) isPast = true
         return response
       })

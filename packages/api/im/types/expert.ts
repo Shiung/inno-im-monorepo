@@ -146,7 +146,8 @@ export interface IExpertStatistics {
 
 export interface IExpertMatchArticle {
   query: {
-    matchId: number
+    mid: number
+    vd: string
     pageIdx?: number
     pageSize?: number
   }
