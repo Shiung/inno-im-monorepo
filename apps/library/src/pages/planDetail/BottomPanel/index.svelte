@@ -7,11 +7,14 @@
 
   export let coin: number
   export let onButtonClick
+
+  let dom: HTMLDivElement
+  $: height = dom?.getBoundingClientRect() && `${dom?.getBoundingClientRect()?.height}px` || `0px`
 </script>
 
 <div data-cid='UnlockBottomPanel'>
-  <div class='fixed z-10 bottom-0 left-0 right-0 h-[114px]'>
-    <div class='p-4 h-full rounded-t-[20px] shadow-[0_0_10px_0_rgba(0,0,0,0.1)] bg-white'>
+  <div bind:this={dom} class='fixed z-10 bottom-0 left-0 right-0'>
+    <div class='p-4 rounded-t-[20px] shadow-[0_0_10px_0_rgba(0,0,0,0.1)] bg-white'>
       <Button class='w-[283px] bg-[rgba(var(--im-monorepo-primary))] rounded-[12px] h-[56px]' on:click={onButtonClick}>
         <div class='space-y-1'>
           <div class='flex items-center space-x-1'>
@@ -27,7 +30,7 @@
       </Button>
     </div>
   </div>
-  <div class='h-[114px]'></div>
+  <div style:height={height}></div>
 </div>
 
 <style lang='scss'>
