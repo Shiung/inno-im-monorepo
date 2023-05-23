@@ -19,7 +19,7 @@ export const createStoreContext = <T extends Object>(key: string | symbol, props
       if (context[_key as keyof T]) context[_key as keyof T].set(_val)
     }
 
-    setContext(key, context)
+    if (!getContext(key)) setContext(key, context)
     return context
   }
 
