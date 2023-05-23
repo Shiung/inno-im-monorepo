@@ -8,9 +8,8 @@
   import { Badget } from 'ui';
   import TeamLogo from '$src/components/TeamLogo'
 
-  import { getContext } from 'svelte'
-  import { isPastContextKey } from '../../context'
-  
+  import { getIsPast } from '../../context'  
+
   type TeamType = 'home' | 'away'
   export let data: IArticleDetail
   export let type: TeamType
@@ -56,8 +55,7 @@
   
   $: active = dispatcher(getMatchResult, data, type)
 
-  const { getIsPast } = getContext(isPastContextKey) as any
-  const isPast = getIsPast()
+  const { isPast } = getIsPast()
 </script>
 
 <div

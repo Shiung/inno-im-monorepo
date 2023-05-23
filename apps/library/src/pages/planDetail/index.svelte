@@ -21,13 +21,13 @@
 
   import BottomPanel from './BottomPanel/index.svelte'
   
-  import { isPastContextKey } from './context'
+  import { setIsPast } from './context'
 
   let coin: number = 1500
   let detailPromise: ReturnType<typeof im.expertArticleDetail>
   let othersPromise: ReturnType<typeof im.expertMatchArticle>
   let bonus: number = 100000
-  let isPast: boolean = false
+  let isPast = false
 
   const fetchArticleDetail = async (articleId: string) => {
     detailPromise = im.expertArticleDetail({ query: { articleId }})
@@ -39,13 +39,11 @@
       })
   }
 
+  $: setIsPast({ isPast })
+
   const onButtonClick = () => {
     console.log('onButtonClick')
   }
-
-  setContext(isPastContextKey, {
-    getIsPast: () => isPast
-  })
 
   $: $params?.articleId && fetchArticleDetail($params?.articleId)
 </script>

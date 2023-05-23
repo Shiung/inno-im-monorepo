@@ -7,12 +7,9 @@
   import TimerLabel from './components/TimerLabel/index.svelte'
 
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
-  
-  import { getContext } from 'svelte'
-  import { isPastContextKey } from '../context'
-  
-  const { getIsPast } = getContext(isPastContextKey) as any
-  const isPast = getIsPast()
+  import { getIsPast } from '../context'
+
+  const { isPast } = getIsPast()
 
   export let data: IArticleDetail
 </script>
