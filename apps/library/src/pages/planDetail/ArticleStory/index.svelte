@@ -20,13 +20,13 @@
     <div class='flex items-center justify-between'>
       <div class='flex items-center space-x-1'>
         <MarketBadget marketType={data?.marketType} />
-        {#if !isPast}
+        {#if !$isPast}
           <TimerLabel />
         {/if}
       </div>
 
       <span class='text-[10px] leading-[15px] text-[#999]'>
-        {#if !isPast}
+        {#if !$isPast}
           {timestampToFormat({ ts: data?.releaseTime, format: 'DD-MM mm:ss' })} {$t('common.publish')}
         {:else}
           {timestampToFormat({ ts: data?.releaseTime, format: 'DD-MM' })}

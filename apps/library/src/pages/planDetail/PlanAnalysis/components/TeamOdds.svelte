@@ -76,7 +76,7 @@
   </div>
 
   <div class='text-[15px] leading-[23px] text-center space-x-2 mt-1'>
-    {#if !isPast}
+    {#if !$isPast}
       <span style:color={kColor}> {info.k} </span>
       <span class='font-semibold'> {info.odd} </span>
     {/if}
