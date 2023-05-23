@@ -8,7 +8,7 @@ console.log('plan component')
 
 </script>
 
-<div data-cid='expertDetail_Main_Plan space-y-[25px]' class='mx-[16px]'>
+<div data-cid='expertDetail_Main_Plan' class='space-y-[25px] mx-[16px]'>
   <Ongoing expertId={$params.expertId} />
   <History expertId={$params.expertId} />
 </div>
