@@ -1,52 +1,52 @@
 <script lang='ts'>
-import FlvPlayer, { onError, onReady } from 'ui/components/FlvPlayer'
-import { params, replace } from 'svelte-spa-router'
-import type { IWebAnchor } from 'api/im/types'
-import Circle from 'ui/core/button/loading.svelte'
+  import FlvPlayer, { onError, onReady } from 'ui/components/FlvPlayer'
+  import { params, replace } from 'svelte-spa-router'
+  import type { IWebAnchor } from 'api/im/types'
+  import Circle from 'ui/core/button/loading.svelte'
 
-import HeaderNavigation from '$containers/HeaderNavigation'
-import HouseImage from '$src/components/HouseImage/index.svelte'
+  import HeaderNavigation from '$containers/HeaderNavigation'
+  import HouseImage from '$src/components/HouseImage/index.svelte'
 
-import AnchorBlock from './AnchorBlock'
-import ExpertBlock from './ExpertBlock'
+  import AnchorBlock from './AnchorBlock'
+  import ExpertBlock from './ExpertBlock'
 
-import { convertSid, type SidType } from 'utils'
+  import { convertSid, type SidType } from 'utils'
 
-$: sid = convertSid($params?.sid)
-let streaming
-let loading = false
-let error = false
+  $: sid = convertSid($params?.sid)
+  let streaming
+  let loading = false
+  let error = false
 
-const headNavIcons: { sid: SidType, onClick: () => void }[] = [
-  {
-    sid: 1,
-    onClick: () => replace('/square/1')
-  },
-  {
-    sid: 2,
-    onClick: () => replace('/square/2')
-  },
-  {
-    sid: 3,
-    onClick: () => replace('/square/3')
+  const headNavIcons: { sid: SidType, onClick: () => void }[] = [
+    {
+      sid: 1,
+      onClick: () => replace('/square/1')
+    },
+    {
+      sid: 2,
+      onClick: () => replace('/square/2')
+    },
+    {
+      sid: 3,
+      onClick: () => replace('/square/3')
+    }
+  ]
+
+  const onChange = (e: CustomEvent<IWebAnchor>) => {
+    streaming = e.detail
   }
-]
 
-const onChange = (e: CustomEvent<IWebAnchor>) => {
-  streaming = e.detail
-}
+  onError((e) => {
+    loading = false
+    error = true
+  })
 
-onError((e) => {
-  loading = false
-  error = true
-})
+  onReady(() => {
+    loading = false
+  })
 
-onReady(() => {
-  loading = false
-})
-
-$: if(streaming) { error = false }
-$: if(streaming && streaming?.liveStatus === 2) loading = true
+  $: if(streaming) { error = false }
+  $: if(streaming && streaming?.liveStatus === 2) loading = true
 </script>
 
 <div>
