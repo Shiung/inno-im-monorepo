@@ -4,7 +4,7 @@ import { convertTimeDiffToPast } from './index'
 
 test('50 secs past.', () => {
   const now = Date.now()
-  const past = now - 50
+  const past = now - 50 * 1000
   const time = convertTimeDiffToPast({ now, past })
   
   expect(time).toStrictEqual({ text: '50', unit: 'sec' })
@@ -12,7 +12,7 @@ test('50 secs past.', () => {
 
 test('30 mins past.', () => {
   const now = Date.now()
-  const past = now - 60 * 30
+  const past = now - 60 * 30 * 1000
   const time = convertTimeDiffToPast({ now, past })
   
   expect(time).toStrictEqual({ text: '30', unit: 'min' })
@@ -20,7 +20,7 @@ test('30 mins past.', () => {
 
 test('2 hours past.', () => {
   const now = Date.now()
-  const past = now - 60 * 60 * 2
+  const past = now - 60 * 60 * 2 * 1000
   const time = convertTimeDiffToPast({ now, past })
   
   expect(time).toStrictEqual({ text: '2', unit: 'hour' })
