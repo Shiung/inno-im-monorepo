@@ -2,11 +2,13 @@
   import { twMerge } from 'tailwind-merge';
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
   import { push, params } from 'svelte-spa-router';
+  import { locale } from '$stores'
 
   import MarketInfo from '$src/components/MarketInfo'
   
   import type { IArticle } from 'api/im/types/expert'
-  import winStamp from './images/ic_stamp_win.webp'
+  import cnWinStamp from './images/zh_CN/ic_stamp_win.webp'
+  import enWinStamp from './images/en_US/ic_stamp_win.webp'
   
   export let article: IArticle
 
@@ -14,7 +16,7 @@
   
   const getStamp = (hitStatus: IArticle['hitStatus']) => {
     switch (hitStatus) {
-      case 1: return winStamp
+      case 1: return ['zh_CN', 'zh_HK'].includes($locale) ? cnWinStamp : enWinStamp
       case 2:
       default:
         return ''
