@@ -9,7 +9,7 @@
   import BackBar from '$containers/BackBar'
   import BonusPoint from '$containers/HeaderNavigation/BonusPoint/index.svelte'
 
-  import ArticleStoryLoading from './ArticleStory/components/Loading/index.svelte'
+  import ArticleStoryLoading from './ArticleStory/components/Loading.svelte'
   import ArticleStory from './ArticleStory/index.svelte'
 
   import MatchPanelLoading from './MatchPanel/Loading.svelte'
@@ -54,7 +54,7 @@
   $: $params?.articleId && fetchArticleDetail($params?.articleId)
 </script>
 
-<div data-cid='expertDetail'>
+<div data-cid='planDetail'>
   <BackBar>
     <BonusPoint slot='right' {bonus} />
   </BackBar>

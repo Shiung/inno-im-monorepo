@@ -10,7 +10,11 @@
 
 </script>
 
-<Button class='w-[283px] bg-[rgba(var(--im-monorepo-primary))] rounded-[12px] h-[56px]' on:click={onButtonClick}>
+<Button
+  data-cid='UnlockButton'
+  class='w-[283px] bg-[rgba(var(--im-monorepo-primary))] rounded-[12px] h-[56px]'
+  on:click={onButtonClick}
+>
   <div class='space-y-1'>
     <div class='flex items-center space-x-1'>
       <Lock class='white-lock' width={18} height={18} />

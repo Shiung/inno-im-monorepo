@@ -4,7 +4,7 @@
 
   import MarketBadget from '$src/components/MarketBadget'
 
-  import TimerLabel from './components/TimerLabel/index.svelte'
+  import TimerLabel from './components/TimerLabel.svelte'
 
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
   import { getIsPast } from '../context'
@@ -14,7 +14,7 @@
   export let data: IArticleDetail
 </script>
 
-<div class='bg-white px-3 pt-3 pb-2'>
+<div data-cid='ArticleStory' class='bg-white px-3 pt-3 pb-2'>
   <div class='min-h-[84px] relative z-[1] rounded-[10px] p-2 bg-white shadow-[0_2px_6px_0_rgba(0,0,0,0.1)] space-y-2'>
     <!-- header -->
     <div class='flex items-center justify-between'>

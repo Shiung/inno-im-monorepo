@@ -16,7 +16,7 @@
 </script>
 
 {#if mid && vd}
-  <div class='rounded-t-[20px] bg-white'>
+  <div data-cid='OtherPredictions' class='rounded-t-[20px] bg-white'>
     <div class='px-4'>
       <Title>{$t('expert.planDetail.othersPrediction')}</Title>
     </div>

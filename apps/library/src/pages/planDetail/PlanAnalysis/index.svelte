@@ -10,7 +10,7 @@
   export let isLocked: boolean
 </script>
 
-<div class="bg-transparent px-3 pb-3">
+<div data-cid='PlanAnalysis' class="bg-transparent px-3 pb-3">
   <div class="flex flex-col items-center rounded-[10px] bg-[#f7f8f9] px-3 pt-2">
     <div class="w-full flex space-x-2">
       <TeamOdds data={data} type='home' isLocked={isLocked} class='flex-1' />
