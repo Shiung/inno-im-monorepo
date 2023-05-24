@@ -5,7 +5,7 @@
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
-  import ExpertList, { Loading as ExpertListLoading } from '$containers/ExpertList'
+
   import BackBar from '$containers/BackBar'
   import BonusPoint from '$containers/HeaderNavigation/BonusPoint/index.svelte'
 
@@ -18,6 +18,8 @@
   import PlanAnalysisLoading from './PlanAnalysis/components/Loading.svelte'
   import PlanAnalysis from './PlanAnalysis/index.svelte'
 
+  import OtherPredictions from './OtherPredictions/index.svelte'
+
   import BottomPanel from './BottomPanel/index.svelte'
   import UnlockButton from './BottomPanel/UnlockButton.svelte'
   import BetButton from './BottomPanel/BetButton.svelte'
@@ -26,7 +28,6 @@
 
   let coin: number = 1500
   let detailPromise: ReturnType<typeof im.expertArticleDetail>
-  let othersPromise: ReturnType<typeof im.expertMatchArticle>
   let bonus: number = 100000
   let isPast = false
   let isLocked = false
@@ -34,10 +35,9 @@
   const fetchArticleDetail = async (articleId: string) => {
     detailPromise = im.expertArticleDetail({ query: { articleId }})
       .then(response => {
-        const { mid, past, vd, articleStatus } = response?.data
+        const { past, articleStatus } = response?.data
         if (past) isPast = true
         if (articleStatus === 2) isLocked = true
-        if (mid) othersPromise = im.expertMatchArticle({ query: { mid, vd }})
         return response
       })
   }
@@ -89,19 +89,11 @@
     </div>
 
     
-    {#await othersPromise}
-      <div class='rounded-t-[20px] bg-white'>
-        <div class='px-4'><Title>{$t('expert.planDetail.othersPrediction')}</Title></div>
-          <ExpertListLoading />
-      </div>
-    {:then response}
-      {#if !isPast}
-        <div class='rounded-t-[20px] bg-white'>
-          <div class='px-4'><Title>{$t('expert.planDetail.othersPrediction')}</Title></div>
-            <ExpertList list={response?.data?.list || []} />
-        </div>
-      {/if}
-    {/await}
+    {#if !isPast && isLocked}
+      {#await detailPromise then response}
+        <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
+      {/await}
+    {/if}
   </div>
 
   {#if !isPast}
