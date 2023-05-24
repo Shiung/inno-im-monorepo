@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { setContext } from 'svelte'
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
   import { t } from '$stores'
@@ -20,7 +19,9 @@
   import PlanAnalysis from './PlanAnalysis/index.svelte'
 
   import BottomPanel from './BottomPanel/index.svelte'
-  
+  import UnlockButton from './BottomPanel/UnlockButton.svelte'
+  import BetButton from './BottomPanel/BetButton.svelte'
+
   import { setIsPast } from './context'
 
   let coin: number = 1500
@@ -28,21 +29,27 @@
   let othersPromise: ReturnType<typeof im.expertMatchArticle>
   let bonus: number = 100000
   let isPast = false
+  let isLocked = false
 
   const fetchArticleDetail = async (articleId: string) => {
     detailPromise = im.expertArticleDetail({ query: { articleId }})
       .then(response => {
-        const { mid, past, vd } = response?.data
-        if (mid) othersPromise = im.expertMatchArticle({ query: { mid, vd }})
+        const { mid, past, vd, articleStatus } = response?.data
         if (past) isPast = true
+        if (articleStatus === 2) isLocked = true
+        if (mid) othersPromise = im.expertMatchArticle({ query: { mid, vd }})
         return response
       })
   }
 
   $: setIsPast({ isPast })
 
-  const onButtonClick = () => {
-    console.log('onButtonClick')
+  const onUnlockClick = () => {
+    console.log('onUnlockClick')
+  }
+
+  const onFollowBetClick = () => {
+    console.log('onFollowBetClick')
   }
 
   $: $params?.articleId && fetchArticleDetail($params?.articleId)
@@ -77,7 +84,7 @@
       {#await detailPromise}
         <PlanAnalysisLoading />
       {:then detail}
-        <PlanAnalysis data={detail?.data} />
+        <PlanAnalysis data={detail?.data} isLocked={!isPast && isLocked} />
       {/await}
     </div>
 
@@ -98,6 +105,12 @@
   </div>
 
   {#if !isPast}
-    <BottomPanel {coin} {onButtonClick} />
+    <BottomPanel>
+      {#if isLocked}
+        <UnlockButton {coin} onButtonClick={onUnlockClick} />
+      {:else}
+        <BetButton onButtonClick={onFollowBetClick} />
+      {/if}
+    </BottomPanel>
   {/if}
 </div>

@@ -7,7 +7,7 @@
   import Lock from './images/lock.svg'
 
   export let data: IArticleDetail
-  let unlocked: boolean = false
+  export let isLocked: boolean
 </script>
 
 <div class="bg-transparent px-3 pb-3">
@@ -18,7 +18,7 @@
       <TeamOdds data={data} type='away' class='flex-1' />
     </div>
 
-    {#if unlocked}
+    {#if isLocked}
       <div class="text-center mt-5">
         <p class="text-sm font-semibold text-[#333]">
           <Lock class='inline-block align-middle' width={20} height={20} />
