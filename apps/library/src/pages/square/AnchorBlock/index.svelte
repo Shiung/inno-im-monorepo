@@ -26,6 +26,10 @@ $: {
   })
 }
 
+const onAnchorClick = () => {
+  console.log('⛔️⛔️⛔️⛔️⛔️ clicked')
+}
+
 </script>
 
 <div data-cid='AnchorList' class={twMerge('bg-white rounded-[20px] pt-[16px]', $$props.class)}>
@@ -50,7 +54,7 @@ $: {
     {:else}
       <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
         {#each anchors?.data?.list || [] as anchor, idx}
-          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
+          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} on:click={() => onAnchorClick()} />
         {/each}
       </div>
     {/if}
