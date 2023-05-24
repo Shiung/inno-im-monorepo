@@ -21,8 +21,8 @@
   import OtherPredictions from './OtherPredictions/index.svelte'
 
   import BottomPanel from './BottomPanel/index.svelte'
-  import UnlockButton from './BottomPanel/UnlockButton.svelte'
-  import BetButton from './BottomPanel/BetButton.svelte'
+  import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
+  import BetButton from './BottomPanel/components/BetButton.svelte'
 
   import { setIsPast } from './context'
 
