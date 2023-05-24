@@ -33,8 +33,8 @@ import HouseImage from '$src/components/HouseImage/index.svelte'
 $: streaming = anchor.streaming
 </script>
 
-{#if $streaming?.liveStatus === 1}
-  <HouseImage src={$streaming.houseImage} />
-{:else}
+{#if $streaming?.liveStatus === 2}
   <FlvPlayer url={$streaming?.playStreamAddress} />
+{:else}
+  <HouseImage src={$streaming?.houseImage} />
 {/if}

@@ -3,6 +3,8 @@ import { im } from 'api'
 import { Ripple } from 'ui'
 import { twMerge } from 'tailwind-merge'
 import { push, params } from 'svelte-spa-router'
+import { createEventDispatcher } from 'svelte'
+import type { IWebAnchor } from 'api/im/types'
 
 import { t } from '$stores'
 import Empty from '$containers/Empty'
@@ -26,8 +28,9 @@ $: {
   })
 }
 
-const onAnchorClick = () => {
-  console.log('⛔️⛔️⛔️⛔️⛔️ clicked')
+const dispatch = createEventDispatcher()
+const onAnchorClick = (anchor: IWebAnchor) => {
+  dispatch('change', anchor)
 }
 
 </script>
@@ -54,7 +57,7 @@ const onAnchorClick = () => {
     {:else}
       <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
         {#each anchors?.data?.list || [] as anchor, idx}
-          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} on:click={() => onAnchorClick()} />
+          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} on:click={() => onAnchorClick(anchor)} />
         {/each}
       </div>
     {/if}
