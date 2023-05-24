@@ -18,4 +18,4 @@ $: i18n = dispatcher(getI18n)
 </script>
 
 
-<Badget variant='gradientPrimary' class={$$props.class}> {$t(i18n)} </Badget>
+<Badget class={$$props.class}> {$t(i18n)} </Badget>

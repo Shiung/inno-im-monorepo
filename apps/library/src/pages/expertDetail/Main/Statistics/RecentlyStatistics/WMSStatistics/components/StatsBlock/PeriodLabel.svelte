@@ -13,7 +13,7 @@
 </script>
 
 {#if data}
-  <Badget variant='gradientPrimary' class='px-[9px] py-[1px]'>
+  <Badget class='px-[9px] py-[1px]'>
     <span class="text-white font-semibold leading-[15px]">{$t(`expert.statistics.${mapping[data]}`)}</span>
   </Badget>
 {/if}
