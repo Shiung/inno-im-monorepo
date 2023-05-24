@@ -34,7 +34,7 @@ $: isSteaming = $streaming?.houseId === houseId
         <span class='text-imprimary text-[16px]'> {$store.houseName} </span>
       </div>
 
-      <div class='text-[11px] truncate'> {$store.description} </div>
+      <div class='text-[11px] truncate text-left'> {$store.houseIntroduction} </div>
       <div class='flex'>
         <span class='items-center px-[5px] rounded-[5px] text-[#999999] text-[6px] bg-[rgba(238,238,238,0.5)]'> 
           {$store.anchorTypeName}

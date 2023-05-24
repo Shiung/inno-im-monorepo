@@ -10,7 +10,7 @@ export interface IPlatformAnchor {
   anchorTypeName: string
   fansCount: number
   anchorTitle: string
-  description: string
+  houseIntroduction: string
 }
 
 export interface IPlatformAnchors {
