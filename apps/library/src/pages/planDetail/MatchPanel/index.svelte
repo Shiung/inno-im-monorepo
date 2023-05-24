@@ -8,7 +8,7 @@
 </script>
 
 <div data-cid='MatchPanel' class='bg-white px-3 pb-5'>
-  <div class='relative z-[1] rounded-[10px] shadow-[0_2px_6px_0_rgba(0,0,0,0.1)] py-2'>
+  <div class='relative z-[1] rounded-[10px] im-shadow py-2'>
       <div class='text-[12px] leading-[18px] text-[#333] mb-[10px] text-center'> {data?.tnName} </div>
 
       <div class='flex justify-around'>

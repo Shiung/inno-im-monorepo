@@ -67,7 +67,7 @@
 <div
   data-cid='TeamOdds'
   class={twMerge(
-    'flex flex-col items-center bg-white w-full shadow-[0_2px_6px_0_rgba(0,0,0,0.1)] rounded-[10px] py-2',
+    'flex flex-col items-center bg-white w-full im-shadow rounded-[10px] py-2',
     active ? 'relative border border-[rgba(var(--im-monorepo-primary))]' : '',
     $$props.class
   )}

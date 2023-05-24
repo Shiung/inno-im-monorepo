@@ -15,7 +15,7 @@
 </script>
 
 <div data-cid='ArticleStory' class='bg-white px-3 pt-3 pb-2'>
-  <div class='min-h-[84px] relative z-[1] rounded-[10px] p-2 bg-white shadow-[0_2px_6px_0_rgba(0,0,0,0.1)] space-y-2'>
+  <div class='min-h-[84px] relative z-[1] rounded-[10px] p-2 bg-white im-shadow space-y-2'>
     <!-- header -->
     <div class='flex items-center justify-between'>
       <div class='flex items-center space-x-1'>
