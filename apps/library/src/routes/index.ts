@@ -53,20 +53,14 @@ const routes = {
       }
     ]
   }),
-  '/platform/chatroom': wrap({
-    asyncComponent: () => import('../pages/platformChatroom/index.svelte'),
+  '/test/chatroom': wrap({
+    asyncComponent: () => import('../pages/test/chatroom/index.svelte'),
     userData: {
       showBottomNav: false
     },
   }),
-  '/platform/anchor': wrap({
-    asyncComponent: () => import('../platform/anchors'),
-    userData: {
-      showBottomNav: false
-    }
-  }),
-  '/platform/streaming': wrap({
-    asyncComponent: () => import('../platform/streaming'),
+  '/test/anchors': wrap({
+    asyncComponent: () => import('../pages/test/anchors/index.svelte'),
     userData: {
       showBottomNav: false
     }
