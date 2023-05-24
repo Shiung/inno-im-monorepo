@@ -1,66 +1,70 @@
-<script lang='ts'>
-import { slide } from 'svelte/transition'
-import { Tween } from 'ui'
-import { amountSymbolTransformer } from 'utils/amount'
-import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+<script lang="ts">
+  import { slide } from 'svelte/transition'
+  import { Tween } from 'ui'
+  import { amountSymbolTransformer } from 'utils/amount'
+  import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 
-import ArrowUp from './images/arrow_up.svg' 
-import fans from './images/fans_on.webp'
-import { streaming } from '../store'
+  import ArrowUp from './images/arrow_up.svg'
+  import fans from './images/fans_on.webp'
+  import { streaming } from '../store'
 
-let folder: boolean = false
-let openDetailSheet: boolean
-
+  let folder: boolean = false
+  let openDetailSheet: boolean
 </script>
 
 {#if $streaming}
-<div class='flex py-[12px] px-[16px] bg-white im-shadow rounded-b-[18px] ease-out duration-300'
-  on:click={() => folder = !folder}
-  on:keypress={() => folder = !folder}
-  style:height={folder ? '50px' : '130px'}
-  transition:slide|local
->
-    <div class='relative flex flex-col items-center'
-      on:click|stopPropagation={() => openDetailSheet = !openDetailSheet}
-      on:keypress >
-      <div class='absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]'
-        style:z-index='1'
+  <div
+    class="flex py-[12px] px-[16px] bg-white im-shadow rounded-b-[18px] ease-out duration-300"
+    on:click={() => (folder = !folder)}
+    on:keypress={() => (folder = !folder)}
+    style:height={folder ? '50px' : '130px'}
+    transition:slide|local
+  >
+    <div
+      class="relative flex flex-col items-center"
+      on:click|stopPropagation={() => (openDetailSheet = !openDetailSheet)}
+      on:keypress
+    >
+      <div
+        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]"
+        style:z-index="1"
         style:bottom={folder ? '3px' : '0px'}
       >
-
         {$streaming.nickName}
       </div>
-      <img class='w-[90px] min-w-[90px] h-[90px] min-h-[90px] rounded-full border border-imprimary ease-out duration-300'
-        style:opacity={folder ? 0 : 1 }
-        src={$streaming.userImage} alt=''
+      <img
+        class="w-[90px] min-w-[90px] h-[90px] min-h-[90px] rounded-full border border-imprimary ease-out duration-300"
+        style:opacity={folder ? 0 : 1}
+        src={$streaming.userImage}
+        alt=""
       />
-
     </div>
 
-    <div class='flex-1 ml-[10px] overflow-hidden'>
-      <div class='flex items-center justify-between'>
-        <div class='text-[16px] text-imprimary'> {$streaming.houseName} </div>
-        <div class='duration-300' style:transform={folder ? 'rotate(180deg)' : 'rotate(0deg)'}>
-          <ArrowUp width={14} height={14} fill='#333333' />
+    <div class="flex-1 ml-[10px] overflow-hidden">
+      <div class="flex items-center justify-between">
+        <div class="text-[16px] text-imprimary">{$streaming.houseName}</div>
+        <div class="duration-300" style:transform={folder ? 'rotate(180deg)' : 'rotate(0deg)'}>
+          <ArrowUp width={14} height={14} fill="#333333" />
         </div>
       </div>
 
-      <div class='truncate'>
+      <div class="truncate">
         {$streaming.houseIntroduction}
       </div>
 
-      <div class='flex'>
-        <span class='items-center px-[5px] rounded-[5px] text-[#999999] text-[6px] bg-[rgba(238,238,238,0.5)]'> 
+      <div class="flex">
+        <span
+          class="items-center px-[5px] rounded-[5px] text-[#999999] text-[6px] bg-[rgba(238,238,238,0.5)]"
+        >
           {$streaming.anchorTypeName}
         </span>
       </div>
 
-      <div class='flex items-end mt-[15px]'>
-        <img class='w-[30px] mr-[10px]' src={fans} alt='' />
-        <Tween value={amountSymbolTransformer($streaming.fansCount)} /> 
+      <div class="flex items-end mt-[15px]">
+        <img class="w-[30px] mr-[10px]" src={fans} alt="" />
+        <Tween value={amountSymbolTransformer($streaming.fansCount)} />
       </div>
-
     </div>
   </div>
-<AnchorDetailSheet bind:open={openDetailSheet}  houseId={$streaming.houseId}/>
+  <AnchorDetailSheet bind:open={openDetailSheet} houseId={$streaming.houseId} />
 {/if}
