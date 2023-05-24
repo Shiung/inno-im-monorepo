@@ -28,8 +28,13 @@ export const getStreaming = anchor.streaming.subscribe
 
 <script lang='ts'>
 import FlvPlayer from 'ui/components/FlvPlayer'
+import HouseImage from '$src/components/HouseImage/index.svelte'
 
 $: streaming = anchor.streaming
 </script>
 
-<FlvPlayer url={$streaming?.playStreamAddress} />
+{#if $streaming?.liveStatus === 1}
+  <HouseImage src={$streaming.houseImage} />
+{:else}
+  <FlvPlayer url={$streaming?.playStreamAddress} />
+{/if}
