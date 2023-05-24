@@ -14,11 +14,10 @@ export let bg: string
 
 let openDetailSheet: boolean = false
 
+$: containerStyle = `background-image:url("${bg}")`
 </script>
 
-<div class='flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]'
-  style:background-image={`url("${bg}")`}
->
+<Ripple class='flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]' style={containerStyle} on:click>
   <div class='text-imprimary'> { anchor.houseName } </div>
   <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
   <div class='flex items-center'>
@@ -36,4 +35,4 @@ let openDetailSheet: boolean = false
   </div>
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
-</div>
+</Ripple>
