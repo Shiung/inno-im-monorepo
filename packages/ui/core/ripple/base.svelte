@@ -33,7 +33,7 @@ const handleClick = (e: any) => {
     isMobile && 'cursor-auto',
     _variant?.className, $$props.class
   )}
-  on:click|preventDefault={handleClick}
+  on:click|preventDefault|stopPropagation={handleClick}
   bind:this={dom}
 >
 
