@@ -26,23 +26,20 @@
 
   import { setIsPast } from './context'
 
+  let response, loading: boolean
   let coin: number = 1500
-  let detailPromise: ReturnType<typeof im.expertArticleDetail>
   let bonus: number = 100000
   let isPast = false
   let isLocked = false
 
   const fetchArticleDetail = async (articleId: string) => {
-    detailPromise = im.expertArticleDetail({ query: { articleId }})
-      .then(response => {
-        const { past, articleStatus } = response?.data
-        if (past) isPast = true
-        if (articleStatus === 2) isLocked = true
-        return response
-      })
+    loading = true
+    response = await im.expertArticleDetail({ query: { articleId }})
+    loading = false
+    const { past, articleStatus } = response?.data
+    if (past) isPast = true
+    if (articleStatus === 2) isLocked = true
   }
-
-  $: setIsPast({ isPast })
 
   const onUnlockClick = () => {
     console.log('onUnlockClick')
@@ -51,6 +48,8 @@
   const onFollowBetClick = () => {
     console.log('onFollowBetClick')
   }
+
+  $: setIsPast({ isPast })
 
   $: $params?.articleId && fetchArticleDetail($params?.articleId)
 </script>
@@ -62,41 +61,41 @@
 
   <div class='space-y-3'>
     <div>
-      {#await detailPromise}
+      {#if loading}
         <ArticleStoryLoading />
-      {:then detail}
-        <ArticleStory data={detail?.data} />
-      {/await}
+      {:else}
+        <ArticleStory data={response?.data} />
+      {/if}
       <Info />
     </div>
 
     <div class='rounded-[20px] bg-white'>
       <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
       
-      {#await detailPromise}
+      {#if loading}
         <MatchPanelLoading />
-      {:then detail}
-        <MatchPanel data={detail?.data} />
-      {/await}
+      {:else}
+        <MatchPanel data={response?.data} />
+      {/if}
 
       <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
 
-      {#await detailPromise}
+      {#if loading}
         <PlanAnalysisLoading />
-      {:then detail}
-        <PlanAnalysis data={detail?.data} isLocked={!isPast && isLocked} />
-      {/await}
+      {:else}
+        <PlanAnalysis data={response?.data} isLocked={!isPast && isLocked} />
+      {/if}
     </div>
 
     
-    {#if !isPast && isLocked}
-      {#await detailPromise then response}
+    {#if !loading}
+      {#if !isPast && isLocked}
         <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
-      {/await}
+      {/if}
     {/if}
   </div>
 
-  {#if !isPast}
+  {#if !loading && !isPast}
     <BottomPanel>
       {#if isLocked}
         <UnlockButton {coin} onButtonClick={onUnlockClick} />

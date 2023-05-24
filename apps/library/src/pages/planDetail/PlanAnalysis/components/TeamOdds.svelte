@@ -13,15 +13,14 @@
   type TeamType = 'home' | 'away'
   export let data: IArticleDetail
   export let type: TeamType
-
-  $: kColor = type === 'home' ? '#80B100' : '#CB0202'
+  export let isLocked: boolean
 
   $: dispatcher = marketTypeDispatcher(data?.marketType)
 
   const getKAndOdds: TResolver<[IArticleDetail, TeamType], { k: string, odd: string }> = {
     ml(data, type) {
-      if (type === 'home') return { k: data?.homeName, odd: data?.odds?.[0]?.h }
-      return { k: data?.awayName, odd: data?.odds?.[0]?.a }
+      if (type === 'home') return { k: '', odd: data?.odds?.[0]?.h }
+      return { k: '', odd: data?.odds?.[0]?.a }
     },
     ah(data, type) {
       if (type === 'home') return { k: data?.odds?.[0]?.k, odd: data?.odds?.[0]?.h }
@@ -46,6 +45,11 @@
       return data?.matchResult === 'ud'
     }
   }
+  const getMarketType: TResolver<[], string> = {
+    ml: () => 'ml',
+    ah: () => 'ah',
+    ou: () => 'ou',
+  }
 
   $: info = {
     name: type === 'home' ? data?.homeName : data?.awayName,
@@ -53,7 +57,9 @@
     ...dispatcher(getKAndOdds, data, type)
   }
   
-  $: active = dispatcher(getMatchResult, data, type)
+  $: active = !isLocked && dispatcher(getMatchResult, data, type)
+
+  $: isOU = dispatcher(getMarketType) === 'ou'
 
   const { isPast } = getIsPast()
 </script>
@@ -71,14 +77,22 @@
     </div>
   {/if}
   <div class="text-center">
-    <TeamLogo class='w-[30px] h-[30px]' src={beImgUrlParse({ id: info.id, type: ImageType.competitors })}/>
-    <span class='text-[12px] leading-[18px]'> {info.name} </span>
+    {#if !isOU}
+      <TeamLogo class='w-[30px] h-[30px]' src={beImgUrlParse({ id: info.id, type: ImageType.competitors })}/>
+      <span class='text-[12px] leading-[18px]'> {info.name} </span>
+    {:else}
+      <span class='text-[12px] leading-[18px]'> {type === 'home' ? $t('common.over') : $t('common.under')} </span>
+    {/if}
   </div>
 
   <div class='text-[15px] leading-[23px] text-center space-x-2 mt-1'>
     {#if !$isPast}
-      <span style:color={kColor}> {info.k} </span>
-      <span class='font-semibold'> {info.odd} </span>
+      {#if info.k}
+        <span style:color={type === 'home' ? '#80B100' : '#CB0202'}> {info.k} </span>
+      {/if}
+      {#if info.odd}
+        <span class='font-semibold'> {info.odd} </span>
+      {/if}
     {/if}
   </div>
 </div>

@@ -6,5 +6,5 @@
 </script>
 
 <Button class='w-[283px] bg-[rgba(var(--im-monorepo-primary))] rounded-[12px] h-[56px]' on:click={onButtonClick}>
-  {$t('expert.planDetail.followBet')}
+  <span class='text-sm'> {$t('expert.planDetail.followBet')} </span>
 </Button>
