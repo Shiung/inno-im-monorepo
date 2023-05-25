@@ -11,12 +11,7 @@ export const timestampToDateTime = (timestamp: number): string => {
 }
 
 export const timestampToDate = (timestamp: number): string => {
-  const date = new Date(timestamp)
-  const year = date.getFullYear()
-  const month = `0${date.getMonth() + 1}`
-  const day = `0${date.getDate()}`
-  const formattedTime = `${year}-${month.slice(-2)}-${day.slice(-2)}`
-  return formattedTime
+  return timestampToFormat({ ts: timestamp, format: 'YYYY-MM-DD'})
 }
 
 export const timestampToFormat = (props: { ts: number, format?: string }): string => {

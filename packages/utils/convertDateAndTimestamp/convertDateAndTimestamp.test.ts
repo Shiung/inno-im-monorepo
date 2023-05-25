@@ -1,5 +1,11 @@
 import '@testing-library/jest-dom'
-import { getTime, convertTimeDiffToPast, dateTimeToTimestamp } from './index'
+import {
+  getTime,
+  convertTimeDiffToPast,
+  dateTimeToTimestamp,
+  timestampToFormat,
+  timestampToDate
+} from './index'
 
 
 describe('convertTimeDiffToPast function', () => {
@@ -44,8 +50,8 @@ describe('getTime function', () => {
     expect(result).toBe('10:47')
   })
 
-  test('unusual timestamp', () => {
-    const obj = { ts: 'aaa' } as unknown as { ts: number } // to check if api value gives unusual value rather than ts
+  test('abnormal timestamp', () => {
+    const obj = { ts: 'aaa' } as unknown as { ts: number } // to check if api value gives abnormal value rather than ts
     const result = getTime(obj.ts)
 
     expect(result).toBe('')
@@ -61,10 +67,60 @@ describe('dateTimeToTimestamp function', () => {
     expect(result).toBe(expectedTs)
   })
 
-  test('unusual dateTime', () => {
+  test('abnormal dateTime', () => {
     const dateTime = 'aaa'
     const result = dateTimeToTimestamp(dateTime)
 
     expect(result).toBeUndefined()
+  })
+})
+
+describe('timestampToFormat function', () => {
+  test('format to YYYY-MM-DD hh:mm:ss', () => {
+    const dateTime = new Date('2023/05/25 10:47').getTime()
+    const expected = '2023-05-25 10:47:00'
+    const result = timestampToFormat({ ts: dateTime, format: 'YYYY-MM-DD hh:mm:ss' })
+
+    expect(result).toBe(expected)
+  })
+
+  test('format to YYYY-MM-DD', () => {
+    const dateTime = new Date('2023/05/25 10:47').getTime()
+    const expected = '2023-05-25'
+    const result = timestampToFormat({ ts: dateTime, format: 'YYYY-MM-DD' })
+
+    expect(result).toBe(expected)
+  })
+
+  test('format to hh:mm:ss', () => {
+    const dateTime = new Date('2023/05/25 10:47').getTime()
+    const expected = '10:47:00'
+    const result = timestampToFormat({ ts: dateTime, format: 'hh:mm:ss' })
+
+    expect(result).toBe(expected)
+  })
+
+  test('format to MM/DD hh:mm', () => {
+    const dateTime = new Date('2023/05/25 10:47').getTime()
+    const expected = '05/25 10:47'
+    const result = timestampToFormat({ ts: dateTime, format: 'MM/DD hh:mm' })
+
+    expect(result).toBe(expected)
+  })
+
+  test('abnormal format params', () => {
+    const dateTime = new Date('2023/05/25 10:47').getTime()
+    const format = 'abc'
+    const result = timestampToFormat({ ts: dateTime, format })
+    expect(result).toBe(format)
+  })
+})
+
+describe('timestampToDate', () => {
+  test('normal timestamp', () => {
+    const timestamp = new Date('2023/05/25 10:47').getTime()
+    const expected = '2023-05-25'
+    const result = timestampToDate(timestamp)
+    expect(result).toBe(expected)
   })
 })
