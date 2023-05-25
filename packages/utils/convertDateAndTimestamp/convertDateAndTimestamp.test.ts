@@ -4,7 +4,8 @@ import {
   convertTimeDiffToPast,
   dateTimeToTimestamp,
   timestampToFormat,
-  timestampToDate
+  timestampToDate,
+  timestampToDateTime
 } from './index'
 
 
@@ -116,11 +117,20 @@ describe('timestampToFormat function', () => {
   })
 })
 
-describe('timestampToDate', () => {
+describe('timestampToDate function', () => {
   test('normal timestamp', () => {
     const timestamp = new Date('2023/05/25 10:47').getTime()
     const expected = '2023-05-25'
     const result = timestampToDate(timestamp)
+    expect(result).toBe(expected)
+  })
+})
+
+describe('timestampToDateTime function', () => {
+  test('normal timestamp', () => {
+    const timestamp = new Date('2023/05/25 10:47:25').getTime()
+    const expected = '05/25 10:47'
+    const result = timestampToDateTime(timestamp)
     expect(result).toBe(expected)
   })
 })

@@ -1,19 +1,5 @@
 import type { IDiffPast } from './types'
 
-export const timestampToDateTime = (timestamp: number): string => {
-  const date = new Date(timestamp)
-  const month = `0${date.getMonth() + 1}`
-  const day = `0${date.getDate()}`
-  const hours = `0${date.getHours()}`
-  const minutes = `0${date.getMinutes()}`
-  const formattedTime = `${month.slice(-2)}/${day.slice(-2)} ${hours.slice(-2)}:${minutes.slice(-2)}`
-  return formattedTime
-}
-
-export const timestampToDate = (timestamp: number): string => {
-  return timestampToFormat({ ts: timestamp, format: 'YYYY-MM-DD'})
-}
-
 export const timestampToFormat = (props: { ts: number, format?: string }): string => {
   const { ts, format = 'YYYY-MM-DD hh-mm-ss' } = props
   const date = new Date(ts)
@@ -32,6 +18,14 @@ export const timestampToFormat = (props: { ts: number, format?: string }): strin
   formatted = formatted.replace('mm', minutes)
   formatted = formatted.replace('ss', seconds)
   return formatted
+}
+
+export const timestampToDateTime = (timestamp: number): string => {
+  return timestampToFormat({ ts: timestamp, format: 'MM/DD hh:mm' })
+}
+
+export const timestampToDate = (timestamp: number): string => {
+  return timestampToFormat({ ts: timestamp, format: 'YYYY-MM-DD' })
 }
 
 export const dateTimeToTimestamp = (date: string): number | undefined => {  
