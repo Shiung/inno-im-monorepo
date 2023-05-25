@@ -39,9 +39,9 @@ export const timestampToFormat = (props: { ts: number, format?: string }): strin
   return formatted
 }
 
-export const dateTimeToTimestamp = (date: string): number => {  
+export const dateTimeToTimestamp = (date: string): number | undefined => {  
   const timestamp = new Date(date).getTime()
-  return timestamp
+  return timestamp || undefined
 }
 
 export const getTime = (timestamp: number): string => {

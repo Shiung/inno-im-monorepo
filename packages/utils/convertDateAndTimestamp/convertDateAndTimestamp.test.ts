@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { getTime, convertTimeDiffToPast } from './index'
+import { getTime, convertTimeDiffToPast, dateTimeToTimestamp } from './index'
 
 
 describe('convertTimeDiffToPast function', () => {
@@ -49,5 +49,22 @@ describe('getTime function', () => {
     const result = getTime(obj.ts)
 
     expect(result).toBe('')
+  })
+})
+
+describe('dateTimeToTimestamp function', () => {
+  test('regular dateTime', () => {
+    const dateTime = '2023/05/25 10:47:00'
+    const expectedTs = new Date(dateTime).getTime()
+    const result = dateTimeToTimestamp(dateTime)
+
+    expect(result).toBe(expectedTs)
+  })
+
+  test('unusual dateTime', () => {
+    const dateTime = 'aaa'
+    const result = dateTimeToTimestamp(dateTime)
+
+    expect(result).toBeUndefined()
   })
 })
