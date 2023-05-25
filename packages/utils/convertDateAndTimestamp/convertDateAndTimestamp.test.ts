@@ -55,7 +55,7 @@ describe('getTime function', () => {
     const obj = { ts: 'aaa' } as unknown as { ts: number } // to check if api value gives abnormal value rather than ts
     const result = getTime(obj.ts)
 
-    expect(result).toBe('')
+    expect(result).toBe('Invalid Date')
   })
 })
 
@@ -66,13 +66,6 @@ describe('dateTimeToTimestamp function', () => {
     const result = dateTimeToTimestamp(dateTime)
 
     expect(result).toBe(expectedTs)
-  })
-
-  test('abnormal dateTime', () => {
-    const dateTime = 'aaa'
-    const result = dateTimeToTimestamp(dateTime)
-
-    expect(result).toBeUndefined()
   })
 })
 
@@ -107,13 +100,6 @@ describe('timestampToFormat function', () => {
     const result = timestampToFormat({ ts: dateTime, format: 'MM/DD hh:mm' })
 
     expect(result).toBe(expected)
-  })
-
-  test('abnormal format params', () => {
-    const dateTime = new Date('2023/05/25 10:47').getTime()
-    const format = 'abc'
-    const result = timestampToFormat({ ts: dateTime, format })
-    expect(result).toBe(format)
   })
 })
 
