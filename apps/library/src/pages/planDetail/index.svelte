@@ -88,14 +88,12 @@
     </div>
 
     
-    {#if !loading}
-      {#if !isPast && isLocked}
-        <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
-      {/if}
+    {#if !loading && !isPast}
+      <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
     {/if}
   </div>
 
-  {#if !loading && !isPast}
+  <!-- {#if !loading && !isPast}
     <BottomPanel>
       {#if isLocked}
         <UnlockButton {coin} onButtonClick={onUnlockClick} />
@@ -103,5 +101,5 @@
         <BetButton onButtonClick={onFollowBetClick} />
       {/if}
     </BottomPanel>
-  {/if}
+  {/if} -->
 </div>
