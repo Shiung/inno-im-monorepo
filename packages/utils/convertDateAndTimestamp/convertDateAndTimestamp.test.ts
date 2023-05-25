@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { convertTimeDiffToPast } from './index'
+import { getTime, convertTimeDiffToPast } from './index'
 
 
 describe('convertTimeDiffToPast function', () => {
@@ -33,5 +33,21 @@ describe('convertTimeDiffToPast function', () => {
     const time = convertTimeDiffToPast({ now, past })
     
     expect(time).toStrictEqual({ text: '04-20', unit: 'date' })
+  })
+})
+
+describe('getTime function', () => {
+  test('regular timestamp', () => {
+    const ts = new Date('2023/05/25 10:47:00').getTime()
+    const result = getTime(ts)
+
+    expect(result).toBe('10:47')
+  })
+
+  test('unusual timestamp', () => {
+    const obj = { ts: 'aaa' } as unknown as { ts: number } // to check if api value gives unusual value rather than ts
+    const result = getTime(obj.ts)
+
+    expect(result).toBe('')
   })
 })
