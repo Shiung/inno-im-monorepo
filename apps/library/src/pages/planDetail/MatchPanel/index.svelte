@@ -13,9 +13,9 @@
 
       <div class='flex justify-around'>
 
-        <div>
-          <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: data?.homeId, type: ImageType.competitors })} />
-          <div class='text-[10px] text-center'> {data?.homeName} </div>
+        <div class='flex flex-col items-center space-y-[5px]'>
+          <TeamLogo class='w-[30px] h-[30px]' src={beImgUrlParse({ id: data?.homeId, type: ImageType.competitors })} />
+          <div class='text-[12px] leading-6 text-center'> {data?.homeName} </div>
         </div>
 
         <div>
@@ -23,9 +23,9 @@
           <div class='text-center text-[11px] leading-[17px] text-[#999]'> {timestampToDatetime(data?.matchTime)} </div>
         </div>
 
-        <div>  
-          <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: data?.awayId, type: ImageType.competitors })} />
-          <div class='text-[10px] text-center'> {data?.awayName} </div>
+        <div class='flex flex-col items-center space-y-[5px]'>
+          <TeamLogo class='w-[30px] h-[30px]' src={beImgUrlParse({ id: data?.awayId, type: ImageType.competitors })} />
+          <div class='text-[12px] leading-6 text-center'> {data?.awayName} </div>
         </div>
         
       </div>

@@ -75,12 +75,12 @@
   {#if active}
     <Badget class='absolute -top-[1px] -left-[1px]'> { $t('common.recommend') } </Badget>
   {/if}
-  <div class="text-center">
+  <div class="flex flex-col items-center">
     {#if !isOU}
       <TeamLogo class='w-[30px] h-[30px]' src={beImgUrlParse({ id: info.id, type: ImageType.competitors })}/>
-      <span class='text-[12px] leading-[18px]'> {info.name} </span>
+      <span class='text-[12px] leading-6'> {info.name} </span>
     {:else}
-      <span class='text-[12px] leading-[18px]'> {type === 'home' ? $t('common.over') : $t('common.under')} </span>
+      <span class='text-[12px] leading-6'> {type === 'home' ? $t('common.over') : $t('common.under')} </span>
     {/if}
   </div>
 
