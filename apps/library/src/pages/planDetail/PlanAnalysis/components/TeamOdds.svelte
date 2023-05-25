@@ -73,9 +73,7 @@
   )}
 >
   {#if active}
-    <div class='absolute -top-[1px] -left-[1px] h-[15px] flex'>
-      <Badget> { $t('common.recommend') } </Badget>
-    </div>
+    <Badget class='absolute -top-[1px] -left-[1px]'> { $t('common.recommend') } </Badget>
   {/if}
   <div class="text-center">
     {#if !isOU}
