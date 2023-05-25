@@ -56,7 +56,7 @@
 
 <div data-cid='planDetail'>
   <BackBar>
-    <BonusPoint slot='right' {bonus} />
+    <!-- <BonusPoint slot='right' {bonus} /> -->
   </BackBar>
 
   <div class='space-y-3'>

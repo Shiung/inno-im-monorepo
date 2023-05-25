@@ -13,7 +13,7 @@ export let icons: IIcon[]
 <div>
   <div class='flex fixed w-full px-[8px] justify-between items-center h-[44px] im-shadow bg-white z-10'>
     <BallSelection active={active} icons={icons} />
-    <BonusPoint />
+    <!-- <BonusPoint /> -->
   </div>
 
   <div class='h-[44px]'/>
