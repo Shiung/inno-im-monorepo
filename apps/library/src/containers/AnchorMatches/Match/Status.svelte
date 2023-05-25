@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { timestampToDatetime, getTime } from 'utils/convertDateAndTimestamp'
+import { timestampToDateTime, getTime } from 'utils/convertDateAndTimestamp'
 import type { IWebAnchorMatch } from 'api/im/types'
 export let match: IWebAnchorMatch
 </script>
@@ -20,7 +20,7 @@ export let match: IWebAnchorMatch
 
   <div>
     <div class='text-imprimary text-center mb-[5px]'> VS </div>
-    <div class='text-[10px] text-center font-semibold'> {timestampToDatetime(match.matchTime)} </div>
+    <div class='text-[10px] text-center font-semibold'> {timestampToDateTime(match.matchTime)} </div>
   </div>
 
 {/if}

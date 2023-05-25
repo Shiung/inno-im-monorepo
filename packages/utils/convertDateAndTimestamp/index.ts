@@ -1,4 +1,6 @@
-export const timestampToDatetime = (timestamp: number) => {
+import type { IDiffPast } from './types'
+
+export const timestampToDateTime = (timestamp: number): string => {
   const date = new Date(timestamp)
   const month = `0${date.getMonth() + 1}`
   const day = `0${date.getDate()}`
@@ -8,7 +10,7 @@ export const timestampToDatetime = (timestamp: number) => {
   return formattedTime
 }
 
-export const timestampToDate = (timestamp: number) => {
+export const timestampToDate = (timestamp: number): string => {
   const date = new Date(timestamp)
   const year = date.getFullYear()
   const month = `0${date.getMonth() + 1}`
@@ -37,14 +39,27 @@ export const timestampToFormat = (props: { ts: number, format?: string }): strin
   return formatted
 }
 
-export const dateTimeToTimestamp = (date: string) => {  
+export const dateTimeToTimestamp = (date: string): number => {  
   const timestamp = new Date(date).getTime()
   return timestamp
 }
 
-export const getTime = (timestamp: number) => {
+export const getTime = (timestamp: number): string => {
   const date = new Date(timestamp)
   const hours = `0${date.getHours()}`
   const minutes = `0${date.getMinutes()}`
   return `${hours.slice(-2)}:${minutes.slice(-2)}`
+}
+
+export const convertTimeDiffToPast = (props: { now: number, past: number }): IDiffPast => {
+  const { now, past } = props
+  const diff = now - past
+
+  if (diff < 60 * 1000) return { text: String(Math.round(diff / 1000)), unit: 'sec' }
+  else if (diff < 3600 * 1000) return { text: String(Math.round(diff / 60 / 1000)), unit: 'min' }
+  else if (diff < 86400 * 1000) return { text: String(Math.round(diff / 60 / 60 / 1000)), unit: 'hour' }
+  else return { 
+    text: timestampToFormat({ ts: past, format: 'MM-DD' }),
+    unit: 'date'
+  }
 }
