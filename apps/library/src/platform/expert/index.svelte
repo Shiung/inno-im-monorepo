@@ -7,7 +7,7 @@ let sid = writable(null)
 export const setSid = (setSid: string) => sid.set(convertSid(setSid))
 
 let detail = writable(initGoDetail)
-export const setGoToDetail = (callback: Function) => detail.update(e => {
+export const setGoToDetail = (callback: (path: string) => void) => detail.update(e => {
   e.goDetailCallback = callback
   return e
 })

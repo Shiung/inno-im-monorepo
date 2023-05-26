@@ -1,7 +1,7 @@
 import { createStoreContext } from 'utils/storeContext'
 
 interface IGoDetail {
-  goDetailCallback: Function
+  goDetailCallback: (path: string) => void
 }
 
 export const initGoDetail: IGoDetail = {
