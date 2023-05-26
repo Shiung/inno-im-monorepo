@@ -2,4 +2,4 @@
   import { imgHeight } from './config'
 </script>
 
-<div class='bg-[#eee] animate-pulse' style:padding-top={imgHeight}></div>
+<div class='bg-[#eee] animate-pulse' style:height={imgHeight}></div>

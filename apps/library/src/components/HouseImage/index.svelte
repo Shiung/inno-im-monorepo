@@ -32,8 +32,8 @@
 {:else if src}
   <div
     data-cid='HouseImage'
-    class={twMerge('block bg-no-repeat bg-center bg-cover', $$props.class)}
+    class={twMerge('block bg-no-repeat bg-center bg-cover h-0', $$props.class)}
     style:background-image={`url(${src})`}
-    style:padding-top={imgHeight}
+    style:height={imgHeight}
   ></div>
 {/if}
