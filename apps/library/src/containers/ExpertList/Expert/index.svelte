@@ -3,7 +3,7 @@ import { Button, Ripple } from 'ui'
 import { convertTimeDiffToPast } from 'utils/convertDateAndTimestamp'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
-import { getGoDetail } from '$src/platform/expert/context'
+import { getGoDetail, setGoDetail } from '$src/platform/expert/context'
 
 import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
@@ -24,11 +24,11 @@ const convertReleaseTime = (releaseTime: number) => {
     default: return time.text
   }
 }
-const { detailLocation } = getGoDetail() || {}
+const { goDetailCallback } = getGoDetail() || {}
 
 const goToDetail = () => {  
-  if (typeof $detailLocation !== 'function') return push(`/expertDetail/${prodiction.expertId}/plan`)
-  $detailLocation()
+  if (typeof $goDetailCallback !== 'function') return push(`/expertDetail/${prodiction.expertId}/plan`)
+  $goDetailCallback(`/expertDetail/${prodiction.expertId}/plan`)
 }
 
 </script>

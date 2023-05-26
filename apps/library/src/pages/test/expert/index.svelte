@@ -1,13 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { push } from 'svelte-spa-router'
-
-  import List, { setSid, goToDetail } from '$src/platform/expert'
+  import List, { setSid, setGoToDetail } from '$src/platform/expert'
 
   onMount(()=>{
     setSid("1")
     setTimeout(() => {
-      goToDetail(() => (window.location.href = '/expertDetail/123/plan'))
+      setGoToDetail((val: string) => (window.location.href = val))
     }, 1000)
   })
 

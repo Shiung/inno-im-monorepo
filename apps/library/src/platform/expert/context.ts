@@ -1,11 +1,11 @@
 import { createStoreContext } from 'utils/storeContext'
 
 interface IGoDetail {
-  detailLocation: Function
+  goDetailCallback: Function
 }
 
 export const initGoDetail: IGoDetail = {
-  detailLocation: null
+  goDetailCallback: null
 }
 
 export const [setGoDetail, getGoDetail] = createStoreContext<IGoDetail>('expertDetail', initGoDetail)
