@@ -1,12 +1,12 @@
 <script lang='ts'>
 import Expert from './Expert/index.svelte'
-import type { IExpertPredictions } from 'api/im/types'
+import type { IExpertPrediction } from 'api/im/types'
 
-export let prodictions: IExpertPredictions['res']['data']
+export let list: IExpertPrediction[]
 
 </script>
 
-{#each prodictions?.list || [] as prodiction}
+{#each list || [] as prodiction}
   <Expert prodiction={prodiction} /> 
 {/each}
 

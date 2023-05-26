@@ -146,9 +146,10 @@ export interface IExpertStatistics {
 
 export interface IExpertMatchArticle {
   query: {
-    matchId: string
-    pageIdx: number
-    pageSize: number
+    mid: number
+    vd: string
+    pageIdx?: number
+    pageSize?: number
   }
   body: null
   res: withData<{
@@ -168,7 +169,8 @@ export interface IArticleDetail extends IPredictionMarket, IMatch {
   vd: string
   matchStatus: MatchStatus,
   matchTime: number,
-  sportId: SportId
+  sportId: SportId,
+  past: boolean
 }
 
 export interface IExpertArticleDetail {
