@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { Button, Ripple } from 'ui'
-import { convertTimeDiffToPast } from 'utils/convertTimeDiff'
+import { convertTimeDiffToPast } from 'utils/convertDateAndTimestamp'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
 
