@@ -53,6 +53,18 @@ const routes = {
       }
     ]
   }),
+  '/planDetail/:expertId/:articleId': wrap({
+    asyncComponent: () => import('$pages/planDetail/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+    conditions: [
+      () => {
+        window.scrollTo(0, 0)
+        return true
+      }
+    ]
+  }),
   '/test/chatroom': wrap({
     asyncComponent: () => import('../pages/test/chatroom/index.svelte'),
     userData: {

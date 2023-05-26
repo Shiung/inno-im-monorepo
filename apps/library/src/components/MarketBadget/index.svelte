@@ -2,25 +2,19 @@
 import { Badget } from 'ui'
 import { t } from '$stores'
 import type { IPredictionMarket } from 'api/im/types/common'
+import { marketTypeDispatcher, type TResolver } from '$src/utils/match'
 
 export let marketType: IPredictionMarket['marketType']
 
-const getI18n = (_marketTypes: typeof marketType) => {
-  switch (_marketTypes) {
-    case '11':
-    case '21':
-      return 'common.1x2'
-    case '12':
-    case '22':
-      return 'common.ah'
-    case '13':
-    case '23':
-      return 'common.ou'
-    default: return ''
-  }
+$: dispatcher = marketTypeDispatcher(marketType)
+
+const getI18n: TResolver<[], string> = {
+  ml: () => 'common.1x2',
+  ah: () => 'common.ah',
+  ou: () => 'common.ou'
 }
 
-$: i18n = getI18n(marketType)
+$: i18n = dispatcher(getI18n)
 </script>
 
 

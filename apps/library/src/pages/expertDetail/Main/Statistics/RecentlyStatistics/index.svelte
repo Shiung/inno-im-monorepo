@@ -3,7 +3,7 @@
   import { t } from '$stores'
   import { params } from 'svelte-spa-router'
 
-  import Title from '$pages/expertDetail/Main/components/Title.svelte'
+  import Title from '$src/components/Title/index.svelte'
 
   import WMSStatistics from './WMSStatistics/index.svelte'
   import WMSStatisticsLoading from './WMSStatistics/components/Loading/index.svelte'

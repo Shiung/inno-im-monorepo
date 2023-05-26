@@ -32,11 +32,22 @@ export interface IOdds {
   ud: string
 }
 
+export const MarketTypeMap = {
+  11: 'ml',
+  21: 'ml',
+  12: 'ah',
+  22: 'ah',
+  13: 'ou',
+  23: 'ou',
+} as const
+
+export type MarketType = `${keyof typeof MarketTypeMap}`
+
 export interface IPredictionMarket {
   // 盤口類型
   // 足球：獨贏(11)、讓球(12)、大小(13)
   // 篮球：獨贏(21)、讓球(22)、大小(23)
-  marketType: '11' | '12' | '13' | '21' | '22' | '23'
+  marketType: MarketType
   // 專家預測結果
   // 獨贏: 主隊(h)、客隊(a)
   // 讓球: 主隊(h)、客隊(a)

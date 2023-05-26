@@ -172,6 +172,7 @@ const expert: IMockData[] = [
         sportId: Random.integer(1, 4) as Types.IArticleDetail['sportId'],
         mid: Random.integer(10000, 50000),
         vd: Random.word(1),
+        past: Random.boolean(),
         ...(genTeamInfo() as Pick<Types.IArticleDetail, 'homeName' | 'homeId' | 'awayName' | 'awayId'>),
         ...genMarket(),
       }
