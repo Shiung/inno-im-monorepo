@@ -20,7 +20,7 @@ export const getTime = (timestamp: number): string => {
 
 export const dateTimeToTimestamp = (date: string): number | undefined => {  
   const timestamp = new Date(date).getTime()
-  return timestamp || undefined
+  return timestamp
 }
 
 export const convertTimeDiffToPast = (props: { now: number, past: number }): IDiffPast => {
