@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Ripple } from 'ui'
   import { twMerge } from 'tailwind-merge';
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
   import { push, params } from 'svelte-spa-router';
@@ -30,7 +31,7 @@
   $: stampStyle = hideStamp ? null : `background-image: url(${getStamp(article.hitStatus)});background-position: right -13px top -15px; background-size: 72px`
 </script>
 
-<div class={twMerge('rounded-[10px] im-shadow bg-no-repeat p-[8px]', $$props.class)} style={stampStyle} on:click={onClick}>
+<Ripple class={twMerge('w-full rounded-[10px] im-shadow bg-no-repeat p-[8px]', $$props.class)} style={stampStyle} on:click={onClick}>
   <div class='text-[14px] font-semibold'>
     {timestampToFormat({ ts: article.releaseTime, format: 'MM-DD' }) } </div>
 
@@ -49,4 +50,4 @@
 
   <MarketInfo class='mt-[8px]' article={article} />
 
-</div>
+</Ripple>

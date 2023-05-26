@@ -14,26 +14,28 @@ export let bg: string
 
 let openDetailSheet: boolean = false
 
+$: containerStyle = `background-image:url("${bg}")`
 </script>
 
-<div class='flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]'
-  style:background-image={`url("${bg}")`}
->
-  <div class='text-imprimary'> { anchor.houseName } </div>
-  <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
-  <div class='flex items-center'>
-    <AnchorStatus liveStatus={anchor.liveStatus} />
-  </div>
+<div>
+  <Ripple class='w-full flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]' style={containerStyle} on:click>
+    <div class='text-imprimary'> { anchor.houseName } </div>
+    <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
+    <div class='flex items-center'>
+      <AnchorStatus liveStatus={anchor.liveStatus} />
+    </div>
 
-  <div class='flex flex-1 justify-between items-end overflow-hidden'>
-    <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-imprimary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
-      on:click={() => openDetailSheet = true}
-    >
-      <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />
-      <div>{$t('anchor.detail')}</div>
-    </Ripple>
-    <AnchorImage class='w-[75px]' src={anchor.userImage} />
-  </div>
+    <div class='flex flex-1 justify-between items-end overflow-hidden'>
+      <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-imprimary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
+        on:click={() => openDetailSheet = true}
+      >
+        <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />
+        <div>{$t('anchor.detail')}</div>
+      </Ripple>
+      <AnchorImage class='w-[75px]' src={anchor.userImage} />
+    </div>
+
+  </Ripple>
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
 </div>

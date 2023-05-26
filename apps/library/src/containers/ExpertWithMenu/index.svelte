@@ -24,11 +24,12 @@ const menu: IExpertMenu[] = [
     type: 1,
     onClick: () => console.log('expert.winningStreakKing') 
   },
-  {
-    i18n: 'expert.followUp',
-    type: 2,
-    onClick: () => console.log('expert.followUp')
-    },
+  // TODO
+  // {
+  //   i18n: 'expert.followUp',
+  //   type: 2,
+  //   onClick: () => console.log('expert.followUp')
+  // },
 ]
 
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
