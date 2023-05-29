@@ -7,4 +7,3 @@ export { default as Anchor } from './anchors'
 export { default as Streaming } from './streaming'
 
 export { default as expert } from '$src/platform/expert'
-export * from '$src/platform/expert'
