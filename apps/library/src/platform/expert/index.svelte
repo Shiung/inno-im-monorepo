@@ -1,8 +1,20 @@
-<script lang='ts'>
-import {num} from './store'
-import { Button } from 'ui'
-import { params } from 'svelte-spa-router'
+<script lang='ts' context='module'>
+import { writable } from 'svelte/store';
 import { convertSid } from 'utils'
+import { initGoDetail, setGoDetail } from './context'
+
+let sid = writable(null)
+export const setSid = (setSid: string) => sid.set(convertSid(setSid))
+
+let detail = writable(initGoDetail)
+export const setGoToDetail = (callback: (path: string) => void) => detail.update(e => {
+  e.goDetailCallback = callback
+  return e
+})
+
+</script>
+
+<script lang='ts'>
 import { im } from 'api'
 
 import ExpertList, { Loading } from '$containers/ExpertList'
@@ -10,7 +22,7 @@ import ExpertList, { Loading } from '$containers/ExpertList'
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
 
 const fetchPredictions = (sid: number) => {
-  if (sid === null) return
+  if (sid == null) return
   predictionsPromise = im.expertPredictions({
     query: {
       ...(sid && { sid }),
@@ -20,17 +32,10 @@ const fetchPredictions = (sid: number) => {
   }})
 }
 
-$: fetchPredictions(sid)
-
-$: sid = convertSid($params?.sid)
+$: fetchPredictions($sid)
+$: setGoDetail($detail)
 
 </script>
-
-<div>
-  {$num}
-</div>
-<Button on:click={() => $num += 1}> plus </Button>
-<Button on:click={() => $num -= 1}> minus </Button>
 
 {#await predictionsPromise}
   <Loading />

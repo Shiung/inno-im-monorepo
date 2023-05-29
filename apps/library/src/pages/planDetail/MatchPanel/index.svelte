@@ -1,7 +1,7 @@
 <script lang="ts">
   import TeamLogo from '$src/components/TeamLogo'
   import { beImgUrlParse, ImageType } from 'utils/imgUrlParse'
-  import { timestampToDatetime } from 'utils/convertDateAndTimestamp'
+  import { timestampToDateTime } from 'utils/convertDateAndTimestamp'
   import type { IArticleDetail } from 'api/im/types'
 
   export let data: IArticleDetail
@@ -20,7 +20,7 @@
 
         <div>
           <div class='text-center text-[20px] leading-[30px] mb-[5px] text-[#333]'> VS </div>
-          <div class='text-center text-[11px] leading-[17px] text-[#999]'> {timestampToDatetime(data?.matchTime)} </div>
+          <div class='text-center text-[11px] leading-[17px] text-[#999]'> {timestampToDateTime(data?.matchTime)} </div>
         </div>
 
         <div class='flex flex-col items-center space-y-[5px]'>
