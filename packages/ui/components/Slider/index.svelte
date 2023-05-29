@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
+  import { calculate, getElementSize } from './utils'
 
   export let data: any[]
   export let xPadding: number = 8
@@ -22,36 +23,7 @@
   $: slidesLastIndex = slidesEndIndex - 2
   let currentIndex = slidesFirstIndex
 
-  $: calHeight = calculateHeight(height)
-
-  const calculateHeight = (height: number | string): string => {
-    if(typeof height === 'number' || /^\d+$/.test(height)) return `${height}px`
-
-    if(/%/.test(height) || /px/.test(height)) return height
-
-    console.warn('Invalid Height property!', height)
-    return ''
-  }
-
-  const calculateWidth = (width: string | number, parent: HTMLDivElement | null): number => {
-    if(typeof width === 'number') return width
-
-    if(!parent) return
-    let retWidth: number = 0
-    if(/%/.test(width)) {
-      const [percent] = width.split('%')
-      const percentage = parseFloat(percent) / 100
-      retWidth = parent.getBoundingClientRect().width * percentage
-    } else if (/px/.test(width)) {
-      const [number] = width.split('px')
-      retWidth = parseFloat(number)
-    } else {
-      console.warn('Invalid Width property!', width)
-      retWidth = 0
-    }
-
-    return retWidth
-  }
+  $: calHeight = calculate('height', height)
 
   const onTouchStart = (e: TouchEvent) => {
     e.preventDefault()
@@ -125,14 +97,14 @@
   }
 
   const calculateDistance = (index: number) => {
-    return -index * (calWidth + xPadding) + Math.floor((window.innerWidth - calWidth) / 2)
+    return -index * (calWidth + xPadding) + Math.floor((getElementSize(sliderContainer, 'width') - calWidth) / 2)
   }
 
   $: handleTransition(currentIndex, transitioning)
 
   onMount(() => {
     if(sliderContainer) {
-      calWidth = calculateWidth(width, sliderContainer)
+      calWidth = calculate('width', width, sliderContainer)
     }
     if(slider) {
       slider.style.transitionProperty = 'none'
@@ -146,6 +118,7 @@
 
 {#if data.length}
   <div
+    data-cid={'Slider'}
     bind:this={sliderContainer}
     class="overflow-hidden"
     style:padding-top={`${yPadding}px`}
@@ -159,7 +132,7 @@
       bind:this={slider}
       class="flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
       style:width={`${slides.length * (calWidth + xPadding)}px`}
-      style:height={calHeight}
+      style:height={`${calHeight}px`}
     >
       {#each slides as slide}
         <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${xPadding}px`}>
