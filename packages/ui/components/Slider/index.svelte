@@ -116,7 +116,7 @@
   })
 </script>
 
-{#if data.length}
+{#if data.length && $$slots.default}
   <div
     data-cid={'Slider'}
     bind:this={sliderContainer}
