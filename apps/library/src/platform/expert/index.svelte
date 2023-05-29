@@ -22,6 +22,7 @@ export const setGoToPlanDetail = (callback: (path: string) => void) => detail.up
 import { im } from 'api'
 
 import ExpertList, { Loading } from '$containers/ExpertList'
+import Empty from '$src/containers/Empty'
 
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
 
@@ -45,4 +46,6 @@ $: setGoDetail($detail)
   <Loading />
 {:then response}
   <ExpertList list={response?.data?.list || []} />
+{:catch}
+  <Empty />
 {/await}
