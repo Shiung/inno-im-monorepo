@@ -11,7 +11,7 @@ export let list: IExpertPrediction[]
 
 </script>
 
-<div class='p-[20px] space-y-10'>
+<div class='pl-[14px] pr-[20px] py-[20px] space-y-10'>
   {#if list.length === 0}
     <Empty class='h-[300px]'/>
   {:else}
