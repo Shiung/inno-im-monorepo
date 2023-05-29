@@ -1,8 +1,8 @@
-const isValidNumber = (value: string): boolean => /^(?!-0?(\.0+)?$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/.test(value)
+export const isValidNumber = (value: string): boolean => /^(?!-0?(\.0+)?$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/.test(value)
 
-const isPercentageValue = (value: string): boolean => /%/.test(value)
+export const isPercentageValue = (value: string): boolean => /^(?!-0?(\.0+)?%$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)%$/.test(value)
 
-const isPixelValue = (value: string): boolean => /px/.test(value)
+export const isPixelValue = (value: string): boolean => /^(?!-0?(\.0+)?px$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)px$/.test(value)
 
 export const getElementSize = (parent: HTMLDivElement, type: 'width' | 'height') => {
   return parent?.getBoundingClientRect()?.[type] || 0

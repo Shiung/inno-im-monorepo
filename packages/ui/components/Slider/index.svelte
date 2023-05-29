@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
+  import { onMount } from 'svelte'
   import { calculate, getElementSize } from './utils'
 
   export let data: any[]
@@ -16,14 +16,14 @@
   let transitioning: boolean = false
   let touchStartX: number | null = null
   let calWidth: number = 0
+  let calHeight: number = 0
+
   $: slides = data.slice(-2).concat(data).concat(data.slice(0, 2))
   const slidesBeginIndex = 0
   const slidesFirstIndex = 2
   $: slidesEndIndex = slides.length - 1
   $: slidesLastIndex = slidesEndIndex - 2
   let currentIndex = slidesFirstIndex
-
-  $: calHeight = calculate('height', height)
 
   const onTouchStart = (e: TouchEvent) => {
     e.preventDefault()
@@ -105,14 +105,12 @@
   onMount(() => {
     if(sliderContainer) {
       calWidth = calculate('width', width, sliderContainer)
+      calHeight = calculate('height', height)
     }
     if(slider) {
       slider.style.transitionProperty = 'none'
       slider.style.transform = `translateX(${calculateDistance(currentIndex)}px)`
     }
-  })
-
-  onDestroy(() => {
   })
 </script>
 
