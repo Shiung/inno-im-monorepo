@@ -1,6 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { calculate, getElementSize } from './utils'
+  import {
+    calculate,
+    getBoundingRect,
+    calDragDistance,
+    isOverThreshold,
+    isOutsideBoundary,
+    isSecondElement,
+    isLastTwoElement,
+    getTouchClientX
+  } from './utils'
 
   export let data: any[]
   export let xPadding: number = 8
@@ -11,39 +20,42 @@
 
   let movable = false
   let moveDisabled = false
+  let transitioning: boolean = false
+
   let slider: HTMLDivElement | null = null
   let sliderContainer: HTMLDivElement | null = null
-  let transitioning: boolean = false
-  let touchStartX: number | null = null
+
   let calWidth: number = 0
   let calHeight: number = 0
 
   $: slides = data.slice(-2).concat(data).concat(data.slice(0, 2))
-  const slidesBeginIndex = 0
   const slidesFirstIndex = 2
-  $: slidesEndIndex = slides.length - 1
-  $: slidesLastIndex = slidesEndIndex - 2
+  $: slidesLength = slides.length
+  $: slidesLastIndex = slidesLength - 3
   let currentIndex = slidesFirstIndex
+  let touchStartX: number = 0
 
   const onTouchStart = (e: TouchEvent) => {
     e.preventDefault()
     if(!('touches' in e) || moveDisabled) return
 
-    touchStartX = e.touches[0].clientX || null
+    touchStartX = getTouchClientX('touchstart', e)
     movable = true
   }
 
   const onTouchMove = (e: TouchEvent) => {
     e.preventDefault()
     if(!('touches' in e) || !movable) return
-
-    const touchMoveX = e.touches[0].clientX
+    
+    const touchMoveX = getTouchClientX('touchmove', e)
     const distance = touchMoveX - touchStartX
-    slider.style.transform = `translateX(${calculateDistance(currentIndex) + distance}px)`
+    const totalDistance = distance + calDragDistance(currentIndex, calWidth, xPadding, getBoundingRect(sliderContainer, 'width'))
 
-    if (touchMoveX < 0 || touchMoveX > window.innerWidth) {
-      const newIndex = touchMoveX < 0 ? currentIndex + 1 : currentIndex - 1
-      setIndex(newIndex)
+    setSliderTranslateX(totalDistance)
+
+    if (isOutsideBoundary(touchMoveX, sliderContainer)) {
+      const newIndex = touchMoveX < getBoundingRect(sliderContainer, 'left') ? currentIndex + 1 : currentIndex - 1
+      setCurrentIndex(newIndex)
       movable = false
     }
   }
@@ -52,14 +64,16 @@
     e.preventDefault()
     if(!('touches' in e) || !movable) return
 
-    const touchEndX = e.changedTouches[0].clientX
-    const distance = touchStartX - touchEndX
+    const touchEndX = getTouchClientX('touchend', e)
+    const distance = touchEndX - touchStartX
 
-    if(Math.abs(distance) > calWidth * swipeThreshold) {
-      setIndex(distance < 0 ? currentIndex - 1 : currentIndex + 1)
+    if(isOverThreshold(distance, calWidth, swipeThreshold)) {
+      const newIndex = distance < 0 ? currentIndex + 1 : currentIndex - 1
+      setCurrentIndex(newIndex)
     } else {
-      handleTransition(currentIndex, false)
+      handleSwipe(currentIndex, false)
     }
+
     movable = false
   }
 
@@ -68,39 +82,45 @@
     if(!val) moveDisabled = false
   }
 
-  const setIndex = (val: number) => {
+  const setCurrentIndex = (val: number) => {
     currentIndex = val
-    if(currentIndex === slidesEndIndex - 1 || currentIndex === slidesBeginIndex + 1) {
+    if(isSecondElement(currentIndex) || isLastTwoElement(currentIndex, slidesLength)) {
       moveDisabled = true
     }
   }
 
-  const handleTransitionEnd = () => {
+  const onTransitionEnd = () => {
     if (slider) {
-      slider.style.transitionProperty = 'none'
-      if(currentIndex === slidesEndIndex - 1) {
-        setIndex(slidesFirstIndex)
+      setSliderTransitionProperty('none')
+
+      if(isLastTwoElement(currentIndex, slidesLength)) {
+        setCurrentIndex(slidesFirstIndex)
         setTransitioning(true)
-      } else if (currentIndex === slidesBeginIndex + 1) {
-        setIndex(slidesLastIndex)
+      } else if (isSecondElement(currentIndex)) {
+        setCurrentIndex(slidesLastIndex)
         setTransitioning(true)
       }
     }
   }
 
-  const handleTransition = (index: number, transitioning: boolean) => {
+  const handleSwipe = (index: number, transitioning: boolean) => {
     if(slider) {
-      !transitioning && (slider.style.transitionProperty = 'transform')
-      slider.style.transform = `translateX(${calculateDistance(index)}px)`
-      transitioning && setTransitioning(false)
+      if(!transitioning) setSliderTransitionProperty('transform')
+      else setTransitioning(false)
+
+      setSliderTranslateX(calDragDistance(index, calWidth, xPadding, getBoundingRect(sliderContainer, 'width')))
     }
   }
 
-  const calculateDistance = (index: number) => {
-    return -index * (calWidth + xPadding) + Math.floor((getElementSize(sliderContainer, 'width') - calWidth) / 2)
+  const setSliderTranslateX = (distance: number) => {
+    slider.style.transform = `translateX(${distance}px)`
   }
 
-  $: handleTransition(currentIndex, transitioning)
+  const setSliderTransitionProperty = (style: 'none' | 'transform') => {
+    slider.style.transitionProperty = style
+  }
+
+  $: handleSwipe(currentIndex, transitioning)
 
   onMount(() => {
     if(sliderContainer) {
@@ -108,32 +128,33 @@
       calHeight = calculate('height', height)
     }
     if(slider) {
-      slider.style.transitionProperty = 'none'
-      slider.style.transform = `translateX(${calculateDistance(currentIndex)}px)`
+      setSliderTransitionProperty('none')
+      setSliderTranslateX(calDragDistance(currentIndex, calWidth, xPadding, getBoundingRect(sliderContainer, 'width')))
     }
   })
 </script>
 
 {#if data.length && $$slots.default}
   <div
-    data-cid={'Slider'}
+    data-cid='Slider'
+    data-tid='Slider'
     bind:this={sliderContainer}
     class="overflow-hidden"
-    style:padding-top={`${yPadding}px`}
-    style:padding-bottom={`${yPadding}px`}
+    style:margin-top={`${yPadding}px`}
+    style:margin-bottom={`${yPadding}px`}
     on:touchstart|nonpassive={onTouchStart}
     on:touchmove|nonpassive={onTouchMove}
     on:touchend|nonpassive={onTouchEnd}
-    on:transitionend={handleTransitionEnd}
+    on:transitionend={onTransitionEnd}
   >
     <div
       bind:this={slider}
       class="flex flex-nowrap items-center ease-in-out duration-500 will-change-transform"
-      style:width={`${slides.length * (calWidth + xPadding)}px`}
+      style:min-width={`${slidesLength * (calWidth + xPadding)}px`}
       style:height={`${calHeight}px`}
     >
       {#each slides as slide}
-        <div class="h-full" style:width={`${calWidth}px`} style:margin-right={`${xPadding}px`}>
+        <div data-class='slide' class="h-full" style:width={`${calWidth}px`} style:margin-right={`${xPadding}px`}>
           <slot item={slide}></slot>
         </div>
       {/each}
