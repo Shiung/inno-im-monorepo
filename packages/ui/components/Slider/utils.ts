@@ -33,7 +33,7 @@ export const calDragDistance = (slideIdx: number, slideWidth: number, padding: n
 }
 
 export const isOverThreshold = (dragDist: number, slideWidth: number, threshold: number) => {
-  return Math.abs(dragDist) > slideWidth * threshold
+  return Math.abs(dragDist) >= slideWidth * threshold
 }
 
 export const isOutsideBoundary = (x: number, container: HTMLDivElement) => {
