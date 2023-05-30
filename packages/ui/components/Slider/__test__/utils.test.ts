@@ -1,4 +1,14 @@
-import { isValidNumber, isPercentageValue, isPixelValue, getElementSize, calculate } from '../utils'
+import {
+  isValidNumber,
+  isPercentageValue,
+  isPixelValue,
+  getBoundingRect,
+  calculate,
+  calDragDistance,
+  isOverThreshold,
+  isOutsideBoundary,
+  getTouchClientX
+} from '../utils'
 import { vi } from 'vitest'
 
 test('isValidNumber function', () => {
@@ -49,19 +59,25 @@ test('isPixelValue function', () => {
   expect(result5).toBe(false)
 })
 
-test('getElementSize function', () => {
+test('getBoundingRect function', () => {
   let parent: { getBoundingClientRect: () => DOMRect } = {
     getBoundingClientRect: () => ({} as any)
   }
   parent.getBoundingClientRect = vi.fn(() => ({
     width: 300,
-    height: 200
+    height: 200,
+    left: 20,
+    right: 320
   }) as any)
 
-  const result1 = getElementSize(parent as HTMLDivElement, 'width')
+  const result1 = getBoundingRect(parent as HTMLDivElement, 'width')
   expect(result1).toBe(300)
-  const result2 = getElementSize(parent as HTMLDivElement, 'height')
+  const result2 = getBoundingRect(parent as HTMLDivElement, 'height')
   expect(result2).toBe(200)
+  const result3 = getBoundingRect(parent as HTMLDivElement, 'left')
+  expect(result3).toBe(20)
+  const result4 = getBoundingRect(parent as HTMLDivElement, 'right')
+  expect(result4).toBe(320)
 })
 
 test('calculate function', () => {
@@ -87,4 +103,55 @@ test('calculate function', () => {
 
   const result5 = calculate('height', 'abc')
   expect(result5).toBe(0)
+})
+
+test('calDragDistance function', () => {
+  const index = 1, width = 300, padding = 10, containerWidth = 500
+
+  const distance = calDragDistance(index, width, padding, containerWidth)
+
+  expect(distance).toBe(-210)
+})
+
+test('isOverThreshold function', () => {
+  const result1 = isOverThreshold(300, 500, 0.6)
+  expect(result1).toBe(true)
+
+  const result2 = isOverThreshold(200, 500, 0.6)
+  expect(result2).toBe(false)
+})
+
+test('isOutsideBoundary function', () => {
+  let parent: { getBoundingClientRect: () => DOMRect } = {
+    getBoundingClientRect: () => ({} as any)
+  }
+  parent.getBoundingClientRect = vi.fn(() => ({
+    width: 200,
+    height: 100,
+    left: 15,
+    right: 215
+  }) as any)
+
+  const result1 = isOutsideBoundary(10, parent as HTMLDivElement)
+  expect(result1).toBe(true)
+
+  const result2 = isOutsideBoundary(200, parent as HTMLDivElement)
+  expect(result2).toBe(false)
+})
+
+test('getTouchClientX function', () => {
+  const touchEvent = {
+    touches: [{ clientX: 100, clientY: 200 }],
+    changedTouches: [{ clientX: 300, clientY: 200 }],
+    targetTouches: [{ clientX: 200, clientY: 200 }],
+  } as unknown as TouchEvent
+
+  const result1 = getTouchClientX('touchstart', touchEvent)
+  expect(result1).toBe(100)
+
+  const result2 = getTouchClientX('touchmove', touchEvent)
+  expect(result2).toBe(100)
+
+  const result3 = getTouchClientX('touchend', touchEvent)
+  expect(result3).toBe(300)
 })
