@@ -28,8 +28,8 @@ export const calculate = (type: 'width' | 'height', value: string | number, pare
   return retWidth
 }
 
-export const calDragDistance = (slideIdx: number, slideWidth: number, padding: number, containerWidth: number) => {
-  return -slideIdx * (slideWidth + padding) + Math.floor((containerWidth - slideWidth) / 2)
+export const calDragDistance = (slideIdx: number, slideWidth: number, padding: number, container: HTMLDivElement) => {
+  return -slideIdx * (slideWidth + padding) + Math.floor((getBoundingRect(container, 'width')  - slideWidth) / 2)
 }
 
 export const isOverThreshold = (dragDist: number, slideWidth: number, threshold: number) => {

@@ -11,6 +11,15 @@ import {
 } from '../utils'
 import { vi } from 'vitest'
 
+const _createContainerEl = (options) => {
+  const parent: { getBoundingClientRect: () => DOMRect } = {
+    getBoundingClientRect: () => ({} as DOMRect)
+  }
+  parent.getBoundingClientRect = vi.fn(() => options as DOMRect)
+
+  return parent as HTMLDivElement
+}
+
 test('isValidNumber function', () => {
   const result1 = isValidNumber('1a2b')
   expect(result1).toBe(false)
@@ -60,34 +69,28 @@ test('isPixelValue function', () => {
 })
 
 test('getBoundingRect function', () => {
-  let parent: { getBoundingClientRect: () => DOMRect } = {
-    getBoundingClientRect: () => ({} as any)
-  }
-  parent.getBoundingClientRect = vi.fn(() => ({
+  const parent = _createContainerEl({
     width: 300,
     height: 200,
     left: 20,
     right: 320
-  }) as any)
+  })
 
-  const result1 = getBoundingRect(parent as HTMLDivElement, 'width')
+  const result1 = getBoundingRect(parent, 'width')
   expect(result1).toBe(300)
-  const result2 = getBoundingRect(parent as HTMLDivElement, 'height')
+  const result2 = getBoundingRect(parent, 'height')
   expect(result2).toBe(200)
-  const result3 = getBoundingRect(parent as HTMLDivElement, 'left')
+  const result3 = getBoundingRect(parent, 'left')
   expect(result3).toBe(20)
-  const result4 = getBoundingRect(parent as HTMLDivElement, 'right')
+  const result4 = getBoundingRect(parent, 'right')
   expect(result4).toBe(320)
 })
 
 test('calculate function', () => {
-  let parent: { getBoundingClientRect: () => DOMRect } = {
-    getBoundingClientRect: () => ({} as any)
-  }
-  parent.getBoundingClientRect = vi.fn(() => ({
+  const parent = _createContainerEl({
     width: 300,
     height: 200
-  }) as any)
+  })
 
   const result1 = calculate('width', 150)
   expect(result1).toBe(150)
@@ -95,7 +98,7 @@ test('calculate function', () => {
   const result2 = calculate('height', '150')
   expect(result2).toBe(150)
 
-  const result3 = calculate('width', '80%', parent as HTMLDivElement)
+  const result3 = calculate('width', '80%', parent)
   expect(result3).toBe(240)
 
   const result4 = calculate('height', '80px')
@@ -106,11 +109,17 @@ test('calculate function', () => {
 })
 
 test('calDragDistance function', () => {
-  const index = 1, width = 300, padding = 10, containerWidth = 500
+  const index = 1, width = 200, padding = 10
+  const parent = _createContainerEl({
+    width: 300,
+    height: 200,
+    left: 20,
+    right: 320
+  })
 
-  const distance = calDragDistance(index, width, padding, containerWidth)
+  const result = calDragDistance(index, width, padding, parent)
 
-  expect(distance).toBe(-210)
+  expect(result).toBe(-160)
 })
 
 test('isOverThreshold function', () => {
@@ -122,20 +131,17 @@ test('isOverThreshold function', () => {
 })
 
 test('isOutsideBoundary function', () => {
-  let parent: { getBoundingClientRect: () => DOMRect } = {
-    getBoundingClientRect: () => ({} as any)
-  }
-  parent.getBoundingClientRect = vi.fn(() => ({
+  const parent = _createContainerEl({
     width: 200,
     height: 100,
     left: 15,
     right: 215
-  }) as any)
+  })
 
-  const result1 = isOutsideBoundary(10, parent as HTMLDivElement)
+  const result1 = isOutsideBoundary(10, parent)
   expect(result1).toBe(true)
 
-  const result2 = isOutsideBoundary(200, parent as HTMLDivElement)
+  const result2 = isOutsideBoundary(200, parent)
   expect(result2).toBe(false)
 })
 

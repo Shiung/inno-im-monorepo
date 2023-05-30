@@ -49,7 +49,7 @@
     
     const touchMoveX = getTouchClientX('touchmove', e)
     const distance = touchMoveX - touchStartX
-    const totalDistance = distance + calDragDistance(currentIndex, calWidth, xPadding, getBoundingRect(sliderContainer, 'width'))
+    const totalDistance = distance + calDragDistance(currentIndex, calWidth, xPadding, sliderContainer)
 
     setSliderTranslateX(totalDistance)
 
@@ -108,7 +108,7 @@
       if(!transitioning) setSliderTransitionProperty('transform')
       else setTransitioning(false)
 
-      setSliderTranslateX(calDragDistance(index, calWidth, xPadding, getBoundingRect(sliderContainer, 'width')))
+      setSliderTranslateX(calDragDistance(index, calWidth, xPadding, sliderContainer))
     }
   }
 
@@ -129,7 +129,7 @@
     }
     if(slider) {
       setSliderTransitionProperty('none')
-      setSliderTranslateX(calDragDistance(currentIndex, calWidth, xPadding, getBoundingRect(sliderContainer, 'width')))
+      setSliderTranslateX(calDragDistance(currentIndex, calWidth, xPadding, sliderContainer))
     }
   })
 </script>
