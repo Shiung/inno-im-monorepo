@@ -1,13 +1,17 @@
 <script lang='ts'>
 import Empty from '$containers/Empty'
+import type { IExpertPrediction } from 'api/im/types'
 
 import FoldedExperts from './FoldedExperts.svelte'
 import Experts from './Experts.svelte'
 
-import type { IExpertPrediction } from 'api/im/types'
+import { setGoDetail, type IGoDetail } from './context'
 
 export let folder: boolean = false
 export let list: IExpertPrediction[]
+export let goMethods: IGoDetail = null
+
+$: setGoDetail(goMethods)
 
 </script>
 

@@ -3,13 +3,13 @@ import { Button, Ripple } from 'ui'
 import { convertTimeDiffToPast } from 'utils/convertDateAndTimestamp'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
-import { getGoDetail } from '$src/platform/expert/context'
+import type { IExpertPrediction } from 'api/im/types'
 
 import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
 import MarketBadget from '$src/components/MarketBadget'
 
-import type { IExpertPrediction } from 'api/im/types'
+import { getGoDetail } from '../context'
 
 export let prodiction: IExpertPrediction
 
@@ -24,7 +24,7 @@ const convertReleaseTime = (releaseTime: number) => {
     default: return time.text
   }
 }
-const { goExpertDetailCallback, goPlanDetailCallback } = getGoDetail() || {}
+const { goExpertDetailCallback, goPlanDetailCallback } = getGoDetail()
 
 const goToExpertDetail = () => {  
   if (typeof $goExpertDetailCallback !== 'function') return push(`/expertDetail/${prodiction.expertId}/plan`)

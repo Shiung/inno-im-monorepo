@@ -1,6 +1,6 @@
 import { createStoreContext } from 'utils/storeContext'
 
-interface IGoDetail {
+export interface IGoDetail {
   goExpertDetailCallback: (path: string) => void
   goPlanDetailCallback: (path: string) => void
 }
