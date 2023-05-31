@@ -1,10 +1,13 @@
 <script lang='ts' context='module'>
 import { writable } from 'svelte/store';
-import { convertSid } from 'utils'
 import { initGoDetail, setGoDetail } from './context'
 
 let sid = writable(null)
-export const setSid = (setSid: string) => sid.set(convertSid(setSid))
+export const setSid = (sidValue: number) => {
+  if (typeof sidValue !== 'number') return console.warn('setSid parameter MUST be type of number')
+
+  sid.set(sidValue)
+}
 
 let detail = writable(initGoDetail)
 export const setGoToExpertDetail = (callback: (path: string) => void) => detail.update(e => {
