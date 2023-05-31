@@ -35,32 +35,3 @@ export const convertTimeDiffToPast = (props: { now: number, past: number }): IDi
     unit: 'date'
   }
 }
-
-type TimeInfo = {
-  second: number
-  minute: number
-  hour: number
-  day: number
-  month: number
-  year: number
-}
-
-export const getTimeDiffInfo = (diff: number): TimeInfo => {
-  const timeDiffSec = Math.ceil(diff / 1000)
-
-  const second = timeDiffSec % 60
-  const minute = Math.floor(timeDiffSec / 60) % 60
-  const hour = Math.floor(timeDiffSec / 60 / 60) % 24
-  const day = Math.floor(timeDiffSec / 60 / 60 / 24) % 30
-  const month = Math.floor(timeDiffSec / 60 / 60 / 24 / 30) % 12
-  const year = Math.floor(timeDiffSec / 60 / 60 / 24 / 30 / 12)
-
-  return {
-    second,
-    minute,
-    hour,
-    day,
-    month,
-    year
-  }
-}
