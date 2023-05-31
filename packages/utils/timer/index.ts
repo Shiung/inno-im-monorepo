@@ -48,7 +48,7 @@ class Timer {
 
     if(this.#status === 'paused') {
       if(this.type === 'countUp') {
-        this.#startTime = new Date().getTime() - this.#currentTime
+        this.#startTime = new Date().getTime() - Math.floor(this.#currentTime / ONE_SECOND) * ONE_SECOND
         this.#count = 0
       }
       this.#status = 'started'
@@ -72,13 +72,13 @@ class Timer {
   }
  
   get currentTime() {
-    return this.#getTimeDiffInfo(this.#currentTime > 0 ? this.#currentTime : 0)
+    return this.#getTimeDiffInfo(Math.max(this.#currentTime, 0))
   }
 
   #tick() {
     const now = new Date().getTime()
     const delay = now - (this.#startTime + this.#count * ONE_SECOND)
-    const interval = ONE_SECOND - delay > 0 ? ONE_SECOND - delay : 0
+    const interval = Math.max(ONE_SECOND - delay, 0)
     this.#count += 1
 
     this.#currentTime = this.#calCurrentTime(now)
