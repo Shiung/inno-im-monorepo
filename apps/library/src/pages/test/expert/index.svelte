@@ -3,7 +3,7 @@
   import List, { setSid, setGoToExpertDetail, setGoToPlanDetail } from '$src/platform/expert'
 
   onMount(()=>{
-    setSid("1")
+    setSid(1)
     setTimeout(() => {
       setGoToExpertDetail((val: string) => (window.location.href = val))
       setGoToPlanDetail((val: string) => { console.log('plan detail path = ', val) })
