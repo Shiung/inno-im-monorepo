@@ -23,42 +23,65 @@ class Timer {
   #timerId = null
   #startTime: number
   #endTime: number
-  #offset
   #currentTime: number
-  #count
+  #count: number
+  #status: 'started' | 'paused' | 'stopped' = 'started'
 
   tickCallback: (timeInfo: TimeInfo) => void
   type: 'countDown' | 'countUp'
-  timeout = false
 
   constructor(options: TimerOptions = {}) {
-    const { start , end, type = 'countDown', offset, tickCallback } = options
+    const { start , end, type = 'countDown', tickCallback } = options
 
     this.type = type
     this.#startTime = isNaN(new Date(start).valueOf()) ? Date.now() : new Date(start).getTime()
     this.#endTime = isNaN(new Date(end).valueOf()) ? Date.now() : new Date(end).getTime()
     this.#currentTime = this.#calCurrentTime(new Date().getTime())
     this.#count = 0
-    // this.offset = offset
     this.tickCallback = typeof tickCallback === 'function' ? tickCallback : noop
 
     this.start()
   }
 
   start() {
-    this.tick()
+    if(this.#status === 'stopped') return
+
+    if(this.#status === 'paused') {
+      if(this.type === 'countUp') {
+        this.#startTime = new Date().getTime() - this.#currentTime
+        this.#count = 0
+      }
+      this.#status = 'started'
+    }
+
+    this.#tick()
   }
 
-  tick() {
-    if(this.timeout) return
-    
+  pause() {
+    if(this.#status === 'stopped' || this.#status === 'paused') return
+
+    clearTimeout(this.#timerId)
+    this.#status = 'paused'
+  }
+
+  stop() {
+    if(this.#status === 'stopped') return
+
+    clearTimeout(this.#timerId)
+    this.#status = 'stopped'
+  }
+ 
+  get currentTime() {
+    return this.#getTimeDiffInfo(this.#currentTime > 0 ? this.#currentTime : 0)
+  }
+
+  #tick() {
     const now = new Date().getTime()
     const delay = now - (this.#startTime + this.#count * ONE_SECOND)
-    const interval = ONE_SECOND - delay
+    const interval = ONE_SECOND - delay > 0 ? ONE_SECOND - delay : 0
     this.#count += 1
 
     this.#currentTime = this.#calCurrentTime(now)
-
     this.tickCallback(this.currentTime)
 
     if(this.type === 'countDown' && this.#currentTime <= 0) {
@@ -67,7 +90,7 @@ class Timer {
     }
 
     this.#timerId = setTimeout(() => {
-      if(!this.timeout) this.tick()
+      this.#tick()
     }, interval)
   }
 
@@ -77,16 +100,6 @@ class Timer {
     } else {
       return now - this.#startTime
     }
-  }
-
-  stop() {
-    clearTimeout(this.#timerId)
-    this.timeout = true
-    this.#count = 0
-  }
- 
-  get currentTime() {
-    return this.#getTimeDiffInfo(this.#currentTime > 0 ? this.#currentTime : 0)
   }
 
   #getTimeDiffInfo (diff: number) {
