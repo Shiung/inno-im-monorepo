@@ -25,7 +25,7 @@ list.list.subscribe((value) => _list = value)
 </script>
 
 {#if !_list || _list?.length === 0}
-  <Empty />
+  <Empty class='h-[300px]' />
 {:else}
   <div>
     <StreamingAnchor />

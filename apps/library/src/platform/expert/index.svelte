@@ -50,5 +50,5 @@ $: fetchPredictions($sid)
     <ExpertList list={response?.data?.list || []} goToDetail={$goToDetail} />
   </div>
 {:catch}
-  <Empty />
+  <Empty class='h-[300px]' />
 {/await}
