@@ -161,7 +161,7 @@ const expert: IMockData[] = [
       {
         articleId: "@word",
         releaseTime: randomPostTime(),
-        closeTime: randomPostTime(),
+        closeTime: Date.now() + Math.floor(Math.random() * 12 + 1) * 60 * 60 * 1000,
         articleStatus: Random.integer(1, 2) as Types.IArticleDetail['articleStatus'],
         title: "@cparagraph",
         content: "@cparagraph",

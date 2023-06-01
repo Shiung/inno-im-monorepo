@@ -4,7 +4,7 @@
 
   import MarketBadget from '$src/components/MarketBadget'
 
-  // import TimerLabel from './components/TimerLabel.svelte'
+  import TimerLabel from './components/TimerLabel.svelte'
 
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
   import { getIsPast } from '../context'
@@ -20,9 +20,9 @@
     <div class='flex items-center justify-between'>
       <div class='flex items-center space-x-1'>
         <MarketBadget marketType={data?.marketType} />
-        <!-- {#if !$isPast}
+        {#if !$isPast}
           <TimerLabel />
-        {/if} -->
+        {/if}
       </div>
 
       <span class='text-[10px] leading-[15px] text-[#999]'>

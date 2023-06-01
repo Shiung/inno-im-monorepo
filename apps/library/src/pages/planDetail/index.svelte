@@ -1,6 +1,7 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
+  import { Timer } from 'utils'
   import { t } from '$stores'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
@@ -25,20 +26,35 @@
   import BetButton from './BottomPanel/components/BetButton.svelte'
 
   import { setIsPast } from './context'
+  import { time } from './store'
 
-  let response, loading: boolean
+  let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
+  let loading: boolean
   let coin: number = 1500
   let bonus: number = 100000
   let isPast = false
   let isLocked = false
+  let timer: Timer
+
+  const TWENTY_FOUR_HOURS = 86400000
 
   const fetchArticleDetail = async (articleId: string) => {
     loading = true
     response = await im.expertArticleDetail({ query: { articleId }})
     loading = false
-    const { past, articleStatus } = response?.data
+    const { past, articleStatus, closeTime } = response?.data
     if (past) isPast = true
     if (articleStatus === 2) isLocked = true
+    
+    const diffTime = closeTime - new Date().getTime()
+    if(diffTime < TWENTY_FOUR_HOURS) {
+      timer = new Timer({
+        start: response?.serverTime,
+        end: closeTime,
+        tickCallback: (timeObj) => { time.set(timeObj) },
+        stopCallback: () => { console.log('stop!!!' )}
+      })
+    }
   }
 
   const onUnlockClick = () => {
