@@ -21,7 +21,7 @@ export type TimeInfo = {
 }
 
 class Timer {
-  #timerId = null
+  #timerId: ReturnType<typeof setTimeout> | null = null
   #startTime: number
   #endTime: number
   #currentTime: number
@@ -32,8 +32,8 @@ class Timer {
   stopCallback: () => void
   type: 'countDown' | 'countUp'
 
-  constructor(options: TimerOptions = {}) {
-    const { start , end, type = 'countDown', tickCallback, stopCallback } = options
+  constructor(options: TimerOptions) {
+    const { start = '' , end = '', type = 'countDown', tickCallback, stopCallback } = options || {}
 
     this.type = type
     this.#startTime = isNaN(new Date(start).valueOf()) ? Date.now() : new Date(start).getTime()
@@ -63,14 +63,14 @@ class Timer {
   pause() {
     if(this.#status === 'stopped' || this.#status === 'paused') return
 
-    clearTimeout(this.#timerId)
+    this.#timerId && clearTimeout(this.#timerId)
     this.#status = 'paused'
   }
 
   stop() {
     if(this.#status === 'stopped') return
 
-    clearTimeout(this.#timerId)
+    this.#timerId && clearTimeout(this.#timerId)
     this.#status = 'stopped'
     this.stopCallback()
   }
