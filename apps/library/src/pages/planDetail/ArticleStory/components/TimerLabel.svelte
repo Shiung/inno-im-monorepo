@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { TimeInfo } from 'utils'
+  import { t } from '$stores'
   import { time } from '../../store'
 
   const format = (timeInfo: TimeInfo) => {
@@ -19,6 +20,6 @@
     data-cid="TimerLabel"
     class="px-1 bg-[rgba(var(--im-monorepo-primary)_/_0.1)] rounded text-[rgba(var(--im-monorepo-primary))] text-[10px] leading-[15px]"
   >
-    {formatTime}
+    {`${$t('expert.planDetail.limitedTimePlan')}：`}{formatTime}
   </div>
 {/if}
