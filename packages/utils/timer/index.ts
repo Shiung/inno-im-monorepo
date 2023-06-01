@@ -8,6 +8,7 @@ export type TimerOptions = {
   type?: 'countDown' | 'countUp'
   offset?: number
   tickCallback?: (timeInfo: TimeInfo) => void
+  stopCallback?: () => void
 }
 
 export type TimeInfo = {
@@ -28,10 +29,11 @@ class Timer {
   #status: 'started' | 'paused' | 'stopped' = 'started'
 
   tickCallback: (timeInfo: TimeInfo) => void
+  stopCallback: () => void
   type: 'countDown' | 'countUp'
 
   constructor(options: TimerOptions = {}) {
-    const { start , end, type = 'countDown', tickCallback } = options
+    const { start , end, type = 'countDown', tickCallback, stopCallback } = options
 
     this.type = type
     this.#startTime = isNaN(new Date(start).valueOf()) ? Date.now() : new Date(start).getTime()
@@ -39,6 +41,7 @@ class Timer {
     this.#currentTime = this.#calCurrentTime(new Date().getTime())
     this.#count = 0
     this.tickCallback = typeof tickCallback === 'function' ? tickCallback : noop
+    this.stopCallback = typeof stopCallback === 'function' ? stopCallback : noop
 
     this.start()
   }
@@ -69,6 +72,7 @@ class Timer {
 
     clearTimeout(this.#timerId)
     this.#status = 'stopped'
+    this.stopCallback()
   }
  
   get currentTime() {
