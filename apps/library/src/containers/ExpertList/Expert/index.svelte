@@ -9,7 +9,7 @@ import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
 import MarketBadget from '$src/components/MarketBadget'
 
-import { getGoDetail } from '../context'
+import { getGoToDetail } from '../context'
 
 export let prodiction: IExpertPrediction
 
@@ -24,16 +24,16 @@ const convertReleaseTime = (releaseTime: number) => {
     default: return time.text
   }
 }
-const { goExpertDetailCallback, goPlanDetailCallback } = getGoDetail()
+const { goToExpertDetailCallback, goToPlanDetailCallback } = getGoToDetail()
 
 const goToExpertDetail = () => {  
-  if (typeof $goExpertDetailCallback !== 'function') return push(`/expertDetail/${prodiction.expertId}/plan`)
-  $goExpertDetailCallback(`/expertDetail/${prodiction.expertId}/plan`)
+  if (typeof $goToExpertDetailCallback !== 'function') return push(`/expertDetail/${prodiction.expertId}/plan`)
+  $goToExpertDetailCallback(`/expertDetail/${prodiction.expertId}/plan`)
 }
 
 const goToPlanDetail = () => {  
-  if (typeof $goPlanDetailCallback !== 'function') return push(`/planDetail/${prodiction.expertId}/${prodiction.articleId}`)
-  $goPlanDetailCallback(`/planDetail/${prodiction.expertId}/${prodiction.articleId}`)
+  if (typeof $goToPlanDetailCallback !== 'function') return push(`/planDetail/${prodiction.expertId}/${prodiction.articleId}`)
+  $goToPlanDetailCallback(`/planDetail/${prodiction.expertId}/${prodiction.articleId}`)
 }
 
 </script>

@@ -1,6 +1,6 @@
 <script lang='ts' context='module'>
 import { writable } from 'svelte/store';
-import { initGoDetail } from '$src/containers/ExpertList'
+import { initGoToDetail } from '$src/containers/ExpertList'
 let sid = writable(null)
 export const setSid = (sidValue: number) => {
   if (typeof sidValue !== 'number') return console.warn('setSid parameter MUST be type of number')
@@ -8,13 +8,13 @@ export const setSid = (sidValue: number) => {
   sid.set(sidValue)
 }
 
-let goDetail = writable(initGoDetail)
-export const setGoToExpertDetail = (callback: (path: string) => void) => goDetail.update(e => {
-  e.goExpertDetailCallback = callback
+let goToDetail = writable(initGoToDetail)
+export const setGoToExpertDetail = (callback: (path: string) => void) => goToDetail.update(e => {
+  e.goToExpertDetailCallback = callback
   return e
 })
-export const setGoToPlanDetail = (callback: (path: string) => void) => goDetail.update(e => {
-  e.goPlanDetailCallback = callback
+export const setGoToPlanDetail = (callback: (path: string) => void) => goToDetail.update(e => {
+  e.goToPlanDetailCallback = callback
   return e
 })
 
@@ -46,7 +46,9 @@ $: fetchPredictions($sid)
 {#await predictionsPromise}
   <Loading />
 {:then response}
-  <ExpertList list={response?.data?.list || []} goMethods={$goDetail} />
+  <div class='bg-white'>
+    <ExpertList list={response?.data?.list || []} goToDetail={$goToDetail} />
+  </div>
 {:catch}
   <Empty />
 {/await}

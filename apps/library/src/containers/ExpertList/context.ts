@@ -1,13 +1,13 @@
 import { createStoreContext } from 'utils/storeContext'
 
-export interface IGoDetail {
-  goExpertDetailCallback: (path: string) => void
-  goPlanDetailCallback: (path: string) => void
+export interface IGoToDetail {
+  goToExpertDetailCallback: (path: string) => void
+  goToPlanDetailCallback: (path: string) => void
 }
 
-export const initGoDetail: IGoDetail = {
-  goExpertDetailCallback: null,
-  goPlanDetailCallback: null
+export const initGoToDetail: IGoToDetail = {
+  goToExpertDetailCallback: null,
+  goToPlanDetailCallback: null
 }
 
-export const [setGoDetail, getGoDetail] = createStoreContext<IGoDetail>('expertDetail', initGoDetail)
+export const [setGoToDetail, getGoToDetail] = createStoreContext<IGoToDetail>('expertDetail', initGoToDetail)
