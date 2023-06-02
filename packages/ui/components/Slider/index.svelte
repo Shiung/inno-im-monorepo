@@ -21,7 +21,6 @@
   export let needSlide: boolean = true
 
   let movable = false
-  let moveDisabled = false
   let transitioning: boolean = false
 
   let slider: HTMLDivElement | null = null
@@ -39,8 +38,8 @@
 
   const onTouchStart = (e: TouchEvent) => {
     if(!needSlide) return
+    if(!('touches' in e)) return
     e.preventDefault()
-    if(!('touches' in e) || moveDisabled) return
 
     touchStartX = getTouchClientX('touchstart', e)
     movable = true
@@ -48,13 +47,22 @@
 
   const onTouchMove = (e: TouchEvent) => {
     if(!needSlide) return
-    e.preventDefault()
     if(!('touches' in e) || !movable) return
+    e.preventDefault()
     
     const touchMoveX = getTouchClientX('touchmove', e)
     const distance = touchMoveX - touchStartX
-    const totalDistance = distance + calDragDistance(currentIndex, calWidth, xPadding, sliderContainer)
+    let totalDistance
 
+    if(isLastTwoElement(currentIndex, slidesLength)) {
+      setSliderTransitionProperty('none')
+      setCurrentIndex(slidesFirstIndex)
+    } else if (isSecondElement(currentIndex)) {
+      setSliderTransitionProperty('none')
+      setCurrentIndex(slidesLastIndex)
+    }
+
+    totalDistance = distance + calDragDistance(currentIndex, calWidth, xPadding, sliderContainer)
     setSliderTranslateX(totalDistance)
 
     if (isOutsideBoundary(touchMoveX, sliderContainer)) {
@@ -66,11 +74,13 @@
 
   const onTouchEnd = (e: TouchEvent) => {
     if(!needSlide) return
-    e.preventDefault()
     if(!('touches' in e) || !movable) return
+    e.preventDefault()
 
     const touchEndX = getTouchClientX('touchend', e)
     const distance = touchEndX - touchStartX
+
+    movable = false
 
     if(isOverThreshold(distance, calWidth, swipeThreshold)) {
       const newIndex = distance < 0 ? currentIndex + 1 : currentIndex - 1
@@ -78,51 +88,45 @@
     } else {
       handleSwipe(currentIndex, false)
     }
-
-    movable = false
   }
 
   const setTransitioning = (val: boolean) => {
     transitioning = val
-    if(!val) moveDisabled = false
   }
 
   const setCurrentIndex = (val: number) => {
     currentIndex = val
-    if(isSecondElement(currentIndex) || isLastTwoElement(currentIndex, slidesLength)) {
-      moveDisabled = true
-    }
   }
 
   const onTransitionEnd = () => {
-    if (slider) {
-      setSliderTransitionProperty('none')
+    if(movable) return
 
-      if(isLastTwoElement(currentIndex, slidesLength)) {
-        setCurrentIndex(slidesFirstIndex)
-        setTransitioning(true)
-      } else if (isSecondElement(currentIndex)) {
-        setCurrentIndex(slidesLastIndex)
-        setTransitioning(true)
-      }
+    setSliderTransitionProperty('none')
+
+    if(isLastTwoElement(currentIndex, slidesLength)) {
+      setCurrentIndex(slidesFirstIndex)
+      setTransitioning(true)
+    } else if (isSecondElement(currentIndex)) {
+      setCurrentIndex(slidesLastIndex)
+      setTransitioning(true)
     }
   }
 
   const handleSwipe = (index: number, transitioning: boolean) => {
-    if(slider) {
-      if(!transitioning) setSliderTransitionProperty('transform')
-      else setTransitioning(false)
+    if(movable) return
 
-      setSliderTranslateX(calDragDistance(index, calWidth, xPadding, sliderContainer))
-    }
+    if(!transitioning) setSliderTransitionProperty('transform')
+    else setTransitioning(false)
+
+    setSliderTranslateX(calDragDistance(index, calWidth, xPadding, sliderContainer))
   }
 
   const setSliderTranslateX = (distance: number) => {
-    slider.style.transform = `translateX(${distance}px)`
+    if(slider) slider.style.transform = `translateX(${distance}px)`
   }
 
   const setSliderTransitionProperty = (style: 'none' | 'transform') => {
-    slider.style.transitionProperty = style
+    if(slider) slider.style.transitionProperty = style
   }
 
   $: handleSwipe(currentIndex, transitioning)
@@ -132,10 +136,9 @@
       calWidth = calculate('width', width, sliderContainer)
       calHeight = calculate('height', height)
     }
-    if(slider) {
-      setSliderTransitionProperty('none')
-      setSliderTranslateX(calDragDistance(currentIndex, calWidth, xPadding, sliderContainer))
-    }
+
+    setSliderTransitionProperty('none')
+    setSliderTranslateX(calDragDistance(currentIndex, calWidth, xPadding, sliderContainer))
   })
 </script>
 
