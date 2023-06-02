@@ -1,0 +1,11 @@
+{
+  "name": "protobuf",
+  "version": "0.0.0",
+  "description": "for protobuf.",
+  "private": true,
+  "main": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "protobufjs": "^7.2.3"
+  }
+}

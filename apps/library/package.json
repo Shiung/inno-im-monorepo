@@ -30,7 +30,8 @@
     "tailwind-merge": "^1.10.0",
     "ui": "workspace:*",
     "utils": "workspace:*",
-    "vd-resource": "workspace:*"
+    "vd-resource": "workspace:*",
+    "protobuf": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
