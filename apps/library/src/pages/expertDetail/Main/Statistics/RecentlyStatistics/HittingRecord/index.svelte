@@ -15,11 +15,9 @@
   $: chartData = calculateRecordData(data)
 </script>
 
-{#if loading || chartData.length}
-  <div class="px-4">
-    <Title>{$t('expert.statistics.hitRecord')}</Title>
-  </div>
-{/if}
+<div class="px-4">
+  <Title>{$t('expert.statistics.hitRecord')}</Title>
+</div>
 
 {#if loading}
   <Loading />

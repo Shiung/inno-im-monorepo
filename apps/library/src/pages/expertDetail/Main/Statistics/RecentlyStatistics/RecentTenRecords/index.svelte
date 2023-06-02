@@ -12,16 +12,14 @@
   export let data: StatisticsList
 </script>
 
-{#if loading || data.length}
-  <div class="flex items-center justify-between px-4">
-    <Title>{$t('expert.statistics.recentRecord', { num: 10 })}</Title>
+<div class="flex items-center justify-between px-4">
+  <Title>{$t('expert.statistics.recentRecord', { num: 10 })}</Title>
 
-    <div class="flex space-x-3">
-      <SubTitleItem title={$t('expert.statistics.hit')} color={'rgba(var(--im-monorepo-primary))'} />
-      <SubTitleItem title={$t('expert.statistics.none')} color={'#ddd'} />
-    </div>
+  <div class="flex space-x-3">
+    <SubTitleItem title={$t('expert.statistics.hit')} color={'rgba(var(--im-monorepo-primary))'} />
+    <SubTitleItem title={$t('expert.statistics.none')} color={'#ddd'} />
   </div>
-{/if}
+</div>
 
 {#if loading}
   <Loading />
