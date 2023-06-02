@@ -8,7 +8,8 @@
     isOutsideBoundary,
     isSecondElement,
     isLastTwoElement,
-    getTouchClientX
+    getTouchClientX,
+    createSlide
   } from './utils'
 
   export let data: any[]
@@ -17,6 +18,7 @@
   export let width: string | number = '90%'
   export let height: string | number  = 63
   export let swipeThreshold: number = 0.3
+  export let needSlide: boolean = true
 
   let movable = false
   let moveDisabled = false
@@ -28,14 +30,15 @@
   let calWidth: number = 0
   let calHeight: number = 0
 
-  $: slides = data.slice(-2).concat(data).concat(data.slice(0, 2))
-  const slidesFirstIndex = 2
+  $: slides = createSlide(data, needSlide)
+  const slidesFirstIndex = needSlide ? 2 : 0
   $: slidesLength = slides.length
   $: slidesLastIndex = slidesLength - 3
   let currentIndex = slidesFirstIndex
   let touchStartX: number = 0
 
   const onTouchStart = (e: TouchEvent) => {
+    if(!needSlide) return
     e.preventDefault()
     if(!('touches' in e) || moveDisabled) return
 
@@ -44,6 +47,7 @@
   }
 
   const onTouchMove = (e: TouchEvent) => {
+    if(!needSlide) return
     e.preventDefault()
     if(!('touches' in e) || !movable) return
     
@@ -61,6 +65,7 @@
   }
 
   const onTouchEnd = (e: TouchEvent) => {
+    if(!needSlide) return
     e.preventDefault()
     if(!('touches' in e) || !movable) return
 
