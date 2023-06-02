@@ -422,35 +422,37 @@
 	}
 </script>
 
-<div
-	data-cid='LineChart'
-	class="relative mx-auto"
-	style="width: {extendedChartOptions.containerWidth}px; height: {extendedChartOptions.containerHeight}px"
->
-	<!-- fixed yAxis -->
-	<svg bind:this={yAxisEl} />
-	<!-- chart -->
+{#if chartData.length}
 	<div
-		bind:this={containerEl}
-		class="absolute top-0 left-0 overflow-x-auto overflow-y-hidden"
-		style:width="{extendedChartOptions.containerWidth}px"
-		style:height="{extendedChartOptions.containerHeight}px"
+		data-cid='LineChart'
+		class="relative mx-auto"
+		style="width: {extendedChartOptions.containerWidth}px; height: {extendedChartOptions.containerHeight}px"
 	>
-		<svg bind:this={mainEl} />
+		<!-- fixed yAxis -->
+		<svg bind:this={yAxisEl} />
+		<!-- chart -->
+		<div
+			bind:this={containerEl}
+			class="absolute top-0 left-0 overflow-x-auto overflow-y-hidden"
+			style:width="{extendedChartOptions.containerWidth}px"
+			style:height="{extendedChartOptions.containerHeight}px"
+		>
+			<svg bind:this={mainEl} />
+		</div>
+		<!-- tooltip -->
+		<div
+			bind:this={tooltipEl}
+			id={'detail-tooltip'}
+			class="absolute z-10 py-1 px-2 rounded-lg min-h-[28px] opacity-0 transition-opacity pointer-events-none shadow-[4px_6px_6px_0_rgba(76,158,234,0.3)]
+				after:border-[5px] after:content-[''] after:block after:w-0 after:h-0 after:absolute after:top-1/2 after:-translate-y-1/2"
+			style="background: linear-gradient(270deg, #1990FF 0%, #38B4FF 100%);"
+		>
+			{#if Object.keys(info).length}
+				<span class="text-white text-[10px] leading-[21px]">{$t('expert.statistics.recentGameHitRate', { total: info.total, hit: info.hit })} {info.percent}%</span>
+			{/if}
+		</div>
 	</div>
-	<!-- tooltip -->
-	<div
-		bind:this={tooltipEl}
-		id={'detail-tooltip'}
-		class="absolute z-10 py-1 px-2 rounded-lg min-h-[28px] opacity-0 transition-opacity pointer-events-none shadow-[4px_6px_6px_0_rgba(76,158,234,0.3)]
-			after:border-[5px] after:content-[''] after:block after:w-0 after:h-0 after:absolute after:top-1/2 after:-translate-y-1/2"
-		style="background: linear-gradient(270deg, #1990FF 0%, #38B4FF 100%);"
-	>
-		{#if Object.keys(info).length}
-			<span class="text-white text-[10px] leading-[21px]">{$t('expert.statistics.recentGameHitRate', { total: info.total, hit: info.hit })} {info.percent}%</span>
-		{/if}
-	</div>
-</div>
+{/if}
 
 <style lang='scss'>
 	#detail-tooltip {

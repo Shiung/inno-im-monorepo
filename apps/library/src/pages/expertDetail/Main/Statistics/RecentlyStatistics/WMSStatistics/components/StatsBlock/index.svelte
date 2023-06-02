@@ -8,7 +8,7 @@
   export let info: StatisticsInfo
 </script>
 
-<div class="relative inline-flex items-center justify-center w-full h-full rounded-[10px] bg-white im-shadow">
+<div class="relative inline-flex items-center justify-center w-full h-[63px] rounded-[10px] bg-white im-shadow">
   <div class="absolute top-0 left-0">
     <PeriodLabel data={info.type} />
   </div>
