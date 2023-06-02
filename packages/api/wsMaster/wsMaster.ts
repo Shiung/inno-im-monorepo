@@ -1,38 +1,49 @@
 import WatchDog from './watchdog'
-import type { SocketRef, WsMasterProps, SyncOptions } from './types'
+import type { WatchDogProps, WsMasterProps, SyncOptions } from './types'
 import wsObservables from './wsObservables'
 
 type PromiseResolver = { resolve: (value: any) => void; timer: ReturnType<typeof setTimeout> }
 
 class WsMaster {
-  url: string
-  socket: SocketRef
-  watchdog: WatchDog
-  reconnectInterval: number
-  messageHandler: Function
   listeners: { [key: string]: PromiseResolver[] }
   defaultSyncTimeout: number
-  enable: boolean
-  timer?: ReturnType<typeof setTimeout>
-  stopIfRetryOverTimes?: number
+  enabled: boolean
   retryTimes: number
+
+  url: WsMasterProps['url']
+  socket: WatchDogProps['socket']
+  reconnectInterval: WatchDogProps['reconnectTimeout']
+  messageHandler: WsMasterProps['messageHandler']
+
+  watchdog: WatchDog
+
+  eventkeyParser: WsMasterProps['eventkeyParser']
+  binaryType: WsMasterProps['binaryType']
+  stopIfRetryOverTimes?: number
+
+  timer?: ReturnType<typeof setTimeout>
 
   constructor(props: WsMasterProps) {
     this.listeners = {}
+    this.defaultSyncTimeout = 30 * 1000
+    this.enabled = true
+    this.retryTimes = 0
+
     this.url = props.url
-    this.stopIfRetryOverTimes = props.stopIfRetryOverTimes
     this.socket = { current: null }
     this.reconnectInterval = props.reconnectInterval || 3 * 1000
-    this.defaultSyncTimeout = 30 * 1000
-    this.enable = true
-    this.retryTimes = 0
     this.messageHandler = props.messageHandler
+
     this.watchdog = new WatchDog({
       socket: this.socket,
       pingInterval: props.pingInterval,
       reconnectTimeout: props.reconnectTimeout,
       pingCommand: props.pingCommand
     })
+
+    if (props.eventkeyParser) this.eventkeyParser = props.eventkeyParser
+    if (props.binaryType) this.binaryType = props.binaryType
+    if (props.stopIfRetryOverTimes) this.stopIfRetryOverTimes = props.stopIfRetryOverTimes
 
     this.init()
     if (props.activate) this.activate()
@@ -51,18 +62,6 @@ class WsMaster {
     }
   }
 
-  private jsonParse(event: MessageEvent<any>): [string, any] {
-    let data: any = {}
-
-    try {
-      data = JSON.parse(event.data)
-    } catch {
-      if (event.data === 'pong') data = { key: 'pong', data: event.data }
-      else data = { key: 'unknow', data: event.data }
-    }
-
-    return [data.key, data.data]
-  }
 
   notifyToListeners(key: string, data: any) {
     if (this.listeners[key]) {
@@ -90,13 +89,12 @@ class WsMaster {
   }
 
   async activate() {
-    this.enable = true
+    this.enabled = true
     if (this.socket.current?.readyState === 0) return
     if (this.socket.current?.readyState === 1) return
     if (this.socket.current?.readyState === 2) await this.waitingSocketClosed()
     this.socket.current = new WebSocket(this.url)
-    // TODO:
-    this.socket.current.binaryType = 'arraybuffer'
+    if (this.binaryType) this.socket.current.binaryType = this.binaryType
 
     this.socket.current.onopen = () => {
       console.log('ws connected.')
@@ -105,13 +103,14 @@ class WsMaster {
 
     this.socket.current.onmessage = event => {
       this.watchdog.extend()
-      // const [eventKey, data] = this.jsonParse(event)
+
+      let parsed: { eventkey: string, data: any } = { eventkey: '', data: null }
+      if (this.eventkeyParser) parsed = this.eventkeyParser(event)
       // if (eventKey === 'pong') return
 
       // this.obserableNotify(eventKey, data)
       // this.notifyToListeners(eventKey, data)
-      console.log('ws event: ', event)
-      this.messageHandler(event.data)
+      this.messageHandler(parsed, event)
       // TODO
       // this.messageHandler({ eventKey, data })
     }
@@ -119,7 +118,7 @@ class WsMaster {
     this.socket.current.onclose = e => {
       console.log('ws closed: ', e)
       if (this.stopIfRetryOverTimes && this.retryTimes >= this.stopIfRetryOverTimes) this.deactivate()
-      else if (this.enable) this.reconnect()
+      else if (this.enabled) this.reconnect()
       this.retryTimes = this.retryTimes + 1
     }
     this.socket.current.onerror = e => {
@@ -137,7 +136,7 @@ class WsMaster {
   }
 
   deactivate() {
-    this.enable = false
+    this.enabled = false
     if (this.timer) clearTimeout(this.timer)
     this.watchdog.stop()
     if (this.socket.current) this.socket.current.close()

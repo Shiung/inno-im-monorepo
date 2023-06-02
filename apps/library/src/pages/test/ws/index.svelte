@@ -1,13 +1,22 @@
 <script lang="ts">
   import { im } from 'protobuf'
-  import createWwbsocket from 'api/wsMaster'
+  import createWebsocket from 'api/wsMaster'
 
-  const ws = createWwbsocket({
+  const ws = createWebsocket({
     url: 'ws://localhost:5174/proto/IM_API_URL',
-    messageHandler: async (data: ArrayBuffer) => {
-      const test = im.request.decode(data)
+    binaryType: 'arraybuffer',
+    eventkeyParser: (event) => {
+      const decoded = im.request.decode(event.data)
+      return { eventkey: decoded.command, data: decoded.data.value }
+    },
 
-      const test2 = im.messageEntity.decode(test.data.value)
+    messageHandler: async ({ eventkey, data }) => {
+      console.log('handler', eventkey, data)
+      // const test = im.request.decode(data)
+      // console.log('test', test)
+
+      // const test2 = im.messageEntity.decode(test.data.value)
+      // console.log('test2', test2)
     },
     activate: true
   })

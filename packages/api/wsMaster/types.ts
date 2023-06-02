@@ -11,12 +11,12 @@ export interface WatchDogProps {
   pingCommand?: string
   listeners?: Listener[]
 }
-// export type MessageHandler = <K>(arg0: {eventKey: K, data: any}) => void
 
 export interface WsMasterProps {
   url: string
-  // messageHandler: MessageHandler
-  messageHandler: Function
+  messageHandler: (arg0: { eventkey: string, data: any }, e: MessageEvent<any>) => void
+  eventkeyParser?: (event: MessageEvent<any>) => { eventkey: string, data: any }
+  binaryType?: 'blob' | 'arraybuffer'
   pingInterval?: number
   reconnectTimeout?: number
   pingCommand?: string
