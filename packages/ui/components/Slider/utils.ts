@@ -1,8 +1,8 @@
-export const isValidNumber = (value: string) => /^(?!-0?(\.0+)?$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/.test(value)
+export const isValidNumber = (value: string) => /^(?!-0?(\.0+)?$)-?(0|[1-9]\d*)?(\.\d+)?(?:\d)$/.test(value)
 
-export const isPercentageValue = (value: string) => /^(?!-0?(\.0+)?%$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)%$/.test(value)
+export const isPercentageValue = (value: string) => /^(?!-0?(\.0+)?%$)-?(0|[1-9]\d*)?(\.\d+)?(?:\d)%$/.test(value)
 
-export const isPixelValue = (value: string) => /^(?!-0?(\.0+)?px$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)px$/.test(value)
+export const isPixelValue = (value: string) => /^(?!-0?(\.0+)?px$)-?(0|[1-9]\d*)?(\.\d+)?(?:\d)px$/.test(value)
 
 export const getBoundingRect = (parent: HTMLDivElement, type: Exclude<keyof DOMRect, 'toJSON'>) => {
   return parent?.getBoundingClientRect()?.[type] || 0
@@ -52,4 +52,9 @@ export const getTouchClientX = (type: 'touchstart' | 'touchmove' | 'touchend', e
     case 'touchend':
       return e?.changedTouches?.[0]?.clientX || 0
   }
+}
+
+export const createSlide = (data: any[], isSlides: boolean) => {
+  if(!isSlides) return data
+  return data.slice(-2).concat(data).concat(data.slice(0, 2))
 }
