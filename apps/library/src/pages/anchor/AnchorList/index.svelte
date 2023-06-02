@@ -3,6 +3,8 @@ import Circle from 'ui/core/button/loading.svelte'
 import { im } from 'api'
 import convertSid from 'utils/convertSid'
 
+import Empty from '$src/containers/Empty'
+
 import { params } from 'svelte-spa-router'
 import Loading from './Loading.svelte'
 import Anchor from './Anchor/index.svelte'
@@ -71,31 +73,33 @@ $: if (domOfLoading) intersectionObserver.observe(domOfLoading)
       <Loading />
 
     {:then anchors}
+      {#if !anchors?.data?.list?.length}
+        <Empty class='h-[300px]' />
+      {:else}
+        {#each anchors?.data?.list || [] as anchor, idx}
+          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
+        {/each}
 
-      {#each anchors?.data?.list || [] as anchor, idx}
-        <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
-      {/each}
+        {#each moreAnchors as anchor, idx}
+          <Anchor anchor={anchor} bg={anchorBgs[(anchors.data.list.length + idx) % anchorBgs.length]} />
+        {/each}
 
-      {#each moreAnchors as anchor, idx}
-        <Anchor anchor={anchor} bg={anchorBgs[(anchors.data.list.length + idx) % anchorBgs.length]} />
-      {/each}
+        
+        <!-- if init fetch data less then pageSize that meaning no more data. -->
+        {#if anchors?.data?.list.length >= pageSize }
 
-      
-      <!-- if init fetch data less then pageSize that meaning no more data. -->
-      {#if anchors?.data?.list.length >= pageSize }
+          <div bind:this={domOfLoading}>
+            {#if fetchingMore} 
+              <div class='relative h-[30px] overflow-hidden'>
+                <Circle stroke='rgb(var(--im-monorepo-primary))' />
+              </div>
+            {:else}
+              <div />
+            {/if}
+          </div>
 
-        <div bind:this={domOfLoading}>
-          {#if fetchingMore} 
-            <div class='relative h-[30px] overflow-hidden'>
-              <Circle stroke='rgb(var(--im-monorepo-primary))' />
-            </div>
-          {:else}
-            <div />
-          {/if}
-        </div>
-
+        {/if}
       {/if}
-
     {/await}  
 
   </div>
