@@ -9,7 +9,7 @@
 </script>
 
 {#if articles.length === 0}
-  <Empty class='h-[300px]' />
+  <Empty class='h-[200px]' />
 {:else}
   {#each articles as article}
     <ExpertArticle {article} class='mb-3' />
