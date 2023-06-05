@@ -118,8 +118,11 @@ describe('timer callback', () => {
 
     const timer = new Timer({ tickCallback: mockCallback, type: 'countUp' })
     timer.start()
-    expect(mockCallback).toHaveBeenCalledTimes(0)
+    expect(mockCallback).not.toHaveBeenCalled()
     vi.runOnlyPendingTimers()
+    expect(mockCallback).toHaveBeenCalled()
+    expect(mockCallback).toHaveBeenCalledTimes(1)
+    vi.advanceTimersByTime(2)
     expect(mockCallback).toHaveBeenCalledTimes(1)
     vi.advanceTimersByTime(2000)
     expect(mockCallback).toHaveBeenCalledTimes(3)
@@ -130,8 +133,9 @@ describe('timer callback', () => {
 
     const timer = new Timer({ stopCallback: mockCallback, end: Date.now() + 1 * 1000 })
     timer.start()
-    expect(mockCallback).toHaveBeenCalledTimes(0)
+    expect(mockCallback).not.toHaveBeenCalled()
     vi.runOnlyPendingTimers()
+    expect(mockCallback).toHaveBeenCalled()
     expect(mockCallback).toHaveBeenCalledTimes(1)
   })
 })
