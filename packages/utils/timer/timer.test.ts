@@ -1,15 +1,15 @@
 import Timer from './index'
 import { vi, describe, expect, test, beforeEach, afterEach } from 'vitest'
 
+beforeEach(() => {
+  vi.useFakeTimers()
+})
+
+afterEach(() => {
+  vi.useRealTimers()
+})
+
 describe('timer init', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
   test('no params', () => {
     const timer = new Timer({})
 
@@ -109,5 +109,29 @@ describe('timer init', () => {
       month: 0,
       year: 0
     })
+  })
+})
+
+describe('timer callback', () => {
+  test('tickCallback', () => {
+    const mockCallback = vi.fn(() => {})
+
+    const timer = new Timer({ tickCallback: mockCallback, type: 'countUp' })
+    timer.start()
+    expect(mockCallback).toHaveBeenCalledTimes(0)
+    vi.runOnlyPendingTimers()
+    expect(mockCallback).toHaveBeenCalledTimes(1)
+    vi.advanceTimersByTime(2000)
+    expect(mockCallback).toHaveBeenCalledTimes(3)
+  })
+
+  test('stopCallback', () => {
+    const mockCallback = vi.fn(() => {})
+
+    const timer = new Timer({ stopCallback: mockCallback, end: Date.now() + 1 * 1000 })
+    timer.start()
+    expect(mockCallback).toHaveBeenCalledTimes(0)
+    vi.runOnlyPendingTimers()
+    expect(mockCallback).toHaveBeenCalledTimes(1)
   })
 })
