@@ -100,6 +100,8 @@ $: if (domOfLoading) intersectionObserver.observe(domOfLoading)
 
         {/if}
       {/if}
+    {:catch}
+      <Empty class='h-[300px]' />
     {/await}  
 
   </div>
