@@ -57,6 +57,7 @@ class Timer {
     } else {
       this.#fakeStartTime = Date.now()
     }
+    
     this.#status = 'started'
     this.#tick()
   }
@@ -82,9 +83,10 @@ class Timer {
 
     const now = this.#startTime + this.#count * ONE_SECOND
     this.#currentTime = this.#calCurrentTime(now)
-    this.#count += 1
 
-    this.tickCallback(this.currentTime)
+    this.#count && this.tickCallback(this.currentTime)
+
+    this.#count += 1
 
     if(this.type === 'countDown' && this.#currentTime <= 0) {
       this.#currentTime = 0
