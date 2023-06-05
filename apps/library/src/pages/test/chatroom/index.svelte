@@ -21,6 +21,6 @@ $: if (dom) setChatEnv({
   <div style:height={isWindow ? `${blockHeight}px` : ''}/>
 </div>
 
-<div class={twMerge(isWindow && 'fixed w-full')}>
+<div class={twMerge(!isWindow && 'fixed w-full')}>
   <Chatroom />
 </div>
