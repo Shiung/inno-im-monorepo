@@ -21,6 +21,6 @@
 
 {#if loading}
   <Loading />
-{:else}
+{:else if chartData.length}
   <LineChart chartData={chartData} />
 {/if}
