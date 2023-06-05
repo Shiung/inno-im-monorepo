@@ -42,8 +42,6 @@ class Timer {
     this.#count = 0
     this.tickCallback = typeof tickCallback === 'function' ? tickCallback : noop
     this.stopCallback = typeof stopCallback === 'function' ? stopCallback : noop
-
-    this.start()
   }
 
   start() {

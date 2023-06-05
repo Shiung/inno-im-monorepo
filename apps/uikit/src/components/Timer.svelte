@@ -10,6 +10,9 @@
   time1 = timer1.currentTime
   time2 = timer2.currentTime
 
+  timer1.start()
+  timer2.start()
+
   const start = (timer: Timer) => {
     timer.start()
   }
