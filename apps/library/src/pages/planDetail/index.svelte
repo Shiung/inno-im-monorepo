@@ -54,6 +54,7 @@
         tickCallback: (timeObj) => { time.set(timeObj) },
         stopCallback: () => { console.log('stop!!!' )}
       })
+      time.set(timer.currentTime)
       timer.start()
     }
   }
