@@ -26,7 +26,8 @@ class Timer {
   #endTime: number
   #currentTime: number
   #count: number
-  #status: 'started' | 'paused' | 'stopped' = 'started'
+  #status: 'started' | 'paused' | 'stopped'
+  #fakeStartTime: number
 
   tickCallback: (timeInfo: TimeInfo) => void
   stopCallback: () => void
@@ -37,24 +38,26 @@ class Timer {
 
     this.type = type
     this.#startTime = isNaN(new Date(start).valueOf()) ? Date.now() : new Date(start).getTime()
+    
     this.#endTime = isNaN(new Date(end).valueOf()) ? Date.now() : new Date(end).getTime()
-    this.#currentTime = this.#calCurrentTime(new Date().getTime())
+    this.#currentTime = this.#calCurrentTime(this.#startTime)
     this.#count = 0
     this.tickCallback = typeof tickCallback === 'function' ? tickCallback : noop
     this.stopCallback = typeof stopCallback === 'function' ? stopCallback : noop
   }
 
   start() {
-    if(this.#status === 'stopped') return
+    if(this.#status === 'started' || this.#status === 'stopped') return
 
     if(this.#status === 'paused') {
       if(this.type === 'countUp') {
-        this.#startTime = new Date().getTime() - Math.floor(this.#currentTime / ONE_SECOND) * ONE_SECOND
-        this.#count = 0
+        this.#count -= 1
+        this.#fakeStartTime = Date.now() - this.#count * ONE_SECOND
       }
-      this.#status = 'started'
+    } else {
+      this.#fakeStartTime = Date.now()
     }
-
+    this.#status = 'started'
     this.#tick()
   }
 
@@ -72,18 +75,15 @@ class Timer {
     this.#status = 'stopped'
     this.stopCallback()
   }
- 
-  get currentTime() {
-    return this.#getTimeDiffInfo(Math.max(this.#currentTime, 0))
-  }
 
   #tick() {
-    const now = new Date().getTime()
-    const delay = now - (this.#startTime + this.#count * ONE_SECOND)
+    const delay = Date.now() - (this.#fakeStartTime + this.#count * ONE_SECOND)
     const interval = Math.max(ONE_SECOND - delay, 0)
+
+    const now = this.#startTime + this.#count * ONE_SECOND
+    this.#currentTime = this.#calCurrentTime(now)
     this.#count += 1
 
-    this.#currentTime = this.#calCurrentTime(now)
     this.tickCallback(this.currentTime)
 
     if(this.type === 'countDown' && this.#currentTime <= 0) {
@@ -122,6 +122,18 @@ class Timer {
       month,
       year
     }
+  }
+
+  get currentTime() {
+    return this.#getTimeDiffInfo(Math.max(this.#currentTime, 0))
+  }
+
+  get endTime() {
+    return this.#endTime
+  }
+
+  get startTime() {
+    return this.#startTime
   }
 }
 
