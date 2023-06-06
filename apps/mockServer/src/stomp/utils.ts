@@ -7,7 +7,7 @@ export const headersParse = (data: string[]) => {
 
   let _headers: IHeaders = { id: '', destination: '' }
   headers.map((header) => {
-    const [key, value] = header.split(':')  
+    const [key, value] = header.split(':')
     _headers[key] = value
   })
 

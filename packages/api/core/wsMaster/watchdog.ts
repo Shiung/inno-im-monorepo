@@ -1,4 +1,4 @@
-import { SocketRef, WatchDogProps } from './types'
+import type { SocketRef, WatchDogProps } from './types'
 
 class WatchDog {
   readonly interval: number
@@ -8,7 +8,7 @@ class WatchDog {
   socket: SocketRef
 
   count: number
-  pingCommand: string
+  pingPongCommand: WatchDogProps['pingPongCommand']
   listeners: Array<(event: string) => void>
 
   constructor(props: WatchDogProps) {
@@ -17,7 +17,7 @@ class WatchDog {
     this.reconnectTimeout = props.reconnectTimeout || 20 * 1000
     this.count = 0
     this.socket = props.socket
-    this.pingCommand = props.pingCommand || 'ping'
+    this.pingPongCommand = props.pingPongCommand || { ping: 'ping', pong: 'pong' }
     this.listeners = []
   }
 
@@ -25,9 +25,7 @@ class WatchDog {
     this.timer = setInterval(() => {
       this.checkTimeoutAndNotify()
       if (this.socket.current && this.socket.current.readyState === 1) {
-        // TODO:
-        // this.socket.current.send(this.pingCommand)
-        this.socket.current.send('\x00')
+        if (this.pingPongCommand) this.socket.current.send(this.pingPongCommand.ping)
         this.count = this.count + 1
       }
     }, this.interval)

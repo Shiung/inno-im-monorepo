@@ -1,11 +1,11 @@
 import WatchDog from './watchdog'
-import type { WatchDogProps, WsMasterProps, SyncOptions } from './types'
+import type { WatchDogProps, WsMasterProps, SyncOptions, IWsMasterEvent } from './types'
 import wsObservables from './wsObservables'
 
 type PromiseResolver = { resolve: (value: any) => void; timer: ReturnType<typeof setTimeout> }
 
 class WsMaster {
-  listeners: { [key: string]: PromiseResolver[] }
+  listeners: { [eventkey: string]: PromiseResolver[] }
   defaultSyncTimeout: number
   enabled: boolean
   retryTimes: number
@@ -17,6 +17,7 @@ class WsMaster {
 
   watchdog: WatchDog
 
+  pingPongCommand: WsMasterProps['pingPongCommand']
   eventkeyParser: WsMasterProps['eventkeyParser']
   binaryType: WsMasterProps['binaryType']
   stopIfRetryOverTimes?: number
@@ -38,9 +39,10 @@ class WsMaster {
       socket: this.socket,
       pingInterval: props.pingInterval,
       reconnectTimeout: props.reconnectTimeout,
-      pingCommand: props.pingCommand
+      pingPongCommand: props.pingPongCommand
     })
 
+    if (props.pingPongCommand) this.pingPongCommand = props.pingPongCommand
     if (props.eventkeyParser) this.eventkeyParser = props.eventkeyParser
     if (props.binaryType) this.binaryType = props.binaryType
     if (props.stopIfRetryOverTimes) this.stopIfRetryOverTimes = props.stopIfRetryOverTimes
@@ -62,21 +64,6 @@ class WsMaster {
     }
   }
 
-
-  notifyToListeners(key: string, data: any) {
-    if (this.listeners[key]) {
-      for (const listener of this.listeners[key]) {
-        clearTimeout(listener.timer)
-        listener.resolve({ key, ...data })
-      }
-      this.listeners[key] = []
-    }
-  }
-
-  obserableNotify(key: string, data: any) {
-    const observable = wsObservables.create(key)
-    observable?.notify({ key, ...data })
-  }
 
   clearRetryTimes() {
     this.retryTimes = 0
@@ -103,16 +90,14 @@ class WsMaster {
 
     this.socket.current.onmessage = event => {
       this.watchdog.extend()
+      if (event.data === this.pingPongCommand?.pong) return
 
-      let parsed: { eventkey: string, data: any } = { eventkey: '', data: null }
+      let parsed: IWsMasterEvent = { eventkey: '', pairId: '', data: null }
       if (this.eventkeyParser) parsed = this.eventkeyParser(event)
-      // if (eventKey === 'pong') return
 
-      // this.obserableNotify(eventKey, data)
+      this.obserableNotify(parsed)
       // this.notifyToListeners(eventKey, data)
-      this.messageHandler(parsed, event)
-      // TODO
-      // this.messageHandler({ eventKey, data })
+      if (this.messageHandler) this.messageHandler(parsed, event)
     }
 
     this.socket.current.onclose = e => {
@@ -124,7 +109,7 @@ class WsMaster {
     this.socket.current.onerror = e => {
       console.log('ws error: ', e)
     }
-    this.watchdog.start()
+    if (this.pingPongCommand) this.watchdog.start()
   }
 
   reconnect() {
@@ -135,6 +120,7 @@ class WsMaster {
     this.timer = setTimeout(this.activate.bind(this), this.reconnectInterval)
   }
 
+  // 將ws連線斷線以及將watchdog關閉
   deactivate() {
     this.enabled = false
     if (this.timer) clearTimeout(this.timer)
@@ -142,7 +128,8 @@ class WsMaster {
     if (this.socket.current) this.socket.current.close()
   }
 
-  async waitingSocketClosed() {
+  // 用 promise 等待確認ws是否已經關閉
+  private async waitingSocketClosed() {
     return new Promise(resolve => {
       const checkState = () => {
         if (this.socket.current?.readyState === 3) resolve(true)
@@ -152,6 +139,7 @@ class WsMaster {
     })
   }
 
+  // 用 promise 等待確認ws是否已經連線
   async waitingSocketConnect() {
     return new Promise(resolve => {
       const checkState = () => {
@@ -196,6 +184,27 @@ class WsMaster {
     const res = await this.waitSync(eventKey, options)
     return res
   }
+
+  notifyToListeners(eventkey: string, data: any) {
+    if (!this.listeners[eventkey]) return
+
+    for (const listener of this.listeners[eventkey]) {
+      clearTimeout(listener.timer)
+      listener.resolve({ eventkey, ...data })
+    }
+    this.listeners[eventkey] = []
+  }
+
+  subscribe(eventkey: string | number, callback: (agr0: IWsMasterEvent) => void) {
+    const observable = wsObservables.get(eventkey)
+    return observable?.subscribe(callback)
+  }
+
+  obserableNotify(props: IWsMasterEvent) {
+    const observable = wsObservables.get(props.eventkey)
+    observable?.notify(props)
+  }
+
 }
 
 export default WsMaster

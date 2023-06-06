@@ -1,11 +1,23 @@
-import WsMaster from './wsMaster'
-import type { WsMasterProps } from './types'
+import { im } from 'protobuf'
 
-const createWebsocket = (props: WsMasterProps): WsMaster => {
-  const wsMaster = new WsMaster(props)
-  return wsMaster
-}
+import createWebsocket from '../core/wsMaster'
 
-export type { SyncOptions, Listener } from './types'
-export { default as wsObservables } from './wsObservables'
-export default createWebsocket
+const ws = createWebsocket({
+  url: 'ws://localhost:5174/proto/IM_API_URL',
+  binaryType: 'arraybuffer',
+  pingPongCommand: { ping: 'ping', pong: 'pong' },
+  eventkeyParser: (event) => {
+    const decoded = im.push.decode(event.data)
+
+    switch (decoded.command) {
+      case im.enum.command.PUSH_MESSAGE:
+        const pushMessageEntity = im.pushMessageEntity.decode(decoded.data.value)
+        return { eventkey: decoded.command, data: pushMessageEntity }
+
+      default:
+        return { eventkey: decoded.command, data: decoded.data.value }
+    }
+  }
+})
+
+export default ws

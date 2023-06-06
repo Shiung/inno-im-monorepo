@@ -39,12 +39,12 @@ class WsObservables<TEventKeys> {
     this.observables = new Map()
   }
 
-  create(event: TEventKeys) {
+  get(event: TEventKeys) {
     if (!this.observables.has(event)) this.observables.set(event, new EventObservable())
     return this.observables.get(event)
   }
 }
 
-const wsObservables = new WsObservables<string>()
+const wsObservables = new WsObservables<string | number>()
 
 export default wsObservables

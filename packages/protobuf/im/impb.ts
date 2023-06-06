@@ -2,11 +2,13 @@ import { load } from 'protobufjs'
 
 import type { Type } from 'protobufjs'
 import { Enum } from './constants'
-import type { IRequest, IMessageEntity } from './types'
+import type { IRequest, IPush, IPushMessageEntity, IRequestMessageEntity } from './types'
 
 class ImBp {
   public _request: ReturnType<Type['lookupType']> | null = null
-  public _messageEntity: ReturnType<Type['lookupType']> | null = null
+  public _requestMessageEntity: ReturnType<Type['lookupType']> | null = null
+  public _push: ReturnType<Type['lookupType']> | null = null
+  public _pushMessageEntity: ReturnType<Type['lookupType']> | null = null
   public enum = Enum
   public done: boolean = false
 
@@ -17,16 +19,22 @@ class ImBp {
   async init(protobuf: string) {
     const root = await load(protobuf)
     this._request = root.lookupType('Request')
-    this._messageEntity = root.lookupType('MessageEntity')
+    this._push = root.lookupType('Push')
+    this._pushMessageEntity = root.lookupType('PushMessageEntity')
     this.enum = {
       command: root.getEnum('Command') as unknown as typeof Enum['command'],
-      MessageEntity: {
-        visible: this._messageEntity.getEnum('Visible') as unknown as typeof Enum['MessageEntity']['visible'],
-        contentType: this._messageEntity.getEnum('ContentType') as unknown as typeof Enum['MessageEntity']['contentType']
-      }
+      visible: root.getEnum('Visible') as unknown as typeof Enum['visible'],
+      contentType: root.getEnum('ContentType') as unknown as typeof Enum['contentType']
     }
 
     this.done = true
+  }
+
+  get push() {
+    return {
+      encode: (data: IPush) => this._push?.encode(data).finish(),
+      decode: (data: ArrayBuffer): IPush => this._push?.decode(new Uint8Array(data)) as unknown as IPush
+    }
   }
 
   get request() {
@@ -36,10 +44,17 @@ class ImBp {
     }
   }
 
-  get messageEntity() {
+  get pushMessageEntity() {
     return {
-      encode: (data: IMessageEntity) => this._messageEntity?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IMessageEntity => this._messageEntity?.decode(new Uint8Array(data)) as unknown as IMessageEntity
+      encode: (data: IPushMessageEntity) => this._pushMessageEntity?.encode(data).finish(),
+      decode: (data: ArrayBuffer): IPushMessageEntity => this._pushMessageEntity?.decode(new Uint8Array(data)) as unknown as IPushMessageEntity
+    }
+  }
+
+  get requestMessageEntity() {
+    return {
+      encode: (data: IRequestMessageEntity) => this._requestMessageEntity?.encode(data).finish(),
+      decode: (data: ArrayBuffer): IRequestMessageEntity => this._requestMessageEntity?.decode(new Uint8Array(data)) as unknown as IRequestMessageEntity
     }
   }
 }

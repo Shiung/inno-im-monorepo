@@ -14,7 +14,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   import { im } from 'api'
-  import stomp, { activate } from 'api/stompMaster'
+  import { im as impb } from 'protobuf'
+  import ws from 'api/wsMaster'
 
   import { t } from '$stores'
   import Empty from '$src/containers/Empty'
@@ -27,25 +28,23 @@
   import InputArea from './InputArea/index.svelte'
 
   import type { IChatMessage } from 'api/im/types'
-  import type { Subscription } from 'api/stompMaster'
 
   const { roomId } = setInfo($info)
   const { minimize, displayType, height } = setEnv($env)
   $: setEnv($env)
   $: setInfo($info)
 
-  let lastReadId: string
+  let lastReadId: number
 
   $: destination = `/topic/chat-room/${$roomId}`
 
   let subId: string
-  let subscription: Subscription
+  let subscription: ReturnType<typeof ws.subscribe>
   let chatMessages = writable<IChatMessage[]>([])
 
   const subscribeRoom = (_roomId: number) => {
-    subscription = stomp.watch({ destination }).subscribe((message) => {
-      if (!subId) subId = message.headers.subscription
-      chatMessages.update((messages) => [...messages, JSON.parse(message.body)])
+    subscription = ws.subscribe(impb.enum.command.PUSH_MESSAGE, ({ data }) => {
+      chatMessages.update((messages) => [...messages, data])
     })
   }
 
@@ -60,12 +59,11 @@
 
   onMount(() => {
     initFetch()
-    activate()
+    ws.activate()
   })
 
   onDestroy(() => {
     if (subscription) subscription.unsubscribe()
-    stomp.deactivate()
   })
 </script>
 

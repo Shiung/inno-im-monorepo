@@ -83,12 +83,6 @@ const routes = {
       showBottomNav: false
     }
   }),
-  '/test/ws': wrap({
-    asyncComponent: () => import('../pages/test/ws/index.svelte'),
-    userData: {
-      showBottomNav: false
-    }
-  }),
   '*': wrap({
     asyncComponent: () => import('$pages/NotFound.svelte')
   })

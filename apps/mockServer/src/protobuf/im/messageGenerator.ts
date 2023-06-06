@@ -3,12 +3,12 @@ import impb from 'protobuf/im/node'
 import { messageEntityData, pushMessageData } from '../../mock/im/chatroom'
 
 
-const messageEntity = () => {
+const pushMessageEntity = () => {
   const data = messageEntityData()
-  return impb._messageEntity?.encode(data).finish()
+  return impb._pushMessageEntity?.encode(data).finish()
 }
 
 export const pushMessage = (id?: string) => {
-  const data = pushMessageData({ id, value: messageEntity() })
-  return impb._request?.encode(data).finish()
+  const data = pushMessageData({ id, value: pushMessageEntity() })
+  return impb._push?.encode(data).finish()
 }

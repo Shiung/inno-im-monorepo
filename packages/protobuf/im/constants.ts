@@ -31,9 +31,7 @@ export enum EVisible {
 }
 export const Enum = {
   command: ECommand,
-  MessageEntity: {
-    contentType: EContentType,
-    visible: EVisible
-  }
+  contentType: EContentType,
+  visible: EVisible
 }
 

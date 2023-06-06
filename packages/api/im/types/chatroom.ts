@@ -1,26 +1,7 @@
-import type { ILanguages } from 'env-config'
-import type { IRequest, IMessageEntity } from 'protobuf/im/types'
+import type { IPushMessageEntity } from 'protobuf/im/types'
 import type { withData } from '../types'
 
-export interface IChatMessage {
-  type: 'message'
-  id: string
-  blackList: boolean
-  source: string
-  sourceInfo: {
-    nickName: string
-    vip: number
-    avatar: number
-    sportAccount: string
-    accountType: number
-    enabledTitle: number
-  },
-  language: ILanguages
-  data: {
-    message: string
-    reply: null | string
-  }
-}
+export type IChatMessage = IPushMessageEntity
 
 export interface IChatroomPastMessage {
   query: {
@@ -30,6 +11,6 @@ export interface IChatroomPastMessage {
   }
   body: null
   res: withData<{
-    list: IRequest[]
+    list: IChatMessage[]
   }>
 }

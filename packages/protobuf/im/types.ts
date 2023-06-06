@@ -1,21 +1,40 @@
-import { ECommand, EContentType, EVisible } from './constants'
+import type { ECommand, EContentType, EVisible } from './constants'
+
+interface IGoogleProtobufAny {
+  type_url?: string
+  value: ArrayBuffer
+}
 
 export interface IRequest {
   reqId: string
   command: ECommand
-  data: {
-    type_url?: string
-    value: ArrayBuffer
-  }
+  data: IGoogleProtobufAny
 }
 
-export interface IMessageEntity {
+export interface IRequestMessageEntity {
+  contentType: EContentType
+  chatId: number
+  iid: number
+  replyTo: number
+  content: string
+}
+
+export interface IPush {
+  reqId: string
+  command: ECommand
+  code: number
+  msg: string
+  data: IGoogleProtobufAny
+}
+
+export interface IPushMessageEntity {
   msgId: number
   contentType: EContentType
   vdId: number
-  sender: number
   senderName: string
+  isSelf: boolean
   chatId: number
+  iid: number
   vip: number
   avatar: number
   replyTo: number
