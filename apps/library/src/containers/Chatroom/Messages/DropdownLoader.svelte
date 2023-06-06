@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { createEventDispatcher } from 'svelte'
+import { getMobileOSInfo, MobileOS } from 'utils'
 import { t } from '$stores'
 
 import Circle from 'ui/core/button/loading.svelte'
@@ -14,11 +15,15 @@ export let quantity: number = 10
 
 let dom: HTMLDivElement
 let canLoadmore: boolean
+
+const isIOS = getMobileOSInfo() === MobileOS.iOS
+const styledElement = isIOS ? document.documentElement : document.body
+
 const intersectionObserver = new IntersectionObserver(async entries => {
   for (const entry of entries) {
     canLoadmore = entry.isIntersecting
   }
-}, { root, rootMargin: '-70px 0px 0px 0px' })
+}, { root, rootMargin: `0px 0px 0px 0px` })
 
 $: if (dom) intersectionObserver.observe(dom)
 
@@ -28,20 +33,30 @@ $: offsetY = Math.min((loadIconYMove - loadIconY) / 2, 100)
 
 const onTouchstart = (e: TouchEvent) => {
   if (!canLoadmore) return
-  document.body.style.overflow = 'hidden'
+
   loadIconY = e.touches[0].clientY
   loadIconYMove = e.touches[0].clientY
+
+  styledElement && (styledElement.style.overscrollBehavior = 'none')
 }
 
 const onTouchmove = (e: TouchEvent) => {
   if (!canLoadmore) return
+
   loadIconYMove = e.touches[0].clientY
-  if (offsetY < 0 && document.body.style.overflow) document.body.style.overflow = null
+
+  if (offsetY < 0 && styledElement.style.overscrollBehavior) {
+    styledElement.style.overscrollBehavior = null
+  }
 }
 
 const onTouchend = () => {
-  if (document.body.style.overflow) document.body.style.overflow = null
+  if (styledElement.style.overscrollBehavior) {
+    styledElement.style.overscrollBehavior = null
+  }
+
   if (offsetY >= 50) dispatch('fetchMore')
+
   loadIconY = 0
   loadIconYMove = 0
 }
