@@ -33,9 +33,6 @@
     "vd-resource": "workspace:*"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.22.3",
-    "@rollup/plugin-babel": "^6.0.3",
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
