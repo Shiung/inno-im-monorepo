@@ -32,7 +32,7 @@
 </script>
 
 <Ripple class={twMerge('w-full rounded-[10px] im-shadow bg-no-repeat p-[8px]', $$props.class)} style={stampStyle} on:click={onClick}>
-  <div class='text-[14px] font-semibold'>
+  <div class='text-left text-[14px] font-semibold'>
     {timestampToFormat({ ts: article.releaseTime, format: 'MM-DD' }) } </div>
 
   <div class='flex items-center justify-between mt-[8px]'>
