@@ -13,7 +13,6 @@ const ws = createWebsocket({
     switch (decoded.command) {
       case im.enum.command.PUSH_MESSAGE:
         const pushMessageEntity = im.pushMessageEntity.decode(decoded.data.value)
-        console.log(pushMessageEntity)
         return { eventkey: decoded.command, data: pushMessageEntity }
 
       default:
