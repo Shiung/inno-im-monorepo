@@ -1,5 +1,9 @@
 import { WebSocketServer } from 'ws'
-import { onConnection as onImConnection, onClose as onImClose } from './im'
+import {
+  onConnection as onImConnection,
+  onClose as onImClose,
+  onMessage as onImMessage
+} from './im'
 
 export const createProtoSocketServer = () => {
   const wss = new WebSocketServer({ noServer: true })
@@ -25,7 +29,12 @@ export const createProtoSocketServer = () => {
     })
 
     ws.on('message', (event) => {
-      console.log(event)
+      switch (module) {
+        case 'IM_API_URL':
+          onImMessage(ws, event); break
+        default:
+          break
+      }
     })
   })
 

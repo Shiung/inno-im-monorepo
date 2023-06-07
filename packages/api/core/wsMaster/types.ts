@@ -20,8 +20,6 @@ export interface IWsMasterEvent {
 
 export interface WsMasterProps {
   url: string
-  messageHandler?: (arg0: IWsMasterEvent, e: MessageEvent<any>) => void
-  eventkeyParser?: (event: MessageEvent<any>) => IWsMasterEvent
   binaryType?: 'blob' | 'arraybuffer'
   pingInterval?: number
   reconnectTimeout?: number
@@ -34,6 +32,9 @@ export interface WsMasterProps {
   reconnectInterval?: number
   activate?: boolean
   stopIfRetryOverTimes?: number
+  eventkeyParser?: (event: MessageEvent<any>) => IWsMasterEvent
+  messageHandler?: (arg0: IWsMasterEvent, e: MessageEvent<any>) => void
+  publishPreprocessor?: (arg0: IWsMasterEvent) => string | ArrayBufferLike | Blob | ArrayBufferView
 }
 
 export interface SyncOptions {

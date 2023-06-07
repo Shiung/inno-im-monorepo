@@ -5,11 +5,12 @@ import { ECommand } from 'protobuf/im/constants'
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
 
-interface MessageEntityDataProps {
+export interface MessageEntityDataProps {
   content?: string
   sender?: string
   isSelf?: boolean
   chatId?: string
+  iid?: number
 }
 
 export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) => {
@@ -24,7 +25,7 @@ export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) 
     senderName: _sender || '@name',
     isSelf: !!props?.isSelf,
     chatId: props?.chatId || '@guid',
-    iid: Random.integer(0, 999999),
+    iid: props?.iid || Random.integer(0, 999999),
     vip: Random.integer(0, 12),
     avatar: Random.integer(0, 100),
     replayTo: Random.integer(0, 100000),
@@ -34,9 +35,9 @@ export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) 
   })
 }
 
-export const pushMessageData = (props: { id?: string, value: any }) => {
-  const reqId = props?.id || ''
-  const value = props.value
+export const pushMessageData = (props: { reqId?: string, value?: Uint8Array }) => {
+  const reqId = props.reqId || ''
+  const value = props.value || new Uint8Array()
 
   return {
     reqId,

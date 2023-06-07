@@ -21,6 +21,7 @@ class ImBp {
     this._request = root.lookupType('Request')
     this._push = root.lookupType('Push')
     this._pushMessageEntity = root.lookupType('PushMessageEntity')
+    this._requestMessageEntity = root.lookupType('RequestMessageEntity')
     this.enum = {
       command: root.getEnum('Command') as unknown as typeof Enum['command'],
       visible: root.getEnum('Visible') as unknown as typeof Enum['visible'],

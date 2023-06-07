@@ -46,7 +46,7 @@ message Push {
 }
 
 message ChatIdsWrapper {
-    repeated int64 chatIds = 1;
+    repeated string chatIds = 1;
 }
 
 message PushMessageEntityWrapper {

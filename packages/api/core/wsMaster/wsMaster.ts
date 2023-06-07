@@ -21,6 +21,7 @@ class WsMaster {
   eventkeyParser: WsMasterProps['eventkeyParser']
   binaryType: WsMasterProps['binaryType']
   stopIfRetryOverTimes?: number
+  publishPreprocessor?: WsMasterProps['publishPreprocessor']
 
   timer?: ReturnType<typeof setTimeout>
 
@@ -46,6 +47,7 @@ class WsMaster {
     if (props.eventkeyParser) this.eventkeyParser = props.eventkeyParser
     if (props.binaryType) this.binaryType = props.binaryType
     if (props.stopIfRetryOverTimes) this.stopIfRetryOverTimes = props.stopIfRetryOverTimes
+    if (props.publishPreprocessor) this.publishPreprocessor = props.publishPreprocessor
 
     this.init()
     if (props.activate) this.activate()
@@ -150,6 +152,7 @@ class WsMaster {
     })
   }
 
+  // 待修正
   waitSync(eventKey: string, options?: SyncOptions) {
     return new Promise<{ key: string; data: any }>(resolve => {
       if (!this.listeners[eventKey]) this.listeners[eventKey] = []
@@ -166,6 +169,7 @@ class WsMaster {
     })
   }
 
+  // 待修正
   send(sendMsg: string, options?: SyncOptions) {
     return new Promise<{ key: string; data: any }>(async resolve => {
       const timer = setTimeout(() => {
@@ -179,12 +183,14 @@ class WsMaster {
     })
   }
 
+  // 待修正
   async sendSync(sendMsg: string, eventKey: string, options?: SyncOptions) {
     await this.send(sendMsg, options)
     const res = await this.waitSync(eventKey, options)
     return res
   }
 
+  // 待修正
   notifyToListeners(eventkey: string, data: any) {
     if (!this.listeners[eventkey]) return
 
@@ -198,6 +204,14 @@ class WsMaster {
   subscribe(eventkey: string | number, callback: (agr0: IWsMasterEvent) => void) {
     const observable = wsObservables.get(eventkey)
     return observable?.subscribe(callback)
+  }
+
+  async publish(event: IWsMasterEvent) {
+    await this.waitingSocketConnect()
+
+    let data: string | ArrayBufferLike | Blob | ArrayBufferView = event.data
+    if (this.publishPreprocessor) data = this.publishPreprocessor(event)
+    this.socket.current?.send(data)
   }
 
   obserableNotify(props: IWsMasterEvent) {

@@ -15,7 +15,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { im } from 'api'
   import { im as impb } from 'protobuf'
-  import ws from 'api/wsMaster'
+  import { im as imWs } from 'api/wsMaster'
 
   import { t } from '$stores'
   import Empty from '$src/containers/Empty'
@@ -39,11 +39,11 @@
   $: destination = `/topic/chat-room/${$roomId}`
 
   let subId: string
-  let subscription: ReturnType<typeof ws.subscribe>
+  let subscription: ReturnType<typeof imWs.subscribe>
   let chatMessages = writable<IChatMessage[]>([])
 
   const subscribeRoom = (_roomId: number) => {
-    subscription = ws.subscribe(impb.enum.command.PUSH_MESSAGE, ({ data }) => {
+    subscription = imWs.subscribe(impb.enum.command.PUSH_MESSAGE, ({ data }) => {
       chatMessages.update((messages) => [...messages, data])
     })
   }
@@ -59,7 +59,7 @@
 
   onMount(() => {
     initFetch()
-    ws.activate()
+    imWs.activate()
   })
 
   onDestroy(() => {

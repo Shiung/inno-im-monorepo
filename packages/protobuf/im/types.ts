@@ -13,7 +13,7 @@ export interface IRequest {
 
 export interface IRequestMessageEntity {
   contentType: EContentType
-  chatId: number
+  chatId: string
   iid: number
   replyTo: number
   content: string
@@ -33,7 +33,7 @@ export interface IPushMessageEntity {
   vdId: number
   senderName: string
   isSelf: boolean
-  chatId: number
+  chatId: string
   iid: number
   vip: number
   avatar: number
