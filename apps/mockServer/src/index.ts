@@ -42,7 +42,7 @@ app.on('request', async (req, res) => {
   if (!req.url) return res.end()
 
   res.writeHead(200, {
-    'Access-Control-Allow-Origin': req.headers.origin,
+    'Access-Control-Allow-Origin': req?.headers?.origin || '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
   })
