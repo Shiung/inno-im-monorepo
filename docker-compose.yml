@@ -1,0 +1,12 @@
+version: "3"
+services:
+  mockServer:
+    image: node
+    container_name: "im-monorepo"
+    restart: always
+    volumes:
+      - ./:/source/
+    working_dir: /app
+    entrypoint: /source/dockerEntrypoint.sh
+    ports:
+      - 5888:5174
