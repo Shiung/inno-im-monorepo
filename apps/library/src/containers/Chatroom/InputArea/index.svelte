@@ -9,13 +9,14 @@ import Send from '../images/send.svg'
 import ShowS from '../images/show_s.svg'
 import Plus from '../images/plus.svg'
 
-import { getInfo } from '../context'
+import { getInfo, getEnv } from '../context'
 
 export let fixed: boolean = true
 export let destination: string
 export let subId: string
 
 const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
+const { showBetList } = getEnv()
 
 let placeHolder: string = ''
 let disabled: boolean = true
@@ -88,7 +89,9 @@ const publishMessage = () => {
         </Ripple>
       </div>
 
-      <Ripple class='flex items-center justify-center rounded-full h-[36px] w-[36px]'>
+      <Ripple class='flex items-center justify-center rounded-full h-[36px] w-[36px]' 
+        on:click={() => ($showBetList = true)}
+      >
         <ShowS width={28} height={28} fill='#999999' />
       </Ripple>
       <Ripple class='flex items-center justify-center rounded-full h-[36px] w-[36px]'>

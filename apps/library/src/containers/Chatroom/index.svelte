@@ -25,12 +25,13 @@
   import Loading from './Loading.svelte'
   import Messages from './Messages/index.svelte'
   import InputArea from './InputArea/index.svelte'
+  import BetListSheet from '../BetListSheet/index.svelte'
 
   import type { IChatMessage } from 'api/im/types'
   import type { Subscription } from 'api/stompMaster'
 
   const { roomId } = setInfo($info)
-  const { minimize, displayType, height } = setEnv($env)
+  const { minimize, displayType, height, showBetList } = setEnv($env)
   $: setEnv($env)
   $: setInfo($info)
 
@@ -88,5 +89,6 @@
     {/if}
 
     <InputArea {destination} {subId} />
+    <BetListSheet bind:open={$showBetList} />
   </div>
 {/if}
