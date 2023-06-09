@@ -1,4 +1,10 @@
 <script lang='ts' context='module'>
+import flvjs from 'flv.js'
+import UAParser from 'ua-parser-js'
+
+const ua = new UAParser()
+const isIOS = ua.getOS().name === 'iOS'
+
 let onReadyCallback: () => void = () => {}
 let onLostDataCallback: () => void = () => {}
 let onErrorCallback: (e: string) => void = () => {} 
@@ -37,16 +43,16 @@ export const setPause = (isLive: boolean = false) => typeof pauseHandler === 'fu
 
 export const setFullScreen = () => typeof fullScreenHandler === 'function' && fullScreenHandler()
 
+export const isFlvUse = flvjs.isSupported() || !isIOS
 </script>
 
 <script lang='ts'>
-import flvjs from 'flv.js'
 import { onMount, onDestroy } from 'svelte'
 import { twMerge } from 'tailwind-merge'
 
 let flvPlayer: ReturnType<typeof flvjs.createPlayer>
 let paused: boolean = true
-let muted: boolean = false
+let muted: boolean = true
 
 export let url: string = ''
 let video: HTMLVideoElement
