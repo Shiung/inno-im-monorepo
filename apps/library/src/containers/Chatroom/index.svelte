@@ -34,6 +34,8 @@
   $: setEnv($env)
   $: setInfo($info)
 
+  $: isWindow = $displayType === 'window'
+
   let lastReadId: string
 
   $: destination = `/topic/chat-room/${$roomId}`
@@ -73,9 +75,10 @@
   <Minimize {lastReadId} {chatMessages} on:click={() => ($minimize = false)} />
 {:else}
   <div
-    class="flex-1 flex flex-col bg-white overflow-y-scroll"
-    style:min-height={$displayType === 'window' ? 'auto' : `calc(100vh - ${$height}px)`}
-    style:max-height={$displayType === 'window' ? 'auto' : `calc(100vh - ${$height}px)`}
+    class="flex-1 flex flex-col bg-white"
+    style:min-height={isWindow ? 'auto' : `calc(100 * var(--vh) - ${$height}px)`}
+    style:max-height={isWindow ? 'auto' : `calc(100 * var(--vh) - ${$height}px)`}
+    style:overflow-y={isWindow ? null : 'scroll'}
   >
     <Header on:close={() => ($minimize = true)} />
 

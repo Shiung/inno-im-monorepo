@@ -8,11 +8,13 @@ export let setGoHome = (callback?: () => void) => {
 </script>
 
 <script lang="ts">
+import { onDestroy, onMount } from 'svelte'
 import Router, { location } from 'svelte-spa-router'
 import BottomNavigation from '$containers/BottomNavigation'
 import { bottomNav, showBottomNav } from '$stores/layout'
-
+import { throttle } from 'utils'
 import routes from './routes'
+import BigNumber from 'bignumber.js'
 
 $: console.log('=========[im-library] location==========', $location)
 
@@ -22,6 +24,19 @@ const routeLoading = (event: CustomEvent) => {
   if (event?.detail?.userData?.showBottomNav === false) showBottomNav.set(false)
   else showBottomNav.set(true)
 }
+
+const handleResize = throttle(() => {
+  const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
+  document.body.style.setProperty('--vh', `${vh}px`)
+}, 250)
+
+onMount(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onDestroy(() => {
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <main class='im-library'>
