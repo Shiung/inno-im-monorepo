@@ -65,11 +65,11 @@
   }
 </script>
 
-<div>
+<div class='relative'>
   {#if showTooOften}
     <div
       transition:fly|local={{ y: 32 }}
-      class="flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px]"
+      class="flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] absolute top-[-32px] w-full"
     >
       {$t('chat.tooOften')}
     </div>
