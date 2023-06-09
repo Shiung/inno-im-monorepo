@@ -1,9 +1,9 @@
-const throttle = (callback, wait) => {
-  let last
-  let timer
+const throttle = (callback: (...args: any[]) => void, wait: number) => {
+  let last: number
+  let timer: ReturnType<typeof setTimeout>
   
   return function () {
-    const context = this
+    const context = this as any
     const args = arguments
     const now = Date.now()
 
@@ -12,11 +12,11 @@ const throttle = (callback, wait) => {
 
       timer = setTimeout(() => {
         last = now
-        callback.apply(context, args)
+        callback.apply(context, Array.from(args))
       }, wait)
     } else {
       last = now
-      callback.apply(context, args)
+      callback.apply(context, Array.from(args))
     }
   }
 }
