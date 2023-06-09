@@ -15,6 +15,7 @@ import { bottomNav, showBottomNav } from '$stores/layout'
 import { throttle } from 'utils'
 import routes from './routes'
 import BigNumber from 'bignumber.js'
+import { appHeight } from '$stores/layout'
 
 $: console.log('=========[im-library] location==========', $location)
 
@@ -28,6 +29,7 @@ const routeLoading = (event: CustomEvent) => {
 const setVh = () => {
   const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
   document.body.style.setProperty('--vh', `${vh}px`)
+  appHeight.set(Number(vh))
 }
 
 const handleResize = throttle(setVh, 250)

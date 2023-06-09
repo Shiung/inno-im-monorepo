@@ -12,12 +12,14 @@
 </script>
 
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
+  import { onMount, onDestroy, tick } from 'svelte'
   import { im } from 'api'
   import { im as impb } from 'protobuf'
   import { im as imWs } from 'api/wsMaster'
+  import { fly } from 'svelte/transition'
 
   import { t } from '$stores'
+  import { appHeight } from '$stores/layout'
   import Empty from '$src/containers/Empty'
 
   import { setInfo, setEnv } from './context'
@@ -43,6 +45,7 @@
   let subId: string
   let subscription: ReturnType<typeof imWs.subscribe>
   let chatMessages = writable<IChatMessage[]>([])
+  let isTransition = false
 
   const subscribeRoom = (_roomId: number) => {
     subscription = imWs.subscribe(impb.enum.command.PUSH_MESSAGE, ({ data }) => {
@@ -59,6 +62,12 @@
     initFetchLoading = false
   }
 
+  const onHeaderClose = async () => {
+    isTransition = true
+    await tick()
+    $minimize = true
+  }
+
   onMount(() => {
     initFetch()
     imWs.activate()
@@ -70,17 +79,19 @@
 </script>
 
 {#if $minimize}
-  <Minimize {lastReadId} {chatMessages} on:click={() => ($minimize = false)} />
+  <Minimize {lastReadId} {chatMessages} on:click={() => { isTransition = true; $minimize = false }} />
 {:else}
   <div
     class="flex-1 flex flex-col bg-white"
     style:min-height={isWindow ? 'auto' : `calc(100 * var(--vh) - ${$height}px)`}
     style:max-height={isWindow ? 'auto' : `calc(100 * var(--vh) - ${$height}px)`}
     style:overflow-y={isWindow ? null : 'scroll'}
+    transition:fly|local={{ y: 100 * $appHeight - $height, duration: 500 }}
+    on:introend={() => { isTransition = false }}
   >
-    <Header on:close={() => ($minimize = true)} />
+    <Header on:close={onHeaderClose} />
 
-    {#if initFetchLoading}
+    {#if initFetchLoading || isTransition}
       <Loading />
     {:else if $chatMessages.length === 0}
       <Empty class="flex-1" title={$t('chat.empty')} />
