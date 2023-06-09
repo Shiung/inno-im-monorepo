@@ -6,6 +6,7 @@ import { t } from '$stores'
 import Circle from 'ui/core/button/loading.svelte'
 
 import DoubleArrow from '../images/double_arrow_down_small.svg'
+import { getEnv } from '../context'
 
 const dispatch = createEventDispatcher()
 
@@ -16,14 +17,17 @@ export let quantity: number = 10
 let dom: HTMLDivElement
 let canLoadmore: boolean
 
+const { displayType } = getEnv()
+$: isWindow = $displayType === 'window'
+
 const isIOS = getMobileOSInfo() === MobileOS.iOS
-const styledElement = isIOS ? document.documentElement : document.body
+$: styledElement = isIOS ? document.documentElement : document.body
 
 const intersectionObserver = new IntersectionObserver(async entries => {
   for (const entry of entries) {
     canLoadmore = entry.isIntersecting
   }
-}, { root, rootMargin: `0px 0px 0px 0px` })
+}, { root, rootMargin: `-70px 0px 0px 0px` })
 
 $: if (dom) intersectionObserver.observe(dom)
 
@@ -38,6 +42,9 @@ const onTouchstart = (e: TouchEvent) => {
   loadIconYMove = e.touches[0].clientY
 
   styledElement && (styledElement.style.overscrollBehavior = 'none')
+  // trick for ios
+  // make overscroll-behavior property works by letting it overflow and scrollable
+  if(isIOS && !isWindow) styledElement.style.minHeight = '100.3%'
 }
 
 const onTouchmove = (e: TouchEvent) => {
@@ -47,12 +54,16 @@ const onTouchmove = (e: TouchEvent) => {
 
   if (offsetY < 0 && styledElement.style.overscrollBehavior) {
     styledElement.style.overscrollBehavior = null
+
+    if(isIOS && !isWindow) styledElement.style.minHeight = null
   }
 }
 
 const onTouchend = () => {
   if (styledElement.style.overscrollBehavior) {
     styledElement.style.overscrollBehavior = null
+
+    if(isIOS && !isWindow) styledElement.style.minHeight = null
   }
 
   if (offsetY >= 50) dispatch('fetchMore')
