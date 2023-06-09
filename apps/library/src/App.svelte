@@ -25,12 +25,15 @@ const routeLoading = (event: CustomEvent) => {
   else showBottomNav.set(true)
 }
 
-const handleResize = throttle(() => {
+const setVh = () => {
   const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
   document.body.style.setProperty('--vh', `${vh}px`)
-}, 250)
+}
+
+const handleResize = throttle(setVh, 250)
 
 onMount(() => {
+  setVh()
   window.addEventListener('resize', handleResize)
 })
 
