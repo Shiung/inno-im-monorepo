@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+option go_package = "go/model/im";
+
+enum Command {
+    COMMAND_NONE     = 0;
+    SEND_MESSAGE     = 2;
+    FETCH_MESSAGES   = 3;
+    REPORT_ABUSE     = 4;
+    SWITCH_LANGUAGE  = 5;
+    SUBSCRIBE_CHAT   = 9;
+    UNSUBSCRIBE_CHAT = 10;
+    PUSH_MESSAGE     = 100;
+    USER_STATUS      = 200;
+}
+
+enum Language {
+    DEFAULT = 0;
+    ZH_CN   = 1;
+    ZH_HK   = 2;
+	EN_US   = 3;
+	MS_MY   = 4;
+	ID_ID   = 5;
+	VI_VN   = 7;
+	HI_IN   = 8;
+	JA_JP   = 9;
+	KO_KR   = 10;
+	TH_TH   = 11;
+	PT_PT   = 12;
+}
+
+message Request {
+    string              reqId   = 1;
+    Command             command = 2;
+    google.protobuf.Any data    = 3;
+}
+
+message Push {
+    string              reqId   = 1;
+    Command             command = 2;
+    int32               code    = 3;
+    string              msg     = 4;
+    google.protobuf.Any data    = 5;
+}
+
+message ChatIdsWrapper {
+    repeated string chatIds = 1;
+}
+
+message PushMessageEntityWrapper {
+    repeated PushMessageEntity pushMessageEntity = 1;
+}
+
+enum ContentType {
+	CONTENT_TYPE_NONE = 0;
+	CHAT              = 1;
+	ORDER             = 2;
+}
+
+enum Visible {
+	VISIBLE_NONE = 0;
+	ALL          = 1;
+	SENDER       = 2;
+}
+
+message RequestMessageEntity {
+    ContentType contentType = 1;
+    string      chatId      = 2;
+	int32       iid         = 3;
+    int64       replyTo     = 4;
+    string      content     = 5;
+}
+
+message PushMessageEntity {
+    int64       msgId       = 1;
+    ContentType contentType = 2;
+    int64       vdId        = 3;
+    string      senderName  = 4;
+	bool        isSelf      = 5;
+    string      chatId      = 6;
+	int32       iid         = 7;
+    int32       vip         = 8;
+    int32       avatar      = 9;
+    int64       replyTo     = 10;
+    string      content     = 11;
+    Visible     visible     = 12;
+    int64       timestamp   = 13;
+}
+
+message FetchArgs {
+    int64 pointer = 1;
+    int64 chatId  = 2;
+}
+
+message ReportAbuseArgs {
+    int64  userId = 1;
+    string reason = 2;
+}
+
+message Notify {
+    Command             command = 1;
+    google.protobuf.Any data    = 2;
+}
+
+message UserStatus {
+    string name   = 1;
+    int64  vdId   = 2;
+    int32  status = 3;
+}
+
+message SwitchLanguageArg {
+    string language = 1;
+}
+
+message Group {
+    int64  id          = 1;
+    string name        = 2;
+    string iconUrl     = 3;
+    int32  memberCount = 4;
+    int32  deleted     = 5;
+}
+
+message GroupsWrapper {
+    repeated Group groups = 1;
+}
+
+message UserGroupStateArg {
+    enum StateType {
+        STATE_TYPE_NONE = 0;
+        REGISTRATION    = 1;
+        CANCELLATION    = 2;
+    }
+
+    int64     userId  = 2;
+    int64     groupId = 3;
+    StateType Status  = 4;
+}
