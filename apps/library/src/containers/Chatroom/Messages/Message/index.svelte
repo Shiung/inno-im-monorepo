@@ -19,7 +19,9 @@
 
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting) checkAndSetLastReadId(entry.target.getAttribute('data-id'))
+      if (entry.isIntersecting && entry.boundingClientRect.y > 0) {
+        checkAndSetLastReadId(entry.target.getAttribute('data-id'))
+      }
     }
   })
 
