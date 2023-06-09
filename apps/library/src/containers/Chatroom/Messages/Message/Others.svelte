@@ -16,7 +16,6 @@
     </div>
 
     <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
-      <div class="text-imprimary text-[12px]">{message.senderName}:</div>
       <div class="text-[14px]">{message.content}</div>
     </div>
   </div>
