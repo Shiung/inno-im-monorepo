@@ -13,12 +13,15 @@ export interface MessageEntityDataProps {
   iid?: number
 }
 
+let msgId = Random.integer(100000, 999999)
+
 export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) => {
   const _content = props?.content
   const _sender = props?.sender
+  const newMsgId = msgId = msgId + Random.integer(0, 10)
 
   return mock({
-    msgId: Random.integer(100000, 999999),
+    msgId: newMsgId,
     // contextType: Random.integer(0, 2),
     contextType: 1,
     vdId: 4,
