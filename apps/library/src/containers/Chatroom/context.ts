@@ -4,6 +4,7 @@ export interface IChatroomInfo {
   roomId: number
   userId: string
   userVip: number
+  userCurrency: string
   isLogin: boolean
   isCharged: boolean
   vipLimit: number
@@ -21,6 +22,7 @@ export const initInfo: IChatroomInfo = {
   roomId: 124,
   userId: 'loki',
   userVip: 6,
+  userCurrency: 'CNY',
   isLogin: true,
   isCharged: true,
   vipLimit: 6,
