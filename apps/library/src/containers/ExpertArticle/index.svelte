@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Ripple } from 'ui'
-  import { twMerge } from 'tailwind-merge';
+  import { twMerge } from 'tailwind-merge'
   import { timestampToFormat } from 'utils/convertDateAndTimestamp'
-  import { push, params } from 'svelte-spa-router';
+  import { push } from 'svelte-spa-router'
   import { locale } from '$stores'
 
   import MarketInfo from '$src/components/MarketInfo'
@@ -12,7 +12,7 @@
   import enWinStamp from './images/en_US/ic_stamp_win.webp'
 
   export let article: IArticle
-
+  export let expertId: string
   export let hideStamp: boolean = false
 
   const getStamp = (hitStatus: IArticle['hitStatus']) => {
@@ -26,7 +26,7 @@
   }
 
   const onClick = () => {
-    push(`/planDetail/${$params.expertId}/${article?.articleId}`)
+    push(`/planDetail/${expertId}/${article?.articleId}`)
   }
 
   $: stampStyle = hideStamp

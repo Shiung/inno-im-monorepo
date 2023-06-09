@@ -1,17 +1,11 @@
 <script lang="ts">
-  import Empty from '$src/containers/Empty'
-
+  import { params } from 'svelte-spa-router'
   import ExpertArticle from '$src/containers/ExpertArticle/index.svelte'
-
   import type { IArticle } from 'api/im/types/expert'
 
   export let articles: IArticle[] = []
 </script>
 
-{#if articles.length === 0}
-  <Empty class='h-[200px]' />
-{:else}
-  {#each articles as article}
-    <ExpertArticle {article} class='mb-3' />
-  {/each}
-{/if}
+{#each articles as article}
+  <ExpertArticle {article} class='mb-3' expertId={$params.expertId} />
+{/each}

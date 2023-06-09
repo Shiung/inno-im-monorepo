@@ -2,6 +2,7 @@
 import { im } from 'api'
 import { Ripple } from 'ui'
 import { t } from '$stores'
+import { params } from 'svelte-spa-router'
 
 import Title from '$src/components/Title/index.svelte'
 import Empty from '$src/containers/Empty'
@@ -11,8 +12,7 @@ import Loading from './components/Loading.svelte'
 
 import Filter from '../../images/filter.svg'
 
-export let expertId: string
-const promise = im.expertArticleHistory({ query: { expertId, pageIdx: 1, pageSize: 10 }})
+const promise = im.expertArticleHistory({ query: { expertId: $params.expertId, pageIdx: 1, pageSize: 10 }})
 </script>
 
 <div>
@@ -27,10 +27,13 @@ const promise = im.expertArticleHistory({ query: { expertId, pageIdx: 1, pageSiz
 
   {#await promise}
     <Loading />
-  {:then articles}
-    <List articles={articles.data.list} />
+  {:then response}
+    {#if !response?.data?.list?.length}
+      <Empty class='h-[200px]' />
+    {:else}
+      <List articles={response.data.list} />
+    {/if}
   {:catch}
     <Empty class='h-[200px]' />
   {/await}
-
 </div>
