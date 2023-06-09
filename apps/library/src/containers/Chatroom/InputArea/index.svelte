@@ -39,7 +39,7 @@ let showTooOften: boolean = false
 let timeout: ReturnType<typeof setTimeout>
 $: if (showTooOften) {
   clearTimeout(timeout) 
-  timeout = setTimeout(() => showTooOften = false, 3000)
+  timeout = setTimeout(() => showTooOften = false, 2000)
 }
 
 const publishMessage = () => {
