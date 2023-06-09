@@ -69,12 +69,11 @@
   const scrollToUnread = () => {
     const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
     if (unreadDom) {
-      unreadDom.scrollIntoView()
+      unreadDom.scrollIntoView({ block: 'end' })
       flash(unreadDom)
 
-      const offset = 200
-      if (isWindow) window.scrollTo({ top: window.scrollY - offset - $height })
-      else dom.scrollTo({ top: dom.scrollTop - offset })
+      const offset = 83
+      if (isWindow) window.scrollTo({ top: window.scrollY + offset })
     }
   }
 
