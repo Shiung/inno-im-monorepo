@@ -23,7 +23,7 @@
         checkAndSetLastReadId(entry.target.getAttribute('data-id'))
       }
     }
-  })
+  }, { rootMargin: `0px 0px -150px 0px`})
 
   $: if (dom) observer.observe(dom)
 </script>
