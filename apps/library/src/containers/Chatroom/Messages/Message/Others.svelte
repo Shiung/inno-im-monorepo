@@ -21,7 +21,7 @@
 </script>
 
 <div class="flex">
-  <div class="min-w-[30px] h-[30px] rounded-full bg-[#999999] flex items-center justify-center">
+  <div class="min-w-[30px] h-[30px] rounded-full flex items-center justify-center">
     {#if avatarImg}<img src={avatarImg} class='block w-[30px] h-[30px]' alt='avatar' />{/if}
   </div>
 
