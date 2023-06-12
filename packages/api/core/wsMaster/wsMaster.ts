@@ -17,7 +17,7 @@ class WsMaster {
 
   watchdog: WatchDog
 
-  pingPongCommand: WsMasterProps['pingPongCommand']
+  pingPongParser: WsMasterProps['pingPongParser']
   eventkeyParser: WsMasterProps['eventkeyParser']
   binaryType: WsMasterProps['binaryType']
   stopIfRetryOverTimes?: number
@@ -40,10 +40,10 @@ class WsMaster {
       socket: this.socket,
       pingInterval: props.pingInterval,
       reconnectTimeout: props.reconnectTimeout,
-      pingPongCommand: props.pingPongCommand
+      pingPongParser: props.pingPongParser
     })
 
-    if (props.pingPongCommand) this.pingPongCommand = props.pingPongCommand
+    if (props.pingPongParser) this.pingPongParser = props.pingPongParser
     if (props.eventkeyParser) this.eventkeyParser = props.eventkeyParser
     if (props.binaryType) this.binaryType = props.binaryType
     if (props.stopIfRetryOverTimes) this.stopIfRetryOverTimes = props.stopIfRetryOverTimes
@@ -92,10 +92,12 @@ class WsMaster {
 
     this.socket.current.onmessage = event => {
       this.watchdog.extend()
-      if (event.data === this.pingPongCommand?.pong) return
+
 
       let parsed: IWsMasterEvent = { eventkey: '', pairId: '', data: null }
       if (this.eventkeyParser) parsed = this.eventkeyParser(event)
+      // check if is pong command returned
+      if (this.pingPongParser?.pong(parsed)) return
 
       this.obserableNotify(parsed)
       // this.notifyToListeners(eventKey, data)
@@ -111,7 +113,7 @@ class WsMaster {
     this.socket.current.onerror = e => {
       console.log('ws error: ', e)
     }
-    if (this.pingPongCommand) this.watchdog.start()
+    this.watchdog.start()
   }
 
   reconnect() {

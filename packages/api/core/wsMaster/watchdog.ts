@@ -8,7 +8,7 @@ class WatchDog {
   socket: SocketRef
 
   count: number
-  pingPongCommand: WatchDogProps['pingPongCommand']
+  pingPongParser: WatchDogProps['pingPongParser']
   listeners: Array<(event: string) => void>
 
   constructor(props: WatchDogProps) {
@@ -17,15 +17,15 @@ class WatchDog {
     this.reconnectTimeout = props.reconnectTimeout || 20 * 1000
     this.count = 0
     this.socket = props.socket
-    this.pingPongCommand = props.pingPongCommand || { ping: 'ping', pong: 'pong' }
     this.listeners = []
+    this.pingPongParser = props.pingPongParser
   }
 
   counting() {
     this.timer = setInterval(() => {
       this.checkTimeoutAndNotify()
       if (this.socket.current && this.socket.current.readyState === 1) {
-        if (this.pingPongCommand) this.socket.current.send(this.pingPongCommand.ping)
+        if (this.pingPongParser) this.socket.current.send(this.pingPongParser.ping() || '\x00')
         this.count = this.count + 1
       }
     }, this.interval)
