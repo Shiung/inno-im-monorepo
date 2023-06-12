@@ -18,7 +18,7 @@ let msgId = Random.integer(100000, 999999)
 export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) => {
   const _content = props?.content
   const _sender = props?.sender
-  const newMsgId = msgId = msgId + Random.integer(0, 10)
+  const newMsgId = msgId = msgId + Random.integer(1, 10)
 
   return mock({
     msgId: newMsgId,
