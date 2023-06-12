@@ -19,10 +19,11 @@ import bg3 from '../images/bg_style2_3.webp'
 let keyWork = ''
 let currentPage = 1
 let pageSize = 20
-let initPromise: ReturnType<typeof im.webAnchors>
+let initLoading: boolean = false
+let initData: Awaited<ReturnType<typeof im.webAnchors>>['data']['list']
+let hasMoreData: boolean = false
 
 const anchorBgs = [ bg0, bg1, bg2, bg3 ]
-
 
 const fetchAnchors = (props: { pageIdx: number, keyWork: string, sid: ReturnType<typeof convertSid> }) => {
   const { pageIdx, keyWork, sid } = props
@@ -38,12 +39,27 @@ const fetchAnchors = (props: { pageIdx: number, keyWork: string, sid: ReturnType
   })
 }
 
-$: if ($params?.anchorSid) initPromise = fetchAnchors({ pageIdx: 1, keyWork, sid: convertSid($params?.anchorSid) })
+const init = async () => {
+  try {
+    initLoading = true
+    const response = await fetchAnchors({ pageIdx: currentPage, keyWork, sid: convertSid($params?.anchorSid) })
+    initData = response?.data?.list
+
+    hasMoreData = response?.data?.list?.length >= pageSize
+    if (response?.data?.pager?.totalPage >= currentPage) currentPage++
+  } catch (error) {
+    initData = []
+  } finally {
+    initLoading = false
+  }
+}
+
+$: if ($params?.anchorSid) init()
 
 let moreAnchors = []
 let fetchingMore = false
 
-$: if (initPromise) {
+$: if (initData) {
   document.body.scrollTo(0, 0)  
   window.scrollTo(0, 0)
   moreAnchors = []
@@ -55,7 +71,12 @@ const intersectionObserver = new IntersectionObserver(async entries => {
     if (entry.isIntersecting) {
       fetchingMore = true
       const res = await fetchAnchors({ pageIdx: currentPage, keyWork, sid: convertSid($params?.anchorSid) })
+
+      hasMoreData = res?.data?.list?.length >= pageSize
+
+      if(res?.data?.pager?.totalPage >= currentPage) currentPage++
       if (res?.data?.list) moreAnchors = [...moreAnchors, ...res.data.list]
+
       fetchingMore = false
     }
   }
@@ -69,24 +90,24 @@ $: if (domOfLoading) intersectionObserver.observe(domOfLoading)
 <Search on:searchEvent={e => keyWork = e.detail.keyWork} />
 
   <div class='space-y-[12px]'>
-    {#await initPromise}
+    {#if initLoading}
       <Loading />
 
-    {:then anchors}
-      {#if !anchors?.data?.list?.length}
+    {:else}
+      {#if !initData?.length}
         <Empty class='h-[300px]' />
       {:else}
-        {#each anchors?.data?.list || [] as anchor, idx}
+        {#each initData || [] as anchor, idx}
           <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
         {/each}
 
         {#each moreAnchors as anchor, idx}
-          <Anchor anchor={anchor} bg={anchorBgs[(anchors.data.list.length + idx) % anchorBgs.length]} />
+          <Anchor anchor={anchor} bg={anchorBgs[(initData.length + idx) % anchorBgs.length]} />
         {/each}
 
         
         <!-- if init fetch data less then pageSize that meaning no more data. -->
-        {#if anchors?.data?.list.length >= pageSize }
+        {#if hasMoreData }
 
           <div bind:this={domOfLoading}>
             {#if fetchingMore} 
@@ -100,9 +121,7 @@ $: if (domOfLoading) intersectionObserver.observe(domOfLoading)
 
         {/if}
       {/if}
-    {:catch}
-      <Empty class='h-[300px]' />
-    {/await}  
+    {/if}
 
   </div>
 
