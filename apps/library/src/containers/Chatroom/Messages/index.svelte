@@ -124,8 +124,8 @@
         ? `${inputHeight + 42}px`
         : `${inputHeight + 10}px`
       : showWarning
-        ? `${10}px`
-        : `0px`
+        ? `${32}px`
+        : `${0}px`
 </script>
 
 <svelte:window on:scroll={isWindow && onWindowScroll} />
