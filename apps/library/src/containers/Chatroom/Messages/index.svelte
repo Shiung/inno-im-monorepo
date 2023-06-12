@@ -6,6 +6,7 @@
   import { Ripple } from 'ui'
   import { im } from 'api'
   import { t } from '$stores'
+  import { im as impb } from 'protobuf'
 
   import flash from './flash'
   import Message from './Message'
@@ -58,8 +59,9 @@
       ? document.documentElement.scrollHeight
       : (mutation.target as HTMLDivElement).scrollHeight
 
-    if (scrollToNewest) {
-      lastReadId = getNewestMessage().msgId
+    const {msgId, visible } = getNewestMessage()
+    if (scrollToNewest && visible === impb.enum.visible.ALL) {
+      lastReadId = msgId
       target.scrollTo({ top: _scrollH })
     }
     checkWatched()
