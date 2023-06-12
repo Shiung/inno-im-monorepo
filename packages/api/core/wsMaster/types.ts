@@ -8,7 +8,7 @@ export interface WatchDogProps {
   socket: SocketRef
   pingInterval?: WsMasterProps['pingInterval']
   reconnectTimeout?: WsMasterProps['reconnectTimeout']
-  pingPongCommand?: WsMasterProps['pingPongCommand']
+  pingPongParser?: WsMasterProps['pingPongParser']
   listeners?: Listener[]
 }
 
@@ -24,9 +24,9 @@ export interface WsMasterProps {
   pingInterval?: number
   reconnectTimeout?: number
 
-  pingPongCommand?: {
-    ping: string
-    pong: string
+  pingPongParser?: {
+    ping: () => string | ArrayBufferLike | Blob | ArrayBufferView | undefined
+    pong: (arg0: IWsMasterEvent) => boolean
   }
 
   reconnectInterval?: number

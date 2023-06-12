@@ -1,19 +1,22 @@
 export enum ECommand {
   COMMAND_NONE = 0,
-  SEND_MESSAGE = 2,
-  FETCH_MESSAGES = 3,
-  REPORT_ABUSE = 4,
-  SWITCH_LANGUAGE = 5,
-  SUBSCRIBE_CHAT = 9,
-  UNSUBSCRIBE_CHAT = 10,
+  SEND_MESSAGE = 1,
+  FETCH_MESSAGES = 2,
+  REPORT_ABUSE = 3,
+  SWITCH_LANGUAGE = 4,
+  SUBSCRIBE_CHAT = 5,
+  UNSUBSCRIBE_CHAT = 6,
+  PING = 7,
   PUSH_MESSAGE = 100,
-  USER_STATUS = 200
+  USER_STATUS = 200,
+  PONG = 300,
 }
 
 export enum EContentType {
   CONTENT_TYPE_NONE = 0,
   CHAT = 1,
-  ORDER = 2
+  ORDER = 2,
+  ANCHOR = 3,
 }
 
 export enum EVisible {

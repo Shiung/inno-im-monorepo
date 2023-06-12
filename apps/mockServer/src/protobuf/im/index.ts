@@ -1,6 +1,7 @@
 import impb from 'protobuf/im/node'
 import { pushMessage, pushMessageEntity } from './messageGenerator'
 
+import type { IRequest } from 'protobuf/im/types'
 import type { RawData, WebSocket } from 'ws'
 
 
@@ -23,22 +24,31 @@ export const onClose = () => {
   clearInterval(sendInterval)
 }
 
+const onReceivePing = (ws: WebSocket) => {
+  const buffer = impb.push?.encode({ reqId: '', command: impb.enum.command.PONG, code: 0, msg: '', data: { value: new Uint8Array() } })
+  if (buffer) ws.send(buffer)
+}
+
+const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
+  const message = impb.requestMessageEntity?.decode(data.data.value as Uint8Array)
+
+  const pushMsg = pushMessageEntity({
+    content: message.content,
+    sender: '',
+    isSelf: true,
+    chatId: message.chatId,
+    iid: message.iid
+  })
+
+  const buf = pushMessage({ reqId: data.reqId, value: pushMsg })
+  if (buf) ws.send(buf)
+}
+
 export const onMessage = (ws: WebSocket, event: RawData) => {
   const data = impb.request?.decode(event as Uint8Array)
+
   switch (data.command) {
-    case impb.enum.command.SEND_MESSAGE:
-      const message = impb.requestMessageEntity?.decode(data.data.value as Uint8Array)
-
-      const pushMsg = pushMessageEntity({
-        content: message.content,
-        sender: '',
-        isSelf: true,
-        chatId: message.chatId,
-        iid: message.iid
-      })
-
-      const buf = pushMessage({ reqId: data.reqId, value: pushMsg })
-      if (buf) ws.send(buf)
-      break
+    case impb.enum.command.PING: return onReceivePing(ws)
+    case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
   }
 }

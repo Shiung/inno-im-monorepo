@@ -5,7 +5,11 @@ import createWebsocket from '../core/wsMaster'
 const ws = createWebsocket({
   url: 'ws://localhost:5174/proto/IM_API_URL',
   binaryType: 'arraybuffer',
-  pingPongCommand: { ping: 'ping', pong: 'pong' },
+
+  pingPongParser: {
+    ping: () => im.request.encode({ reqId: '', command: im.enum.command.PING, data: { value: new Uint8Array() } }),
+    pong: (event) => event.eventkey === im.enum.command.PONG
+  },
 
   eventkeyParser: (event) => {
     const decoded = im.push.decode(event.data)
