@@ -124,7 +124,7 @@
         ? `${inputHeight + 42}px`
         : `${inputHeight + 10}px`
       : showWarning
-        ? `${inputHeight + 10}px`
+        ? `${10}px`
         : `0px`
 </script>
 
