@@ -27,9 +27,12 @@
   import Header from './Header/index.svelte'
   import Loading from './Loading.svelte'
   import Messages from './Messages/index.svelte'
+  import WarningTips from './WarningTips/index.svelte'
   import InputArea from './InputArea/index.svelte'
 
   import type { IChatMessage } from 'api/im/types'
+
+  import { warningCodeMap } from './utils'
 
   const { roomId } = setInfo($info)
   const { minimize, displayType, height } = setEnv($env)
@@ -46,6 +49,17 @@
   let subscription: ReturnType<typeof imWs.subscribe>
   let chatMessages = writable<IChatMessage[]>([])
   let isTransition = false
+  
+  let errorMsg: string
+  let showWarning: boolean
+
+  const setWarningMessage = (code: string) => {
+    const warningMsg = warningCodeMap?.[code]
+    if(warningMsg) {
+      errorMsg = $t(warningMsg)
+      showWarning = true
+    }
+  }
 
   const subscribeRoom = (_roomId: number) => {
     subscription = imWs.subscribe(impb.enum.command.PUSH_MESSAGE, ({ data }) => {
@@ -99,6 +113,13 @@
       <Messages bind:lastReadId {chatMessages} />
     {/if}
 
-    <InputArea {destination} {subId} />
+    <InputArea {destination} {subId} on:warningInput={(e) => { setWarningMessage(e.detail) }}>
+      <WarningTips
+        slot='warningTips'
+        show={showWarning}
+        message={errorMsg}
+        on:close={() => { showWarning = false }}
+      />
+    </InputArea>
   </div>
 {/if}

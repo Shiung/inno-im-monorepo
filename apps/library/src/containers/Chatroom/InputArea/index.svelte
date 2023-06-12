@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
   import { twMerge } from 'tailwind-merge'
-  import { fly } from 'svelte/transition'
   // import stomp from 'api/stompMaster'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
@@ -36,18 +36,16 @@
   let dom: HTMLDivElement
   $: blockHeight = dom?.getBoundingClientRect().height
 
+  const dispatch = createEventDispatcher()
+
   let message: string
-  let showTooOften: boolean = false
-  let timeout: ReturnType<typeof setTimeout>
-  $: if (showTooOften) {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => (showTooOften = false), 2000)
-  }
 
   const publishMessage = () => {
     if (!message) return
     const now = Date.now()
-    if (now - lastSend <= $frequency) return (showTooOften = true)
+    if (now - lastSend <= $frequency) {
+      return dispatch('warningInput', 30003)
+    }
 
     imWs.publish({
       eventkey: im.enum.command.SEND_MESSAGE,
@@ -66,14 +64,7 @@
 </script>
 
 <div class='relative'>
-  {#if showTooOften}
-    <div
-      transition:fly|local={{ y: 32 }}
-      class="flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] absolute top-[-32px] w-full"
-    >
-      {$t('chat.tooOften')}
-    </div>
-  {/if}
+  <slot name='warningTips'></slot>
 
   <div
     class={twMerge(
