@@ -1,7 +1,9 @@
-const map = new Map()
+import { getConfig } from 'env-config'
+import { getVendorTheme } from 'utils'
+const avatarMap = new Map()
 
 export const fetchAvatar = async (id: number) => {
-  if(map.has(id)) return map.get(id)
+  if(avatarMap.has(id)) return avatarMap.get(id)
 
   let path
   switch (id) {
@@ -360,6 +362,103 @@ export const fetchAvatar = async (id: number) => {
     }
   }
 
-  map.set(id, path)
+  if(path) avatarMap.set(id, path)
   return path
 }
+
+const vipMap = new Map()
+
+const fetchVendorVip = (vendor: string) => {
+  return async (id: number) => {
+    if(vipMap.has(id)) return vipMap.get(id)
+
+    let path
+    switch (id) {
+      case 0: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/0.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/0.png')
+        path = promise?.default
+        break
+      }
+      case 1: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/1.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/1.png')
+        path = promise?.default
+        break
+      }
+      case 2: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/2.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/2.png')
+        path = promise?.default
+        break
+      }
+      case 3: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/3.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/3.png')
+        path = promise?.default
+        break
+      }
+      case 4: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/4.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/4.png')
+        path = promise?.default
+        break
+      }
+      case 5: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/5.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/5.png')
+        path = promise?.default
+        break
+      }
+      case 6: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/6.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/6.png')
+        path = promise?.default
+        break
+      }
+      case 7: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/7.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/7.png')
+        path = promise?.default
+        break
+      }
+      case 8: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/8.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/8.png')
+        path = promise?.default
+        break
+      }
+      case 9: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/9.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/9.png')
+        path = promise?.default
+        break
+      }
+      case 10: {
+        let promise
+        if (vendor === 'vd002') promise = await import('$src/assets/vip/vd002/10.png')
+        else if (vendor === 'vd004') promise = await import('$src/assets/vip/vd004/10.png')
+        path = promise?.default
+        break
+      }
+      default: {
+        break
+      }
+    }
+
+    if(path) vipMap.set(id, path)
+    return path
+  }
+}
+
+export const fetchVip = fetchVendorVip(getVendorTheme(getConfig()?.VENDERID || 'vd004'))

@@ -1,17 +1,23 @@
 <script lang="ts">
   import type { IChatMessage } from 'api/im/types'
-  import { fetchAvatar } from '$src/utils/avatar'
+  import { fetchAvatar, fetchVip } from '$src/utils/images'
 
   export let message: IChatMessage
   
-  let avatarImg
+  let avatarImg, vipImg
 
   const fetchAvatarImg = async () => {
     const imgPath = await fetchAvatar(message.avatar)
     avatarImg = imgPath
   }
 
+  const fetchVipImg = async () => {
+    const imgPath = await fetchVip(message.vip)
+    vipImg = imgPath
+  }
+
   $: typeof message.avatar === 'number' && fetchAvatarImg()
+  $: typeof message.vip === 'number' && fetchVipImg()
 </script>
 
 <div class="flex">
@@ -21,8 +27,8 @@
 
   <div class="ml-[4px]">
     <div class="flex items-center">
-      <div class="text-[12px]">VIP{message.vip}</div>
-      <div class="text-imprimary text-[12px] ml-[4px]">{message.senderName}:</div>
+      {#if vipImg}<img src={vipImg} class='block w-auto h-[14px] mr-2' alt='vip' />{/if}
+      <div class="text-imprimary text-[12px]">{message.senderName}:</div>
     </div>
 
     <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
