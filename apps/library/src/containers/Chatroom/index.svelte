@@ -49,7 +49,8 @@
   let subscription: ReturnType<typeof imWs.subscribe>
   let chatMessages = writable<IChatMessage[]>([])
   let isTransition = false
-  
+  let inputHeight: number
+
   let errorMsg: string
   let showWarning: boolean
 
@@ -110,14 +111,21 @@
     {:else if $chatMessages.length === 0}
       <Empty class="flex-1" title={$t('chat.empty')} />
     {:else}
-      <Messages bind:lastReadId {chatMessages} />
+      <Messages bind:lastReadId {chatMessages} {showWarning} inputHeight={inputHeight} />
     {/if}
 
-    <InputArea {destination} {subId} on:warningInput={(e) => { setWarningMessage(e.detail) }}>
+    <InputArea
+      {destination}
+      {subId}
+      on:warningInput={(e) => { setWarningMessage(e.detail) }}
+      on:domInit={(e) => { inputHeight = e.detail }}
+    >
       <WarningTips
         slot='warningTips'
         show={showWarning}
         message={errorMsg}
+        inputHeight={inputHeight}
+        fixed={isWindow}
         on:close={() => { showWarning = false }}
       />
     </InputArea>

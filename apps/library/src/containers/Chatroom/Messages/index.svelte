@@ -25,6 +25,8 @@
 
   export let chatMessages: Writable<IChatMessage[]>
   export let lastReadId: number
+  export let showWarning: boolean = false
+  export let inputHeight: number
 
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
@@ -115,6 +117,15 @@
       window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
     else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
   }
+
+  $: moreBtnBottomStyle =
+    isWindow
+      ? showWarning
+        ? `${inputHeight + 42}px`
+        : `${inputHeight + 10}px`
+      : showWarning
+        ? `${inputHeight + 10}px`
+        : `0px`
 </script>
 
 <svelte:window on:scroll={isWindow && onWindowScroll} />
@@ -140,9 +151,9 @@
       in:fly={{ y: 50, duration: 300 }}
       class={twMerge(
         'flex justify-center mx-auto !mt-0 z-10',
-        isWindow ? 'fixed bottom-[90px] translate-x-[-50%]' : ' bottom-[10px] sticky'
+        isWindow ? 'fixed left-1/2 -translate-x-1/2' : 'sticky'
       )}
-      style:left={isWindow && 'calc(50% - 16px)'}
+      style:bottom={moreBtnBottomStyle}
     >
       <Ripple
         class="flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]"

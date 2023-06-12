@@ -36,6 +36,8 @@
   let dom: HTMLDivElement
   $: blockHeight = dom?.getBoundingClientRect().height
 
+  $: if (dom) dispatch('domInit', blockHeight)
+
   const dispatch = createEventDispatcher()
 
   let message: string
