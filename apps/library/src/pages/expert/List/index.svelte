@@ -40,7 +40,7 @@
   const pageSize: number = 10
   let initLoading: boolean = false
   let hasMoreData: boolean = false
-  let fetchingMore: boolean = false
+  let moreLoading: boolean = false
   let moreData: IExpertPrediction[] = []
   let initData: Awaited<ReturnType<typeof im.expertPredictions>>['data']['list'] = []
   let dom: HTMLDivElement
@@ -95,7 +95,7 @@
     for (const entry of entries) {
       if (entry.isIntersecting) {
         try {
-          fetchingMore = true
+          moreLoading = true
           const response = await fetchPredictions({ sid, type: type, pageIdx, pageSize })
           const { list, pager } = response?.data || {}
           
@@ -107,7 +107,7 @@
         } catch (error) {
           hasMoreData = false
         } finally {
-          fetchingMore = false
+          moreLoading = false
         }
       }
     }
@@ -146,7 +146,7 @@
 
       {#if hasMoreData}
         <div bind:this={dom}>
-          {#if fetchingMore}
+          {#if moreLoading}
             <div class='relative h-[30px] overflow-hidden'>
               <Circle stroke="rgba(var(--im-monorepo-primary))" />
             </div>
