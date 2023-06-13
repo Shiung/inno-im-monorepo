@@ -17,7 +17,9 @@
       <!-- 玩法區塊 待討論 -->
       <div class='flex items-center'>
         <MarkInfo article={article} />
-        <div class='text-[12px] ml-[4px]'> {`${article.homeName} vs ${article.awayName}`} </div>
+        {#if article?.homeName && article?.awayName}
+          <div class='text-[12px] ml-[4px]'> {`${article.homeName} vs ${article.awayName}`} </div>
+        {/if}
       </div>
 
       <Button class='w-full rounded-[12px] h-[44px]' on:click={() => push(`/planDetail/${$params.expertId}/${article.articleId}`)}>
