@@ -38,11 +38,14 @@
 
   let pageIdx: number = 1
   const pageSize: number = 10
+
   let initLoading: boolean = false
+  let initData: Awaited<ReturnType<typeof im.expertPredictions>>['data']['list'] = []
+
   let hasMoreData: boolean = false
   let moreLoading: boolean = false
   let moreData: IExpertPrediction[] = []
-  let initData: Awaited<ReturnType<typeof im.expertPredictions>>['data']['list'] = []
+
   let dom: HTMLDivElement
 
   const fetchPredictions = ({
@@ -113,9 +116,10 @@
     }
   })
 
-  $: init({ sid, type })
-
-  $: if (initData) window.scrollTo(0, 0)
+  $: {
+    window.scrollTo(0, 0)
+    init({ sid, type })
+  }
 
   $: if (dom) observer.observe(dom)
 
