@@ -19,48 +19,8 @@
 </script>
 
 <script lang="ts">
-  import { im } from 'api'
-
-  import Expert, { Loading as ExpertLoading } from '$containers/Expert'
-  import Empty from '$src/containers/Empty'
-
-  let predictionsPromise: ReturnType<typeof im.expertPredictions>
-
-  const fetchPredictions = (sid: number) => {
-    if (sid == null) return
-    predictionsPromise = im.expertPredictions({
-      query: {
-        ...(sid && { sid }),
-        type: 0,
-        pageIdx: 1,
-        pageSize: 10
-      }
-    })
-  }
-
-  $: fetchPredictions($sid)
+  import ExpertList from './List/index.svelte'
 </script>
 
-<div class="bg-white">
-  {#await predictionsPromise}
-    <ExpertLoading length={5} />
-  {:then response}
-    {@const list = response?.data?.list || []}
+<ExpertList sid={$sid} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
 
-    <div class="pl-[14px] pr-[20px] py-[20px] space-y-10">
-      {#if list.length === 0}
-        <Empty class="h-[300px]" />
-      {:else}
-        {#each list as prediction}
-          <Expert
-            {prediction}
-            goToExpertDetailCallback={$goToExpertDetail}
-            goToPlanDetailCallback={$goToPlanDetail}
-          />
-        {/each}
-      {/if}
-    </div>
-  {:catch}
-    <Empty class="h-[300px]" />
-  {/await}
-</div>
