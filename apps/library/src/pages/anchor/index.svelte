@@ -1,6 +1,7 @@
 <script lang='ts'>
 import { params, replace } from 'svelte-spa-router'
 import HeaderNavigation from '$containers/HeaderNavigation'
+import { locale } from '$stores'
 
 import AnchorList from './AnchorList'
 
@@ -30,5 +31,7 @@ const headNavIcons: {sid: SidType, onClick: () => void}[] = [
 
 <div>
   <HeaderNavigation active={sid} icons={headNavIcons} />
-  <AnchorList />
+  {#key $locale}
+    <AnchorList />
+  {/key}  
 </div>

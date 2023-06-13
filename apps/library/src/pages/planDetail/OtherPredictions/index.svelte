@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
 
   import ExpertList, { Loading } from '$containers/ExpertList'
   import Title from '$src/components/Title/index.svelte'
@@ -11,7 +11,7 @@
   let promise: ReturnType<typeof im.expertMatchArticle>
 
   $: if(mid && vd) {
-    promise = im.expertMatchArticle({ query: { mid, vd }})
+    promise = im.expertMatchArticle({ query: { mid, vd }, headers: { 'Accept-Language': $locale }})
   }
 </script>
 

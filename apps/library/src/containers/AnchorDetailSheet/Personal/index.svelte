@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { im } from 'api'
-import { t } from '$stores'
+import { t, locale } from '$stores'
 
 import PhotoLoading from './PhotoLoading.svelte'
 
@@ -9,7 +9,10 @@ import type { IWebAnchorInfo } from 'api/im/types'
 export let personal: { loading: boolean, data: IWebAnchorInfo['res']['data'] }
 export let houseId: string
 
-const photosPromise = im.webAnchorPhotos({ query: { houseId, pageIdx: 1, pageSize: 10 }})
+const photosPromise = im.webAnchorPhotos({
+  query: { houseId, pageIdx: 1, pageSize: 10 },
+  headers: { 'Accept-Language': $locale }
+})
 
 const stateTrans = (state: typeof personal.data.state): string => {
   switch (state) {

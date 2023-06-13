@@ -5,6 +5,8 @@ import convertSid from 'utils/convertSid'
 
 import Empty from '$src/containers/Empty'
 
+import { locale } from '$stores'
+
 import { params } from 'svelte-spa-router'
 import Loading from './Loading.svelte'
 import Anchor from './Anchor/index.svelte'
@@ -34,7 +36,8 @@ const fetchAnchors = (props: { pageIdx: number, keyWork: string, sid: ReturnType
       ...(keyWork && { keyWork }),
       pageIdx,
       pageSize
-    }
+    },
+    headers: { 'Accept-Language': $locale}
   })
 }
 

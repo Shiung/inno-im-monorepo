@@ -2,10 +2,12 @@
 import { twMerge } from 'tailwind-merge'
 import { im } from 'api'
 
+import { locale } from '$stores'
 import ExpertList, { Loading } from '$containers/ExpertList'
 
 import Menu from './Menu/index.svelte'
 
+import type { ILanguages } from 'env-config'
 import type { IExpertMenu } from './types'
 import type { SidType } from 'utils'
 
@@ -34,18 +36,19 @@ const menu: IExpertMenu[] = [
 
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
 
-const fetchPredictions = (sid: SidType, type: typeof actived) => {
+const fetchPredictions = (sid: SidType, type: typeof actived, lang: ILanguages) => {
   if (sid === null) return
   predictionsPromise = im.expertPredictions({
     query: {
       ...(sid && { sid }),
       ...(type && { type }),
       pageIdx: 1,
-      pageSize: 10
-  }})
+      pageSize: 10},
+    headers: { 'Accept-Language': lang }
+  })
 }
 
-$: fetchPredictions(sid, actived)
+$: fetchPredictions(sid, actived, $locale)
 
 </script>
 

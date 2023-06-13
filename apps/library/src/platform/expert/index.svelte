@@ -22,13 +22,15 @@ export const setGoToPlanDetail = (callback: (path: string) => void) => goToDetai
 
 <script lang='ts'>
 import { im } from 'api'
+import { locale } from '$stores'
+import type { ILanguages } from 'env-config'
 
 import ExpertList, { Loading } from '$containers/ExpertList'
 import Empty from '$src/containers/Empty'
 
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
 
-const fetchPredictions = (sid: number) => {
+const fetchPredictions = (sid: number, lang: ILanguages) => {
   if (sid == null) return
   predictionsPromise = im.expertPredictions({
     query: {
@@ -36,10 +38,12 @@ const fetchPredictions = (sid: number) => {
       type: 0,
       pageIdx: 1,
       pageSize: 10
-  }})
+    },
+    headers: { 'Accept-Language': lang }
+  })
 }
 
-$: fetchPredictions($sid)
+$: fetchPredictions($sid, $locale)
 
 </script>
 

@@ -6,7 +6,7 @@ import { push, params } from 'svelte-spa-router'
 import { createEventDispatcher } from 'svelte'
 import type { IWebAnchor } from 'api/im/types'
 
-import { t } from '$stores'
+import { t, locale } from '$stores'
 import Empty from '$containers/Empty'
 import convertSid from 'utils/convertSid'
 
@@ -24,7 +24,8 @@ const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 
 $: {
   if ($params?.sid && $params.sid !== '0') anchorsPromise = im.webAnchors({
-    query: { sid: convertSid($params?.sid), pageIdx: 1, pageSize: 4 }
+    query: { sid: convertSid($params?.sid), pageIdx: 1, pageSize: 4 },
+    headers: { 'Accept-Language': $locale }
   })
 }
 
