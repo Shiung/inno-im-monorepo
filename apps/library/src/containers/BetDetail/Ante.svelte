@@ -1,19 +1,20 @@
 <script lang="ts">
   import { t } from '$stores'
-  import { toThousandths } from 'utils/amount'
-  import { getInfo } from '../Chatroom/context'
+  import { amountThousandthTransformer } from 'utils/amount'
 
   import CurrencyIcon from '$components/CurrencyIcon/index.svelte'
 
   export let betItem
 
-  const { userCurrency } = getInfo()
+  const { currency } = betItem
 </script>
 
 <div class="flex items-center">
   <div class="text-[#999]">{$t('chat.bet')}</div>
-  <CurrencyIcon currency={$userCurrency} size="15px" />
+
+  <CurrencyIcon class="w-[15px] h-[15px] mx-[5px]" {currency} />
+
   <div class="text-[rgb(var(--im-monorepo-primary))] text-[14px]">
-    {toThousandths(betItem.totalAnte)}
+    {amountThousandthTransformer(betItem.totalAnte)}
   </div>
 </div>
