@@ -56,7 +56,7 @@
 
   <div class="bg-[#eeeeee] h-[1px] my-[8px]" />
 
-  <div class="truncate text-[14px] font-semibold">{article.title}</div>
+  <div class="truncate text-left text-[14px] font-semibold">{article.title}</div>
 
   <MarketInfo class="mt-[8px]" {article} />
 </Ripple>
