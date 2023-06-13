@@ -1,3 +1,4 @@
+import type { ILanguages } from 'env-config'
 import type { IDiffPast } from './types'
 import dayjs from 'dayjs'
 
@@ -33,5 +34,25 @@ export const convertTimeDiffToPast = (props: { now: number, past: number }): IDi
   else return { 
     text: timestampToFormat({ ts: past, format: 'MM-DD' }),
     unit: 'date'
+  }
+}
+
+export const languagesToDateFormat = (lang: ILanguages, time: string) => {
+  switch (lang) {
+    case 'zh_CN':
+      return dayjs(time).locale('zh-cn').format('DD-MM HH:mm')
+    case 'en_US':
+    case 'ms_MY':
+    case 'id_ID':
+    case 'vi_VN':
+    case 'hi_IN':
+    case 'th_TH':
+      return dayjs(time).locale('en-us').format('DD MMM HH:mm')
+    case 'ja_JP':
+      return dayjs(time).locale('ja-jp').format('MM月DD日 HH:mm')
+    case 'ko_KR':
+      return dayjs(time).locale('ko-kr').format('MM달DD일 HH:mm')
+    default:
+      return dayjs(time).locale('en-us').format('DD MMM HH:mm')
   }
 }
