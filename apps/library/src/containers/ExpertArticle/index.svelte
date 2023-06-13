@@ -41,7 +41,7 @@
   style={stampStyle}
   on:click={onClick}
 >
-  <div class="text-[14px] font-semibold">
+  <div class="text-left text-[14px] font-semibold">
     {timestampToFormat({ ts: article.releaseTime, format: 'MM-DD' })}
   </div>
 
