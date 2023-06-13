@@ -15,7 +15,6 @@ enum Command {
 	PING             = 7;
     PUSH_MESSAGE     = 100;
     USER_STATUS      = 200;
-	PONG             = 300;
 }
 
 enum Language {
@@ -76,10 +75,10 @@ message RequestMessageEntity {
 }
 
 message PushMessageEntity {
-    int64       msgId       = 1;
-    ContentType contentType = 2;
-    int64       vdId        = 3;
-    string      senderName  = 4;
+    int64       msgId       = 1; // message id
+    ContentType contentType = 2; // content 屬於哪種類型
+    int64       vdId        = 3; // vendor id 平台商id
+    string      senderName  = 4; // 發訊息者的名字
 	bool        isSelf      = 5;
     string      chatId      = 6;
 	int32       iid         = 7;

@@ -45,10 +45,17 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
 }
 
 export const onMessage = (ws: WebSocket, event: RawData) => {
-  const data = impb.request?.decode(event as Uint8Array)
 
-  switch (data.command) {
-    case impb.enum.command.PING: return onReceivePing(ws)
-    case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
+  try {
+    const data = impb.request?.decode(event as Uint8Array)
+    switch (data.command) {
+      case impb.enum.command.PING: return onReceivePing(ws)
+      case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
+    }
+
+  } catch (e) {
+    console.log(e)
   }
+
+
 }
