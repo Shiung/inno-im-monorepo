@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import { params, replace } from 'svelte-spa-router'
   import { im } from 'api'
 
   import Circle from 'ui/core/button/loading.svelte'
