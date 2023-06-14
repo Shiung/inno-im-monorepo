@@ -71,5 +71,5 @@ const goToPlanDetail = () => {
     </div>
   </div>
 
-  <p class='mt-[10px] text-[14px] font-semibold truncate pl-[6px]'> {prodiction.title} </p>
+  <p class='text-left mt-[10px] text-[14px] font-semibold truncate pl-[6px]'> {prodiction.title} </p>
 </Ripple>
