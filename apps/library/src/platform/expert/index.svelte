@@ -1,54 +1,26 @@
-<script lang='ts' context='module'>
-import { writable } from 'svelte/store';
-import { initGoToDetail } from '$src/containers/ExpertList'
-let sid = writable(null)
-export const setSid = (sidValue: number) => {
-  if (typeof sidValue !== 'number') return console.warn('setSid parameter MUST be type of number')
+<script lang="ts" context="module">
+  import { writable } from 'svelte/store'
+  import type { GoToExpertDetail, GoToPlanDetail } from '$containers/Expert/type'
 
-  sid.set(sidValue)
-}
+  let sid = writable(null)
+  export const setSid = (sidValue: number) => {
+    if (typeof sidValue !== 'number') return console.warn('setSid parameter MUST be type of number')
 
-let goToDetail = writable(initGoToDetail)
-export const setGoToExpertDetail = (callback: (path: string) => void) => goToDetail.update(e => {
-  e.goToExpertDetailCallback = callback
-  return e
-})
-export const setGoToPlanDetail = (callback: (path: string) => void) => goToDetail.update(e => {
-  e.goToPlanDetailCallback = callback
-  return e
-})
+    sid.set(sidValue)
+  }
 
+  let goToExpertDetail = writable<GoToExpertDetail>(null)
+  export const setGoToExpertDetail = (callback: GoToExpertDetail) =>
+    goToExpertDetail.update((_) => callback)
+
+  let goToPlanDetail = writable<GoToPlanDetail>(null)
+  export const setGoToPlanDetail = (callback: GoToPlanDetail) =>
+    goToPlanDetail.update((_) => callback)
 </script>
 
-<script lang='ts'>
-import { im } from 'api'
-
-import ExpertList, { Loading } from '$containers/ExpertList'
-import Empty from '$src/containers/Empty'
-
-let predictionsPromise: ReturnType<typeof im.expertPredictions>
-
-const fetchPredictions = (sid: number) => {
-  if (sid == null) return
-  predictionsPromise = im.expertPredictions({
-    query: {
-      ...(sid && { sid }),
-      type: 0,
-      pageIdx: 1,
-      pageSize: 10
-  }})
-}
-
-$: fetchPredictions($sid)
-
+<script lang="ts">
+  import ExpertList from './List/index.svelte'
 </script>
 
-{#await predictionsPromise}
-  <Loading />
-{:then response}
-  <div class='bg-white'>
-    <ExpertList list={response?.data?.list || []} goToDetail={$goToDetail} />
-  </div>
-{:catch}
-  <Empty class='h-[300px]' />
-{/await}
+<ExpertList sid={$sid} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
+
