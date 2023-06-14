@@ -15,7 +15,7 @@ export type ITransStore = (
 // 為了配合 universe-portal-wap 專案 的語系同步
 const getProtalLocalandSet = () => {
   const locale = localStorage.getItem('locale.current')
-  if (locale) localStorage.setItem('locale', locale.replaceAll('"', ''))
+  if (locale) localStorage.setItem('locale', locale.replace(/"/g, ''))
 }
 
 getProtalLocalandSet()
