@@ -43,7 +43,7 @@ export const setPause = (isLive: boolean = false) => typeof pauseHandler === 'fu
 
 export const setFullScreen = () => typeof fullScreenHandler === 'function' && fullScreenHandler()
 
-export const isFlvUse = flvjs.isSupported() || !isIOS
+export const isFlvUse = !isIOS || flvjs.isSupported()
 </script>
 
 <script lang='ts'>
