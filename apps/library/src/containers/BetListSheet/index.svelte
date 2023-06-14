@@ -4,6 +4,7 @@
   import { dataCid } from '../BottomNavigation'
 
   import DetailHeader from './DetailHeader/index.svelte'
+  import DetailContent from './DetailContent/index.svelte'
   import DetailFooter from './DetailFooter/index.svelte'
 
   import type { ITabs } from './types'
@@ -11,8 +12,8 @@
   export let open: boolean
 
   const tabs: ITabs = {
-    'chat.betList': () => import('./DetailContent/index.svelte'),
-    'chat.otherBetList': () => import('./DetailContent/index.svelte')
+    'chat.betList': () => import('./DetailContent/Self/index.svelte'),
+    'chat.otherBetList': () => import('./DetailContent/Other/index.svelte')
   }
 
   let activedTab: keyof typeof tabs = 'chat.betList'
@@ -48,11 +49,13 @@
   maxHeight={(height) => height + 20}
   {onMaxHeight}
 >
-  <Header class="py-[12px] bg-white px-[15px]">
+  <Header class="py-[9px] bg-white px-[15px]">
     <DetailHeader bind:activedTab tabs={Object.keys(tabs)} />
   </Header>
 
-  <Content>There is Content</Content>
+  <Content class="p-0">
+    <DetailContent {activedTab} {tabs} />
+  </Content>
 
   <Footer class="p-0 bg-white">
     <DetailFooter />
