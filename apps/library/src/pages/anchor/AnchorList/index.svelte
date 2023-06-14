@@ -6,6 +6,8 @@
 
   import Empty from '$src/containers/Empty'
 
+  import { locale } from '$stores'
+
   import { params } from 'svelte-spa-router'
   import Loading from './Loading.svelte'
   import Anchor from './Anchor/index.svelte'
@@ -43,7 +45,8 @@
         ...(keyWord && { keyWord }),
         pageIdx,
         pageSize
-      }
+      },
+      headers: { 'Accept-Language': $locale}
     })
   }
 

@@ -6,6 +6,7 @@
   import SubMenu from '$components/SubMenu/index.svelte'
   import Empty from '$containers/Empty'
   import Expert, { Loading as ExpertLoading } from '$containers/Expert'
+  import { locale } from '$stores'
 
   import type { SidType } from 'utils'
   import type { IExpertMenu } from '$components/SubMenu/type'
@@ -64,7 +65,8 @@
         ...(type && { type }),
         pageIdx,
         pageSize
-      }
+      },
+      headers: { 'Accept-Language': $locale }
     })
   }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
 
   import Empty from '$containers/Empty'
   import Expert, { Loading as ExpertLoading } from '$containers/Expert'
@@ -12,7 +12,7 @@
   let promise: ReturnType<typeof im.expertMatchArticle>
 
   $: if(mid && vd) {
-    promise = im.expertMatchArticle({ query: { mid, vd }})
+    promise = im.expertMatchArticle({ query: { mid, vd }, headers: { 'Accept-Language': $locale }})
   }
 </script>
 

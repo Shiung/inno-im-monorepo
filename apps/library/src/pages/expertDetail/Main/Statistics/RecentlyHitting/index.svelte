@@ -3,10 +3,13 @@
   import Title from '$src/components/Title/index.svelte'
   import List from './components/List.svelte'
   import Loading from './components/Loading.svelte'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
   import { im } from 'api'
 
-  const promise = im.expertArticleHit({ query: { expertId: $params?.expertId, pageIdx: 1, pageSize: 10 }})
+  const promise = im.expertArticleHit({
+    query: { expertId: $params?.expertId, pageIdx: 1, pageSize: 10 },
+    headers: { 'Accept-Language': $locale }
+  })
 </script>
 
 <div class="px-4">

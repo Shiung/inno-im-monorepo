@@ -5,6 +5,7 @@
   
   import ExpertList from './List/index.svelte'
 
+  import { locale } from '$stores'
   import { convertSid, type SidType } from 'utils'
 
   const headNavIcons: { sid: SidType; onClick: () => void }[] = [
@@ -28,5 +29,7 @@
 <div data-cid="Expert">
   <HeaderNavigation active={sid} icons={headNavIcons} />
 
-  <ExpertList sid={sid} />
+  {#key $locale}
+    <ExpertList sid={sid} />
+  {/key}
 </div>

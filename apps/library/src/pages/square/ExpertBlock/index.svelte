@@ -10,6 +10,9 @@ import SubMenu from '$src/components/SubMenu/index.svelte'
 import Empty from '$containers/Empty'
 import Expert, { Loading as ExpertLoading } from '$containers/Expert'
 
+import { locale } from '$stores'
+import type { ILanguages } from 'env-config'
+
 import { convertSid, type SidType } from 'utils'
 import type { IExpertMenu } from '$src/components/SubMenu/type'
 
@@ -34,7 +37,7 @@ const menu: IExpertMenu[] = [
 ]
 
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
-const fetchPredictions = (sid: SidType, type: typeof active) => {
+const fetchPredictions = (sid: SidType, type: typeof active, lang: ILanguages) => {
   if (sid === null) return
   predictionsPromise = im.expertPredictions({
     query: {
@@ -42,13 +45,15 @@ const fetchPredictions = (sid: SidType, type: typeof active) => {
       ...(type && { type }),
       pageIdx: 1,
       pageSize: 10
-  }})
+    },
+    headers: { 'Accept-Language': lang }
+  })
 }
 
 let showMore: boolean = false
 
 $: sid = convertSid($params?.sid)
-$: fetchPredictions(sid, active)
+$: fetchPredictions(sid, active, $locale)
 
 </script>
 

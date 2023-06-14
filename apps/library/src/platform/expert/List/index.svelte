@@ -2,6 +2,8 @@
   import { onDestroy } from 'svelte'
   import { im } from 'api'
 
+  import { locale } from '$stores'
+
   import Circle from 'ui/core/button/loading.svelte'
   import Empty from '$containers/Empty'
   import Expert, { Loading as ExpertLoading } from '$containers/Expert'
@@ -40,7 +42,8 @@
         ...(sid && { sid }),
         pageIdx,
         pageSize
-      }
+      },
+      headers: { 'Accept-Language': $locale }
     })
   }
 

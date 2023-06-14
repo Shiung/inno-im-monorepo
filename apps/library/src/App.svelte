@@ -1,10 +1,15 @@
 <script lang='ts' context='module'>
 import { push } from 'svelte-spa-router'
+import { locale } from '$stores'
 let goHomeCallback: () => void = () => push('/')
 
 export let setGoHome = (callback?: () => void) => {
   if (callback) goHomeCallback = callback
 }
+
+// plateform 設定im語系
+export const setImLocale = locale.set
+
 </script>
 
 <script lang="ts">

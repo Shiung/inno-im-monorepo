@@ -20,7 +20,10 @@
 
 <script lang="ts">
   import ExpertList from './List/index.svelte'
+  import { locale } from '$stores'
 </script>
 
-<ExpertList sid={$sid} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
+{#key $locale}
+  <ExpertList sid={$sid} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
+{/key}
 
