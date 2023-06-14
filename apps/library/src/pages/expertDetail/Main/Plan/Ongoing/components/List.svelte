@@ -12,7 +12,7 @@
 <div class='space-y-[12px]'>
 
   {#each articles as article}
-    {@const {homeName, awayName, title, articleId } = article || {}}
+    {@const { homeName, awayName, title, articleId } = article || {}}
     <div class='space-y-[8px] im-shadow rounded-[10px] p-[8px]'>
       <div class='truncate'> {title} </div>
       <!-- 玩法區塊 待討論 -->
