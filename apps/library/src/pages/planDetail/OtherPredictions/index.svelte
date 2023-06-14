@@ -2,7 +2,8 @@
   import { im } from 'api'
   import { t, locale } from '$stores'
 
-  import ExpertList, { Loading } from '$containers/ExpertList'
+  import Empty from '$containers/Empty'
+  import Expert, { Loading as ExpertLoading } from '$containers/Expert'
   import Title from '$src/components/Title/index.svelte'
   
   export let mid: number
@@ -22,9 +23,18 @@
     </div>
 
     {#await promise}
-      <Loading />
+      <ExpertLoading length={5} />
     {:then response}
-      <ExpertList list={response?.data?.list || []} />
+      {@const list = response?.data?.list || []}
+      <div class='pl-[14px] pr-[20px] py-[20px] space-y-10'>
+        {#if list.length === 0}
+          <Empty class='h-[300px]'/>
+        {:else}
+          {#each list as prediction}
+            <Expert prediction={prediction} /> 
+          {/each}
+        {/if}
+      </div>
     {/await}
   </div>
 {/if}

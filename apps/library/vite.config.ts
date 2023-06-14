@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import svelteSVG from 'vite-plugin-svelte-svg'
+import legacy from '@vitejs/plugin-legacy'
 
 const svelteSVGPlugin = () => svelteSVG({
   svgoConfig: {},
@@ -34,7 +35,10 @@ const buildAsLibrary = () => ({
 export default defineConfig({
   plugins: [
     svelte(),
-    svelteSVGPlugin()
+    svelteSVGPlugin(),
+    legacy({
+      targets: ['defaults', 'not IE 11']
+    })
   ],
   resolve: {
     alias: {
