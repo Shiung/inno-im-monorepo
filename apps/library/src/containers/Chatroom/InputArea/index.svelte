@@ -43,24 +43,31 @@
     timeout = setTimeout(() => (showTooOften = false), 3000)
   }
 
-  const publishMessage = () => {
+  const publishMessage = async () => {
     if (!message) return
     const now = Date.now()
     if (now - lastSend <= $frequency) return (showTooOften = true)
 
-    imWs.publish({
-      eventkey: im.enum.command.SEND_MESSAGE,
-      data: {
-        contentType: im.enum.contentType.CHAT,
-        chatId: 'chatid124',
-        iid: 1234,
-        // replyTo:
-        content: message
-      }
-    })
+    const waitSendMessage = message
+    const eventkey = im.enum.command.SEND_MESSAGE
+
+    const data = {
+      contentType: im.enum.contentType.CHAT,
+      chatId: 'chatid124',
+      iid: 1234,
+      // replyTo:
+      content: waitSendMessage
+    }
+
+    message = ''
+    const res = await imWs.publish(
+      { eventkey, data },
+      { reqId: String(now), eventkey: `${eventkey}_${now}` }
+    )
+
+    console.log('publish res: ', res)
 
     lastSend = now
-    message = ''
   }
 </script>
 

@@ -162,19 +162,19 @@ class WsMaster {
     })
   }
 
-  waitSync(eventKey: string | number, options?: SyncOptions) {
+  waitSync(eventkey: string | number, options?: SyncOptions) {
     return new Promise<IWsMasterEvent>((resolve, reject) => {
-      if (!this.listeners[eventKey]) this.listeners[eventKey] = []
+      if (!this.listeners[eventkey]) this.listeners[eventkey] = []
 
       const timer = setTimeout(() => {
-        reject('waitSync timeout')
+        reject(`waitSync timeout ${eventkey}`)
 
-        const listeners = this.listeners[eventKey]
+        const listeners = this.listeners[eventkey]
         const listener = listeners.find(promiseResolver => promiseResolver.resolve === resolve)
         if (listener) listeners.splice(listeners.indexOf(listener), 1)
       }, options?.timeout || this.defaultSyncTimeout)
 
-      this.listeners[eventKey].push({ resolve, timer })
+      this.listeners[eventkey].push({ resolve, timer })
     })
   }
 
@@ -222,7 +222,7 @@ class WsMaster {
 
     let data: WsMessage = event.data
     if (this.publishPreprocessor) data = this.publishPreprocessor(event, options)
-    return this.sendSync(data, options.eventkey || event.eventkey)
+    return this.sendSync(data, options?.eventkey || event.eventkey)
   }
 
   obserableNotify(props: IWsMasterEvent) {
