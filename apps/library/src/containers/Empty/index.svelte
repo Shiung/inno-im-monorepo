@@ -2,7 +2,7 @@
 import { Empty } from 'ui'
 import { t } from '$stores'
 
-export let title: string = $t('common.empty')
+export let title: string = ''
 </script>
 
-<Empty title={title} class={$$props.class} />
+<Empty title={title || $t('common.empty')} class={$$props.class} />
