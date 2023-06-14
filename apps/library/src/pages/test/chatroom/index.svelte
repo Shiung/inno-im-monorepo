@@ -2,7 +2,7 @@
 import { twMerge } from 'tailwind-merge'
 import Chatroom, { setChatEnv } from '$src/containers/Chatroom'
 
-const isWindow: boolean = false
+const isWindow: boolean = true
 let dom: HTMLDivElement
 $: blockHeight = dom?.getBoundingClientRect().height
 

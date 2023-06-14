@@ -14,6 +14,7 @@
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo, getEnv } from '../context'
+  import { inputAreaOffset } from '../InputArea/store'
 
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
@@ -26,8 +27,6 @@
 
   export let chatMessages: Writable<IChatMessage[]>
   export let lastReadId: number
-  export let showWarning: boolean = false
-  export let inputHeight: number
 
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
@@ -120,14 +119,6 @@
     else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
   }
 
-  $: moreBtnBottomStyle =
-    isWindow
-      ? showWarning
-        ? `${inputHeight + 42}px`
-        : `${inputHeight + 10}px`
-      : showWarning
-        ? `${32}px`
-        : `${0}px`
 </script>
 
 <svelte:window on:scroll={isWindow && onWindowScroll} />
@@ -155,7 +146,7 @@
         'flex justify-center mx-auto !mt-0 z-10',
         isWindow ? 'fixed left-1/2 -translate-x-1/2' : 'sticky'
       )}
-      style:bottom={moreBtnBottomStyle}
+      style:bottom={`${$inputAreaOffset}px`}
     >
       <Ripple
         class="flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]"

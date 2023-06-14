@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { fly } from 'svelte/transition'
   import { twMerge } from 'tailwind-merge'
   // import stomp from 'api/stompMaster'
   import { im as imWs } from 'api/wsMaster'
@@ -11,13 +11,16 @@
   import ShowS from '../images/show_s.svg'
   import Plus from '../images/plus.svg'
 
-  import { getInfo } from '../context'
+  import { warningCodeMap } from '../utils'
+  import { getInfo, getEnv } from '../context'
+  import { inputAreaOffset } from './store'
 
   export let fixed: boolean = true
   export let destination: string
   export let subId: string
 
   const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
+  const { displayType } = getEnv()
 
   let placeHolder: string = ''
   let disabled: boolean = true
@@ -36,17 +39,13 @@
   let dom: HTMLDivElement
   $: blockHeight = dom?.getBoundingClientRect().height
 
-  $: if (dom) dispatch('domInit', blockHeight)
-
-  const dispatch = createEventDispatcher()
-
   let message: string
 
   const publishMessage = () => {
     if (!message) return
     const now = Date.now()
     if (now - lastSend <= $frequency) {
-      return dispatch('warningInput', 30003)
+      return setWarningMsg('30003')
     }
 
     imWs.publish({
@@ -63,10 +62,45 @@
     lastSend = now
     message = ''
   }
+
+  let warningMsg: string
+  let showWarning: boolean = false
+  const setWarningMsg = (code: string) => {
+    const msgKey = warningCodeMap?.[code]
+    if(msgKey) warningMsg = $t(msgKey)
+    showWarning = true
+  }
+
+  $: isWindow = $displayType === 'window'
+  $: {
+    const warningHeight = showWarning ? 32 : 0
+    const offset = (isWindow ? blockHeight + 10 : 0) + warningHeight
+
+    inputAreaOffset.set(offset)
+  }
+
+  let timeout: ReturnType<typeof setTimeout>
+  $: if (showWarning) {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      showWarning = false
+    }, 2000)
+  }
 </script>
 
 <div class='relative'>
-  <slot name='warningTips'></slot>
+  {#if showWarning}
+    <div
+      transition:fly|local={{ y: 32 }}
+      class={twMerge(
+        "flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full",
+        isWindow ? 'fixed' : 'absolute -translate-y-full'
+      )}
+      style:bottom={isWindow && `${blockHeight}px`}
+    >
+      {warningMsg}
+    </div>
+  {/if}
 
   <div
     class={twMerge(
