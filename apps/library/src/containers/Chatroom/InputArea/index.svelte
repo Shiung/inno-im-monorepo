@@ -16,7 +16,6 @@
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = true
-  export let destination: string
   export let subId: string
 
   const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
@@ -41,26 +40,33 @@
 
   let message: string
 
-  const publishMessage = () => {
+  const publishMessage = async () => {
     if (!message) return
     const now = Date.now()
     if (now - lastSend <= $frequency) {
       return setWarningMsg('30003')
     }
 
-    imWs.publish({
-      eventkey: im.enum.command.SEND_MESSAGE,
-      data: {
-        contentType: im.enum.contentType.CHAT,
-        chatId: 'chatid124',
-        iid: 1234,
-        // replyTo:
-        content: message
-      }
-    })
+    const waitSendMessage = message
+    const eventkey = im.enum.command.SEND_MESSAGE
+
+    const data = {
+      contentType: im.enum.contentType.CHAT,
+      chatId: 'chatid124',
+      iid: 1234,
+      // replyTo:
+      content: waitSendMessage
+    }
+
+    message = ''
+    const res = await imWs.publish(
+      { eventkey, data },
+      { reqId: String(now), eventkey: `${eventkey}_${now}` }
+    )
+
+    console.log('publish res: ', res)
 
     lastSend = now
-    message = ''
   }
 
   let warningMsg: string

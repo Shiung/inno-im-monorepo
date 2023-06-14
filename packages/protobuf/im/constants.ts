@@ -8,8 +8,7 @@ export enum ECommand {
   UNSUBSCRIBE_CHAT = 6,
   PING = 7,
   PUSH_MESSAGE = 100,
-  USER_STATUS = 200,
-  PONG = 300,
+  USER_STATUS = 200
 }
 
 export enum EContentType {

@@ -21,9 +21,8 @@ export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) 
   const newMsgId = msgId = msgId + Random.integer(1, 10)
 
   return mock({
-    msgId: newMsgId,
-    // contextType: Random.integer(0, 2),
-    contextType: 1,
+    msgId: Random.integer(100000, 999999),
+    contentType: 1,
     vdId: 4,
     senderName: _sender || '@name',
     isSelf: !!props?.isSelf,
@@ -31,7 +30,7 @@ export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) 
     iid: props?.iid || Random.integer(0, 999999),
     vip: Random.integer(0, 12),
     avatar: Random.integer(0, 100),
-    replayTo: Random.integer(0, 100000),
+    replyTo: Random.integer(0, 100000),
     content: _content || '@sentence',
     visible: Random.integer(0, 2),
     timestamp: Date.now() + (idx || 0)

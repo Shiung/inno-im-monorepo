@@ -25,11 +25,17 @@ export const onClose = () => {
 }
 
 const onReceivePing = (ws: WebSocket) => {
-  const buffer = impb.push?.encode({ reqId: '', command: impb.enum.command.PONG, code: 0, msg: '', data: { value: new Uint8Array() } })
+  const buffer = impb.push?.encode({ reqId: '', command: impb.enum.command.PING, code: 0, msg: '', data: { value: new Uint8Array() } })
+  if (buffer) ws.send(buffer)
+}
+
+const sendReply = (ws: WebSocket, data: IRequest) => {
+  const buffer = impb.push?.encode({ reqId: data.reqId, command: data.command, code: 0, msg: '', data: { value: new Uint8Array() } })
   if (buffer) ws.send(buffer)
 }
 
 const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
+  sendReply(ws, data)
   const message = impb.requestMessageEntity?.decode(data.data.value as Uint8Array)
 
   const pushMsg = pushMessageEntity({
@@ -40,15 +46,22 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
     iid: message.iid
   })
 
-  const buf = pushMessage({ reqId: data.reqId, value: pushMsg })
+  const buf = pushMessage({ reqId: '', value: pushMsg })
   if (buf) ws.send(buf)
 }
 
 export const onMessage = (ws: WebSocket, event: RawData) => {
-  const data = impb.request?.decode(event as Uint8Array)
 
-  switch (data.command) {
-    case impb.enum.command.PING: return onReceivePing(ws)
-    case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
+  try {
+    const data = impb.request?.decode(event as Uint8Array)
+    switch (data.command) {
+      case impb.enum.command.PING: return onReceivePing(ws)
+      case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
+    }
+
+  } catch (e) {
+    console.log('decode error: ', event)
   }
+
+
 }
