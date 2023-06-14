@@ -28,7 +28,7 @@
 	let mainEl: SVGElement
 	let tooltipEl: HTMLDivElement
 
-	$: chartOptions = {
+	const chartOptions = {
 		containerWidth: 375,
     containerHeight: 200,
     marginLeft: 46,

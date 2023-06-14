@@ -34,18 +34,19 @@ let openDetailSheet: boolean
       <div class='flex items-center'>
         <AnchorStatus class='mr-[5px]' liveStatus={anchor.liveStatus} />
 
-        <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
-          <Ripple class='flex items-center text-imprimary text-[10px] h-[20px] pl-[10px]'
-            ripple='#eeeeee'
-            on:click={() => showMatchList = !showMatchList}
-          > 
-            <span>{$t('anchor.matchList')} </span>
-            <div class='duration-300' style:transform={showMatchList ? 'rotate(180deg)' : ''}>
-              <Arrow class='mx-[5px]' width={13} height={14} fill='rgb(var(--im-monorepo-primary))' />
-            </div>
-          </Ripple>
-        </div>
-
+        {#if anchor?.matchCount}
+          <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
+            <Ripple class='flex items-center text-imprimary text-[10px] h-[20px] pl-[10px]'
+              ripple='#eeeeee'
+              on:click={() => showMatchList = !showMatchList}
+            > 
+              <span>{$t('anchor.matchList')} </span>
+              <div class='duration-300' style:transform={showMatchList ? 'rotate(180deg)' : ''}>
+                <Arrow class='mx-[5px]' width={13} height={14} fill='rgb(var(--im-monorepo-primary))' />
+              </div>
+            </Ripple>
+          </div>
+        {/if}
       </div>
     </div>
 
