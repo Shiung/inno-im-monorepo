@@ -32,13 +32,13 @@ $: changeDict($locale)
 </script>
 
 <Search class='mb-[10px] text-[11px]' dict={dict} bind:value={value}
-  on:submit={() => dispatch('searchEvent', { keyWork: value })}
+  on:submit={() => dispatch('searchEvent', { keyWord: value })}
   on:select={e => {
     value = e.detail
-    dispatch('searchEvent', { keyWork: e.detail })
+    dispatch('searchEvent', { keyWord: e.detail })
   }}
   on:clear={e => {
-    if (!e.detail.isFocused) dispatch('searchEvent', { keyWork: '' })
+    if (!e.detail.isFocused) dispatch('searchEvent', { keyWord: '' })
   }}
   placeholder={$t('anchor.search.placeholder')}
 />

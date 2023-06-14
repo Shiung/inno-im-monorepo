@@ -1,113 +1,147 @@
-<script lang='ts'>
-import Circle from 'ui/core/button/loading.svelte'
-import { im } from 'api'
-import convertSid from 'utils/convertSid'
+<script lang="ts">
+  import { onDestroy } from 'svelte'
+  import Circle from 'ui/core/button/loading.svelte'
+  import { im } from 'api'
+  import convertSid from 'utils/convertSid'
 
-import Empty from '$src/containers/Empty'
+  import Empty from '$src/containers/Empty'
 
-import { locale } from '$stores'
+  import { locale } from '$stores'
 
-import { params } from 'svelte-spa-router'
-import Loading from './Loading.svelte'
-import Anchor from './Anchor/index.svelte'
-import Search from './Search/index.svelte'
+  import { params } from 'svelte-spa-router'
+  import Loading from './Loading.svelte'
+  import Anchor from './Anchor/index.svelte'
+  import Search from './Search/index.svelte'
 
+  import bg0 from '../images/bg_style2_0.webp'
+  import bg1 from '../images/bg_style2_1.webp'
+  import bg2 from '../images/bg_style2_2.webp'
+  import bg3 from '../images/bg_style2_3.webp'
 
-import bg0 from '../images/bg_style2_0.webp'
-import bg1 from '../images/bg_style2_1.webp'
-import bg2 from '../images/bg_style2_2.webp'
-import bg3 from '../images/bg_style2_3.webp'
+  let keyWord = ''
 
-let keyWork = ''
-let currentPage = 1
-let pageSize = 20
-let initPromise: ReturnType<typeof im.webAnchors>
+  let pageIdx = 1
+  let pageSize = 20
 
-const anchorBgs = [ bg0, bg1, bg2, bg3 ]
+  let initLoading: boolean = false
+  let initData: Awaited<ReturnType<typeof im.webAnchors>>['data']['list']
 
+  let hasMoreData: boolean = false
+  let moreAnchors = []
+  let moreLoading = false
 
-const fetchAnchors = (props: { pageIdx: number, keyWork: string, sid: ReturnType<typeof convertSid> }) => {
-  const { pageIdx, keyWork, sid } = props
-  currentPage = pageIdx
+  const anchorBgs = [bg0, bg1, bg2, bg3]
 
-  return im.webAnchors({
-    query: {
-      ...(sid && { sid }),
-      ...(keyWork && { keyWork }),
-      pageIdx,
-      pageSize
-    },
-    headers: { 'Accept-Language': $locale}
-  })
-}
+  const fetchAnchors = (props: {
+    pageIdx: number
+    keyWord: string
+    sid: ReturnType<typeof convertSid>
+  }) => {
+    const { pageIdx, keyWord, sid } = props
 
-$: if ($params?.anchorSid) initPromise = fetchAnchors({ pageIdx: 1, keyWork, sid: convertSid($params?.anchorSid) })
+    return im.webAnchors({
+      query: {
+        ...(sid && { sid }),
+        ...(keyWord && { keyWord }),
+        pageIdx,
+        pageSize
+      },
+      headers: { 'Accept-Language': $locale}
+    })
+  }
 
-let moreAnchors = []
-let fetchingMore = false
+  const init = async ({
+    keyWord,
+    sid
+  }: {
+    keyWord: string
+    sid: ReturnType<typeof convertSid>
+  }) => {
+    pageIdx = 1
+    moreAnchors = []
+    initData = []
 
-$: if (initPromise) {
-  document.body.scrollTo(0, 0)  
-  window.scrollTo(0, 0)
-  moreAnchors = []
-}
+    try {
+      initLoading = true
+      const response = await fetchAnchors({ pageIdx, keyWord, sid })
+      const { list, pager } = response?.data || {}
 
-let domOfLoading: HTMLDivElement
-const intersectionObserver = new IntersectionObserver(async entries => {
-  for (const entry of entries) {
-    if (entry.isIntersecting) {
-      fetchingMore = true
-      const res = await fetchAnchors({ pageIdx: currentPage, keyWork, sid: convertSid($params?.anchorSid) })
-      if (res?.data?.list) moreAnchors = [...moreAnchors, ...res.data.list]
-      fetchingMore = false
+      if (list?.length) initData = list
+
+      const { totalPage } = pager || {}
+      hasMoreData = totalPage > pageIdx
+      if (hasMoreData) pageIdx++
+    } catch (error) {
+      initData = []
+    } finally {
+      initLoading = false
     }
   }
-})
 
-$: if (domOfLoading) intersectionObserver.observe(domOfLoading)
+  $: {
+    if ($params?.anchorSid) {
+      document.body.scrollTo(0, 0)
+      window.scrollTo(0, 0)
+      init({ keyWord, sid: convertSid($params?.anchorSid) })
+    }
+  }
 
+  let domOfLoading: HTMLDivElement
+  let intersectionObserver = new IntersectionObserver(async (entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        moreLoading = true
+        const res = await fetchAnchors({ pageIdx, keyWord, sid: convertSid($params?.anchorSid) })
+        const { list, pager } = res?.data || {}
+
+        if (list?.length) moreAnchors = [...moreAnchors, ...res.data.list]
+
+        const { totalPage } = pager || {}
+        hasMoreData = totalPage > pageIdx
+        if (hasMoreData) pageIdx++
+
+        moreLoading = false
+      }
+    }
+  })
+
+  $: if (domOfLoading) intersectionObserver.observe(domOfLoading)
+
+  onDestroy(() => {
+    intersectionObserver.disconnect()
+    intersectionObserver = null
+  })
 </script>
 
-<div data-cid='Anchor_AnchorList' class='bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]'>
-<Search on:searchEvent={e => keyWork = e.detail.keyWork} />
+<div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
+  <Search on:searchEvent={(e) => (keyWord = e.detail.keyWord)} />
 
-  <div class='space-y-[12px]'>
-    {#await initPromise}
+  <div class="space-y-[12px]">
+    {#if initLoading}
       <Loading />
+    {:else if !initData?.length}
+      <Empty class="h-[300px]" />
+    {:else}
+      {#each initData || [] as anchor, idx}
+        <Anchor {anchor} bg={anchorBgs[idx % anchorBgs.length]} />
+      {/each}
 
-    {:then anchors}
-      {#if !anchors?.data?.list?.length}
-        <Empty class='h-[300px]' />
-      {:else}
-        {#each anchors?.data?.list || [] as anchor, idx}
-          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} />
-        {/each}
+      {#each moreAnchors as anchor, idx}
+        <Anchor {anchor} bg={anchorBgs[(initData.length + idx) % anchorBgs.length]} />
+      {/each}
 
-        {#each moreAnchors as anchor, idx}
-          <Anchor anchor={anchor} bg={anchorBgs[(anchors.data.list.length + idx) % anchorBgs.length]} />
-        {/each}
-
-        
-        <!-- if init fetch data less then pageSize that meaning no more data. -->
-        {#if anchors?.data?.list.length >= pageSize }
-
-          <div bind:this={domOfLoading}>
-            {#if fetchingMore} 
-              <div class='relative h-[30px] overflow-hidden'>
-                <Circle stroke='rgb(var(--im-monorepo-primary))' />
-              </div>
-            {:else}
-              <div />
-            {/if}
-          </div>
-
-        {/if}
+      <!-- if init fetch data less then pageSize that meaning no more data. -->
+      {#if hasMoreData}
+        <div bind:this={domOfLoading}>
+          {#if moreLoading}
+            <div class="relative h-[30px] overflow-hidden">
+              <Circle stroke="rgb(var(--im-monorepo-primary))" />
+            </div>
+          {:else}
+            <div />
+          {/if}
+        </div>
       {/if}
-    {:catch}
-      <Empty class='h-[300px]' />
-    {/await}  
-
+    {/if}
   </div>
-
 </div>
-
