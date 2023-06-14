@@ -67,27 +67,27 @@ enum Visible {
 }
 
 message RequestMessageEntity {
-    ContentType contentType = 1;
-    string      chatId      = 2;
-	int32       iid         = 3;
-    int64       replyTo     = 4;
-    string      content     = 5;
+    ContentType contentType = 1; // content 屬於哪種類型
+    string      chatId      = 2; // 聊天室id
+	int32       iid         = 3; // 賽事id
+    int64       replyTo     = 4; // 回覆的訊息id
+    string      content     = 5; // 訊息內容
 }
 
 message PushMessageEntity {
-    int64       msgId       = 1; // message id
-    ContentType contentType = 2; // content 屬於哪種類型
-    int64       vdId        = 3; // vendor id 平台商id
-    string      senderName  = 4; // 發訊息者的名字
-	bool        isSelf      = 5;
-    string      chatId      = 6;
-	int32       iid         = 7;
-    int32       vip         = 8;
-    int32       avatar      = 9;
-    int64       replyTo     = 10;
-    string      content     = 11;
-    Visible     visible     = 12;
-    int64       timestamp   = 13;
+    int64       msgId       = 1;  // message id
+    ContentType contentType = 2;  // content 屬於哪種類型
+    int64       vdId        = 3;  // vendor id 平台商id
+    string      senderName  = 4;  // 發訊息者的名字
+	bool        isSelf      = 5;  // 是否是自己發的訊息
+    string      chatId      = 6;  // 聊天室id
+	int32       iid         = 7;  // 賽事id
+    int32       vip         = 8;  // vip等級
+    int32       avatar      = 9;  // 大頭貼編號
+    int64       replyTo     = 10; // 回覆的訊息id
+    string      content     = 11; // 訊息內容
+    Visible     visible     = 12; // 訊息可見度
+    int64       timestamp   = 13; // 訊息時間戳
 }
 
 message FetchArgs {

@@ -1,5 +1,5 @@
 import WatchDog from './watchdog'
-import type { WatchDogProps, WsMasterProps, SyncOptions, IWsMasterEvent } from './types'
+import type { WatchDogProps, WsMasterProps, SyncOptions, IWsMasterEvent, WsMessage } from './types'
 import wsObservables from './wsObservables'
 
 type PromiseResolver = { resolve: (value: any) => void; timer: ReturnType<typeof setTimeout> }
@@ -11,8 +11,9 @@ class WsMaster {
   retryTimes: number
 
   url: WsMasterProps['url']
+  subprotocols: WsMasterProps['subprotocols']
   socket: WatchDogProps['socket']
-  reconnectInterval: WatchDogProps['reconnectTimeout']
+  reconnectInterval: WsMasterProps['reconnectInterval']
   messageHandler: WsMasterProps['messageHandler']
 
   watchdog: WatchDog
@@ -32,6 +33,7 @@ class WsMaster {
     this.retryTimes = 0
 
     this.url = props.url
+    this.subprotocols = props.subprotocols
     this.socket = { current: null }
     this.reconnectInterval = props.reconnectInterval || 3 * 1000
     this.messageHandler = props.messageHandler
@@ -77,12 +79,18 @@ class WsMaster {
     this.reconnect()
   }
 
+  setSubprotocols(subprotocols: WsMasterProps['subprotocols']) {
+    if (this.subprotocols === subprotocols) return
+    this.subprotocols = subprotocols
+    this.reconnect()
+  }
+
   async activate() {
     this.enabled = true
     if (this.socket.current?.readyState === 0) return
     if (this.socket.current?.readyState === 1) return
     if (this.socket.current?.readyState === 2) await this.waitingSocketClosed()
-    this.socket.current = new WebSocket(this.url)
+    this.socket.current = new WebSocket(this.url, this.subprotocols)
     if (this.binaryType) this.socket.current.binaryType = this.binaryType
 
     this.socket.current.onopen = () => {
@@ -94,13 +102,13 @@ class WsMaster {
       this.watchdog.extend()
 
 
-      let parsed: IWsMasterEvent = { eventkey: '', pairId: '', data: null }
+      let parsed: IWsMasterEvent = { eventkey: '', data: null }
       if (this.eventkeyParser) parsed = this.eventkeyParser(event)
       // check if is pong command returned
       if (this.pingPongParser?.pong(parsed)) return
 
       this.obserableNotify(parsed)
-      // this.notifyToListeners(eventKey, data)
+      this.notifyToListeners(parsed)
       if (this.messageHandler) this.messageHandler(parsed, event)
     }
 
@@ -154,13 +162,12 @@ class WsMaster {
     })
   }
 
-  // 待修正
-  waitSync(eventKey: string, options?: SyncOptions) {
-    return new Promise<{ key: string; data: any }>(resolve => {
+  waitSync(eventKey: string | number, options?: SyncOptions) {
+    return new Promise<IWsMasterEvent>((resolve, reject) => {
       if (!this.listeners[eventKey]) this.listeners[eventKey] = []
 
       const timer = setTimeout(() => {
-        resolve({ key: 'timeout', data: {} })
+        reject('waitSync timeout')
 
         const listeners = this.listeners[eventKey]
         const listener = listeners.find(promiseResolver => promiseResolver.resolve === resolve)
@@ -171,36 +178,37 @@ class WsMaster {
     })
   }
 
-  // 待修正
-  send(sendMsg: string, options?: SyncOptions) {
-    return new Promise<{ key: string; data: any }>(async resolve => {
+  // 待確認功能設計方向
+  send(sendMsg: WsMessage, options?: SyncOptions) {
+    return new Promise<void>(async (resolve, reject) => {
+
       const timer = setTimeout(() => {
-        resolve({ key: 'timeout', data: {} })
+        reject()
       }, options?.timeout || this.defaultSyncTimeout)
 
       await this.waitingSocketConnect()
       this.socket.current?.send(sendMsg)
       clearTimeout(timer)
-      resolve({ key: 'success', data: {} })
+      resolve()
     })
   }
 
-  // 待修正
-  async sendSync(sendMsg: string, eventKey: string, options?: SyncOptions) {
+  // 待確認功能設計方向
+  async sendSync(sendMsg: WsMessage, eventKey: string | number, options?: SyncOptions) {
     await this.send(sendMsg, options)
     const res = await this.waitSync(eventKey, options)
     return res
   }
 
-  // 待修正
-  notifyToListeners(eventkey: string, data: any) {
-    if (!this.listeners[eventkey]) return
+  // 待確認功能設計方向
+  notifyToListeners(event: IWsMasterEvent) {
+    if (!this.listeners[event.eventkey]) return
 
-    for (const listener of this.listeners[eventkey]) {
+    for (const listener of this.listeners[event.eventkey]) {
       clearTimeout(listener.timer)
-      listener.resolve({ eventkey, ...data })
+      listener.resolve(event)
     }
-    this.listeners[eventkey] = []
+    delete this.listeners[event.eventkey]
   }
 
   subscribe(eventkey: string | number, callback: (agr0: IWsMasterEvent) => void) {
@@ -208,12 +216,13 @@ class WsMaster {
     return observable?.subscribe(callback)
   }
 
-  async publish(event: IWsMasterEvent) {
+  // TODO: publish 用法需要再優雅些, 綁死的 options.eventkey 需要有更好的用法
+  async publish(event: IWsMasterEvent, options?: any) {
     await this.waitingSocketConnect()
 
-    let data: string | ArrayBufferLike | Blob | ArrayBufferView = event.data
-    if (this.publishPreprocessor) data = this.publishPreprocessor(event)
-    this.socket.current?.send(data)
+    let data: WsMessage = event.data
+    if (this.publishPreprocessor) data = this.publishPreprocessor(event, options)
+    return this.sendSync(data, options.eventkey || event.eventkey)
   }
 
   obserableNotify(props: IWsMasterEvent) {

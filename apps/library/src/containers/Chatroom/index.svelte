@@ -85,6 +85,6 @@
       <Messages bind:lastReadId {chatMessages} />
     {/if}
 
-    <InputArea {destination} {subId} />
+    <InputArea />
   </div>
 {/if}

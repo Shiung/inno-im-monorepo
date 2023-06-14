@@ -14,7 +14,6 @@
   import { getInfo } from '../context'
 
   export let fixed: boolean = true
-  export let destination: string
   export let subId: string
 
   const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
