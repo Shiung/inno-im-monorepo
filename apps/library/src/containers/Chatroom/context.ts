@@ -1,3 +1,4 @@
+import type { EChatroomSize } from './utils'
 import { createStoreContext } from 'utils/storeContext'
 
 export interface IChatroomInfo {
@@ -14,6 +15,7 @@ export interface IChatroomEnv {
   displayType: 'window' | 'block'
   height: number
   minimize: boolean
+  size: `${EChatroomSize}`
 }
 
 export const initInfo: IChatroomInfo = {
@@ -31,7 +33,8 @@ export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInf
 export const initEnv: IChatroomEnv = {
   displayType: 'window',
   height: 0,
-  minimize: true
+  minimize: true,
+  size: 'default'
 }
 
 export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)

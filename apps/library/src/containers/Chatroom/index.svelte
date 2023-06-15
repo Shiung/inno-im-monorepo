@@ -1,7 +1,9 @@
 <script lang="ts" context="module">
+  import { twMerge } from 'tailwind-merge'
   import { writable } from 'svelte/store'
   import { initEnv, initInfo } from './context'
   import type { IChatroomEnv, IChatroomInfo } from './context'
+  import { EChatroomSize } from './utils'
 
   let env = writable(initEnv)
   export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
@@ -9,6 +11,12 @@
   let info = writable(initInfo)
   export const setChatInfo = (_info: Partial<IChatroomInfo>) =>
     info.update((e) => ({ ...e, ..._info }))
+  
+  let sizeChangedCallback: (size: `${EChatroomSize}`) => void = () => {}
+  export const onSizeChangedCallback = (callback: (size: `${EChatroomSize}`) => void) => {
+    if (typeof callback !== 'function') return console.warn('onSizeChangedCallback callback MUST be function') 
+    sizeChangedCallback = callback
+  }
 </script>
 
 <script lang="ts">
@@ -62,10 +70,17 @@
     initFetchLoading = false
   }
 
-  const onHeaderClose = async () => {
+  const onChatroomOpen = () => {
+    isTransition = true
+    $minimize = false
+    sizeChangedCallback && sizeChangedCallback(EChatroomSize.EXPAND)
+  }
+
+  const onChatroomClose = async () => {
     isTransition = true
     await tick()
     $minimize = true
+    sizeChangedCallback && sizeChangedCallback(EChatroomSize.DEFAULT)
   }
 
   onMount(() => {
