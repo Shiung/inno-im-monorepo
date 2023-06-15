@@ -13,7 +13,7 @@
 
 <div
   class="grid grid-cols-[auto_9fr] border-b-[0.5px] border-[#ddd] min-h-[135px] px-[10px] pt-[12px]"
-  on:click={() => dispatch('active', betItem.uuid)}
+  on:click={() => dispatch('active', betItem)}
   on:keypress
 >
   <div class="flex items-center" style:height={heignt}>

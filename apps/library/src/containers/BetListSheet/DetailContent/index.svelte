@@ -6,6 +6,7 @@
 
   export let tabs: ITabs
   export let activedTab: keyof typeof tabs
+  export let betData: string
 
   const loadingComponent = async (_activeTab: typeof activedTab) => {
     if (!activedTab) return
@@ -44,5 +45,5 @@
 </script>
 
 {#await lazyLoading then comp}
-  <svelte:component this={comp} />
+  <svelte:component this={comp} bind:betData />
 {/await}
