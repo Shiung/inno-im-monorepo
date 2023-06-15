@@ -89,6 +89,11 @@
     {/if}
 
     <InputArea {destination} {subId} />
-    <BetListSheet bind:open={$showBetList} />
+    <BetListSheet
+      bind:open={$showBetList}
+      {destination}
+      {subId}
+      on:deactivate={()=>subscription.unsubscribe()}
+    />
   </div>
 {/if}

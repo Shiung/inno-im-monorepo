@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
+  import { createEventDispatcher, onDestroy } from 'svelte'
   import BottomSheet, { Header, Content, Footer } from 'ui/components/BottomSheet'
   import { dataCid } from '../BottomNavigation'
+  import stomp from 'api/stompMaster'
+  import { getInfo } from '$containers/Chatroom/context'
 
   import DetailHeader from './DetailHeader/index.svelte'
   import DetailContent from './DetailContent/index.svelte'
@@ -10,6 +12,9 @@
   import type { ITabs } from './types'
 
   export let open: boolean
+  export let destination: string
+  export let subId: string
+  const dispatch = createEventDispatcher()
 
   const tabs: ITabs = {
     'chat.betList': () => import('./DetailContent/Self/index.svelte'),
@@ -37,6 +42,33 @@
 
   const onMaxHeight = () => setZIndexOfBottomNav('51')
 
+  let betData
+  const { userId } = getInfo()
+
+  const handleFollowOrder = () => {
+    console.log('click followOrder');
+  }
+
+  const handleShowOrder = () => {
+    stomp.publish({
+      destination,
+      headers: { id: subId },
+      body: JSON.stringify({ message: betData, userId: $userId })
+    })
+    betData = null
+    open = false
+    setTimeout(() => {
+      dispatch('deactivate')
+    }, 500)
+  }
+
+  const publishMessage = () => {
+    if (!betData) return
+    if (self) return handleShowOrder()
+    handleFollowOrder()
+  }
+
+  $: self = activedTab === 'chat.betList'
   $: if (!open) clearZIndexOfBottomNav()
   onDestroy(() => clearZIndexOfBottomNav())
 </script>
@@ -54,10 +86,14 @@
   </Header>
 
   <Content class="p-0">
-    <DetailContent {activedTab} {tabs} />
+    <DetailContent bind:betData {activedTab} {tabs} />
   </Content>
 
   <Footer class="p-0 bg-white">
-    <DetailFooter />
+    <DetailFooter
+      on:click={publishMessage}
+      selected={!!betData}
+      {self}
+    />
   </Footer>
 </BottomSheet>
