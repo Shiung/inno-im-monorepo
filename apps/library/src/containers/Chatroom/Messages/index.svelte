@@ -3,10 +3,12 @@
   import { tweened } from 'svelte/motion'
   import { fly } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
+  import { tick } from 'svelte'
   import { Ripple } from 'ui'
   import { im } from 'api'
   import { t } from '$stores'
   import { im as impb } from 'protobuf'
+  import type { IPushMessageEntity } from 'protobuf/im/types'
 
   import flash from './flash'
   import Message from './Message'
@@ -31,7 +33,8 @@
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
 
-  const getNewestMessage = () => $chatMessages[$chatMessages.length - 1]
+  const getOldestMessage = () => ($chatMessages.find(msg => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  const getNewestMessage = () => ($chatMessages.findLast(msg => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
 
   const onScroll = (scrollTop: number, clientHeight: number, scrollHeight: number) => {
     if (scrollTop + clientHeight >= scrollHeight - 50) {
@@ -58,8 +61,8 @@
       ? document.documentElement.scrollHeight
       : (mutation.target as HTMLDivElement).scrollHeight
 
-    const {msgId, visible } = getNewestMessage()
-    if (scrollToNewest && visible === impb.enum.visible.ALL) {
+    const { msgId } = getNewestMessage()
+    if (scrollToNewest) {
       lastReadId = msgId
       target.scrollTo({ top: _scrollH })
     }
@@ -101,7 +104,7 @@
   let pastQuantity = 10
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
-    const targetId = $chatMessages[pastQuantity].msgId
+    const targetId = getOldestMessage().msgId
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
@@ -109,7 +112,8 @@
     chatMessages.update((messages) => [...res.data.list, ...messages])
     fetchMoreLoading = false
 
-    targetDom.scrollIntoView()
+    await tick()
+    targetDom?.scrollIntoView()
 
     const headerHeight = 44
     const loadmoreHeight = 34
@@ -126,6 +130,7 @@
 <div
   class="relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]"
   on:scroll={!isWindow && onDomScroll}
+  style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
 >
   <DropdownLoader
@@ -135,7 +140,7 @@
     on:fetchMore={fetchMore}
   />
 
-  {#each $chatMessages as message}
+  {#each $chatMessages as message (message.msgId)}
     <Message {message} bind:lastReadId self={message.isSelf} />
   {/each}
 
