@@ -6,7 +6,6 @@ export interface IChatroomInfo {
   userId: string
   userVip: number
   userCurrency: string
-  language: ILanguages
   isLogin: boolean
   isCharged: boolean
   vipLimit: number
@@ -25,7 +24,6 @@ export const initInfo: IChatroomInfo = {
   userId: 'loki',
   userVip: 6,
   userCurrency: 'CNY',
-  language: 'zh_HK',
   isLogin: true,
   isCharged: true,
   vipLimit: 6,

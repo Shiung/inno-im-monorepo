@@ -1,12 +1,11 @@
 <script lang="ts">
   import { languagesToDateFormat } from 'utils/convertDateAndTimestamp'
-  import { getInfo } from '../Chatroom/context'
+  import { locale } from '$stores'
 
   export let betItem
 
-  const { language } = getInfo()
 </script>
 
 <div class="text-[#999]">
-  {languagesToDateFormat($language, betItem.betTime)}
+  {languagesToDateFormat($locale, betItem.betTime)}
 </div>
