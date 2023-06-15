@@ -17,7 +17,7 @@
   import { im as impb } from 'protobuf'
   import { im as imWs } from 'api/wsMaster'
 
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
   import Empty from '$src/containers/Empty'
 
   import { setInfo, setEnv } from './context'
@@ -52,7 +52,7 @@
 
   let initFetchLoading: boolean = true
   const initFetch = async () => {
-    const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: 30 } })
+    const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: 30 }, headers: { 'Accept-Language': $locale } })
     chatMessages.update((messages) => [...res.data.list, ...messages])
     initFetchLoading = false
   }

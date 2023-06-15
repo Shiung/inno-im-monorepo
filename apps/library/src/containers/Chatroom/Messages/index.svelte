@@ -5,7 +5,7 @@
   import { expoOut } from 'svelte/easing'
   import { Ripple } from 'ui'
   import { im } from 'api'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
 
   import flash from './flash'
   import Message from './Message'
@@ -103,7 +103,7 @@
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
-    const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: pastQuantity } })
+    const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: pastQuantity }, headers: { 'Accept-Language': $locale } })
     chatMessages.update((messages) => [...res.data.list, ...messages])
     fetchMoreLoading = false
 

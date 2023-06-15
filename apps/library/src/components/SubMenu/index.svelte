@@ -5,21 +5,21 @@ import { Ripple } from 'ui'
 
 import { t, type ITransStore } from '$stores'
 
-import type { IExpertMenu } from '../types'
+import type { IExpertMenu } from './type'
 
 export let menu: IExpertMenu[]
-export let actived: IExpertMenu['type']
+export let active: IExpertMenu['type']
 
 const onClick = (item: IExpertMenu) => {
-  actived = item.type
+  active = item.type
 }
 
-let itemsConteiner: HTMLDivElement
-const calBar = (actived: IExpertMenu['type'], _t?: ITransStore): { width: number, left: number } => {
-  if (!itemsConteiner) return null
+let itemsContainer: HTMLDivElement
+const calBar = (active: IExpertMenu['type'], _t?: ITransStore): { width: number, left: number } => {
+  if (!itemsContainer) return null
 
-  const idx = menu.findIndex((item) => item.type === actived)
-  const target = itemsConteiner.children[idx] 
+  const idx = menu.findIndex((item) => item.type === active)
+  const target = itemsContainer.children[idx] 
 
   if (!target) return null
 
@@ -27,21 +27,21 @@ const calBar = (actived: IExpertMenu['type'], _t?: ITransStore): { width: number
   return { width: rect.width, left: rect.left }
 }
 
-$: barStyle = calBar(actived, $t)
+$: barStyle = calBar(active, $t)
 
 onMount(() => {
-  barStyle = calBar(actived)
+  barStyle = calBar(active)
 })
 
 </script>
 
 <div class={twMerge('relative flex flex-col justify-center', $$props.class)}>
-  <div class='flex w-full items-center justify-around mt-[8px]' bind:this={itemsConteiner}>
+  <div class='flex w-full items-center justify-around mt-[8px]' bind:this={itemsContainer}>
     {#each menu as item}
 
       <Ripple class={twMerge(
           'text-[#999999] text-[14px] p-2',
-          actived === item.type && 'text-imprimary'
+          active === item.type && 'text-imprimary'
         )} 
         on:click={() => onClick(item)}
       >

@@ -26,6 +26,7 @@
     "@types/ua-parser-js": "^0.7.36",
     "eslint-config-custom": "workspace:*",
     "sass": "^1.59.3",
-    "svelte": "^3.54.0"
+    "svelte": "^3.54.0",
+    "vitest": "^0.29.7"
   }
 }

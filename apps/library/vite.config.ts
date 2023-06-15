@@ -10,6 +10,7 @@ const svelteSVGPlugin = () => svelteSVG({
 
 const buildAsLibrary = () => ({
   build: {
+    target: ['chrome70'],
     lib: {
       // Could also be a dictionary or array of multiple entry points
       entry: {
