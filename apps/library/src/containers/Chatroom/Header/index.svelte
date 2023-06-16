@@ -5,7 +5,7 @@ import { Ripple } from 'ui'
 import { t } from '$stores'
 import { twMerge } from 'tailwind-merge'
 
-import Marquee from 'ui/components/Marquee'
+import { Marquee } from 'ui'
 
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'

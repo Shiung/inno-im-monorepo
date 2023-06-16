@@ -24,7 +24,7 @@
 <div class={twMerge('w-full overflow-hidden', $$props.class)} bind:this={boxDom}>
   <div
     bind:this={contentDom}
-    class={twMerge('relative flex space-x-3')}
+    class={twMerge('relative flex space-x-3 whitespace-nowrap')}
     style:padding-left={`${boxWidth}px`}
     style:left={`${move}px`}>
     {#each infos as info, idx (idx)}
