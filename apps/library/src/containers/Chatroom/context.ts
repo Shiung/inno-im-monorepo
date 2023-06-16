@@ -1,4 +1,4 @@
-import type { EChatroomSize } from './utils'
+import type { EChatroomSize } from './constant'
 import { createStoreContext } from 'utils/storeContext'
 
 export interface IChatroomInfo {

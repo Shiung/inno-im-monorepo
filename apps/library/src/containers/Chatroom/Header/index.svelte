@@ -10,23 +10,27 @@ import Close from '../images/close.svg'
 
 import { getEnv } from '../context'
 
-// export let fixed: boolean
+export let isTransition: boolean
 
 const dispatch = createEventDispatcher()
-const { displayType }  = getEnv()
+const { displayType, height }  = getEnv()
 
 let showRemind: boolean = false
 
 let dom: HTMLDivElement
 $: blockHeight = dom?.getBoundingClientRect().height
 
+$: isWindow = $displayType === 'window'
+
 </script>
 
 <div>
-  <div class={twMerge(
-      'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30',
-      $displayType === 'window' ? 'fixed' : 'sticky'
+  <div
+    class={twMerge(
+      'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30 transition-[top] duration-300 ease-in-out',
+      isWindow ? 'fixed' : 'sticky'
     )}
+    style:top={!isTransition ? `${$height}px` : ''}
     bind:this={dom}
   >
     <div class='flex items-center'>
@@ -50,5 +54,5 @@ $: blockHeight = dom?.getBoundingClientRect().height
     </Ripple>
   </div>
 
-  <div style:height={$displayType === 'window' ? `${blockHeight}px` : 0} />
+  <div style:height={isWindow ? `${blockHeight}px` : 0} />
 </div>

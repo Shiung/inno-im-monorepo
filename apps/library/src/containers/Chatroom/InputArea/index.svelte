@@ -11,7 +11,7 @@
   import ShowS from '../images/show_s.svg'
   import Plus from '../images/plus.svg'
 
-  import { warningCodeMap } from '../utils'
+  import { warningCodeMap } from '../constant'
   import { getInfo, getEnv } from '../context'
   import { inputAreaOffset } from './store'
 
