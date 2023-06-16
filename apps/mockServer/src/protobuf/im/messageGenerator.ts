@@ -5,7 +5,7 @@ import type { MessageEntityDataProps } from '../../mock/im/chatroom'
 
 
 export const pushMessageEntity = (msg?: MessageEntityDataProps) => {
-  const data = messageEntityData(0, msg)
+  const data = messageEntityData(Date.now(), msg)
   return impb.pushMessageEntity?.encode(data)
 }
 

@@ -11,12 +11,11 @@
   import ShowS from '../images/show_s.svg'
   import Plus from '../images/plus.svg'
 
-  import { warningCodeMap } from '../utils'
+  import { warningCodeMap } from '../constant'
   import { getInfo, getEnv } from '../context'
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = true
-  export let subId: string
 
   const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
   const { displayType } = getEnv()

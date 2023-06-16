@@ -13,15 +13,12 @@ export interface MessageEntityDataProps {
   iid?: number
 }
 
-let msgId = Random.integer(100000, 999999)
-
-export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) => {
+export const messageEntityData = (ts: number = Date.now(), props?: MessageEntityDataProps) => {
   const _content = props?.content
   const _sender = props?.sender
-  const newMsgId = msgId = msgId + Random.integer(1, 10)
 
   return mock({
-    msgId: Random.integer(100000, 999999),
+    msgId: ts,
     contentType: 1,
     vdId: 4,
     senderName: _sender || '@name',
@@ -33,7 +30,7 @@ export const messageEntityData = (idx?: number, props?: MessageEntityDataProps) 
     replyTo: Random.integer(0, 100000),
     content: _content || '@sentence',
     visible: Random.integer(0, 2),
-    timestamp: Date.now() + (idx || 0)
+    timestamp: ts
   })
 }
 
@@ -50,16 +47,23 @@ export const pushMessageData = (props: { reqId?: string, value?: Uint8Array }) =
   }
 }
 
+let lastDateId = Date.now()
+
 const expert: IMockData[] = [
   {
     url: '/v1/chat-room/past-message',
     timeout: 500,
-    response: ({ query }) => mock(withData<Types.IChatroomPastMessage>({
-      list: Array.from({ length: Number(query.quantity) || 30 }, (_, idx) => ({
-        //...pushMessageData({ value: messageEntityData(idx) })
-        ...messageEntityData(idx)
+    response: ({ query }) => {
+      const listLength = Number(query.quantity) || 30
+      const list = Array.from({ length: listLength }, (_, idx) => ({
+        // ...pushMessageData({ value: messageEntityData(idx) })
+        ...messageEntityData(lastDateId - (listLength - idx))
       }))
-    }))
+
+      lastDateId = list[0].msgId
+
+      return mock(withData<Types.IChatroomPastMessage>({ list }))
+    }
   },
 ]
 
