@@ -1,6 +1,5 @@
 <script lang='ts'>
   import { twMerge } from "tailwind-merge";
-  export let css: string = ''
   export let infos: Array<string> = []
 
   let boxDom: HTMLDivElement
@@ -22,7 +21,7 @@
   ticker()
 </script>
 
-<div class={twMerge('w-full overflow-hidden', css)} bind:this={boxDom}>
+<div class={twMerge('w-full overflow-hidden', $$props.class)} bind:this={boxDom}>
   <div
     bind:this={contentDom}
     class={twMerge('relative flex space-x-3')}

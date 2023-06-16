@@ -47,7 +47,7 @@ $: marqueeInfo = [
         <div transition:slide={{ axis: 'x' }}>
           <Marquee
             infos={marqueeInfo}
-            css='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden'/>
+            class='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden'/>
         </div>
       {/if}
 
