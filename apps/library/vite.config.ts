@@ -2,6 +2,9 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import svelteSVG from 'vite-plugin-svelte-svg'
+import { execSync } from 'child_process'
+
+const packageJson = require('./package.json')
 
 const svelteSVGPlugin = () => svelteSVG({
   svgoConfig: {},
@@ -33,6 +36,11 @@ const buildAsLibrary = () => ({
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    'process.env.name': JSON.stringify(packageJson.name),
+    'process.env.version': JSON.stringify(packageJson.version),
+    'process.env.commitHEAD': JSON.stringify(execSync('git rev-parse HEAD').toString()),
+  },
   plugins: [
     svelte(),
     svelteSVGPlugin()
