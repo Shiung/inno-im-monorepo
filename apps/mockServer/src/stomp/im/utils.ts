@@ -23,7 +23,7 @@ export const genChatRoomBody = (props?: { message?: string, userId?: string }) =
   const _message = props?.message
   const _userId = props?.userId
 
-  return messageEntityData(0, { content: _message, sender: _userId })
+  return messageEntityData(Date.now(), { content: _message, sender: _userId })
 }
 
 export const sendData = (props: { ws: WebSocket, data: IStompData, body: object }) => {
