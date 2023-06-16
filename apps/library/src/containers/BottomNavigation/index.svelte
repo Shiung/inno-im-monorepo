@@ -34,15 +34,7 @@ let genIcons = (_t: ITransStore) => ([
     icon: () => import('./images/expert.svg'),
     text: _t('common.expert'),
     onClick: () => push('/expert')
-  },
-  {
-    id: 'match',
-    icon: () => import('./images/match.svg'),
-    text: _t('common.match'),
-    disabled: true,
-    onClick: () => console.log('5')
-
-  },
+  }
 ])
 
 $: icons = genIcons($t)

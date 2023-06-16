@@ -18,16 +18,19 @@ export let match: IWebAnchorMatch
   >
     <div class='text-[12px] text-center font-semibold mb-[10px]'> {match.tnName} </div>
 
-    <div class='flex justify-around'>
+    <div class='flex'>
 
-      <div>  
+      <div class='flex-1 flex flex-col items-center px-[5px]'>  
         <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.homeId, type: ImageType.competitors })} />
         <div class='text-[10px] text-center'> {match.homeName} </div>
       </div>
 
-      <Status match={match} />
+      <div class='flex-[0_0_80px]'>
+        <Status match={match} />
+      </div>
 
-      <div>  
+
+      <div class='flex-1 flex flex-col items-center px-[5px]'>  
         <TeamLogo class='w-[24px] h-[24px] mb-[5px]' src={beImgUrlParse({ id: match.awayId, type: ImageType.competitors })} />
         <div class='text-[10px] text-center'> {match.awayName} </div>
       </div>

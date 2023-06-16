@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { im } from 'api'
+import { locale } from '$stores'
 
 import type { IWebAnchorLife, IWebAnchorInfo } from 'api/im/types'
 import type { ITabs } from './types'
@@ -24,7 +25,7 @@ const fetchAnchorLife = async () => {
   if (life.data) return
 
   life.loading = true
-  const res = await im.webAnchorLife({ query: { houseId, pageIdx: 1, pageSize: 10 } })
+  const res = await im.webAnchorLife({ query: { houseId, pageIdx: 1, pageSize: 10 }, headers: { 'Accept-Language': $locale } })
   life.data = res?.data
   life.loading = false
 }
@@ -34,7 +35,7 @@ const fetchPersonal = async () => {
   if (personal.data) return
     
     personal.loading = true
-    const res = await im.webAnchorInfo({ query: { houseId }})
+    const res = await im.webAnchorInfo({ query: { houseId }, headers: { 'Accept-Language': $locale} })
     personal.data = res?.data
     personal.loading = false
 }

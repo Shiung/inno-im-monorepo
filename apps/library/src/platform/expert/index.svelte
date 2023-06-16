@@ -1,44 +1,29 @@
-<script lang='ts' context='module'>
-import { writable } from 'svelte/store';
-import { convertSid } from 'utils'
-import { initGoDetail, setGoDetail } from './context'
+<script lang="ts" context="module">
+  import { writable } from 'svelte/store'
+  import type { GoToExpertDetail, GoToPlanDetail } from '$containers/Expert/type'
 
-let sid = writable(null)
-export const setSid = (setSid: string) => sid.set(convertSid(setSid))
+  let sid = writable(null)
+  export const setSid = (sidValue: number) => {
+    if (typeof sidValue !== 'number') return console.warn('setSid parameter MUST be type of number')
 
-let detail = writable(initGoDetail)
-export const setGoToDetail = (callback: (path: string) => void) => detail.update(e => {
-  e.goDetailCallback = callback
-  return e
-})
+    sid.set(sidValue)
+  }
 
+  let goToExpertDetail = writable<GoToExpertDetail>(null)
+  export const setGoToExpertDetail = (callback: GoToExpertDetail) =>
+    goToExpertDetail.update((_) => callback)
+
+  let goToPlanDetail = writable<GoToPlanDetail>(null)
+  export const setGoToPlanDetail = (callback: GoToPlanDetail) =>
+    goToPlanDetail.update((_) => callback)
 </script>
 
-<script lang='ts'>
-import { im } from 'api'
-
-import ExpertList, { Loading } from '$containers/ExpertList'
-
-let predictionsPromise: ReturnType<typeof im.expertPredictions>
-
-const fetchPredictions = (sid: number) => {
-  if (sid == null) return
-  predictionsPromise = im.expertPredictions({
-    query: {
-      ...(sid && { sid }),
-      type: 0,
-      pageIdx: 1,
-      pageSize: 10
-  }})
-}
-
-$: fetchPredictions($sid)
-$: setGoDetail($detail)
-
+<script lang="ts">
+  import ExpertList from './List/index.svelte'
+  import { locale } from '$stores'
 </script>
 
-{#await predictionsPromise}
-  <Loading />
-{:then response}
-  <ExpertList list={response?.data?.list || []} />
-{/await}
+{#key $locale}
+  <ExpertList sid={$sid} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
+{/key}
+

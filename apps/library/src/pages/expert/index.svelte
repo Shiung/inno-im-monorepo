@@ -1,30 +1,35 @@
-<script lang='ts'>
-import { params, replace } from 'svelte-spa-router'
-import HeaderNavigation from '$containers/HeaderNavigation'
-import ExpertWithMenu from '$containers/ExpertWithMenu'
+<script lang="ts">
+  import { params, replace } from 'svelte-spa-router'
 
-import { convertSid, type SidType } from 'utils'
+  import HeaderNavigation from '$containers/HeaderNavigation'
+  
+  import ExpertList from './List/index.svelte'
 
-$: sid = convertSid($params?.expertSid)
+  import { locale } from '$stores'
+  import { convertSid, type SidType } from 'utils'
 
-const headNavIcons: {sid: SidType, onClick: () => void}[] = [
-  {
-    sid: 0,
-    onClick: () => replace('/expert/0')
-  },
-  {
-    sid: 1,
-    onClick: () => replace('/expert/1')
-  },
-  {
-    sid: 2,
-    onClick: () => replace('/expert/2')
-  }
-]
+  const headNavIcons: { sid: SidType; onClick: () => void }[] = [
+    {
+      sid: 0,
+      onClick: () => replace('/expert/0')
+    },
+    {
+      sid: 1,
+      onClick: () => replace('/expert/1')
+    },
+    {
+      sid: 2,
+      onClick: () => replace('/expert/2')
+    }
+  ]
+
+  $: sid = convertSid($params?.expertSid)
 </script>
 
-<div>
+<div data-cid="Expert">
   <HeaderNavigation active={sid} icons={headNavIcons} />
-  <ExpertWithMenu sid={sid} />
-</div>
 
+  {#key $locale}
+    <ExpertList sid={sid} />
+  {/key}
+</div>

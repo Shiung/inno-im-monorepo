@@ -1,12 +1,13 @@
 <script lang='ts'>
 import Loading from './Loading.svelte'
 import Match from './Match/index.svelte'
+import { locale } from '$stores'
 
 import { getMatches } from './utils'
 
 export let houseId: string
 
-const matchesPromise = getMatches(houseId)
+const matchesPromise = getMatches(houseId, $locale)
 
 </script>
 
