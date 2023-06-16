@@ -1,6 +1,7 @@
 <script lang='ts'>
   import { twMerge } from "tailwind-merge";
   export let infos: Array<string> = []
+  export let speed: number = 1
 
   let boxDom: HTMLDivElement
   let contentDom: HTMLDivElement
@@ -11,7 +12,7 @@
   const ticker = () => {
     const scrollWidth =  contentDom?.scrollWidth
     if (Math.abs(move) <= scrollWidth + 15) {
-      move -= 1
+      move -= 1 * speed
     } else {
       move = 0
     }

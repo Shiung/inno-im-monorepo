@@ -12,8 +12,11 @@
 
 <Marquee infos={list} class='w-[200px] bg-[#ccc]' />
 <br/>
-<Marquee infos={list} class='bg-[#ccc]' />
+<Marquee infos={list} class='bg-[#ccc]' speed={3} />
 <br/>
 <div class='flex justify-end'>
   <Marquee infos={list} class='w-[300px] bg-[#ccc] text-[30px]' />
 </div>
+
+<br/>
+<Marquee infos={list} class='bg-[#ccc]' speed={2} />
