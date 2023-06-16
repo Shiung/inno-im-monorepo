@@ -40,7 +40,7 @@ $: marqueeInfo = [
       <Ripple class='rounded-full flex items-center justify-center w-[25px] h-[25px]'
         on:click={() => showRemind = !showRemind}
       >
-        <Info width={20} height={20} fill='#999999' />
+        <Info width={20} height={20} fill={showRemind ? 'rgb(var(--im-monorepo-primary))': '#999999'} />
       </Ripple>
 
       {#if showRemind}
