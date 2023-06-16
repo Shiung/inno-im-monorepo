@@ -3,7 +3,7 @@
   import { tweened } from 'svelte/motion'
   import { fly } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
-  import { tick } from 'svelte'
+  import { createEventDispatcher, tick } from 'svelte'
   import { Ripple } from 'ui'
   import { im } from 'api'
   import { t } from '$stores'
@@ -35,6 +35,8 @@
 
   const getOldestMessage = () => ($chatMessages.find(msg => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
   const getNewestMessage = () => ($chatMessages.findLast(msg => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+
+  const dispatch = createEventDispatcher()
 
   const onScroll = (scrollTop: number, clientHeight: number, scrollHeight: number) => {
     if (scrollTop + clientHeight >= scrollHeight - 50) {
@@ -85,6 +87,8 @@
 
   $: if (dom) scrollToUnread()
 
+  $: if (dom) dispatch('domBound', dom)
+
   const checkWatched = () => {
     if (lastReadId === getNewestMessage().msgId) allWatched = true
     else allWatched = false
@@ -128,7 +132,7 @@
 <svelte:window on:scroll={isWindow && onWindowScroll} />
 
 <div
-  class="relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px]"
+  class="relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white"
   on:scroll={!isWindow && onDomScroll}
   style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
