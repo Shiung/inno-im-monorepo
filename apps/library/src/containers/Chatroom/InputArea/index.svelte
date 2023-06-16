@@ -16,7 +16,6 @@
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = true
-  export let subId: string
 
   const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
   const { displayType } = getEnv()
