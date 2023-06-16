@@ -36,14 +36,11 @@
 
   let lastReadId: number
 
-  $: destination = `/topic/chat-room/${$roomId}`
-
-  let subId: string
   let subscription: ReturnType<typeof imWs.subscribe>
   let chatMessages = writable<IChatMessage[]>([])
 
   const subscribeRoom = (_roomId: number) => {
-    subscription = imWs.subscribe(impb.enum.command.PUSH_MESSAGE, ({ data }) => {
+    subscription = imWs.subscribe({ eventkey: impb.enum.command.PUSH_MESSAGE }, ({ data }) => {
       chatMessages.update((messages) => [...messages, data])
     })
   }

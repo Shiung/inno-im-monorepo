@@ -9,7 +9,7 @@ let sendInterval: NodeJS.Timer
 
 export const onConnection = (ws: WebSocket) => {
   if (!impb.done) {
-    setTimeout(() => onConnection(ws), 100)
+    setTimeout(() => onConnection(ws), 10)
     return
   }
 
@@ -33,7 +33,6 @@ const sendReply = (ws: WebSocket, data: IRequest) => {
   const buffer = impb.push?.encode({ reqId: data.reqId, command: data.command, code: 0, msg: '', data: { value: new Uint8Array() } })
   if (buffer) ws.send(buffer)
 }
-
 const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
   sendReply(ws, data)
   const message = impb.requestMessageEntity?.decode(data.data.value as Uint8Array)
@@ -51,7 +50,6 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
 }
 
 export const onMessage = (ws: WebSocket, event: RawData) => {
-
   try {
     const data = impb.request?.decode(event as Uint8Array)
     switch (data.command) {
@@ -60,7 +58,7 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
     }
 
   } catch (e) {
-    console.log('decode error: ', event)
+    console.log('decode error: ', event, e)
   }
 
 

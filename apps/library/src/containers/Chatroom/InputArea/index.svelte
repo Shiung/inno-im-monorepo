@@ -14,9 +14,8 @@
   import { getInfo } from '../context'
 
   export let fixed: boolean = true
-  export let subId: string
 
-  const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
+  const { isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
 
   let placeHolder: string = ''
   let disabled: boolean = true
@@ -49,7 +48,6 @@
     if (now - lastSend <= $frequency) return (showTooOften = true)
 
     const waitSendMessage = message
-    const eventkey = im.enum.command.SEND_MESSAGE
 
     const data = {
       contentType: im.enum.contentType.CHAT,
@@ -60,10 +58,11 @@
     }
 
     message = ''
-    const res = await imWs.publish(
-      { eventkey, data },
-      { reqId: String(now), eventkey: `${eventkey}_${now}` }
-    )
+    const res = await imWs.publish({
+      pairId: now,
+      eventkey: im.enum.command.SEND_MESSAGE,
+      data
+    })
 
     console.log('publish res: ', res)
 

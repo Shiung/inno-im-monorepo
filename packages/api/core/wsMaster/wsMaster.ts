@@ -5,6 +5,7 @@ import wsObservables from './wsObservables'
 type PromiseResolver = { resolve: (value: any) => void; timer: ReturnType<typeof setTimeout> }
 
 class WsMaster {
+  // listener 是用來做 sync 用，會根據eventkey 以及 pairId 來決定是否為 等待的回應
   listeners: { [eventkey: string]: PromiseResolver[] }
   defaultSyncTimeout: number
   enabled: boolean
@@ -19,7 +20,7 @@ class WsMaster {
   watchdog: WatchDog
 
   pingPongParser: WsMasterProps['pingPongParser']
-  eventkeyParser: WsMasterProps['eventkeyParser']
+  messagePreparser: WsMasterProps['messagePreparser']
   binaryType: WsMasterProps['binaryType']
   stopIfRetryOverTimes?: number
   publishPreprocessor?: WsMasterProps['publishPreprocessor']
@@ -46,7 +47,7 @@ class WsMaster {
     })
 
     if (props.pingPongParser) this.pingPongParser = props.pingPongParser
-    if (props.eventkeyParser) this.eventkeyParser = props.eventkeyParser
+    if (props.messagePreparser) this.messagePreparser = props.messagePreparser
     if (props.binaryType) this.binaryType = props.binaryType
     if (props.stopIfRetryOverTimes) this.stopIfRetryOverTimes = props.stopIfRetryOverTimes
     if (props.publishPreprocessor) this.publishPreprocessor = props.publishPreprocessor
@@ -98,18 +99,18 @@ class WsMaster {
       this.retryTimes = 0
     }
 
-    this.socket.current.onmessage = event => {
+    this.socket.current.onmessage = e => {
       this.watchdog.extend()
 
+      let parsed: IWsMasterEvent = { eventkey: '', data: e }
+      if (this.messagePreparser) parsed = this.messagePreparser(e)
 
-      let parsed: IWsMasterEvent = { eventkey: '', data: null }
-      if (this.eventkeyParser) parsed = this.eventkeyParser(event)
       // check if is pong command returned
       if (this.pingPongParser?.pong(parsed)) return
 
+      if (this.messageHandler) this.messageHandler(e, parsed)
       this.obserableNotify(parsed)
       this.notifyToListeners(parsed)
-      if (this.messageHandler) this.messageHandler(parsed, event)
     }
 
     this.socket.current.onclose = e => {
@@ -145,7 +146,7 @@ class WsMaster {
     return new Promise(resolve => {
       const checkState = () => {
         if (this.socket.current?.readyState === 3) resolve(true)
-        else setTimeout(checkState, 500)
+        else setTimeout(checkState, 10)
       }
       checkState()
     })
@@ -156,34 +157,41 @@ class WsMaster {
     return new Promise(resolve => {
       const checkState = () => {
         if (this.socket.current?.readyState === 1) resolve(true)
-        else setTimeout(checkState, 500)
+        else setTimeout(checkState, 10)
       }
       checkState()
     })
   }
 
-  waitSync(eventkey: string | number, options?: SyncOptions) {
+  genSyncEventkey(event: IWsMasterEvent) {
+    const _pairId = event.pairId ? `_${event.pairId}` : ''
+    const key = `${event.eventkey}${_pairId}`
+    return key
+  }
+
+  waitSync(event: IWsMasterEvent, options?: SyncOptions) {
+    const key = this.genSyncEventkey(event)
+
     return new Promise<IWsMasterEvent>((resolve, reject) => {
-      if (!this.listeners[eventkey]) this.listeners[eventkey] = []
+      if (!this.listeners[key]) this.listeners[key] = []
 
       const timer = setTimeout(() => {
-        reject(`waitSync timeout ${eventkey}`)
+        reject(`waitSync timeout ${key}`)
 
-        const listeners = this.listeners[eventkey]
+        const listeners = this.listeners[key]
         const listener = listeners.find(promiseResolver => promiseResolver.resolve === resolve)
         if (listener) listeners.splice(listeners.indexOf(listener), 1)
       }, options?.timeout || this.defaultSyncTimeout)
 
-      this.listeners[eventkey].push({ resolve, timer })
+      this.listeners[key].push({ resolve, timer })
     })
   }
 
-  // 待確認功能設計方向
   send(sendMsg: WsMessage, options?: SyncOptions) {
     return new Promise<void>(async (resolve, reject) => {
 
       const timer = setTimeout(() => {
-        reject()
+        reject('send timeout.')
       }, options?.timeout || this.defaultSyncTimeout)
 
       await this.waitingSocketConnect()
@@ -193,41 +201,40 @@ class WsMaster {
     })
   }
 
-  // 待確認功能設計方向
-  async sendSync(sendMsg: WsMessage, eventKey: string | number, options?: SyncOptions) {
-    await this.send(sendMsg, options)
-    const res = await this.waitSync(eventKey, options)
+  async sendSync(event: IWsMasterEvent, options?: SyncOptions) {
+    await this.send(event.data, options)
+    const res = await this.waitSync(event, options)
     return res
   }
 
-  // 待確認功能設計方向
   notifyToListeners(event: IWsMasterEvent) {
-    if (!this.listeners[event.eventkey]) return
+    const key = this.genSyncEventkey(event)
+    if (!this.listeners[key]) return
 
-    for (const listener of this.listeners[event.eventkey]) {
+    for (const listener of this.listeners[key]) {
       clearTimeout(listener.timer)
       listener.resolve(event)
     }
-    delete this.listeners[event.eventkey]
+    delete this.listeners[key]
   }
 
-  subscribe(eventkey: string | number, callback: (agr0: IWsMasterEvent) => void) {
-    const observable = wsObservables.get(eventkey)
+  subscribe(event: Omit<IWsMasterEvent, 'data'>, callback: (agr0: IWsMasterEvent) => void) {
+    const key = this.genSyncEventkey(event)
+    const observable = wsObservables.get(key)
     return observable?.subscribe(callback)
   }
 
-  // TODO: publish 用法需要再優雅些, 綁死的 options.eventkey 需要有更好的用法
-  async publish(event: IWsMasterEvent, options?: any) {
+  async publish(event: IWsMasterEvent) {
     await this.waitingSocketConnect()
 
-    let data: WsMessage = event.data
-    if (this.publishPreprocessor) data = this.publishPreprocessor(event, options)
-    return this.sendSync(data, options?.eventkey || event.eventkey)
+    if (this.publishPreprocessor) event.data = this.publishPreprocessor(event)
+    return this.sendSync(event)
   }
 
-  obserableNotify(props: IWsMasterEvent) {
-    const observable = wsObservables.get(props.eventkey)
-    observable?.notify(props)
+  obserableNotify(event: IWsMasterEvent) {
+    const key = this.genSyncEventkey(event)
+    const observable = wsObservables.get(key)
+    observable?.notify(event)
   }
 
 }

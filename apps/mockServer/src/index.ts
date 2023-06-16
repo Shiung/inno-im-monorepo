@@ -3,12 +3,14 @@ import { URLSearchParams, parse } from 'url'
 
 import { createStompSocketServer } from './stomp'
 import { createProtoSocketServer } from './protobuf'
+import { createEchoSocketServer } from './echo'
 import moduleDict from './moduleDict'
 import type { IMockData, IMethod } from './types'
 
 const app = createServer()
 const stompSocketServer = createStompSocketServer()
 const protoSocketServer = createProtoSocketServer()
+const echoSocketServer = createEchoSocketServer()
 
 const getPathAndModule = (path: string) => {
   const pathArray = path.split('/')
@@ -72,6 +74,12 @@ app.on('upgrade', (req, socket, head) => {
   else if (pathname?.match('/proto')) {
     protoSocketServer.handleUpgrade(req, socket, head, (ws) => {
       protoSocketServer.emit('connection', ws, req)
+    })
+  }
+
+  else if (pathname?.match('/echo')) {
+    echoSocketServer.handleUpgrade(req, socket, head, (ws) => {
+      echoSocketServer.emit('connection', ws, req)
     })
   }
 })

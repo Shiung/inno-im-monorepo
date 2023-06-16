@@ -4,6 +4,7 @@ import createWebsocket from '../core/wsMaster'
 
 const ws = createWebsocket({
   url: 'ws://localhost:5174/proto/IM_API_URL',
+  // url: 'ws://172.28.40.55:5174/proto/IM_API_URL',
   binaryType: 'arraybuffer',
 
   pingPongParser: {
@@ -11,22 +12,22 @@ const ws = createWebsocket({
     pong: (event) => event.eventkey === im.enum.command.PING
   },
 
-  eventkeyParser: (event) => {
+  messagePreparser: (event) => {
     const decoded = im.push.decode(event.data)
 
     switch (decoded.command) {
       case im.enum.command.SEND_MESSAGE:
-        return { eventkey: `${decoded.command}_${decoded.reqId}`, code: decoded.code, msg: decoded.msg, data: decoded.data }
+        return { eventkey: decoded.command, pairId: decoded.reqId, code: decoded.code, msg: decoded.msg, data: decoded.data }
       case im.enum.command.PUSH_MESSAGE:
         const pushMessageEntity = im.pushMessageEntity.decode(decoded.data?.value)
-        return { eventkey: decoded.command, data: pushMessageEntity }
+        return { eventkey: decoded.command, pairId: decoded.reqId, data: pushMessageEntity }
 
       default:
-        return { eventkey: decoded.command, data: decoded.data?.value }
+        return { eventkey: decoded.command, pairId: decoded.reqId, data: decoded.data?.value }
     }
   },
 
-  publishPreprocessor: (event, option) => {
+  publishPreprocessor: (event) => {
     switch (event.eventkey) {
       case im.enum.command.SEND_MESSAGE:
         const requestMessageEntity = im.requestMessageEntity.encode({
@@ -37,13 +38,15 @@ const ws = createWebsocket({
           content: event.data.content
         })
 
-        return im.request.encode({
-          reqId: option?.reqId,
+        const request = im.request.encode({
+          reqId: String(event?.pairId || ''),
           command: im.enum.command.SEND_MESSAGE,
           data: {
             value: requestMessageEntity || new ArrayBuffer(0)
           }
         })
+
+        return request
 
       default: return event.data
     }
