@@ -1,9 +1,11 @@
 <script lang="ts">
-import { fade } from 'svelte/transition'
+import { slide } from 'svelte/transition'
 import { createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 import { twMerge } from 'tailwind-merge'
+
+import Marquee from 'ui/components/Marquee'
 
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'
@@ -19,6 +21,10 @@ let showRemind: boolean = false
 
 let dom: HTMLDivElement
 $: blockHeight = dom?.getBoundingClientRect().height
+
+$: marqueeInfo = [
+  $t('chat.remind')
+]
 
 </script>
 
@@ -38,8 +44,10 @@ $: blockHeight = dom?.getBoundingClientRect().height
       </Ripple>
 
       {#if showRemind}
-        <div transition:fade|locale class='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px]'>
-          {$t('chat.remind')}
+        <div transition:slide={{ axis: 'x' }}>
+          <Marquee
+            infos={marqueeInfo}
+            css='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden'/>
         </div>
       {/if}
 
