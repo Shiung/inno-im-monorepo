@@ -1,5 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
+  import { params } from 'svelte-spa-router'
   import { t, locale } from '$stores'
 
   import Empty from '$containers/Empty'
@@ -25,16 +26,18 @@
     {#await promise}
       <ExpertLoading length={5} />
     {:then response}
-      {@const list = response?.data?.list || []}
+      {@const filtered = response?.data?.list?.filter(item => item.expertId !== $params.expertId) || []}
       <div class='pl-[14px] pr-[20px] py-[20px] space-y-10'>
-        {#if list.length === 0}
+        {#if filtered.length === 0}
           <Empty class='h-[300px]'/>
         {:else}
-          {#each list as prediction}
+          {#each filtered as prediction}
             <Expert prediction={prediction} /> 
           {/each}
         {/if}
       </div>
+    {:catch}
+      <Empty class='h-[300px]'/>
     {/await}
   </div>
 {/if}
