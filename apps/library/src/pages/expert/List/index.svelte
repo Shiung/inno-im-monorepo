@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
   import { im } from 'api'
+  import { locale } from '$stores'
 
-  import Circle from 'ui/core/button/loading.svelte'
+  import InfiniteScroll from 'ui/components/InfiniteScroll'
+
   import SubMenu from '$components/SubMenu/index.svelte'
   import Empty from '$containers/Empty'
   import Expert, { Loading as ExpertLoading } from '$containers/Expert'
-  import { locale } from '$stores'
 
   import type { SidType } from 'utils'
   import type { IExpertMenu } from '$components/SubMenu/type'
-  import type { IExpertPrediction } from 'api/im/types'
 
   export let sid: SidType
 
@@ -40,94 +39,52 @@
   const pageSize: number = 10
 
   let initLoading: boolean = false
-  let initData: Awaited<ReturnType<typeof im.expertPredictions>>['data']['list'] = []
-
+  let data: Awaited<ReturnType<typeof im.expertPredictions>>['data']['list'] = []
   let hasMoreData: boolean = false
-  let moreLoading: boolean = false
-  let moreData: IExpertPrediction[] = []
 
-  let dom: HTMLDivElement
-
-  const fetchPredictions = ({
-    sid,
-    type,
-    pageIdx,
-    pageSize
-  }: {
-    sid: SidType
-    type: MenuType
-    pageIdx: number
-    pageSize: number
-  }) => {
-    return im.expertPredictions({
-      query: {
-        ...(sid && { sid }),
-        ...(type && { type }),
-        pageIdx,
-        pageSize
-      },
-      headers: { 'Accept-Language': $locale }
-    })
-  }
-
-  const init = async ({ sid, type }: { sid: SidType, type: MenuType }) => {
-    pageIdx = 1
-    moreData = []
-    if(sid == null) return
-
+  const fetchPredictions = async ({ sid, type }: { sid: SidType, type: MenuType }) => {
     try {
-      initLoading = true
-
-      const response = await fetchPredictions({ sid, type, pageIdx, pageSize })
+      const response = await im.expertPredictions({
+        query: {
+          ...(sid && { sid }),
+          ...(type && { type }),
+          pageIdx,
+          pageSize
+        },
+        headers: { 'Accept-Language': $locale }
+      })
 
       const { list, pager } = response?.data || {}
 
-      if (list?.length) initData = list
+      if (list?.length) data = [...data, ...list]
 
       const { totalPage } = pager || {}
       hasMoreData = totalPage > pageIdx
       if(hasMoreData) pageIdx++
     } catch (error) {
-      initData = []
+      hasMoreData = false
+    }
+  }
+
+  const init = async ({ sid, type }: { sid: SidType, type: MenuType }) => {
+    pageIdx = 1
+    data = []
+
+    try {
+      initLoading = true
+      await fetchPredictions({ sid, type })
+    } catch (error) {
+      data = []
       hasMoreData = false
     } finally {
       initLoading = false
     }
   }
 
-  let observer = new IntersectionObserver(async (entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        try {
-          moreLoading = true
-          const response = await fetchPredictions({ sid, type: type, pageIdx, pageSize })
-          const { list, pager } = response?.data || {}
-          
-          if(list?.length) moreData = [...moreData, ...list]
-
-          const { totalPage } = pager || {}
-          hasMoreData = totalPage > pageIdx
-          if(hasMoreData) pageIdx++
-        } catch (error) {
-          hasMoreData = false
-        } finally {
-          moreLoading = false
-        }
-      }
-    }
-  })
-
   $: {
     window.scrollTo(0, 0)
     init({ sid, type })
   }
-
-  $: if (dom) observer.observe(dom)
-
-  onDestroy(() => {
-    observer.disconnect()
-    observer = null
-  })
 </script>
 
 <div data-cid='ExpertList' class="bg-white">
@@ -137,26 +94,14 @@
     <ExpertLoading length={5} />
   {:else}
     <div class="pl-[14px] pr-[20px] py-[20px] space-y-10">
-      {#if initData.length === 0}
+      {#if data.length === 0}
         <Empty class="h-[300px]" />
       {:else}
-        {#each initData as prediction}
-          <Expert {prediction} />
-        {/each}
-
-        {#each moreData as prediction}
-          <Expert {prediction} />
-        {/each}
-      {/if}
-
-      {#if hasMoreData}
-        <div bind:this={dom}>
-          {#if moreLoading}
-            <div class='relative h-[30px] overflow-hidden'>
-              <Circle stroke="rgba(var(--im-monorepo-primary))" />
-            </div>
-          {/if}
-        </div>
+        <InfiniteScroll hasMore={hasMoreData} load={() => fetchPredictions({ sid, type })}>
+          {#each data as prediction}
+            <Expert {prediction} />
+          {/each}
+        </InfiniteScroll>
       {/if}
     </div>
   {/if}
