@@ -57,7 +57,6 @@
       await fetchPredictions({ mid, vd })
     } catch (error) {
       data = []
-      hasMoreData = false
     } finally {
       initLoading = false
     }
