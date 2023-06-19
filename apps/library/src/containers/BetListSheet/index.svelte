@@ -1,9 +1,11 @@
 <script lang="ts">
+  import Pc from './Pc.svelte'
+  import Wap from './Wap.svelte'
+
   import { createEventDispatcher, onDestroy } from 'svelte'
-  import BottomSheet, { Header, Content, Footer } from 'ui/components/BottomSheet'
-  import { dataCid } from '../BottomNavigation'
+  import { Header, Content, Footer } from 'ui/components/BottomSheet'
   import stomp from 'api/stompMaster'
-  import { getInfo } from '$containers/Chatroom/context'
+  import { getInfo, getEnv } from '$containers/Chatroom/context'
 
   import DetailHeader from './DetailHeader/index.svelte'
   import DetailContent from './DetailContent/index.svelte'
@@ -15,6 +17,8 @@
   export let destination: string
   export let subId: string
   const dispatch = createEventDispatcher()
+  const { device } = getEnv()
+  const component = $device === 'pc' ? Pc : Wap
 
   const tabs: ITabs = {
     'chat.betList': () => import('./DetailContent/Self/index.svelte'),
@@ -23,30 +27,11 @@
 
   let activedTab: keyof typeof tabs = 'chat.betList'
 
-  let onMax: boolean = false
-  const clearZIndexOfBottomNav = () => {
-    if (!onMax) return
-
-    const bottomNav = document.querySelector(`[data-cid="${dataCid}"]`)?.firstChild as HTMLElement
-    if (!bottomNav) return
-    bottomNav.style.zIndex = ''
-    onMax = false
-  }
-
-  const setZIndexOfBottomNav = (zIndex: string) => {
-    const bottomNav = document.querySelector(`[data-cid="${dataCid}"]`)?.firstChild as HTMLElement
-    if (!bottomNav) return
-    bottomNav.style.zIndex = zIndex
-    onMax = true
-  }
-
-  const onMaxHeight = () => setZIndexOfBottomNav('51')
-
   let betData
   const { userId } = getInfo()
 
   const handleFollowOrder = () => {
-    console.log('click followOrder');
+    console.log('click followOrder')
   }
 
   const handleShowOrder = () => {
@@ -69,18 +54,9 @@
   }
 
   $: self = activedTab === 'chat.betList'
-  $: if (!open) clearZIndexOfBottomNav()
-  onDestroy(() => clearZIndexOfBottomNav())
 </script>
 
-<BottomSheet
-  class={onMax && 'rounded-none'}
-  dragBar
-  bind:open
-  initHeight={(height) => (height * 9) / 10}
-  maxHeight={(height) => height + 20}
-  {onMaxHeight}
->
+<svelte:component this={component} bind:open>
   <Header class="py-[9px] bg-white px-[15px]">
     <DetailHeader bind:activedTab tabs={Object.keys(tabs)} />
   </Header>
@@ -90,10 +66,6 @@
   </Content>
 
   <Footer class="p-0 bg-white">
-    <DetailFooter
-      on:click={publishMessage}
-      selected={!!betData}
-      {self}
-    />
+    <DetailFooter on:click={publishMessage} selected={!!betData} {self} />
   </Footer>
-</BottomSheet>
+</svelte:component>

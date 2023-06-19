@@ -9,7 +9,9 @@ $: blockHeight = dom?.getBoundingClientRect().height
 $: if (dom) setChatEnv({
   displayType: isWindow ? 'window' : 'block',
   height: blockHeight,
-  minimize: false
+  minimize: false,
+  showBetList: false,
+  device: 'pc'
 })
 
 </script>
