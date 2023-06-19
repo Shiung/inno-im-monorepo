@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
   import { im } from 'api'
 
   import { locale } from '$stores'
