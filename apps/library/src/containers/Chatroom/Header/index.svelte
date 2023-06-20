@@ -1,9 +1,11 @@
 <script lang="ts">
-import { fade } from 'svelte/transition'
+import { slide } from 'svelte/transition'
 import { createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 import { twMerge } from 'tailwind-merge'
+
+import { Marquee } from 'ui'
 
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'
@@ -20,6 +22,9 @@ let showRemind: boolean = false
 let dom: HTMLDivElement
 $: blockHeight = dom?.getBoundingClientRect().height
 
+$: marqueeInfo = [
+  $t('chat.remind')
+]
 $: isWindow = $displayType === 'window'
 
 </script>
@@ -38,12 +43,14 @@ $: isWindow = $displayType === 'window'
       <Ripple class='rounded-full flex items-center justify-center w-[25px] h-[25px]'
         on:click={() => showRemind = !showRemind}
       >
-        <Info width={20} height={20} fill='#999999' />
+        <Info width={20} height={20} fill={showRemind ? 'rgb(var(--im-monorepo-primary))': '#999999'} />
       </Ripple>
 
       {#if showRemind}
-        <div transition:fade|locale class='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px]'>
-          {$t('chat.remind')}
+        <div transition:slide={{ axis: 'x' }}>
+          <Marquee
+            infos={marqueeInfo}
+            class='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden'/>
         </div>
       {/if}
 
