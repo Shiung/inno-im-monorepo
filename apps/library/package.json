@@ -7,6 +7,7 @@
     "dev": "npm run locales && npm run _dev",
     "build": "npm run locales && npm run _build",
     "build:library": "APP_ENV=library vite build",
+    "build:library-watch": "APP_ENV=library vite build -w",
     "locales": "zx ./env_scripts/locales.mjs",
     "preview": "vite preview",
     "release": "zx ./env_scripts/releaseLibrary.mjs",
