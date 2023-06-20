@@ -1,11 +1,11 @@
 <script lang="ts">
   import { t } from '$stores'
   import parseMarketName from './utils/parseMarketName'
-  import { getPlatformInfo } from '$containers/Chatroom/context'
+  import { getOrdersInfo } from '$containers/Chatroom/context'
 
   export let betItem
 
-  const { sportMarketSummary } = getPlatformInfo()
+  const { sportMarketSummary } = getOrdersInfo()
 
   const { marketType } = betItem
 

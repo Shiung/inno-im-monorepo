@@ -46,12 +46,12 @@ export const initEnv: IChatroomEnv = {
 
 export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
 
-export interface IPlatformInfo {
+export interface IOrdersInfo {
   sportMarketSummary: ISportMarketSummary
 }
 
-export const initPlatformInfo: IPlatformInfo = {
+export const initOrdersInfo: IOrdersInfo = {
   sportMarketSummary: null
 }
 
-export const [setPlatformInfo, getPlatformInfo] = createStoreContext<IPlatformInfo>('chatRoomPlatformInfo', initPlatformInfo)
+export const [setOrdersInfo, getOrdersInfo] = createStoreContext<IOrdersInfo>('chatRoomOrdersInfo', initOrdersInfo)

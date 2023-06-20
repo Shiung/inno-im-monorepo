@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { writable } from 'svelte/store'
-  import { initEnv, initInfo, initPlatformInfo } from './context'
-  import type { IChatroomEnv, IChatroomInfo, IPlatformInfo } from './context'
+  import { initEnv, initInfo, initOrdersInfo } from './context'
+  import type { IChatroomEnv, IChatroomInfo, IOrdersInfo } from './context'
   import type { SizeChangedCallback } from './type'
 
   let env = writable(initEnv)
@@ -18,9 +18,9 @@
     sizeChangedCallback = callback
   }
 
-  let platformInfo = writable(initPlatformInfo)
-  export const setChatPlatformInfo = (_platformInfo: Partial<IPlatformInfo>) =>
-    platformInfo.update((e) => ({ ...e, ..._platformInfo }))
+  let ordersInfo = writable(initOrdersInfo)
+  export const setChatOrdersInfo = (_platformInfo: Partial<IOrdersInfo>) =>
+    ordersInfo.update((e) => ({ ...e, ..._platformInfo }))
 </script>
 
 <script lang="ts">
@@ -37,7 +37,7 @@
 
   import Empty from '$src/containers/Empty'
 
-  import { setInfo, setEnv, setPlatformInfo } from './context'
+  import { setInfo, setEnv, setOrdersInfo } from './context'
   import Minimize from './Minimize/index.svelte'
   import Header from './Header/index.svelte'
   import Loading from './Loading.svelte'
@@ -61,7 +61,7 @@
   })
 
   $: setInfo($info)
-  $: setPlatformInfo($platformInfo)
+  $: setOrdersInfo($ordersInfo)
 
   $: isWindow = $displayType === 'window'
 

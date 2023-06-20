@@ -2,7 +2,7 @@
 import { twMerge } from 'tailwind-merge'
 import { onMount } from 'svelte'
 import { locale } from '$stores'
-import Chatroom, { setChatEnv, setChatPlatformInfo, onSizeChangedCallback, type SizeChangedOption } from '$src/containers/Chatroom'
+import Chatroom, { setChatEnv, setChatOrdersInfo, onSizeChangedCallback, type SizeChangedOption } from '$src/containers/Chatroom'
 
 const isWindow: boolean = true
 let expandType: string = 'default'
@@ -27,7 +27,7 @@ $: if (dom) {
 }
 
 $: setChatEnv({ height: changedHeight, size: expandType as any })
-$: setChatPlatformInfo({sportMarketSummary})
+$: setChatOrdersInfo({sportMarketSummary})
 
 onSizeChangedCallback((option: SizeChangedOption) => {
   isTransition = option.transition

@@ -1,12 +1,12 @@
 <script lang="ts">
   import parseMarketName from './utils/parseMarketName'
   import CornerKickImg from './images/corner-kick.png'
-  import { getPlatformInfo } from '$containers/Chatroom/context'
+  import { getOrdersInfo } from '$containers/Chatroom/context'
   import { amountThousandthTransformer } from 'utils/amount'
 
   export let betItem
 
-  const { sportMarketSummary } = getPlatformInfo()
+  const { sportMarketSummary } = getOrdersInfo()
 
   const {
     sid,
