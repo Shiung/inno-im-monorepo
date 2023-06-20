@@ -1,10 +1,15 @@
 <script lang='ts' context='module'>
 import { push } from 'svelte-spa-router'
+import { locale } from '$stores'
 let goHomeCallback: () => void = () => push('/')
 
 export let setGoHome = (callback?: () => void) => {
   if (callback) goHomeCallback = callback
 }
+
+// plateform 設定im語系
+export const setImLocale = locale.set
+
 </script>
 
 <script lang="ts">
@@ -16,7 +21,9 @@ import { throttle } from 'utils'
 import routes from './routes'
 import BigNumber from 'bignumber.js'
 import { appHeight } from '$stores/layout'
+import versionInfo from './utils/versionInfo'
 
+versionInfo()
 $: console.log('=========[im-library] location==========', $location)
 
 const routeLoading = (event: CustomEvent) => {

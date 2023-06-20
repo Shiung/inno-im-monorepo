@@ -9,9 +9,11 @@ import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
 import MarketBadget from '$src/components/MarketBadget'
 
-import { getGoToDetail } from '../context'
+import type { GoToExpertDetail, GoToPlanDetail } from './type'
 
-export let prodiction: IExpertPrediction
+export let prediction: IExpertPrediction
+export let goToExpertDetailCallback: GoToExpertDetail = null
+export let goToPlanDetailCallback: GoToPlanDetail = null
 
 const convertReleaseTime = (releaseTime: number) => {
   const time = convertTimeDiffToPast({now: Date.now(), past: releaseTime})
@@ -24,16 +26,17 @@ const convertReleaseTime = (releaseTime: number) => {
     default: return time.text
   }
 }
-const { goToExpertDetailCallback, goToPlanDetailCallback } = getGoToDetail()
 
-const goToExpertDetail = () => {  
-  if (typeof $goToExpertDetailCallback !== 'function') return push(`/expertDetail/${prodiction.expertId}/plan`)
-  $goToExpertDetailCallback(`/expertDetail/${prodiction.expertId}/plan`)
+const goToExpertDetail = () => {
+  if (typeof goToExpertDetailCallback !== 'function') return push(`/expertDetail/${prediction.expertId}/plan`)
+
+  goToExpertDetailCallback(`/expertDetail/${prediction.expertId}/plan`)
 }
 
-const goToPlanDetail = () => {  
-  if (typeof $goToPlanDetailCallback !== 'function') return push(`/planDetail/${prodiction.expertId}/${prodiction.articleId}`)
-  $goToPlanDetailCallback(`/planDetail/${prodiction.expertId}/${prodiction.articleId}`)
+const goToPlanDetail = () => {
+  if (typeof goToPlanDetailCallback !== 'function') return push(`/planDetail/${prediction.expertId}/${prediction.articleId}`)
+
+  goToPlanDetailCallback(`/planDetail/${prediction.expertId}/${prediction.articleId}`)
 }
 
 </script>
@@ -46,17 +49,17 @@ const goToPlanDetail = () => {
         style={'grid-template-columns: 44px auto'}
         on:click={goToExpertDetail}
       >
-        <ExpertImage class='border-[3px] border-white im-shadow' src={prodiction.expertImage} />
+        <ExpertImage class='border-[3px] border-white im-shadow' src={prediction.expertImage} />
 
         <div class='self-center'>
-          <div class='text-[14px] font-semibold text-start'> {prodiction.expertName} </div>
-          <div class='text-[10px] text-[#999999] text-left'> {convertReleaseTime(prodiction.releaseTime)} </div>
+          <div class='text-[14px] font-semibold text-start'> {prediction.expertName} </div>
+          <div class='text-[10px] text-[#999999] text-left'> {convertReleaseTime(prediction.releaseTime)} </div>
         </div>
       </Ripple>
         
       <div class='flex items-center space-x-[4px] pl-[6px]'>
-        <MarketBadget marketType={prodiction.marketType} /> 
-        <Strack streak={prodiction.hotStreak} />
+        <MarketBadget marketType={prediction.marketType} /> 
+        <Strack streak={prediction.hotStreak} />
       </div>
     </div>
 
@@ -65,11 +68,11 @@ const goToPlanDetail = () => {
 
       <div class='flex text-[10px] items-end self-end'>
         <span class='text-[#666666]'> {$t('expert.hitRate')} </span>
-        <span class='text-[26px] font-semibold leading-none'> {prodiction.hitRate} </span>
+        <span class='text-[26px] font-semibold leading-none'> {prediction.hitRate} </span>
         <span> % </span>
       </div>
     </div>
   </div>
 
-  <p class='mt-[10px] text-[14px] font-semibold truncate pl-[6px]'> {prodiction.title} </p>
+  <p class='text-left mt-[10px] text-[14px] font-semibold truncate pl-[6px]'> {prediction.title} </p>
 </Ripple>

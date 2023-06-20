@@ -1,7 +1,8 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
+  import type { ILanguages } from 'env-config'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
@@ -32,9 +33,9 @@
   let isPast = false
   let isLocked = false
 
-  const fetchArticleDetail = async (articleId: string) => {
+  const fetchArticleDetail = async (articleId: string, lang: ILanguages) => {
     loading = true
-    response = await im.expertArticleDetail({ query: { articleId }})
+    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
     loading = false
     const { past, articleStatus } = response?.data
     if (past) isPast = true
@@ -51,7 +52,7 @@
 
   $: setIsPast({ isPast })
 
-  $: $params?.articleId && fetchArticleDetail($params?.articleId)
+  $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale)
 </script>
 
 <div data-cid='planDetail'>

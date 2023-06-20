@@ -6,7 +6,7 @@
   import { createEventDispatcher, tick } from 'svelte'
   import { Ripple } from 'ui'
   import { im } from 'api'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
   import { im as impb } from 'protobuf'
   import type { IPushMessageEntity } from 'protobuf/im/types'
 

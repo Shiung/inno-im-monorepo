@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { im } from 'api'
-import { t } from '$stores'
+import { t, locale } from '$stores'
 import { params } from 'svelte-spa-router'
 
 import Empty from '$src/containers/Empty'
@@ -9,7 +9,10 @@ import Title from '$src/components/Title/index.svelte'
 import Loading from './components/Loading.svelte'
 import List from './components/List.svelte'
 
-const promise = im.expertArticleNow({ query: { expertId: $params.expertId }})
+const promise = im.expertArticleNow({
+  query: { expertId: $params.expertId },
+  headers: { 'Accept-Language': $locale }
+})
 </script>
 
 <div>

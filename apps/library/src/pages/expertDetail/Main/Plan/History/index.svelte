@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { im } from 'api'
 import { Ripple } from 'ui'
-import { t } from '$stores'
+import { t, locale } from '$stores'
 import { params } from 'svelte-spa-router'
 
 import Title from '$src/components/Title/index.svelte'
@@ -12,7 +12,10 @@ import Loading from './components/Loading.svelte'
 
 import Filter from '../../images/filter.svg'
 
-const promise = im.expertArticleHistory({ query: { expertId: $params.expertId, pageIdx: 1, pageSize: 10 }})
+const promise = im.expertArticleHistory({
+  query: { expertId: $params.expertId, pageIdx: 1, pageSize: 10 },
+  headers: { 'Accept-Language': $locale }
+})
 </script>
 
 <div>
