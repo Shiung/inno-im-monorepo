@@ -1,5 +1,5 @@
 import { createStoreContext } from 'utils/storeContext'
-import type { ILanguages } from 'env-config'
+import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
 export interface IChatroomInfo {
   roomId: number
@@ -10,6 +10,7 @@ export interface IChatroomInfo {
   isCharged: boolean
   vipLimit: number
   frequency: number
+  sportMarketSummary: ISportMarketSummary
 }
 
 export interface IChatroomEnv {
@@ -28,7 +29,8 @@ export const initInfo: IChatroomInfo = {
   isLogin: true,
   isCharged: true,
   vipLimit: 6,
-  frequency: 5000
+  frequency: 5000,
+  sportMarketSummary: null
 }
 
 export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)

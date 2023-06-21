@@ -18,10 +18,10 @@
   export let subId: string
   const dispatch = createEventDispatcher()
   const { device } = getEnv()
-  const component = $device === 'pc' ? Pc : Wap
+  const Container = $device === 'pc' ? Pc : Wap
 
   const tabs: ITabs = {
-    'chat.betList': () => import('./DetailContent/Self/index.svelte'),
+    'chat.betList': () => import('./DetailContent/Self.svelte'),
     'chat.otherBetList': () => import('./DetailContent/Other/index.svelte')
   }
 
@@ -56,7 +56,7 @@
   $: self = activedTab === 'chat.betList'
 </script>
 
-<svelte:component this={component} bind:open>
+<svelte:component this={Container} bind:open>
   <Header class="py-[9px] bg-white px-[15px]">
     <DetailHeader bind:activedTab tabs={Object.keys(tabs)} />
   </Header>
