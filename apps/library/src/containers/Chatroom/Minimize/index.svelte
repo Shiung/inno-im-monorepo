@@ -23,7 +23,7 @@
 
 <div class="fixed bottom-[31px] w-[100vw] px-[20px]">
   <Ripple
-    class="flex items-center w-full im-shadow rounded-[20px] h-[48px] px-[20px]"
+    class="flex items-center w-full im-shadow rounded-[20px] h-[48px] px-[20px] bg-white"
     on:click={() => dispatch('click')}
   >
     <div class="relative">

@@ -5,7 +5,13 @@
   import type { SizeChangedCallback } from './type'
 
   let env = writable(initEnv)
-  export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
+  export const setChatEnv = (_env: Partial<IChatroomEnv>) => {
+    env.update((e) => {
+      console.log('⛔️⛔️⛔️⛔️⛔️ e', e)
+      console.log('⛔️⛔️⛔️⛔️⛔️ _env', _env)
+      return ({ ...e, ..._env })
+    })
+  }
 
   let info = writable(initInfo)
   export const setChatInfo = (_info: Partial<IChatroomInfo>) =>
@@ -29,6 +35,7 @@
   import type { IChatMessage } from 'api/im/types'
   import { t, locale } from '$stores'
   import { appHeight } from '$stores/layout'
+  import BigNumber from 'bignumber.js'
 
   import Empty from '$src/containers/Empty'
 
@@ -42,15 +49,32 @@
   import { EChatroomSize } from './constant'
 
   const { roomId } = setInfo($info)
-  const { minimize, displayType, height } = setEnv($env)
-
-  $: setEnv($env)
+  const { minimize, displayType, height, size } = setEnv($env)
 
   $: setChatEnv({
-    minimize: $minimize,
-    displayType: $displayType,
-    height: $height
+    minimize: $minimize
   })
+
+  
+  // $: console.log('⛔️⛔️⛔️⛔️⛔️ $env', $env)
+  // $: console.log('⛔️⛔️⛔️⛔️⛔️ $height', $height)
+  
+  env.subscribe(e => {
+    // console.log('⛔️⛔️⛔️⛔️⛔️ env changed', e)
+    displayType.set(e.displayType)
+    height.set(e.height)
+    size.set(e.size)
+    // setEnv(e)
+  })
+  // const { minimize, displayType, height } = setEnv($env)
+
+  // $: setEnv($env)
+
+  // $: setChatEnv({
+  //   minimize: $minimize,
+  //   displayType: $displayType,
+  //   height: $height
+  // })
 
   $: setInfo($info)
 
@@ -117,6 +141,11 @@
     touchMoveOffset = startY - moveY
   }
 
+  const initBodyHeight = () => {
+    const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
+    appHeight.set(Number(vh))
+  }
+
   // for changing chatroom size to EXPAND/NORMAL
   $: {
     const scrollY = isWindow ? window.scrollY : boxContainerDom?.scrollTop
@@ -134,6 +163,7 @@
   $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
 
   onMount(() => {
+    initBodyHeight()
     initFetch()
     imWs.activate()
   })
@@ -145,14 +175,14 @@
 
 <div
   data-cid="Chatroom"
-  class={twMerge(!isWindow && 'fixed w-full transition-[top] duration-300 ease-in-out')}
+  class={twMerge(!isWindow && 'fixed w-full transition-[top] duration-300')}
   style:top={!isWindow ? `${$height}px` : ''}
 >
   {#if $minimize}
     <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
   {:else}
     <div
-      class={twMerge('flex-1 flex flex-col bg-white', isTransition && 'fixed w-full bottom-0')}
+      class={twMerge('flex-1 flex flex-col bg-white', isTransition && 'fixed w-full z-30 bottom-0')}
       style:min-height={isWindow && !isTransition ? 'auto' : boxContainerHeight}
       style:max-height={isWindow && !isTransition ? 'none' : boxContainerHeight}
       transition:fly|local={{ y: 100 * $appHeight - $height, duration: 500 }}

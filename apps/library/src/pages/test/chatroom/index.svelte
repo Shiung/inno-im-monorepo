@@ -21,7 +21,7 @@ $: if (dom) {
   })
 }
 
-$: setChatEnv({ height: changedHeight })
+$: setChatEnv({ height: changedHeight, size: expandType as any })
 
 onSizeChangedCallback((option: SizeChangedOption) => {
   isTransition = option.transition
@@ -50,7 +50,7 @@ onSizeChangedCallback((option: SizeChangedOption) => {
 <div>
   <div
     class={twMerge(
-      'w-full bg-white h-[200px] duration-300 ease-in-out',
+      'w-full bg-white h-[200px] duration-300',
       (expandType !== 'default') && 'fixed z-30',
       isTransition ? 'transition-[height]' : 'transition-none'
     )}
@@ -62,7 +62,7 @@ onSizeChangedCallback((option: SizeChangedOption) => {
   </div>
   <div
     class={twMerge(
-      'duration-300 ease-in-out',
+      'duration-300',
       isTransition ? 'transition-[height]' : 'transition-none'
     )}
     style:height={(expandType !== 'default') ? `${changedHeight}px` : ''}
