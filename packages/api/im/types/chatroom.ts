@@ -78,3 +78,22 @@ export interface IChatroomSelfOrders {
     list: ISelfOrder[]
   }>
 }
+
+export interface IOtherOrder {
+  iid: number
+  nickName: string
+  account: string
+  vip: number
+  avatar: number
+  betOrder: ISelfOrder
+}
+export interface IChatroomOtherOrders {
+  query: {
+    iid: number
+    quantity?: number
+  }
+  body: null
+  res: withData<{
+    list: IOtherOrder[]
+  }>
+}

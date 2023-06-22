@@ -12,7 +12,7 @@
 </script>
 
 <div
-  class="grid grid-cols-[auto_9fr] border-b-[0.5px] border-[#ddd] min-h-[135px] px-[10px] pt-[12px]"
+  class="grid grid-cols-[auto_9fr] border-b-[0.5px] border-[#ddd] px-[10px] pt-[12px]"
   on:click={() => dispatch('active', betItem)}
   on:keypress
 >

@@ -22,7 +22,7 @@
 
   const tabs: ITabs = {
     'chat.betList': () => import('./DetailContent/Self.svelte'),
-    'chat.otherBetList': () => import('./DetailContent/Other/index.svelte')
+    'chat.otherBetList': () => import('./DetailContent/Other.svelte')
   }
 
   let activedTab: keyof typeof tabs = 'chat.betList'

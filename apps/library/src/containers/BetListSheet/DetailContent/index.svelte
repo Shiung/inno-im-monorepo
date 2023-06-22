@@ -3,7 +3,7 @@
   import { getInfo } from '$containers/Chatroom/context'
   import { locale } from '$stores'
 
-  import type { IChatroomSelfOrders, IWebAnchorLife, IWebAnchorInfo } from 'api/im/types'
+  import type { IChatroomSelfOrders, IChatroomOtherOrders } from 'api/im/types'
   import type { ITabs } from '../types'
 
   export let tabs: ITabs
@@ -33,26 +33,26 @@
   }
 
   const fetchSelfOrders = async () => {
-    if (self.data) return
+    // if (self.data) return
     self.loading = true
 
     $sportMarketSummary || (await fetchMarket())
-    const res = await im.chatroomSelfOrders({ query: { iid: 1, quantity: 0 } })
+    const res = await im.chatroomSelfOrders({ query: { iid: 1 } })
 
     self.data = res?.data
     self.loading = false
   }
 
-  let personal: { loading: boolean; data: IWebAnchorInfo['res']['data'] } = {
+  let other: { loading: boolean; data: IChatroomOtherOrders['res']['data'] } = {
     loading: true,
     data: undefined
   }
   const fetchOtherOrders = async () => {
-    // if (personal.data) return
-    //   personal.loading = true
-    //   const res = await im.webAnchorInfo({ query: { houseId }})
-    //   personal.data = res?.data
-    //   personal.loading = false
+    // if (other.data) return
+    other.loading = true
+    const res = await im.chatroomOtherOrders({ query: { iid: 1 } })
+    other.data = res?.data
+    other.loading = false
   }
 
   $: {
@@ -65,6 +65,6 @@
   {#if activedTab === 'chat.betList'}
     <svelte:component this={comp} bind:betData {self} />
   {:else if activedTab === 'chat.otherBetList'}
-    <svelte:component this={comp} bind:betData />
+    <svelte:component this={comp} bind:betData {other} />
   {/if}
 {/await}
