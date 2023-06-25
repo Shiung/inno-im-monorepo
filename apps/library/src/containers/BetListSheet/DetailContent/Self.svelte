@@ -1,36 +1,13 @@
 <script lang="ts">
-  import BetDetail, { Win, Market, BetOn, Ante, Date } from '$containers/BetDetail'
-  import Loading from './Loading.svelte'
-  import Empty from '$src/containers/Empty'
+  import { Win, Market, BetOn, Ante, Date } from '$containers/BetDetail'
 
-  import type { IChatroomSelfOrders } from 'api/im/types'
+  import type { IBetOrder } from 'api/im/types'
 
-  export let betData: string
-  export let self: { loading: boolean; data: IChatroomSelfOrders['res']['data'] }
+  export let betItem: IBetOrder
 
   const components = [Win, Market, BetOn, Ante, Date]
-
-  let uuid: string = ''
-  const handelActive = (event: CustomEvent) => {
-    uuid = event.detail.uuid
-    betData = event.detail
-  }
 </script>
 
-{#if self.loading}
-  <Loading />
-{:else}
-  {@const list = self?.data?.list || []}
-
-  {#if list.length === 0}
-    <Empty class="flex-1" />
-  {:else}
-    {#each list as item}
-      <BetDetail {uuid} betItem={item} on:active={handelActive}>
-        {#each components as component}
-          <svelte:component this={component} betItem={item} />
-        {/each}
-      </BetDetail>
-    {/each}
-  {/if}
-{/if}
+{#each components as component}
+  <svelte:component this={component} {betItem} />
+{/each}

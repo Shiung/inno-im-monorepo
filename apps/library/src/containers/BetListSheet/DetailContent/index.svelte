@@ -2,26 +2,25 @@
   import { im } from 'api'
   import { getInfo } from '$containers/Chatroom/context'
   import { locale } from '$stores'
+  import Container from './Container.svelte'
 
-  import type { IChatroomSelfOrders, IChatroomOtherOrders } from 'api/im/types'
-  import type { ITabs } from '../types'
+  import type { IFetchData } from 'api/im/types'
 
-  export let tabs: ITabs
-  export let activedTab: keyof typeof tabs
   export let betData: string
+  export let self: boolean
 
   const { sportMarketSummary } = getInfo()
 
-  const loadingComponent = async (_activeTab: typeof activedTab) => {
-    if (!activedTab) return
-    const loader = tabs[activedTab]
+  const Self = () => import('./Self.svelte')
+  const Other = () => import('./Other.svelte')
+
+  const loadingComponent = async (_self: typeof self) => {
+    const loader = self ? Self : Other
     const comp = await loader()
     return comp.default
   }
 
-  $: lazyLoading = loadingComponent(activedTab)
-
-  let self: { loading: boolean; data: IChatroomSelfOrders['res']['data'] } = {
+  let fetchData: { loading: boolean; data: IFetchData } = {
     loading: true,
     data: undefined
   }
@@ -33,38 +32,36 @@
   }
 
   const fetchSelfOrders = async () => {
-    // if (self.data) return
-    self.loading = true
+    // if (fetchData.data) return
+    fetchData.loading = true
 
     $sportMarketSummary || (await fetchMarket())
     const res = await im.chatroomSelfOrders({ query: { iid: 1 } })
 
-    self.data = res?.data
-    self.loading = false
+    fetchData.data = res.data
+    fetchData.loading = false
   }
 
-  let other: { loading: boolean; data: IChatroomOtherOrders['res']['data'] } = {
-    loading: true,
-    data: undefined
-  }
   const fetchOtherOrders = async () => {
-    // if (other.data) return
-    other.loading = true
+    // if (fetchData.data) return
+    fetchData.loading = true
+
     const res = await im.chatroomOtherOrders({ query: { iid: 1 } })
-    other.data = res?.data
-    other.loading = false
+
+    fetchData.data = res.data
+    fetchData.loading = false
   }
+
+  $: lazyLoading = loadingComponent(self)
 
   $: {
-    if (activedTab === 'chat.betList') fetchSelfOrders()
-    else if (activedTab === 'chat.otherBetList') fetchOtherOrders()
+    if (self) fetchSelfOrders()
+    else fetchOtherOrders()
   }
 </script>
 
 {#await lazyLoading then comp}
-  {#if activedTab === 'chat.betList'}
-    <svelte:component this={comp} bind:betData {self} />
-  {:else if activedTab === 'chat.otherBetList'}
-    <svelte:component this={comp} bind:betData {other} />
-  {/if}
+  <Container bind:betData {fetchData} let:betItem>
+    <svelte:component this={comp} {betItem} />
+  </Container>
 {/await}

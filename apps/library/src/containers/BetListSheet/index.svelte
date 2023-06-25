@@ -62,7 +62,7 @@
   </Header>
 
   <Content class="p-0">
-    <DetailContent bind:betData {activedTab} {tabs} />
+    <DetailContent bind:betData {self}/>
   </Content>
 
   <Footer class="p-0 bg-white">

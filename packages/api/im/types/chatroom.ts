@@ -87,6 +87,7 @@ export interface IOtherOrder {
   avatar: number
   betOrder: ISelfOrder
 }
+
 export interface IChatroomOtherOrders {
   query: {
     iid: number
@@ -97,3 +98,14 @@ export interface IChatroomOtherOrders {
     list: IOtherOrder[]
   }>
 }
+
+export interface IBetOrder extends ISelfOrder {
+  iid?: number
+  nickName?: string
+  account?: string
+  vip?: number
+  avatar?: number
+  betOrder?: ISelfOrder
+}
+
+export type IFetchData = IChatroomSelfOrders['res']['data'] | IChatroomOtherOrders['res']['data']
