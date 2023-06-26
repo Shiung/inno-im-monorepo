@@ -40,6 +40,7 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
 
   const pushMsg = pushMessageEntity({
     content: message.content,
+    contentType: message.contentType,
     sender: '',
     isSelf: true,
     chatId: message.chatId,

@@ -3,9 +3,9 @@
   import Loading from './Loading.svelte'
   import Empty from '$src/containers/Empty'
 
-  import type { IFetchData, ISelfOrder, IOtherOrder } from 'api/im/types'
+  import type { IFetchData, IBetOrder, ISelfOrder, IOtherOrder } from 'api/im/types'
 
-  export let betData: string
+  export let betData: IBetOrder
   export let fetchData: { loading: boolean; data: IFetchData }
 
   let uuid: string = ''

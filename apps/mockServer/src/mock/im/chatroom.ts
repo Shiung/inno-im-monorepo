@@ -7,6 +7,7 @@ import type { IMockData } from '../../types'
 
 export interface MessageEntityDataProps {
   content?: string
+  contentType?: number
   sender?: string
   isSelf?: boolean
   chatId?: string
@@ -16,10 +17,11 @@ export interface MessageEntityDataProps {
 export const messageEntityData = (ts: number = Date.now(), props?: MessageEntityDataProps) => {
   const _content = props?.content
   const _sender = props?.sender
-
+  const _contentType = props?.contentType
+  
   return mock({
     msgId: ts,
-    contentType: 1,
+    contentType: _contentType || 1,
     vdId: 4,
     senderName: _sender || '@name',
     isSelf: !!props?.isSelf,

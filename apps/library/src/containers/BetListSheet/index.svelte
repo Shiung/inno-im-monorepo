@@ -2,18 +2,20 @@
   import Pc from './Pc.svelte'
   import Wap from './Wap.svelte'
 
-  import { createEventDispatcher, onDestroy } from 'svelte'
   import { Header, Content, Footer } from 'ui/components/BottomSheet'
-  import { getInfo, getEnv } from '$containers/Chatroom/context'
+  import { getEnv } from '$containers/Chatroom/context'
+  import { im as imWs } from 'api/wsMaster'
+  import { im } from 'protobuf'
 
   import DetailHeader from './DetailHeader/index.svelte'
   import DetailContent from './DetailContent/index.svelte'
   import DetailFooter from './DetailFooter/index.svelte'
 
   import type { ITabs } from './types'
+  import type { IBetOrder } from 'api/im/types'
 
   export let open: boolean
-  const dispatch = createEventDispatcher()
+
   const { device } = getEnv()
   const Container = $device === 'pc' ? Pc : Wap
 
@@ -24,19 +26,33 @@
 
   let activedTab: keyof typeof tabs = 'chat.betList'
 
-  let betData
-  const { userId } = getInfo()
+  let betData: IBetOrder
 
   const handleFollowOrder = () => {
     console.log('click followOrder')
   }
 
-  const handleShowOrder = () => {
-    betData = null
+  const handleShowOrder = async () => {
+    const eventkey = im.enum.command.SEND_MESSAGE
+    const waitSendMessage = betData
+    const now = Date.now()
+
+    const data = {
+      contentType: im.enum.contentType.ORDER,
+      chatId: 'chatid124',
+      iid: 1234,
+      content: JSON.stringify(waitSendMessage)
+    }
+
+    const res = await imWs.publish(
+      { eventkey, data },
+      { reqId: String(now), eventkey: `${eventkey}_${now}` }
+    )
+
+    console.log('publish res: ', res)
+
     open = false
-    setTimeout(() => {
-      dispatch('deactivate')
-    }, 500)
+    betData = null
   }
 
   const publishMessage = () => {

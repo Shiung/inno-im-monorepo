@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { IChatMessage } from 'api/im/types'
+  import BetOrder from './BetOrder/index.svelte'
 
   export let message: IChatMessage
   export let thisEl: HTMLDivElement
@@ -10,9 +11,13 @@
     <div />
 
     <div class="flex">
-      <div class="ml-[4px] bg-[#f5f5f5] rounded-[10px] p-[8px] bg-imprimary">
-        <div class="text-[14px] text-white">{message.content}</div>
-      </div>
+      {#if message.contentType === 1}
+        <div class="ml-[4px] bg-[#f5f5f5] rounded-[10px] p-[8px] bg-imprimary">
+          <div class="text-[14px] text-white">{message.content}</div>
+        </div>
+      {:else if message.contentType === 2}
+        <BetOrder message={JSON.parse(message.content)} />
+      {/if}
 
       <div
         class="min-w-[30px] h-[30px] rounded-full bg-[#999999] flex items-center justify-center ml-[4px]"

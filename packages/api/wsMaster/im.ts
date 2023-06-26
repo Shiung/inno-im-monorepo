@@ -30,7 +30,7 @@ const ws = createWebsocket({
     switch (event.eventkey) {
       case im.enum.command.SEND_MESSAGE:
         const requestMessageEntity = im.requestMessageEntity.encode({
-          contentType: im.enum.contentType.CHAT,
+          contentType: event.data.contentType,
           chatId: event.data.chatId,
           iid: event.data.iid,
           replyTo: event.data.replyTo,

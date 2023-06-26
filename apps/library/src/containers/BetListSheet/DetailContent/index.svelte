@@ -4,9 +4,9 @@
   import { locale } from '$stores'
   import Container from './Container.svelte'
 
-  import type { IFetchData } from 'api/im/types'
+  import type { IFetchData, IBetOrder } from 'api/im/types'
 
-  export let betData: string
+  export let betData: IBetOrder
   export let self: boolean
 
   const { sportMarketSummary } = getInfo()
