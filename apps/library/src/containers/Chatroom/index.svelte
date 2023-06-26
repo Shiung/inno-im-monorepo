@@ -195,8 +195,6 @@
 
       <BetListSheet
         bind:open={$showBetList}
-        {destination}
-        {subId}
         on:deactivate={()=>subscription.unsubscribe()}
       />
     </div>

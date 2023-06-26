@@ -42,7 +42,7 @@ export const initEnv: IChatroomEnv = {
   height: 0,
   minimize: true,
   showBetList: false,
-  device: 'pc',
+  device: 'wap',
   size: 'default'
 }
 

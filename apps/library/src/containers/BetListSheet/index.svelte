@@ -4,7 +4,6 @@
 
   import { createEventDispatcher, onDestroy } from 'svelte'
   import { Header, Content, Footer } from 'ui/components/BottomSheet'
-  import stomp from 'api/stompMaster'
   import { getInfo, getEnv } from '$containers/Chatroom/context'
 
   import DetailHeader from './DetailHeader/index.svelte'
@@ -14,8 +13,6 @@
   import type { ITabs } from './types'
 
   export let open: boolean
-  export let destination: string
-  export let subId: string
   const dispatch = createEventDispatcher()
   const { device } = getEnv()
   const Container = $device === 'pc' ? Pc : Wap
@@ -35,11 +32,6 @@
   }
 
   const handleShowOrder = () => {
-    stomp.publish({
-      destination,
-      headers: { id: subId },
-      body: JSON.stringify({ message: betData, userId: $userId })
-    })
     betData = null
     open = false
     setTimeout(() => {
