@@ -18,7 +18,9 @@ import BottomNavigation from '$containers/BottomNavigation'
 import { bottomNav, showBottomNav } from '$stores/layout'
 
 import routes from './routes'
+import versionInfo from './utils/versionInfo'
 
+versionInfo()
 $: console.log('=========[im-library] location==========', $location)
 
 const routeLoading = (event: CustomEvent) => {

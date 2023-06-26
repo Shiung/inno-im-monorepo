@@ -1,7 +1,7 @@
 import { createStoreContext } from 'utils/storeContext'
 
 export interface IChatroomInfo {
-  roomId: number
+  roomId: string
   userId: string
   userVip: number
   isLogin: boolean
@@ -17,7 +17,7 @@ export interface IChatroomEnv {
 }
 
 export const initInfo: IChatroomInfo = {
-  roomId: 124,
+  roomId: '124',
   userId: 'loki',
   userVip: 6,
   isLogin: true,

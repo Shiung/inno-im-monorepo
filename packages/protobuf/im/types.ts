@@ -43,8 +43,14 @@ export interface IPushMessageEntity {
   timestamp: number
 }
 
+
 export interface IChatIdsWrapper {
   chatIds: string[]
+}
+
+export interface IFetchArgs {
+  pointer: number
+  chatId: string
 }
 
 export interface IReportAbuseAegs {

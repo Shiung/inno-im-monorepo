@@ -8,11 +8,11 @@
   import Empty from '$containers/Empty'
   import Expert, { Loading as ExpertLoading } from '$containers/Expert'
 
-  import type { SidType } from 'utils'
   import type { IExpertPrediction } from 'api/im/types'
   import type { GoToExpertDetail, GoToPlanDetail } from '$containers/Expert/type'
 
-  export let sid: SidType
+  export let mid: number
+  export let vd: string
   export let goToExpertDetail: GoToExpertDetail
   export let goToPlanDetail: GoToPlanDetail
 
@@ -20,7 +20,7 @@
   const pageSize: number = 10
 
   let initLoading: boolean = false
-  let initData: Awaited<ReturnType<typeof im.expertPredictions>>['data']['list'] = []
+  let initData: Awaited<ReturnType<typeof im.expertMatchArticle>>['data']['list'] = []
 
   let hasMoreData: boolean = false
   let moreLoading: boolean = false
@@ -29,17 +29,20 @@
   let dom: HTMLDivElement
 
   const fetchPredictions = ({
-    sid,
+    mid,
+    vd,
     pageIdx,
     pageSize
   }: {
-    sid: SidType
+    mid: number
+    vd: string
     pageIdx: number
     pageSize: number
   }) => {
-    return im.expertPredictions({
+    return im.expertMatchArticle({
       query: {
-        ...(sid && { sid }),
+        ...(mid && { mid }),
+        ...(vd && { vd }),
         pageIdx,
         pageSize
       },
@@ -47,15 +50,15 @@
     })
   }
 
-  const init = async ({ sid }: { sid: SidType }) => {
+  const init = async ({ mid, vd }: { mid: number, vd: string }) => {
     pageIdx = 1
     moreData = []
-    if(sid == null) return
+    if(mid == null || vd == null) return
 
     try {
       initLoading = true
 
-      const response = await fetchPredictions({ sid, pageIdx, pageSize })
+      const response = await fetchPredictions({ mid, vd, pageIdx, pageSize })
 
       const { list, pager } = response?.data || {}
 
@@ -77,7 +80,7 @@
       if (entry.isIntersecting) {
         try {
           moreLoading = true
-          const response = await fetchPredictions({ sid, pageIdx, pageSize })
+          const response = await fetchPredictions({ mid, vd, pageIdx, pageSize })
           const { list, pager } = response?.data || {}
           
           if(list?.length) moreData = [...moreData, ...list]
@@ -96,7 +99,7 @@
 
   $: {
     window.scrollTo(0, 0)
-    init({ sid })
+    init({ mid, vd })
   }
 
   $: if (dom) observer.observe(dom)

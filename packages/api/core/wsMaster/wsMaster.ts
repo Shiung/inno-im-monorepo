@@ -12,6 +12,7 @@ class WsMaster {
   retryTimes: number
 
   url: WsMasterProps['url']
+  params?: { [key: string]: string | number }
   subprotocols: WsMasterProps['subprotocols']
   socket: WatchDogProps['socket']
   reconnectInterval: WsMasterProps['reconnectInterval']
@@ -77,13 +78,16 @@ class WsMaster {
   setUrl(url: string) {
     if (this.url === url) return
     this.url = url
-    this.reconnect()
+  }
+
+  setParams(params: { [key: string]: string | number }) {
+    if (this.params === params) return
+    this.params = params
   }
 
   setSubprotocols(subprotocols: WsMasterProps['subprotocols']) {
     if (this.subprotocols === subprotocols) return
     this.subprotocols = subprotocols
-    this.reconnect()
   }
 
   async activate() {
@@ -91,7 +95,11 @@ class WsMaster {
     if (this.socket.current?.readyState === 0) return
     if (this.socket.current?.readyState === 1) return
     if (this.socket.current?.readyState === 2) await this.waitingSocketClosed()
-    this.socket.current = new WebSocket(this.url, this.subprotocols)
+    const url = new URL(this.url)
+    const searchParams = new URLSearchParams(this.params as unknown as URLSearchParams)
+    if (searchParams.size !== 0) url.search = searchParams.toString()
+
+    this.socket.current = new WebSocket(url.href, this.subprotocols)
     if (this.binaryType) this.socket.current.binaryType = this.binaryType
 
     this.socket.current.onopen = () => {
@@ -163,7 +171,7 @@ class WsMaster {
     })
   }
 
-  genSyncEventkey(event: IWsMasterEvent) {
+  genSyncEventkey(event: Omit<IWsMasterEvent, 'data'>) {
     const _pairId = event.pairId ? `_${event.pairId}` : ''
     const key = `${event.eventkey}${_pairId}`
     return key

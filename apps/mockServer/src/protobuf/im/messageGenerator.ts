@@ -13,3 +13,10 @@ export const pushMessage = (props?: { reqId?: string, value?: Uint8Array | undef
   const data = pushMessageData({ reqId: props?.reqId, value: props?.value || pushMessageEntity() })
   return impb.push?.encode(data)
 }
+
+export const genPushMessages = () => {
+  const data = Array.from({ length: 10 }, (_, idx) => ({
+    ...messageEntityData(idx)
+  }))
+  return impb.pushMessageEntityWrapper?.encode(data)
+}

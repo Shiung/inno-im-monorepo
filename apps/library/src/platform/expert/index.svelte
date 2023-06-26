@@ -2,11 +2,11 @@
   import { writable } from 'svelte/store'
   import type { GoToExpertDetail, GoToPlanDetail } from '$containers/Expert/type'
 
-  let sid = writable(null)
-  export const setSid = (sidValue: number) => {
-    if (typeof sidValue !== 'number') return console.warn('setSid parameter MUST be type of number')
+  let matchInfo = writable(null)
+  export const setMatchInfo = ({ mid, vd }) => {
+    if (typeof mid !== 'number' || typeof vd !== 'string') return console.warn('mid, vd parameters MUST be type of number, string')
 
-    sid.set(sidValue)
+    matchInfo.set({ mid, vd })
   }
 
   let goToExpertDetail = writable<GoToExpertDetail>(null)
@@ -24,6 +24,6 @@
 </script>
 
 {#key $locale}
-  <ExpertList sid={$sid} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
+  <ExpertList mid={$matchInfo?.mid} vd={$matchInfo?.vd} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
 {/key}
 

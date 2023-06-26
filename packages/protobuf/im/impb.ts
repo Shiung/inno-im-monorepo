@@ -4,7 +4,8 @@ import type { Type } from 'protobufjs'
 import { Enum } from './constants'
 import type {
   IRequest, IPush, IPushMessageEntity,
-  IRequestMessageEntity, IChatIdsWrapper, IReportAbuseAegs
+  IRequestMessageEntity, IChatIdsWrapper, IReportAbuseAegs,
+  IFetchArgs
 } from './types'
 
 class ImBp {
@@ -12,7 +13,9 @@ class ImBp {
   public _requestMessageEntity: ReturnType<Type['lookupType']> | null = null
   public _push: ReturnType<Type['lookupType']> | null = null
   public _pushMessageEntity: ReturnType<Type['lookupType']> | null = null
+  public _pushMessageEntityWrapper: ReturnType<Type['lookupType']> | null = null
   public _chatIdsWrapper: ReturnType<Type['lookupType']> | null = null
+  public _fetchArgs: ReturnType<Type['lookupType']> | null = null
   public _reportAbuseArgs: ReturnType<Type['lookupType']> | null = null
   public enum = Enum
   public done: boolean = false
@@ -26,8 +29,10 @@ class ImBp {
     this._request = root.lookupType('Request')
     this._push = root.lookupType('Push')
     this._pushMessageEntity = root.lookupType('PushMessageEntity')
+    this._pushMessageEntityWrapper = root.lookupType('PushMessageEntityWrapper')
     this._requestMessageEntity = root.lookupType('RequestMessageEntity')
     this._chatIdsWrapper = root.lookupType('ChatIdsWrapper')
+    this._fetchArgs = root.lookupType('FetchArgs')
     this._reportAbuseArgs = root.lookupType('ReportAbuseArgs')
     this.enum = {
       command: root.getEnum('Command') as unknown as typeof Enum['command'],
@@ -59,6 +64,13 @@ class ImBp {
     }
   }
 
+  get pushMessageEntityWrapper() {
+    return {
+      encode: (data: IPushMessageEntity[]) => this._pushMessageEntityWrapper?.encode(data).finish(),
+      decode: (data: ArrayBuffer): IPushMessageEntity[] => this._pushMessageEntityWrapper?.decode(new Uint8Array(data)) as unknown as IPushMessageEntity[]
+    }
+  }
+
   get requestMessageEntity() {
     return {
       encode: (data: IRequestMessageEntity) => this._requestMessageEntity?.encode(data).finish(),
@@ -70,6 +82,13 @@ class ImBp {
     return {
       encode: (data: IChatIdsWrapper) => this._chatIdsWrapper?.encode(data).finish(),
       decode: (data: ArrayBuffer): IChatIdsWrapper => this._chatIdsWrapper?.decode(new Uint8Array(data)) as unknown as IChatIdsWrapper
+    }
+  }
+
+  get fetchArgs() {
+    return {
+      encode: (data: IFetchArgs) => this._fetchArgs?.encode(data).finish(),
+      decode: (data: ArrayBuffer): IFetchArgs => this._fetchArgs?.decode(new Uint8Array(data)) as unknown as IFetchArgs
     }
   }
 
