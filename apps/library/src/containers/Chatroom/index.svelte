@@ -5,13 +5,7 @@
   import type { SizeChangedCallback } from './type'
 
   let env = writable(initEnv)
-  export const setChatEnv = (_env: Partial<IChatroomEnv>) => {
-    env.update((e) => {
-      console.log('⛔️⛔️⛔️⛔️⛔️ e', e)
-      console.log('⛔️⛔️⛔️⛔️⛔️ _env', _env)
-      return ({ ...e, ..._env })
-    })
-  }
+  export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
 
   let info = writable(initInfo)
   export const setChatInfo = (_info: Partial<IChatroomInfo>) =>
@@ -54,27 +48,12 @@
   $: setChatEnv({
     minimize: $minimize
   })
-
-  
-  // $: console.log('⛔️⛔️⛔️⛔️⛔️ $env', $env)
-  // $: console.log('⛔️⛔️⛔️⛔️⛔️ $height', $height)
   
   env.subscribe(e => {
-    // console.log('⛔️⛔️⛔️⛔️⛔️ env changed', e)
     displayType.set(e.displayType)
     height.set(e.height)
     size.set(e.size)
-    // setEnv(e)
   })
-  // const { minimize, displayType, height } = setEnv($env)
-
-  // $: setEnv($env)
-
-  // $: setChatEnv({
-  //   minimize: $minimize,
-  //   displayType: $displayType,
-  //   height: $height
-  // })
 
   $: setInfo($info)
 
