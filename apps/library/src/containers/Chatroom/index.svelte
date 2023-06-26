@@ -2,20 +2,24 @@
   import { writable } from 'svelte/store'
   import { initEnv, initInfo } from './context'
   import type { IChatroomEnv, IChatroomInfo } from './context'
-  import type { SizeChangedCallback } from './type'
+  import type { SizeChangedCallback, ToggleCallback } from './type'
 
   let env = writable(initEnv)
   export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
 
   let info = writable(initInfo)
-  export const setChatInfo = (_info: Partial<IChatroomInfo>) =>
-    info.update((e) => ({ ...e, ..._info }))
+  export const setChatInfo = (_info: Partial<IChatroomInfo>) => info.update((e) => ({ ...e, ..._info }))
 
   let sizeChangedCallback: SizeChangedCallback = () => {}
   export const onSizeChangedCallback = (callback: SizeChangedCallback) => {
     if (typeof callback !== 'function')
       return console.warn('onSizeChangedCallback callback MUST be function')
     sizeChangedCallback = callback
+  }
+
+  let toggleCallback: ToggleCallback = () => {}
+  export const onToggledCallback = (callback: ToggleCallback) => {
+    toggleCallback = callback
   }
 </script>
 
@@ -43,16 +47,13 @@
   import { EChatroomSize } from './constant'
 
   const { roomId } = setInfo($info)
-  const { minimize, displayType, height, size } = setEnv($env)
-
-  $: setChatEnv({
-    minimize: $minimize
-  })
+  const { isOpen, displayType, height, size } = setEnv($env)
   
   env.subscribe(e => {
     displayType.set(e.displayType)
     height.set(e.height)
     size.set(e.size)
+    isOpen.set(e.isOpen)
   })
 
   $: setInfo($info)
@@ -92,14 +93,14 @@
 
   const expandChatroom = () => {
     isTransition = true
-    $minimize = false
+    toggleCallback && toggleCallback(true)
     sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
   }
 
   const foldChatroom = async () => {
     isTransition = true
     await tick() // for chatroom content chang to <Loading>
-    $minimize = true
+    toggleCallback && toggleCallback(false)
     touchMoveOffset = 0
     isWindow && window.scrollTo({ top: 0 })
     sizeChangedCallback &&
@@ -157,7 +158,7 @@
   class={twMerge(!isWindow && 'fixed w-full transition-[top] duration-300')}
   style:top={!isWindow ? `${$height}px` : ''}
 >
-  {#if $minimize}
+  {#if !$isOpen}
     <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
   {:else}
     <div

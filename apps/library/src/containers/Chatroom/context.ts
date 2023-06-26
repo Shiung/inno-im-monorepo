@@ -14,7 +14,7 @@ export interface IChatroomInfo {
 export interface IChatroomEnv {
   displayType: 'window' | 'block'
   height: number
-  minimize: boolean
+  isOpen: boolean
   size: `${EChatroomSize}`
 }
 
@@ -33,7 +33,7 @@ export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInf
 export const initEnv: IChatroomEnv = {
   displayType: 'window',
   height: 0,
-  minimize: true,
+  isOpen: false,
   size: 'default'
 }
 

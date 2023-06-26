@@ -17,7 +17,7 @@ $: if (dom) {
   setChatEnv({
     displayType: isWindow ? 'window' : 'block',
     height: initHeight,
-    minimize: true
+    isOpen: false
   })
 }
 
