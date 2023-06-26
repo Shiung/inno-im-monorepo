@@ -1,12 +1,13 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.29",
+  "version": "0.0.32",
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
     "build": "npm run locales && npm run _build",
     "build:library": "APP_ENV=library vite build",
+    "build:library-watch": "APP_ENV=library vite build -w",
     "locales": "zx ./env_scripts/locales.mjs",
     "preview": "vite preview",
     "release": "zx ./env_scripts/releaseLibrary.mjs",
@@ -30,7 +31,8 @@
     "tailwind-merge": "^1.10.0",
     "ui": "workspace:*",
     "utils": "workspace:*",
-    "vd-resource": "workspace:*"
+    "vd-resource": "workspace:*",
+    "protobuf": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",

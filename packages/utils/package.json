@@ -13,7 +13,8 @@
     "bignumber.js": "^9.1.1",
     "dayjs": "^1.11.7",
     "env-config": "workspace:*",
-    "svelte": "^3.59.1"
+    "svelte": "^3.59.1",
+    "ua-parser-js": "^1.0.35"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

@@ -1,32 +1,41 @@
 <script lang="ts">
-import { fade } from 'svelte/transition'
+import { slide } from 'svelte/transition'
 import { createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
 import { t } from '$stores'
 import { twMerge } from 'tailwind-merge'
+
+import { Marquee } from 'ui'
 
 import Info from '../images/info.svg'
 import Close from '../images/close.svg'
 
 import { getEnv } from '../context'
 
-// export let fixed: boolean
+export let isTransition: boolean
 
 const dispatch = createEventDispatcher()
-const { displayType }  = getEnv()
+const { displayType, height }  = getEnv()
 
 let showRemind: boolean = false
 
 let dom: HTMLDivElement
 $: blockHeight = dom?.getBoundingClientRect().height
 
+$: marqueeInfo = [
+  $t('chat.remind')
+]
+$: isWindow = $displayType === 'window'
+
 </script>
 
 <div>
-  <div class={twMerge(
-      'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30',
-      $displayType === 'window' ? 'fixed' : 'sticky'
+  <div
+    class={twMerge(
+      'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30 transition-[top] duration-300 ease-in-out',
+      isWindow ? 'fixed' : 'sticky'
     )}
+    style:top={!isTransition ? `${$height}px` : ''}
     bind:this={dom}
   >
     <div class='flex items-center'>
@@ -34,12 +43,14 @@ $: blockHeight = dom?.getBoundingClientRect().height
       <Ripple class='rounded-full flex items-center justify-center w-[25px] h-[25px]'
         on:click={() => showRemind = !showRemind}
       >
-        <Info width={20} height={20} fill='#999999' />
+        <Info width={20} height={20} fill={showRemind ? 'rgb(var(--im-monorepo-primary))': '#999999'} />
       </Ripple>
 
       {#if showRemind}
-        <div transition:fade|locale class='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px]'>
-          {$t('chat.remind')}
+        <div transition:slide={{ axis: 'x' }}>
+          <Marquee
+            infos={marqueeInfo}
+            class='text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden'/>
         </div>
       {/if}
 
@@ -50,5 +61,5 @@ $: blockHeight = dom?.getBoundingClientRect().height
     </Ripple>
   </div>
 
-  <div style:height={$displayType === 'window' ? `${blockHeight}px` : 0} />
+  <div style:height={isWindow ? `${blockHeight}px` : 0} />
 </div>

@@ -4,7 +4,7 @@ import { WebSocketServer } from 'ws'
 import { headersParse, bodyParse } from './utils'
 import { connectHandler, subscribeHandler, sendHandler } from './handlers'
 
-export const createWebSocketServer = () => {
+export const createStompSocketServer = () => {
   const wss = new WebSocketServer({ noServer: true })
 
   wss.on('connection', (ws, req) => {

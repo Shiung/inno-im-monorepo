@@ -1,10 +1,12 @@
 <script lang='ts'>
 import { createEventDispatcher } from 'svelte'
+import { getMobileOSInfo, MobileOS } from 'utils'
 import { t } from '$stores'
 
 import Circle from 'ui/core/button/loading.svelte'
 
 import DoubleArrow from '../images/double_arrow_down_small.svg'
+import { getEnv } from '../context'
 
 const dispatch = createEventDispatcher()
 
@@ -14,34 +16,68 @@ export let quantity: number = 10
 
 let dom: HTMLDivElement
 let canLoadmore: boolean
-const intersectionObserver = new IntersectionObserver(async entries => {
-  for (const entry of entries) {
-    canLoadmore = entry.isIntersecting
-  }
-}, { root, rootMargin: '-70px 0px 0px 0px' })
+
+const { displayType, height } = getEnv()
+$: isWindow = $displayType === 'window'
+
+const isIOS = getMobileOSInfo() === MobileOS.iOS
+$: controlledRoot = isIOS ? document.documentElement : document.body
+
+let intersectionObserver = null
+$: {
+  if(intersectionObserver) intersectionObserver.disconnect()
+  
+  intersectionObserver = new IntersectionObserver(async entries => {
+    for (const entry of entries) {
+      canLoadmore = entry.isIntersecting
+    }
+  }, { root: !isWindow ? root : null, rootMargin: `${!isWindow ? 0 : -($height + 44)}px 0px 0px 0px` })
+
+  if (dom) intersectionObserver.observe(dom)
+}
 
 $: if (dom) intersectionObserver.observe(dom)
 
 let loadIconY: number = 0
 let loadIconYMove: number = 0
-$: offsetY = Math.min((loadIconYMove - loadIconY) / 2, 100)
+let isScrollToTop: boolean = false
+
+$: offsetY = Math.max(Math.min((loadIconYMove - loadIconY) / 2, 100), 0)
 
 const onTouchstart = (e: TouchEvent) => {
+  isScrollToTop = (isWindow ? window.scrollY : root.scrollTop) === 0
   if (!canLoadmore) return
-  document.body.style.overflow = 'hidden'
+
   loadIconY = e.touches[0].clientY
   loadIconYMove = e.touches[0].clientY
+
+  controlledRoot && (controlledRoot.style.overscrollBehavior = 'none')
+  // trick for ios
+  // make overscroll-behavior property works by letting it overflow and scrollable
+  if(isIOS && !isWindow) controlledRoot.style.minHeight = '100.3%'
 }
 
 const onTouchmove = (e: TouchEvent) => {
-  if (!canLoadmore) return
+  if (!canLoadmore || !isScrollToTop) return
+
   loadIconYMove = e.touches[0].clientY
-  if (offsetY < 0 && document.body.style.overflow) document.body.style.overflow = null
+
+  if (offsetY < 0 && controlledRoot.style.overscrollBehavior) {
+    controlledRoot.style.overscrollBehavior = null
+
+    if(isIOS && !isWindow) controlledRoot.style.minHeight = null
+  }
 }
 
 const onTouchend = () => {
-  if (document.body.style.overflow) document.body.style.overflow = null
+  if (controlledRoot.style.overscrollBehavior) {
+    controlledRoot.style.overscrollBehavior = null
+
+    if(isIOS && !isWindow) controlledRoot.style.minHeight = null
+  }
+
   if (offsetY >= 50) dispatch('fetchMore')
+
   loadIconY = 0
   loadIconYMove = 0
 }

@@ -20,7 +20,7 @@ const getDevConfig = (env: ENV): WindowEnv => {
 }
 
 declare global {
-  interface Window { _env_: WindowEnv }
+  interface Window { _env_: WindowEnv, _version_: any }
 }
 
 let config: WindowEnv = getDevConfig(env)

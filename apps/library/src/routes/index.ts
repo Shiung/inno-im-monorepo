@@ -1,9 +1,17 @@
 import { replace } from 'svelte-spa-router'
 import { wrap } from 'svelte-spa-router/wrap'
-import Entry from '$pages/entry.svelte'
+// import Entry from '$pages/entry.svelte'
 
 const routes = {
-  '/': Entry,
+  '/': wrap({
+    asyncComponent: () => null,
+    conditions: [
+      () => {
+        replace('/square')
+        return true
+      }
+    ]
+  }),
   '/square/:sid?': wrap({
     asyncComponent: () => import('$pages/square/index.svelte'),
     userData: {

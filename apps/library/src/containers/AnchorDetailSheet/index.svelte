@@ -4,6 +4,7 @@ import { Ripple } from 'ui'
 import { onDestroy } from 'svelte'
 import BottomSheet, { Header, Content } from 'ui/components/BottomSheet'
 import { dataCid } from '../BottomNavigation'
+import { locale } from '$stores'
 
 import DetailHeader from './DetailHeader.svelte'
 import DetailContent from './DetailContent.svelte'
@@ -25,7 +26,10 @@ const tabs: ITabs = {
 let activedTab: keyof typeof tabs = 'anchor.matches'
 
 let detailPromise: ReturnType<typeof im.webAnchorDetail>
-$: if (open) detailPromise = im.webAnchorDetail({ query: { houseId }})
+$: if (open) detailPromise = im.webAnchorDetail({
+  query: { houseId },
+  headers: { 'Accept-Language': $locale }
+})
 
 
 let onMax: boolean = false
