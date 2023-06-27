@@ -36,9 +36,24 @@ export interface IPushMessageEntity {
   chatId: string
   iid: number
   vip: number
-  avatar: number
+  avatar: string
   replyTo: number
   content: string
   visible: EVisible
   timestamp: number
+}
+
+
+export interface IChatIdsWrapper {
+  chatIds: string[]
+}
+
+export interface IFetchArgs {
+  pointer: number
+  chatId: string
+}
+
+export interface IReportAbuseAegs {
+  userId: number
+  reason: string
 }

@@ -17,7 +17,7 @@
 
   export let fixed: boolean = true
 
-  const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
+  const { isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
   const { displayType } = getEnv()
 
   let placeHolder: string = ''
@@ -47,7 +47,6 @@
     }
 
     const waitSendMessage = message
-    const eventkey = im.enum.command.SEND_MESSAGE
 
     const data = {
       contentType: im.enum.contentType.CHAT,
@@ -58,10 +57,11 @@
     }
 
     message = ''
-    const res = await imWs.publish(
-      { eventkey, data },
-      { reqId: String(now), eventkey: `${eventkey}_${now}` }
-    )
+    const res = await imWs.publish({
+      pairId: now,
+      eventkey: im.enum.command.SEND_MESSAGE,
+      data
+    })
 
     console.log('publish res: ', res)
 
