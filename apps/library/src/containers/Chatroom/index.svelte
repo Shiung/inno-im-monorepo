@@ -215,7 +215,7 @@
     <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
   {:else}
     <div
-      class={twMerge('flex-1 flex flex-col bg-white', isTransition && 'fixed w-full z-30 bottom-0')}
+      class={twMerge('relative flex-1 flex flex-col bg-white', isTransition && 'fixed w-full z-30 bottom-0')}
       style:min-height={boxContainerHeight}
       style:max-height={isWindow && !isTransition ? 'none' : boxContainerHeight}
       transition:fly|local={{ y: 100 * $appHeight - $height, duration: 500 }}
@@ -245,6 +245,8 @@
       {/if}
 
       <InputArea />
+
+      <div class='absolute inset-0 bg-white z-[-1]'></div>
     </div>
   {/if}
 </div>
