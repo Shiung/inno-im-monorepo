@@ -7,7 +7,6 @@
   export let thisEl: HTMLDivElement
   
   let avatarImg, vipImg
-
   const fetchAvatarImg = async () => {
     const imgPath = await fetchAvatar(message.avatar)
     avatarImg = imgPath
@@ -18,7 +17,7 @@
     vipImg = imgPath
   }
 
-  $: typeof message.avatar === 'number' && fetchAvatarImg()
+  $: typeof message.avatar === 'string' && fetchAvatarImg()
   $: typeof message.vip === 'number' && fetchVipImg()
 </script>
 

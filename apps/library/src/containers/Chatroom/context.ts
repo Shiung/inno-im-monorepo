@@ -42,8 +42,8 @@ export interface IUserInfo {
 
 export const initUserInfo: IUserInfo = {
   userAccount: '',
-  userToken: '',
-  userVip: 0,
+  userToken: 'gfdvnrgefnhhtgerfvdgrefsd',
+  userVip: 999,
 }
 
 export const [setUserInfo, getUserInfo] = createStoreContext<IUserInfo>('chatRoomUserInfo', initUserInfo)
