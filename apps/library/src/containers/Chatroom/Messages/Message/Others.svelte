@@ -7,7 +7,13 @@
   export let thisEl: HTMLDivElement
   
   let avatarImg, vipImg
+
   const fetchAvatarImg = async () => {
+    if(message.contentType === im.enum.contentType.ANCHOR_HOST || message.contentType === im.enum.contentType.ANCHOR_MEMBER) {
+      avatarImg = message.avatar
+      return
+    }
+
     const imgPath = await fetchAvatar(message.avatar)
     avatarImg = imgPath
   }
