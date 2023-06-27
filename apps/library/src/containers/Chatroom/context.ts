@@ -11,7 +11,6 @@ export interface IChatroomInfo {
   isCharged: boolean
   vipLimit: number
   frequency: number
-  sportMarketSummary: ISportMarketSummary
 }
 
 export interface IChatroomEnv {
@@ -32,7 +31,6 @@ export const initInfo: IChatroomInfo = {
   isCharged: true,
   vipLimit: 6,
   frequency: 5000,
-  sportMarketSummary: null
 }
 
 export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
@@ -47,3 +45,13 @@ export const initEnv: IChatroomEnv = {
 }
 
 export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
+
+export interface IPlatformInfo {
+  sportMarketSummary: ISportMarketSummary
+}
+
+export const initPlatformInfo: IPlatformInfo = {
+  sportMarketSummary: null
+}
+
+export const [setPlatformInfo, getPlatformInfo] = createStoreContext<IPlatformInfo>('chatRoomPlatformInfo', initPlatformInfo)

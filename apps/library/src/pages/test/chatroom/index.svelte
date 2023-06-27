@@ -1,6 +1,8 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
-import Chatroom, { setChatEnv, onSizeChangedCallback, type SizeChangedOption } from '$src/containers/Chatroom'
+import { onMount } from 'svelte'
+import { locale } from '$stores'
+import Chatroom, { setChatEnv, setChatPlatformInfo, onSizeChangedCallback, type SizeChangedOption } from '$src/containers/Chatroom'
 
 const isWindow: boolean = true
 let expandType: string = 'default'
@@ -8,6 +10,7 @@ let dom: HTMLDivElement
 let changedHeight
 let videoPlay: boolean = false
 let isTransition: boolean = false
+let sportMarketSummary
 
 $: initHeight = dom?.getBoundingClientRect().height
 
@@ -24,6 +27,7 @@ $: if (dom) {
 }
 
 $: setChatEnv({ height: changedHeight, size: expandType as any })
+$: setChatPlatformInfo({sportMarketSummary})
 
 onSizeChangedCallback((option: SizeChangedOption) => {
   isTransition = option.transition
@@ -47,6 +51,16 @@ onSizeChangedCallback((option: SizeChangedOption) => {
 // setTimeout(() => {
 //   videoPlay = true
 // }, 3000)
+onMount(async ()=> {
+  const fetchMarket = async () => {
+    const lang = $locale.toLowerCase().replace(/_/g, '-')
+    const res = await fetch(
+      `https://tiger-api.innodev.site/platform/systatus/proxy/sports/dev/Java/json/${lang}/market_property_setting`
+    ).then((res) => res.json())
+    return res
+  }
+  sportMarketSummary = await fetchMarket()
+})
 </script>
 
 <div>

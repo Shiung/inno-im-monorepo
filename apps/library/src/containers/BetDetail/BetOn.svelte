@@ -1,10 +1,12 @@
 <script lang="ts">
   import parseMarketName from './utils/parseMarketName'
-  import sportMarketSummary from './sportMarketSummary.json'
   import CornerKickImg from './images/corner-kick.png'
+  import { getPlatformInfo } from '$containers/Chatroom/context'
   import { amountThousandthTransformer } from 'utils/amount'
 
   export let betItem
+
+  const { sportMarketSummary } = getPlatformInfo()
 
   const {
     sid,
@@ -21,7 +23,7 @@
 
   const { betOnName } = parseMarketName({
     info: { sid, betOn, k: conditions, market, homeName, awayName, outright },
-    sportMarketSummary
+    sportMarketSummary: $sportMarketSummary
   })
 
   const cornerKick = market.includes('cr')

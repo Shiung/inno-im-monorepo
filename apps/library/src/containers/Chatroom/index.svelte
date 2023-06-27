@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { writable } from 'svelte/store'
-  import { initEnv, initInfo } from './context'
-  import type { IChatroomEnv, IChatroomInfo } from './context'
+  import { initEnv, initInfo, initPlatformInfo } from './context'
+  import type { IChatroomEnv, IChatroomInfo, IPlatformInfo } from './context'
   import type { SizeChangedCallback } from './type'
 
   let env = writable(initEnv)
@@ -17,6 +17,10 @@
       return console.warn('onSizeChangedCallback callback MUST be function')
     sizeChangedCallback = callback
   }
+
+  let platformInfo = writable(initPlatformInfo)
+  export const setChatPlatformInfo = (_platformInfo: Partial<IPlatformInfo>) =>
+    platformInfo.update((e) => ({ ...e, ..._platformInfo }))
 </script>
 
 <script lang="ts">
@@ -33,7 +37,7 @@
 
   import Empty from '$src/containers/Empty'
 
-  import { setInfo, setEnv } from './context'
+  import { setInfo, setEnv, setPlatformInfo } from './context'
   import Minimize from './Minimize/index.svelte'
   import Header from './Header/index.svelte'
   import Loading from './Loading.svelte'
@@ -57,6 +61,7 @@
   })
 
   $: setInfo($info)
+  $: setPlatformInfo($platformInfo)
 
   $: isWindow = $displayType === 'window'
 
@@ -193,10 +198,7 @@
 
       <InputArea />
 
-      <BetListSheet
-        bind:open={$showBetList}
-        on:deactivate={()=>subscription.unsubscribe()}
-      />
+      <BetListSheet bind:open={$showBetList} on:deactivate={() => subscription.unsubscribe()} />
     </div>
   {/if}
 </div>
