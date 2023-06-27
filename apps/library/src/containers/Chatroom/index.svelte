@@ -169,18 +169,19 @@
     appHeight.set(Number(vh))
   }
 
-  // for changing chatroom size to EXPAND/NORMAL
-  $: {
+  const changeRoomSizeByTouchMove = (moveOffset: number) => {
     const scrollY = isWindow ? window.scrollY : boxContainerDom?.scrollTop
 
-    if (!isExpand && touchMoveOffset >= EXPAND_OFFSET) {
+    if (!isExpand && moveOffset >= EXPAND_OFFSET) {
       isExpand = true
       sizeChangedCallback({ size: EChatroomSize.EXPAND, transition: true })
-    } else if (isExpand && touchMoveOffset <= -EXPAND_OFFSET && scrollY === 0) {
+    } else if (isExpand && moveOffset <= -EXPAND_OFFSET && scrollY === 0) {
       isExpand = false
       sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
     }
   }
+
+  $: changeRoomSizeByTouchMove(touchMoveOffset)
 
   // use 100 * $appHeight for compatibility between ios and android
   $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
