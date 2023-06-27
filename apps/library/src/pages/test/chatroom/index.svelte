@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
-import Chatroom, { setChatEnv, onSizeChangedCallback, type SizeChangedOption } from '$src/containers/Chatroom'
+import Chatroom, { setChatEnv, onSizeChangedCallback, onToggledCallback , type SizeChangedOption } from '$src/containers/Chatroom'
 
 const isWindow: boolean = true
 let expandType: string = 'default'
@@ -40,6 +40,10 @@ onSizeChangedCallback((option: SizeChangedOption) => {
       changedHeight = 0
       break
   }
+})
+
+onToggledCallback((open) => {
+  setChatEnv({ isOpen: open })
 })
 
 // setTimeout(() => {

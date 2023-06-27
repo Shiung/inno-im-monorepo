@@ -1,34 +1,12 @@
 import type { EChatroomSize } from './constant'
 import { createStoreContext } from 'utils/storeContext'
 
-export interface IChatroomInfo {
-  roomId: string
-  userId: string
-  userVip: number
-  isLogin: boolean
-  isCharged: boolean
-  vipLimit: number
-  frequency: number
-}
-
 export interface IChatroomEnv {
   displayType: 'window' | 'block'
   height: number
   isOpen: boolean
   size: `${EChatroomSize}`
 }
-
-export const initInfo: IChatroomInfo = {
-  roomId: '124',
-  userId: 'loki',
-  userVip: 6,
-  isLogin: true,
-  isCharged: true,
-  vipLimit: 6,
-  frequency: 5000
-}
-
-export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
 
 export const initEnv: IChatroomEnv = {
   displayType: 'window',
@@ -38,3 +16,34 @@ export const initEnv: IChatroomEnv = {
 }
 
 export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
+
+export interface IChatroomInfo {
+  chatId: string
+  iid: number
+  vipLimit: number
+  frequency: number
+}
+
+export const initInfo: IChatroomInfo = {
+  chatId: '',
+  iid: 0,
+  vipLimit: 0,
+  frequency: 5000
+}
+
+export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
+
+
+export interface IUserInfo {
+  userAccount: string
+  userToken: string
+  userVip: number
+}
+
+export const initUserInfo: IUserInfo = {
+  userAccount: '',
+  userToken: '',
+  userVip: 0,
+}
+
+export const [setUserInfo, getUserInfo] = createStoreContext<IUserInfo>('chatRoomUserInfo', initUserInfo)

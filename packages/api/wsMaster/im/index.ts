@@ -15,7 +15,7 @@ const dev = localStorage.getItem('dev') === 'true'
 const ws = createWebsocket({
   // url: 'ws://localhost:5174/proto/IM_API_URL',
   // url: 'ws://172.28.40.55:5174/proto/IM_API_URL',
-  url: 'ws://localhost:3000/im/chat-ws/ws',
+  url: 'ws://localhost:5174/proto/IM_API_URL',
   // url: 'ws://172.28.30.209:3000/im/chat-ws/ws',
   binaryType: 'arraybuffer',
 

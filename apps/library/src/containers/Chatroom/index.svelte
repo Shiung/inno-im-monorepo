@@ -1,8 +1,8 @@
 <script lang="ts" context="module">
   import { writable } from 'svelte/store'
-  import { initEnv, initInfo } from './context'
-  import type { IChatroomEnv, IChatroomInfo } from './context'
-  import type { SizeChangedCallback, ToggleCallback } from './type'
+  import { initEnv, initInfo, initUserInfo } from './context'
+  import type { IChatroomEnv, IChatroomInfo, IUserInfo } from './context'
+  import type { SizeChangedCallback, ToggledCallback, DestroyedCallback } from './type'
 
   let env = writable(initEnv)
   export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
@@ -10,16 +10,25 @@
   let info = writable(initInfo)
   export const setChatInfo = (_info: Partial<IChatroomInfo>) => info.update((e) => ({ ...e, ..._info }))
 
+  let userInfo = writable(initUserInfo)
+  export const setChatUserInfo = (_info: Partial<IUserInfo>) => userInfo.update((e) => ({ ...e, ..._info }))
+
   let sizeChangedCallback: SizeChangedCallback = () => {}
   export const onSizeChangedCallback = (callback: SizeChangedCallback) => {
-    if (typeof callback !== 'function')
-      return console.warn('onSizeChangedCallback callback MUST be function')
+    if (typeof callback !== 'function') return console.warn('onSizeChangedCallback parameter callback MUST be function')
     sizeChangedCallback = callback
   }
 
-  let toggleCallback: ToggleCallback = () => {}
-  export const onToggledCallback = (callback: ToggleCallback) => {
-    toggleCallback = callback
+  let toggledCallback: ToggledCallback = () => {}
+  export const onToggledCallback = (callback: ToggledCallback) => {
+    if (typeof callback !== 'function') return console.warn('onToggledCallback parameter callback MUST be function')
+    toggledCallback = callback
+  }
+
+  let destroyedCallback: DestroyedCallback = () => {}
+  export const onDestroyedCallback = (callback: DestroyedCallback) => {
+    if (typeof callback !== 'function') return console.warn('onDestroyedCallback parameter callback MUST be function')
+    destroyedCallback = callback
   }
 </script>
 
@@ -32,20 +41,21 @@
   import { t } from '$stores'
   import { appHeight } from '$stores/layout'
   import BigNumber from 'bignumber.js'
+  import type { IChatMessage } from 'api/im/types'
 
   import Empty from '$src/containers/Empty'
 
-  import { setInfo, setEnv } from './context'
+  import { setInfo, setEnv, setUserInfo } from './context'
   import Minimize from './Minimize/index.svelte'
   import Header from './Header/index.svelte'
   import Loading from './Loading.svelte'
   import Messages from './Messages/index.svelte'
   import InputArea from './InputArea/index.svelte'
-
   import { EChatroomSize } from './constant'
 
-  const { roomId } = setInfo($info)
+  const { chatId, iid, vipLimit, frequency } = setInfo($info)
   const { isOpen, displayType, height, size } = setEnv($env)
+  const { userAccount, userToken, userVip } = setUserInfo($userInfo)
   
   env.subscribe(e => {
     displayType.set(e.displayType)
@@ -54,7 +64,18 @@
     isOpen.set(e.isOpen)
   })
 
-  $: setInfo($info)
+  userInfo.subscribe(e => {
+    userAccount.set(e.userAccount)
+    userToken.set(e.userToken)
+    userVip.set(e.userVip)
+  })
+
+  info.subscribe(e => {
+    chatId.set(e.chatId)
+    iid.set(e.iid)
+    vipLimit.set(e.vipLimit)
+    frequency.set(e.frequency)
+  })
 
   $: isWindow = $displayType === 'window'
 
@@ -70,35 +91,35 @@
     })
   }
 
-  const subscribeRoom = (_roomId: string) => {
+  const subscribeRoom = (_chatId: string) => {
     imWs.publish({
       eventkey: impb.enum.command.SUBSCRIBE_CHAT,
-      data: { chatIds: [String($roomId)] }
+      data: { chatIds: [String($chatId)] }
     })
   }
 
-  const unsubscribeRoom = (_roomId: string) => {
+  const unsubscribeRoom = (_chatId: string) => {
     imWs.publish({
       eventkey: impb.enum.command.UNSUBSCRIBE_CHAT,
-      data: { chatIds: [String($roomId)] }
+      data: { chatIds: [String($chatId)] }
     })
   }
 
-  let perviousRoomId: string
-  const subscribeNewAndUnsubscribePrevious = (_roomId: string) => {
-    if (perviousRoomId && perviousRoomId !== _roomId) unsubscribeRoom(perviousRoomId)
-    subscribeRoom(_roomId)
-    perviousRoomId = _roomId
+  let perviousChatId: string
+  const subscribeNewAndUnsubscribePrevious = (_chatId: string) => {
+    if (perviousChatId && perviousChatId !== _chatId) unsubscribeRoom(perviousChatId)
+    subscribeRoom(_chatId)
+    perviousChatId = _chatId
   }
 
-  $: if ($roomId) subscribeNewAndUnsubscribePrevious($roomId)
+  $: if ($chatId) subscribeNewAndUnsubscribePrevious($chatId)
 
   let initFetchLoading: boolean = true
 
   const initChatroom = async () => {
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
-      data: { pointer: 0, chatId: $roomId }
+      data: { pointer: 0, chatId: $chatId }
     })
     console.log('FETCH_MESSAGES: ', res)
     // chatMessages.update((messages) => [...res.data.list, ...messages])
@@ -115,14 +136,14 @@
 
   const expandChatroom = () => {
     isTransition = true
-    toggleCallback && toggleCallback(true)
+    toggledCallback && toggledCallback(true)
     sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
   }
 
   const foldChatroom = async () => {
     isTransition = true
     await tick() // for chatroom content chang to <Loading>
-    toggleCallback && toggleCallback(false)
+    toggledCallback && toggledCallback(false)
     touchMoveOffset = 0
     isWindow && window.scrollTo({ top: 0 })
     sizeChangedCallback &&
@@ -181,6 +202,7 @@
 
   onDestroy(() => {
     if (subscription) subscription.unsubscribe()
+    destroyedCallback && destroyedCallback()
   })
 </script>
 
@@ -194,7 +216,7 @@
   {:else}
     <div
       class={twMerge('flex-1 flex flex-col bg-white', isTransition && 'fixed w-full z-30 bottom-0')}
-      style:min-height={isWindow && !isTransition ? 'auto' : boxContainerHeight}
+      style:min-height={boxContainerHeight}
       style:max-height={isWindow && !isTransition ? 'none' : boxContainerHeight}
       transition:fly|local={{ y: 100 * $appHeight - $height, duration: 500 }}
       on:introend={() => {
