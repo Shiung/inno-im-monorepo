@@ -181,6 +181,20 @@
     }
   }
 
+  const resetStoreModule = () => {
+    setChatEnv({
+      displayType: 'window',
+      height: 0,
+      isOpen: false,
+      size: 'default'
+    })
+
+    setChatInfo({
+      chatId: '',
+      iid: 0
+    })
+  }
+
   $: changeRoomSizeByTouchMove(touchMoveOffset)
 
   // use 100 * $appHeight for compatibility between ios and android
@@ -203,7 +217,7 @@
 
   onDestroy(() => {
     if (subscription) subscription.unsubscribe()
-    destroyedCallback && destroyedCallback()
+    resetStoreModule()
   })
 </script>
 
