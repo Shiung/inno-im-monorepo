@@ -14,11 +14,11 @@
         <div class="text-[14px] text-white">{message.content}</div>
       </div>
 
-      <div
+      <!-- <div
         class="min-w-[30px] h-[30px] rounded-full bg-[#999999] flex items-center justify-center ml-[4px]"
       >
         {message.avatar}
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
