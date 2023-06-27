@@ -1,6 +1,13 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
-import Chatroom, { setChatEnv, onSizeChangedCallback, onToggledCallback , type SizeChangedOption } from '$src/containers/Chatroom'
+import Chatroom, {
+  setChatEnv,
+  setChatInfo,
+  setChatUserInfo,
+  onSizeChangedCallback,
+  onToggledCallback ,
+  type SizeChangedOption
+} from '$src/containers/Chatroom'
 
 const isWindow: boolean = true
 let expandType: string = 'default'
@@ -18,6 +25,19 @@ $: if (dom) {
     displayType: isWindow ? 'window' : 'block',
     height: initHeight,
     isOpen: false
+  })
+
+  setChatInfo({
+    chatId: '1234',
+    iid: 123456,
+    vipLimit: 0,
+    frequency: 0,
+  })
+
+  setChatUserInfo({
+    userAccount: 'sean001',
+    userToken: 'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiZmM4NzU3MWYtNDQzZS00MDI0LWE1NGMtZjEyNTkwMWY3Y2E5IiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg3NzUyNzMyMDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.T4wC3cLQP1QtQOUKs8pX7sFd0TxAd7VzBep9_dLzFfk',
+    userVip: 999
   })
 }
 
