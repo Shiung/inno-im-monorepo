@@ -5,7 +5,7 @@ export type IChatMessage = IPushMessageEntity
 
 export interface IChatroomPastMessage {
   query: {
-    roomId: number
+    chatId: string
     cursor?: string
     quantity?: number
   }

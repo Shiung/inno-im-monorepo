@@ -28,7 +28,7 @@ export const messageEntityData = (ts: number = Date.now(), props?: MessageEntity
     chatId: props?.chatId || '@guid',
     iid: props?.iid || Random.integer(0, 999999),
     vip: Random.integer(0, 12),
-    avatar: Random.integer(0, 100),
+    avatar: String(Random.integer(0, 100)),
     replyTo: Random.integer(0, 100000),
     content: _content || '@sentence',
     visible: Random.integer(0, 2),

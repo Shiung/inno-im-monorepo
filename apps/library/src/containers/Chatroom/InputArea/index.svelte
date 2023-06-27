@@ -1,3 +1,12 @@
+<script lang="ts" context="module">
+  import type { RouterRedirectCallback } from '../type'
+  let routerRedirectCallback: RouterRedirectCallback = () => {}
+  export const onRouterRedirect = (callback: RouterRedirectCallback) => {
+    if (typeof callback !== 'function') return console.warn('onRouterRedirect parameter callback MUST be function')
+    routerRedirectCallback = callback
+  }
+</script>
+
 <script lang="ts">
   import { fly } from 'svelte/transition'
   import { twMerge } from 'tailwind-merge'
@@ -12,25 +21,35 @@
   import Plus from '../images/plus.svg'
 
   import { warningCodeMap } from '../constant'
-  import { getInfo, getEnv } from '../context'
+  import { getInfo, getEnv, getUserInfo } from '../context'
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = true
 
-  const { userId, isLogin, isCharged, userVip, vipLimit, frequency } = getInfo()
+  const { userToken, userVip } = getUserInfo()
+  const { chatId, iid, vipLimit, frequency } = getInfo()
   const { displayType, showBetList } = getEnv()
 
   let placeHolder: string = ''
   let disabled: boolean = true
   let lastSend: number = 0
+  let routerCallback
 
   $: {
-    if (!$isLogin) placeHolder = $t('chat.needLogin')
-    else if (!$isCharged) placeHolder = $t('chat.needCharge')
-    else if ($userVip < $vipLimit) placeHolder = $t('chat.needVip', { vip: $vipLimit })
+    disabled = true
+    if (!$userToken) {
+      placeHolder = $t('chat.needLogin')
+      routerCallback = () => routerRedirectCallback({ location: 'login' })
+    }
+    // TODO: deposit limit check
+    else if ($userVip < $vipLimit) {
+      placeHolder = $t('chat.needVip', { vip: $vipLimit })
+      routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
+    }
     else {
       placeHolder = $t('chat.normalPlaceholder')
       disabled = false
+      routerCallback = undefined
     }
   }
 
@@ -47,21 +66,21 @@
     }
 
     const waitSendMessage = message
-    const eventkey = im.enum.command.SEND_MESSAGE
 
     const data = {
       contentType: im.enum.contentType.CHAT,
-      chatId: 'chatid124',
-      iid: 1234,
+      chatId: $chatId,
+      iid: $iid,
       // replyTo:
       content: waitSendMessage
     }
 
     message = ''
-    const res = await imWs.publish(
-      { eventkey, data },
-      { reqId: String(now), eventkey: `${eventkey}_${now}` }
-    )
+    const res = await imWs.publish({
+      pairId: now,
+      eventkey: im.enum.command.SEND_MESSAGE,
+      data
+    })
 
     console.log('publish res: ', res)
 
@@ -74,6 +93,12 @@
     const msgKey = warningCodeMap?.[code]
     if(msgKey) warningMsg = $t(msgKey)
     showWarning = true
+  }
+
+  const handleClick = () => {
+    if(!disabled) return
+
+    routerCallback && routerCallback()
   }
 
   $: isWindow = $displayType === 'window'
@@ -122,6 +147,7 @@
           {disabled}
           bind:value={message}
           maxlength="300"
+          on:click={handleClick}
         />
 
         <Ripple

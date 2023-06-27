@@ -16,6 +16,7 @@ export interface WatchDogProps {
 
 export interface IWsMasterEvent {
   eventkey: string | number,
+  pairId?: string | number,
   code?: number,
   msg?: string,
   data: any,
@@ -36,9 +37,9 @@ export interface WsMasterProps {
   reconnectInterval?: number
   activate?: boolean
   stopIfRetryOverTimes?: number
-  eventkeyParser?: (event: MessageEvent<any>) => IWsMasterEvent
-  messageHandler?: (event: IWsMasterEvent, e: MessageEvent<any>) => void
-  publishPreprocessor?: (event: IWsMasterEvent, options?: any) => WsMessage
+  messagePreparser?: (event: MessageEvent<any>) => IWsMasterEvent
+  messageHandler?: (e: MessageEvent<any>, event: IWsMasterEvent) => void
+  publishPreprocessor?: (event: IWsMasterEvent) => WsMessage
 }
 
 export interface SyncOptions {

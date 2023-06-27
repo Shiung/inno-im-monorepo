@@ -9,6 +9,11 @@
   let avatarImg, vipImg
 
   const fetchAvatarImg = async () => {
+    if(message.contentType === im.enum.contentType.ANCHOR_HOST || message.contentType === im.enum.contentType.ANCHOR_MEMBER) {
+      avatarImg = message.avatar
+      return
+    }
+
     const imgPath = await fetchAvatar(message.avatar)
     avatarImg = imgPath
   }
@@ -18,7 +23,7 @@
     vipImg = imgPath
   }
 
-  $: typeof message.avatar === 'number' && fetchAvatarImg()
+  $: typeof message.avatar === 'string' && fetchAvatarImg()
   $: typeof message.vip === 'number' && fetchVipImg()
 </script>
 

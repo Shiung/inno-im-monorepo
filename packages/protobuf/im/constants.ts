@@ -15,7 +15,8 @@ export enum EContentType {
   CONTENT_TYPE_NONE = 0,
   CHAT = 1,
   ORDER = 2,
-  ANCHOR = 3,
+  ANCHOR_HOST = 3,
+  ANCHOR_MEMBER = 4
 }
 
 export enum EVisible {

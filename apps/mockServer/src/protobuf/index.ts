@@ -9,8 +9,8 @@ export const createProtoSocketServer = () => {
   const wss = new WebSocketServer({ noServer: true })
 
   wss.on('connection', (ws, req) => {
-    const url = req?.url?.split('/proto/')
-    const module = url?.[1]
+    const urlParser = new URL(req?.url || '', 'http://localhost:5174')
+    const module = urlParser?.pathname?.split('/proto/')?.[1]
 
     switch (module) {
       case 'IM_API_URL':

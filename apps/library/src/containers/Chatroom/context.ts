@@ -2,49 +2,42 @@ import type { EChatroomSize } from './constant'
 import { createStoreContext } from 'utils/storeContext'
 import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
-export interface IChatroomInfo {
-  roomId: number
-  userId: string
-  userVip: number
-  userCurrency: string
-  isLogin: boolean
-  isCharged: boolean
-  vipLimit: number
-  frequency: number
-}
-
 export interface IChatroomEnv {
   displayType: 'window' | 'block'
   height: number
-  minimize: boolean
+  isOpen: boolean
+  size: `${EChatroomSize}`
   showBetList: boolean
   device: 'pc' | 'wap'
-  size: `${EChatroomSize}`
-}
 
-export const initInfo: IChatroomInfo = {
-  roomId: 124,
-  userId: 'loki',
-  userVip: 6,
-  userCurrency: 'CNY',
-  isLogin: true,
-  isCharged: true,
-  vipLimit: 6,
-  frequency: 5000,
 }
-
-export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
 
 export const initEnv: IChatroomEnv = {
   displayType: 'window',
   height: 0,
-  minimize: true,
+  isOpen: false,
+  size: 'default',
   showBetList: false,
   device: 'wap',
-  size: 'default'
 }
 
 export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
+
+export interface IChatroomInfo {
+  chatId: string
+  iid: number
+  vipLimit: number
+  frequency: number
+}
+
+export const initInfo: IChatroomInfo = {
+  chatId: '',
+  iid: 0,
+  vipLimit: 0,
+  frequency: 5000
+}
+
+export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
 
 export interface IOrdersInfo {
   sportMarketSummary: ISportMarketSummary
@@ -55,3 +48,19 @@ export const initOrdersInfo: IOrdersInfo = {
 }
 
 export const [setOrdersInfo, getOrdersInfo] = createStoreContext<IOrdersInfo>('chatRoomOrdersInfo', initOrdersInfo)
+
+export interface IUserInfo {
+  userAccount: string
+  userToken: string
+  userVip: number
+  userCurrency: string
+}
+
+export const initUserInfo: IUserInfo = {
+  userAccount: '',
+  userToken: '',
+  userVip: 0,
+  userCurrency: 'CNY',
+}
+
+export const [setUserInfo, getUserInfo] = createStoreContext<IUserInfo>('chatRoomUserInfo', initUserInfo)

@@ -1,14 +1,19 @@
 <script lang="ts">
+  import { appHeight } from '$stores/layout'
+  import type { IChatMessage } from 'api/im/types'
+
+  import { getEnv } from '../../context'
+
   import Others from './Others.svelte'
   import Self from './Self.svelte'
-
-  import type { IChatMessage } from 'api/im/types'
 
   export let lastReadId: number
   export let message: IChatMessage
   export let self: boolean
 
   let dom: HTMLDivElement
+
+  const { height } = getEnv()
 
   // TODO 待雪花算法上後再修正
   const checkAndSetLastReadId = (id: string) => {
@@ -25,7 +30,13 @@
     }
   }, { rootMargin: `0px 0px -150px 0px`})
 
-  $: if (dom) observer.observe(dom)
+  // 還不知道怎麼取到正確的 message container 高度，所以先寫死數值 (Header + inputArea)
+  $: boxContainerHeight = 100 * $appHeight - $height - 44 - 83
+
+  $: if (dom) {
+    if(dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))
+    observer.observe(dom)
+  }
 </script>
 
 <svelte:component this={self ? Self : Others} {message} bind:thisEl={dom} />

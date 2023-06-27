@@ -21,7 +21,7 @@
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
 
-  const { roomId } = getInfo()
+  const { chatId } = getInfo()
 
   const { displayType, height } = getEnv()
 
@@ -112,7 +112,7 @@
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
-    const res = await im.chatroomPastMessage({ query: { roomId: $roomId, quantity: pastQuantity } })
+    const res = await im.chatroomPastMessage({ query: { chatId: $chatId, quantity: pastQuantity }, headers: { 'Accept-Language': $locale } })
     chatMessages.update((messages) => [...res.data.list, ...messages])
     fetchMoreLoading = false
 
