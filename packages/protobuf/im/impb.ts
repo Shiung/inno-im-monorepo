@@ -46,56 +46,56 @@ class ImBp {
   get push() {
     return {
       encode: (data: IPush) => this._push?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IPush => this._push?.decode(new Uint8Array(data)) as unknown as IPush
+      decode: (data: ArrayBuffer) => this._push?.decode(new Uint8Array(data)) as unknown as IPush
     }
   }
 
   get request() {
     return {
       encode: (data: IRequest) => this._request?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IRequest => this._request?.decode(new Uint8Array(data)) as unknown as IRequest
+      decode: (data: ArrayBuffer) => this._request?.decode(new Uint8Array(data)) as unknown as IRequest
     }
   }
 
   get pushMessageEntity() {
     return {
       encode: (data: IPushMessageEntity) => this._pushMessageEntity?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IPushMessageEntity => this._pushMessageEntity?.decode(new Uint8Array(data)) as unknown as IPushMessageEntity
+      decode: (data: ArrayBuffer) => this._pushMessageEntity?.decode(new Uint8Array(data)) as unknown as IPushMessageEntity
     }
   }
 
   get pushMessageEntityWrapper() {
     return {
-      encode: (data: IPushMessageEntity[]) => this._pushMessageEntityWrapper?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IPushMessageEntity[] => this._pushMessageEntityWrapper?.decode(new Uint8Array(data)) as unknown as IPushMessageEntity[]
+      encode: (data: { pushMessageEntity: IPushMessageEntity[] }) => this._pushMessageEntityWrapper?.encode(data).finish(),
+      decode: (data: ArrayBuffer) => this._pushMessageEntityWrapper?.decode(new Uint8Array(data)) as unknown as { pushMessageEntity: IPushMessageEntity[] }
     }
   }
 
   get requestMessageEntity() {
     return {
       encode: (data: IRequestMessageEntity) => this._requestMessageEntity?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IRequestMessageEntity => this._requestMessageEntity?.decode(new Uint8Array(data)) as unknown as IRequestMessageEntity
+      decode: (data: ArrayBuffer) => this._requestMessageEntity?.decode(new Uint8Array(data)) as unknown as IRequestMessageEntity
     }
   }
 
   get chatIdsWrapper() {
     return {
       encode: (data: IChatIdsWrapper) => this._chatIdsWrapper?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IChatIdsWrapper => this._chatIdsWrapper?.decode(new Uint8Array(data)) as unknown as IChatIdsWrapper
+      decode: (data: ArrayBuffer) => this._chatIdsWrapper?.decode(new Uint8Array(data)) as unknown as IChatIdsWrapper
     }
   }
 
   get fetchArgs() {
     return {
       encode: (data: IFetchArgs) => this._fetchArgs?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IFetchArgs => this._fetchArgs?.decode(new Uint8Array(data)) as unknown as IFetchArgs
+      decode: (data: ArrayBuffer) => this._fetchArgs?.decode(new Uint8Array(data)) as unknown as IFetchArgs
     }
   }
 
   get reportAbuseAegs() {
     return {
       encode: (data: IReportAbuseAegs) => this._reportAbuseArgs?.encode(data).finish(),
-      decode: (data: ArrayBuffer): IReportAbuseAegs => this._reportAbuseArgs?.decode(new Uint8Array(data)) as unknown as IReportAbuseAegs
+      decode: (data: ArrayBuffer) => this._reportAbuseArgs?.decode(new Uint8Array(data)) as unknown as IReportAbuseAegs
     }
   }
 }

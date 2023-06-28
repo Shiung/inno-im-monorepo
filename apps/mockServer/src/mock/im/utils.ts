@@ -3,6 +3,8 @@ import { getRandomItemFromArray } from 'utils'
 
 import type { IPredictionMarket } from 'api/im/types'
 
+export const prefix = '/api-gateway'
+
 export const withData = <T extends { res: { data: any } }>(data: T['res']['data']) => ({
   code: 0,
   message: "",
@@ -12,16 +14,16 @@ export const withData = <T extends { res: { data: any } }>(data: T['res']['data'
 
 export const randomPostTime = () => {
   const now = Date.now()
-  const unit = getRandomItemFromArray(['sec', 'min', 'hour', 'day']) 
+  const unit = getRandomItemFromArray(['sec', 'min', 'hour', 'day'])
 
   switch (unit) {
     case 'sec': return now - Random.integer(1000, 59 * 1000)
     case 'min': return now - Random.integer(60 * 1000, 60 * 59 * 1000)
     case 'hour': return now - Random.integer(60 * 60 * 1000, 60 * 60 * 23 * 1000)
-    case 'day': return now - Random.integer(60 * 60 * 24 * 1000, 60 * 60 * 24* 30 * 1000)
+    case 'day': return now - Random.integer(60 * 60 * 24 * 1000, 60 * 60 * 24 * 30 * 1000)
     default: return now
   }
-} 
+}
 
 export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({
   pageIdx: query.pageIdx || 1,

@@ -11,10 +11,12 @@ const getDevConfig = (env: ENV): WindowEnv => {
     ODDS_BOARD_WEBSOCKET_URL: 'wss://api-dev.kioga.site/product',
     BE_CDN_URL: 'https://be-source.dev.mppwr.com',
     VENDERID: 'vd004',
+    vendor_id: 4,
     DEPLOY_ENV: env,
     RESOURCE_URL: '',
     ECHO_URL: 'https://echo.zuplo.io',
-    IM_API_URL: `https://tiger-api.inno${env}.site/im/api-gateway`
+    IM_API_URL: `https://tiger-api.inno${env}.site/im`,
+    IM_CHAT_WS_URL: `wss://tiger-api.inno${env}.site/im/chat-ws/ws`
   }
 }
 

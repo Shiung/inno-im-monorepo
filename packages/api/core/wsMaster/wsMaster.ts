@@ -31,7 +31,7 @@ class WsMaster {
   constructor(props: WsMasterProps) {
     this.listeners = {}
     this.defaultSyncTimeout = 30 * 1000
-    this.enabled = true
+    this.enabled = false
     this.retryTimes = 0
 
     this.url = props.url
@@ -91,7 +91,6 @@ class WsMaster {
   }
 
   async activate() {
-    this.enabled = true
     if (this.socket.current?.readyState === 0) return
     if (this.socket.current?.readyState === 1) return
     if (this.socket.current?.readyState === 2) await this.waitingSocketClosed()
@@ -104,6 +103,7 @@ class WsMaster {
 
     this.socket.current.onopen = () => {
       console.log('ws connected.')
+      this.enabled = true
       this.retryTimes = 0
     }
 

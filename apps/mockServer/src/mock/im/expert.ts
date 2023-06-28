@@ -1,12 +1,12 @@
 import { mock, Random } from 'mockjs'
-import { withData, genPager, randomPostTime, genMarket, getExpertImage, genTeamInfo } from './utils'
+import { prefix, withData, genPager, randomPostTime, genMarket, getExpertImage, genTeamInfo } from './utils'
 
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
 
 const expert: IMockData[] = [
   {
-    url: '/v1/expert/predictions',
+    url: `${prefix}/v1/expert/predictions`,
     response: ({ query }) => mock(withData<Types.IExpertPredictions>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
         const market = genMarket()
@@ -35,7 +35,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/recommend',
+    url: `${prefix}/v1/expert/recommend`,
     response: ({ query }) => mock(withData<Types.IExpertRecommand>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => ({
         expertId: "@word",
@@ -55,17 +55,17 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/info',
+    url: `${prefix}/v1/expert/info`,
     response: () => mock(withData<Types.IExpertInfo>({
-        expertId: "@word",
-        expertName: "@cname",
-        expertImage: getExpertImage(),
-        hotStreak: Random.integer(0, 12),
+      expertId: "@word",
+      expertName: "@cname",
+      expertImage: getExpertImage(),
+      hotStreak: Random.integer(0, 12),
     }))
   },
   {
-    url: '/v1/expert/article/now',
-    response: ({ query}) => mock(withData<Types.IExpertArticleNow>({
+    url: `${prefix}/v1/expert/article/now`,
+    response: ({ query }) => mock(withData<Types.IExpertArticleNow>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         ...genMarket(),
         articleId: "@word",
@@ -80,7 +80,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/article/history',
+    url: `${prefix}/v1/expert/article/history`,
     response: ({ query }) => mock(withData<Types.IExpertArticleHistory>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         ...genMarket(),
@@ -97,7 +97,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/article/hit',
+    url: `${prefix}/v1/expert/article/hit`,
     response: ({ query }) => mock(withData<Types.IExpertArticleHit>({
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         ...genMarket(),
@@ -114,7 +114,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/statistics',
+    url: `${prefix}/v1/expert/statistics`,
     response: () => mock(withData<Types.IExpertStatistics>({
       list: Array.from({ length: 10 }, () => ({
         hitStatus: Random.natural(1, 2) as Types.IExpertStatistics['res']['data']['list'][number]['hitStatus'],
@@ -128,7 +128,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/match/article',
+    url: `${prefix}/v1/expert/match/article`,
     response: ({ query }) => mock(withData<Types.IExpertPredictions>({
       list: Array.from({ length: Number(query.pageSize) || 10 }, () => {
         const market = genMarket()
@@ -156,7 +156,7 @@ const expert: IMockData[] = [
     }))
   },
   {
-    url: '/v1/expert/article/detail',
+    url: `${prefix}/v1/expert/article/detail`,
     response: () => mock(withData<Types.IExpertArticleDetail>(
       {
         articleId: "@word",

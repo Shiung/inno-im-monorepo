@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { withData, randomPostTime, genPager, genHouseId, genTeamInfo } from './utils'
+import { prefix, withData, randomPostTime, genPager, genHouseId, genTeamInfo } from './utils'
 import { getRandomItemFromArray } from 'utils'
 
 import type * as Types from 'api/im/types'
@@ -18,7 +18,7 @@ Random.extend({
 
 const webAnchors: IMockData[] = [
   {
-    url: '/v1/anchor/web-anchors',
+    url: `${prefix}/v1/anchor/web-anchors`,
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IWebAnchors>({
       list: Array.from({ length: Number(query.pageSize) || 20 }, () => ({
@@ -42,33 +42,33 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/v1/anchor/web-anchor/detail',
+    url: `${prefix}/v1/anchor/web-anchor/detail`,
     response: () => mock(withData<Types.IWebAnchorDetail>({
-        userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
-        nickName: "@ANCHORNICKNAME",
-        personalIntroduction: '@cparagraph'
+      userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+      nickName: "@ANCHORNICKNAME",
+      personalIntroduction: '@cparagraph'
     }))
   },
   {
-    url: '/v1/anchor/web-anchor/match-list',
+    url: `${prefix}/v1/anchor/web-anchor/match-list`,
     timeout: 500,
     response: () => mock(withData<Types.IWebAnchorMatches>({
-      matchList: Array.from({length: Random.natural(0, 5)}, () => ({
-          ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeId' | 'homeName' | 'awayId' | 'awayName'>,
-          tnName: "@cname",
-          tid: Random.integer(10000, 50000),
-          sportId: Random.integer(1, 3) as Types.IWebAnchorMatch['sportId'],
-          matchId:"@id",
-          matchTime: randomPostTime(),
-          matchStatus: Random.integer(1, 8) as Types.IWebAnchorMatch['matchStatus'],
-          mid: Random.integer(10000, 50000),
-          vd: Random.word(1),
-          score: "@integer(1,10)-@integer(1,10)"
+      matchList: Array.from({ length: Random.natural(0, 5) }, () => ({
+        ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeId' | 'homeName' | 'awayId' | 'awayName'>,
+        tnName: "@cname",
+        tid: Random.integer(10000, 50000),
+        sportId: Random.integer(1, 3) as Types.IWebAnchorMatch['sportId'],
+        matchId: "@id",
+        matchTime: randomPostTime(),
+        matchStatus: Random.integer(1, 8) as Types.IWebAnchorMatch['matchStatus'],
+        mid: Random.integer(10000, 50000),
+        vd: Random.word(1),
+        score: "@integer(1,10)-@integer(1,10)"
       }))
     }))
   },
   {
-    url: '/v1/anchor/web-anchor/life',
+    url: `${prefix}/v1/anchor/web-anchor/life`,
     response: ({ query }) => mock(withData<Types.IWebAnchorLife>({
       list: Array.from({ length: Random.natural(0, 20) }, () => ({
         date: randomPostTime(),
@@ -79,7 +79,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/v1/anchor/web-anchor/photos',
+    url: `${prefix}/v1/anchor/web-anchor/photos`,
     response: ({ query }) => mock(withData<Types.IWebAnchorPhotos>({
       list: Array.from({ length: Random.natural(0, 20) }, () => ({
         date: randomPostTime(),
@@ -90,7 +90,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/v1/anchor/web-anchor/info',
+    url: `${prefix}/v1/anchor/web-anchor/info`,
     response: () => mock(withData<Types.IWebAnchorInfo>({
       country: "@region",
       height: String(Random.natural(150, 170)),
@@ -103,7 +103,7 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: '/v1/anchor/web-anchor/recommend',
+    url: `${prefix}/v1/anchor/web-anchor/recommend`,
     response: () => mock(withData<Types.IWebAnchorRecommend>({
       houseId: genHouseId(),
       liveStatus: Random.natural(1, 4) as Types.IWebAnchorRecommend['res']['data']['liveStatus'],
