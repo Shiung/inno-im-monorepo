@@ -50,26 +50,36 @@
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
   const { isOpen, displayType, height, size } = setEnv($env)
   const { userAccount, userToken, userVip } = setUserInfo($userInfo)
-  
-  env.subscribe(e => {
-    displayType.set(e.displayType)
-    height.set(e.height)
-    size.set(e.size)
-    isOpen.set(e.isOpen)
-  })
 
-  userInfo.subscribe(e => {
-    userAccount.set(e.userAccount)
-    userToken.set(e.userToken)
-    userVip.set(e.userVip)
-  })
+  const subscribeStoreModule = () => {
+    const envUnsubscribe = env.subscribe(e => {
+      displayType.set(e.displayType)
+      height.set(e.height)
+      size.set(e.size)
+      isOpen.set(e.isOpen)
+    })
 
-  info.subscribe(e => {
-    chatId.set(e.chatId)
-    iid.set(e.iid)
-    vipLimit.set(e.vipLimit)
-    frequency.set(e.frequency)
-  })
+    const userInfoUnsubscribe = userInfo.subscribe(e => {
+      userAccount.set(e.userAccount)
+      userToken.set(e.userToken)
+      userVip.set(e.userVip)
+    })
+
+    const infoUnsubscribe = info.subscribe(e => {
+      chatId.set(e.chatId)
+      iid.set(e.iid)
+      vipLimit.set(e.vipLimit)
+      frequency.set(e.frequency)
+    })
+
+    return () => {
+      infoUnsubscribe()
+      userInfoUnsubscribe()
+      envUnsubscribe()
+    }
+  }
+
+  const unsubscribeStoreModule = subscribeStoreModule()
 
   $: isWindow = $displayType === 'window'
 
@@ -212,6 +222,7 @@
   onDestroy(() => {
     if (subscription) subscription.unsubscribe()
     resetStoreModule()
+    unsubscribeStoreModule()
   })
 </script>
 
