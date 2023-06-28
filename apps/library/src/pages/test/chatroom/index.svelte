@@ -1,4 +1,5 @@
 <script lang='ts'>
+import { im } from 'api'
 import { twMerge } from 'tailwind-merge'
 import { onMount } from 'svelte'
 import { locale } from '$stores'
@@ -19,6 +20,7 @@ let changedHeight
 let videoPlay: boolean = false
 let isTransition: boolean = false
 let sportMarketSummary
+let selfOrdersCallback: () => Promise<any>
 
 $: initHeight = dom?.getBoundingClientRect().height
 
@@ -49,7 +51,7 @@ $: if (dom) {
 }
 
 $: setChatEnv({ height: changedHeight, size: expandType as any })
-$: setChatOrdersInfo({sportMarketSummary})
+$: setChatOrdersInfo({sportMarketSummary, selfOrdersCallback})
 
 onSizeChangedCallback((option: SizeChangedOption) => {
   isTransition = option.transition
@@ -77,15 +79,20 @@ onToggledCallback((open) => {
 // setTimeout(() => {
 //   videoPlay = true
 // }, 3000)
+
+const fetchMarket = async () => {
+  const lang = $locale.toLowerCase().replace(/_/g, '-')
+  const res = await fetch(
+    `https://tiger-api.innodev.site/platform/systatus/proxy/sports/dev/Java/json/${lang}/market_property_setting`
+  ).then((res) => res.json())
+  sportMarketSummary = res
+}
+
+const fetchSelfOrders = async () => await im.chatroomSelfOrders({ query: { iid: 1 } })
+
 onMount(async ()=> {
-  const fetchMarket = async () => {
-    const lang = $locale.toLowerCase().replace(/_/g, '-')
-    const res = await fetch(
-      `https://tiger-api.innodev.site/platform/systatus/proxy/sports/dev/Java/json/${lang}/market_property_setting`
-    ).then((res) => res.json())
-    return res
-  }
-  sportMarketSummary = await fetchMarket()
+  await fetchMarket()
+  selfOrdersCallback = fetchSelfOrders
 })
 </script>
 

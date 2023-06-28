@@ -1,6 +1,7 @@
-import type { EChatroomSize } from './constant'
 import { createStoreContext } from 'utils/storeContext'
+import type { EChatroomSize } from './constant'
 import type { ISportMarketSummary } from '$containers/BetDetail/types'
+import type { ISelfOrder, IChatroomSelfOrders } from 'api/im/types'
 
 export interface IChatroomEnv {
   displayType: 'window' | 'block'
@@ -9,7 +10,6 @@ export interface IChatroomEnv {
   size: `${EChatroomSize}`
   showBetList: boolean
   device: 'pc' | 'wap'
-
 }
 
 export const initEnv: IChatroomEnv = {
@@ -41,11 +41,13 @@ export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInf
 
 export interface IOrdersInfo {
   sportMarketSummary: ISportMarketSummary
+  selfOrdersCallback: () => Promise<any>
 }
 
 export const initOrdersInfo: IOrdersInfo = {
-  sportMarketSummary: null
-}
+  sportMarketSummary: null,
+  selfOrdersCallback: null
+ }
 
 export const [setOrdersInfo, getOrdersInfo] = createStoreContext<IOrdersInfo>('chatRoomOrdersInfo', initOrdersInfo)
 
