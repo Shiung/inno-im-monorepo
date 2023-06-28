@@ -2,7 +2,7 @@
   import { writable } from 'svelte/store'
   import { initEnv, initInfo, initUserInfo } from './context'
   import type { IChatroomEnv, IChatroomInfo, IUserInfo } from './context'
-  import type { SizeChangedCallback, ToggledCallback, DestroyedCallback } from './type'
+  import type { SizeChangedCallback, ToggledCallback } from './type'
 
   let env = writable(initEnv)
   export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
