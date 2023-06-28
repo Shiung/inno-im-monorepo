@@ -2,7 +2,7 @@
   import { writable } from 'svelte/store'
   import { initEnv, initInfo, initUserInfo, initOrdersInfo } from './context'
   import type { IChatroomEnv, IChatroomInfo, IUserInfo, IOrdersInfo } from './context'
-  import type { SizeChangedCallback, ToggledCallback, DestroyedCallback } from './type'
+  import type { SizeChangedCallback, ToggledCallback } from './type'
 
   let env = writable(initEnv)
   export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
@@ -27,12 +27,6 @@
   export const onToggledCallback = (callback: ToggledCallback) => {
     if (typeof callback !== 'function') return console.warn('onToggledCallback parameter callback MUST be function')
     toggledCallback = callback
-  }
-
-  let destroyedCallback: DestroyedCallback = () => {}
-  export const onDestroyedCallback = (callback: DestroyedCallback) => {
-    if (typeof callback !== 'function') return console.warn('onDestroyedCallback parameter callback MUST be function')
-    destroyedCallback = callback
   }
 </script>
 
@@ -63,29 +57,39 @@
   const { isOpen, displayType, height, size, showBetList, device } = setEnv($env)
   const { userAccount, userToken, userVip, userCurrency } = setUserInfo($userInfo)
   const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
-  
-  env.subscribe(e => {
-    displayType.set(e.displayType)
-    height.set(e.height)
-    size.set(e.size)
-    isOpen.set(e.isOpen)
-    device.set(e.device)
-    showBetList.set(e.showBetList)
-  })
 
-  userInfo.subscribe(e => {
-    userAccount.set(e.userAccount)
-    userToken.set(e.userToken)
-    userVip.set(e.userVip)
-    userCurrency.set(e.userCurrency)
-  })
+  const subscribeStoreModule = () => {
+    const envUnsubscribe = env.subscribe(e => {
+      displayType.set(e.displayType)
+      height.set(e.height)
+      size.set(e.size)
+      isOpen.set(e.isOpen)
+      device.set(e.device)
+      showBetList.set(e.showBetList)
+    })
 
-  info.subscribe(e => {
-    chatId.set(e.chatId)
-    iid.set(e.iid)
-    vipLimit.set(e.vipLimit)
-    frequency.set(e.frequency)
-  })
+    const userInfoUnsubscribe = userInfo.subscribe(e => {
+      userAccount.set(e.userAccount)
+      userToken.set(e.userToken)
+      userVip.set(e.userVip)
+      userCurrency.set(e.userCurrency)
+    })
+
+    const infoUnsubscribe = info.subscribe(e => {
+      chatId.set(e.chatId)
+      iid.set(e.iid)
+      vipLimit.set(e.vipLimit)
+      frequency.set(e.frequency)
+    })
+
+    return () => {
+      infoUnsubscribe()
+      userInfoUnsubscribe()
+      envUnsubscribe()
+    }
+  }
+
+  const unsubscribeStoreModule = subscribeStoreModule()
 
   ordersInfo.subscribe(e => {
     sportMarketSummary.set(e.sportMarketSummary)
@@ -196,6 +200,22 @@
     }
   }
 
+  const resetStoreModule = () => {
+    setChatEnv({
+      displayType: 'window',
+      height: 0,
+      isOpen: false,
+      size: 'default',
+      showBetList: false,
+      device: 'wap',
+    })
+
+    setChatInfo({
+      chatId: '',
+      iid: 0
+    })
+  }
+
   $: changeRoomSizeByTouchMove(touchMoveOffset)
 
   // use 100 * $appHeight for compatibility between ios and android
@@ -218,7 +238,8 @@
 
   onDestroy(() => {
     if (subscription) subscription.unsubscribe()
-    destroyedCallback && destroyedCallback()
+    resetStoreModule()
+    unsubscribeStoreModule()
   })
 </script>
 
