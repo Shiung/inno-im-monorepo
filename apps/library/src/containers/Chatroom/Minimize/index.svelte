@@ -29,7 +29,8 @@
     return visibleMsgs[visibleMsgs.length - 1]?.content || ''
   }
 
-  $: unread = calculateUnread($chatMessages, lastReadId)
+  // $: unread = calculateUnread($chatMessages, lastReadId)
+  $: unread = '99'
 
   $: content = getLatestMsgContent($chatMessages)
 </script>
@@ -44,7 +45,7 @@
 
       {#if unread && unread !== '0'}
         <div
-          class="absolute bg-imprimary rounded-full top-[-30%] right-[-40%] px-[2px] text-[10px] text-white font-semibold min-w-[15px]"
+          class="absolute bg-imprimary rounded-full top-[-30%] left-[50%] px-[2px] text-[10px] text-white font-semibold min-w-[15px]"
         >
           {unread}
         </div>
