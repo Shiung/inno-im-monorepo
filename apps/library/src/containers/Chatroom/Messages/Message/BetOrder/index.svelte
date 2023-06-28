@@ -32,11 +32,10 @@
     <Win
       class="mt-[15px] mb-[8px] leading-[20px] text-[rgb(var(--im-monorepo-primary))]"
       betItem={message}
-      amountSize={'22px'}
-      textColor={'rgb(var(--im-monorepo-primary))'}
+      chatMessage
     />
     <Market betItem={message} />
     <BetOn betItem={message} />
-    <Ante betItem={message} textColor={'#999'} />
+    <Ante betItem={message} color={'#999'} />
   </div>
 </div>

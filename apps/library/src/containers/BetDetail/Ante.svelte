@@ -5,7 +5,7 @@
   import CurrencyIcon from '$components/CurrencyIcon/index.svelte'
 
   export let betItem
-  export let textColor: string = 'rgb(var(--im-monorepo-primary))'
+  export let color: string = 'rgb(var(--im-monorepo-primary))'
 
   const { currency } = betItem
 </script>
@@ -15,7 +15,7 @@
 
   <CurrencyIcon class="w-[15px] h-[15px] mx-[5px]" {currency} />
 
-  <div class="text-[14px]" style:color={textColor}>
+  <div class="text-[14px]" style:color>
     {amountThousandthTransformer(betItem.totalAnte)}
   </div>
 </div>

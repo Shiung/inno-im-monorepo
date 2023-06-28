@@ -6,8 +6,7 @@
   import CurrencyIcon from '$components/CurrencyIcon/index.svelte'
 
   export let betItem
-  export let amountSize: string = '18px'
-  export let textColor: string = '#999'
+  export let chatMessage = false
 
   const { currency, details, cashOut, mayWinAmount, netWin } = betItem
   const settle = details[0].settle !== 0 || cashOut
@@ -24,11 +23,13 @@
       })}
     </div>
   {:else}
-    <div style:color={textColor}>{$t('chat.toWin')}</div>
+    <div class={chatMessage ? 'rgb(var(--im-monorepo-primary))' : 'text-[#999]'}>
+      {$t('chat.toWin')}
+    </div>
 
     <CurrencyIcon class="w-[20px] h-[20px] mx-[5px]" {currency} />
 
-    <div style:font-size={amountSize}>
+    <div class={chatMessage ? 'text-[22px]' : 'text-[18px]'}>
       {amountThousandthTransformer(mayWinAmount)}
     </div>
   {/if}
