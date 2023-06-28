@@ -28,13 +28,6 @@
       return console.warn('onToggledCallback parameter callback MUST be function')
     toggledCallback = callback
   }
-
-  let destroyedCallback: DestroyedCallback = () => {}
-  export const onDestroyedCallback = (callback: DestroyedCallback) => {
-    if (typeof callback !== 'function')
-      return console.warn('onDestroyedCallback parameter callback MUST be function')
-    destroyedCallback = callback
-  }
 </script>
 
 <script lang="ts">
@@ -64,26 +57,35 @@
   const { isOpen, displayType, height, size } = setEnv($env)
   const { userAccount, userToken, userVip } = setUserInfo($userInfo)
 
-  env.subscribe((e) => {
-    displayType.set(e.displayType)
-    height.set(e.height)
-    size.set(e.size)
-    isOpen.set(e.isOpen)
-  })
+  const subscribeStoreModule = () => {
+    const envUnsubscribe = env.subscribe((e) => {
+      displayType.set(e.displayType)
+      height.set(e.height)
+      size.set(e.size)
+      isOpen.set(e.isOpen)
+    })
 
-  userInfo.subscribe((e) => {
-    userAccount.set(e.userAccount)
-    userToken.set(e.userToken)
-    userVip.set(e.userVip)
-  })
+    const userInfoUnsubscribe = userInfo.subscribe((e) => {
+      userAccount.set(e.userAccount)
+      userToken.set(e.userToken)
+      userVip.set(e.userVip)
+    })
 
-  info.subscribe((e) => {
-    chatId.set(e.chatId)
-    iid.set(e.iid)
-    vipLimit.set(e.vipLimit)
-    frequency.set(e.frequency)
-  })
+    const infoUnsubscribe = info.subscribe((e) => {
+      chatId.set(e.chatId)
+      iid.set(e.iid)
+      vipLimit.set(e.vipLimit)
+      frequency.set(e.frequency)
+    })
 
+    return () => {
+      infoUnsubscribe()
+      userInfoUnsubscribe()
+      envUnsubscribe()
+    }
+  }
+
+  const unsubscribeStoreModule = subscribeStoreModule()
   $: isWindow = $displayType === 'window'
 
   let lastReadId: number
@@ -114,11 +116,14 @@
 
   let perviousChatId: string
   const subscribeNewAndUnsubscribePrevious = (_chatId: string) => {
+    // TODO: 避免多次 subscribe，先暫不處理，待搬出upper level後處理
+    if (_chatId === '0') return
+
     if (perviousChatId && perviousChatId !== _chatId) unsubscribeRoom(perviousChatId)
     subscribeRoom(_chatId)
     perviousChatId = _chatId
   }
-  $: if ($chatId) subscribeNewAndUnsubscribePrevious($chatId)
+  $: if ($chatId || iid) subscribeNewAndUnsubscribePrevious($chatId || String($iid))
 
   let initFetchLoading: boolean = true
 
@@ -126,7 +131,7 @@
     if (subscription) subscription.unsubscribe()
     subscribePushMessage()
     // TODO: 初次進入時 subscribe 會發生兩次，先暫不處理，待搬出upper level後處理
-    subscribeNewAndUnsubscribePrevious($chatId)
+    subscribeNewAndUnsubscribePrevious($chatId || String($iid))
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: 0, chatId: $chatId }
