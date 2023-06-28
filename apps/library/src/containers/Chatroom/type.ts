@@ -14,6 +14,4 @@ export type SizeChangedCallback = (option: SizeChangedOption) => void
 
 export type ToggledCallback = (open: boolean) => void
 
-export type DestroyedCallback = (...args: any[]) => any
-
 export type RouterRedirectCallback = (option: RouterRedirectOption) => void

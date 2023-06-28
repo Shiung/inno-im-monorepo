@@ -2,7 +2,7 @@
   import { writable } from 'svelte/store'
   import { initEnv, initInfo, initUserInfo } from './context'
   import type { IChatroomEnv, IChatroomInfo, IUserInfo } from './context'
-  import type { SizeChangedCallback, ToggledCallback, DestroyedCallback } from './type'
+  import type { SizeChangedCallback, ToggledCallback } from './type'
 
   let env = writable(initEnv)
   export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
@@ -178,18 +178,33 @@
     appHeight.set(Number(vh))
   }
 
-  // for changing chatroom size to EXPAND/NORMAL
-  $: {
+  const changeRoomSizeByTouchMove = (moveOffset: number) => {
     const scrollY = isWindow ? window.scrollY : boxContainerDom?.scrollTop
 
-    if (!isExpand && touchMoveOffset >= EXPAND_OFFSET) {
+    if (!isExpand && moveOffset >= EXPAND_OFFSET) {
       isExpand = true
       sizeChangedCallback({ size: EChatroomSize.EXPAND, transition: true })
-    } else if (isExpand && touchMoveOffset <= -EXPAND_OFFSET && scrollY === 0) {
+    } else if (isExpand && moveOffset <= -EXPAND_OFFSET && scrollY === 0) {
       isExpand = false
       sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
     }
   }
+
+  const resetStoreModule = () => {
+    setChatEnv({
+      displayType: 'window',
+      height: 0,
+      isOpen: false,
+      size: 'default'
+    })
+
+    setChatInfo({
+      chatId: '',
+      iid: 0
+    })
+  }
+
+  $: changeRoomSizeByTouchMove(touchMoveOffset)
 
   // use 100 * $appHeight for compatibility between ios and android
   $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
@@ -224,7 +239,8 @@
 
   onDestroy(() => {
     if (subscription) subscription.unsubscribe()
-    destroyedCallback && destroyedCallback()
+    resetStoreModule()
+    unsubscribeStoreModule()
   })
 </script>
 

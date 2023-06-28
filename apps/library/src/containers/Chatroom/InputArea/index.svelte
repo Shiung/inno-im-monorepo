@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import type { RouterRedirectCallback } from '../type'
   let routerRedirectCallback: RouterRedirectCallback = () => {}
-  export const onRouterRedirect = (callback: RouterRedirectCallback) => {
+  export const onRouterRedirectCallback = (callback: RouterRedirectCallback) => {
     if (typeof callback !== 'function') return console.warn('onRouterRedirect parameter callback MUST be function')
     routerRedirectCallback = callback
   }
@@ -95,10 +95,16 @@
     showWarning = true
   }
 
-  const handleClick = () => {
+  const onInputClick = () => {
     if(!disabled) return
 
     routerCallback && routerCallback()
+  }
+
+  const onInputKeyPress = (e: KeyboardEvent) => {
+    if(e.key === 'Enter') {
+      publishMessage()
+    }
   }
 
   $: isWindow = $displayType === 'window'
@@ -140,14 +146,13 @@
     bind:this={dom}
   >
     <div class="flex items-center">
-      <div class="flex-1 flex items-center relative">
+      <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
           class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary"
           placeholder={placeHolder}
           {disabled}
           bind:value={message}
           maxlength="300"
-          on:click={handleClick}
         />
 
         <Ripple
