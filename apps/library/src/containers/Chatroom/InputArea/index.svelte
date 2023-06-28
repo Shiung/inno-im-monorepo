@@ -95,10 +95,16 @@
     showWarning = true
   }
 
-  const handleClick = () => {
+  const onInputClick = () => {
     if(!disabled) return
 
     routerCallback && routerCallback()
+  }
+
+  const onInputKeyPress = (e: KeyboardEvent) => {
+    if(e.key === 'Enter') {
+      publishMessage()
+    }
   }
 
   $: isWindow = $displayType === 'window'
@@ -140,7 +146,7 @@
     bind:this={dom}
   >
     <div class="flex items-center">
-      <div class="flex-1 flex items-center relative" on:click={handleClick}>
+      <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
           class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary"
           placeholder={placeHolder}
