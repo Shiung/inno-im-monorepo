@@ -24,12 +24,6 @@
     if (typeof callback !== 'function') return console.warn('onToggledCallback parameter callback MUST be function')
     toggledCallback = callback
   }
-
-  let destroyedCallback: DestroyedCallback = () => {}
-  export const onDestroyedCallback = (callback: DestroyedCallback) => {
-    if (typeof callback !== 'function') return console.warn('onDestroyedCallback parameter callback MUST be function')
-    destroyedCallback = callback
-  }
 </script>
 
 <script lang="ts">
