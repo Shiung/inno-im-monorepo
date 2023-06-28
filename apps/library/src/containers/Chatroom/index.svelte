@@ -216,8 +216,6 @@
       return
     }
 
-    console.log('referer', refererTools.getBase64(), document.referrer)
-
     imWs.setParams({
       account: _account,
       vd: getConfig().vendor_id,
