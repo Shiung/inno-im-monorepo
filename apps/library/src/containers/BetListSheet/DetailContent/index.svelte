@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { getOrdersInfo } from '$containers/Chatroom/context'
+  import { getOrdersInfo, getInfo } from '$containers/Chatroom/context'
   import Container from './Container.svelte'
 
   import type { IFetchData, IBetOrder } from 'api/im/types'
@@ -9,6 +9,7 @@
   export let self: boolean
 
   const { selfOrdersCallback } = getOrdersInfo()
+  const { iid } = getInfo()
 
   const Self = () => import('./Self.svelte')
   const Other = () => import('./Other.svelte')
@@ -28,7 +29,10 @@
     fetchData.loading = true
 
     const mock = localStorage.getItem('mock') === 'true' || false
-    const res = mock ? await im.chatroomSelfOrders({ query: { iid: 1 } }) : await $selfOrdersCallback()
+
+    let res = { data: { list: [] } }
+    if (!mock) res = await im.chatroomSelfOrders({ query: { iid: $iid } })
+    else res.data.list = await $selfOrdersCallback()
 
     fetchData.data = res.data
     fetchData.loading = false
@@ -37,7 +41,7 @@
   const fetchOtherOrders = async () => {
     fetchData.loading = true
 
-    const res = await im.chatroomOtherOrders({ query: { iid: 1 } })
+    const res = await im.chatroomOtherOrders({ query: { iid: $iid } })
 
     fetchData.data = res.data
     fetchData.loading = false

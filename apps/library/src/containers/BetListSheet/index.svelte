@@ -3,7 +3,7 @@
   import Wap from './Wap.svelte'
 
   import { Header, Content, Footer } from 'ui/components/BottomSheet'
-  import { getEnv } from '$containers/Chatroom/context'
+  import { getEnv, getInfo } from '$containers/Chatroom/context'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
 
@@ -17,6 +17,8 @@
   export let open: boolean
 
   const { device } = getEnv()
+  const { chatId, iid } = getInfo()
+
   const Container = $device === 'pc' ? Pc : Wap
 
   const tabs: ITabs = {
@@ -39,15 +41,16 @@
 
     const data = {
       contentType: im.enum.contentType.ORDER,
-      chatId: 'chatid124',
-      iid: 1234,
+      chatId: $chatId,
+      iid: $iid,
       content: JSON.stringify(waitSendMessage)
     }
 
-    const res = await imWs.publish(
-      { eventkey, data },
-      { reqId: String(now), eventkey: `${eventkey}_${now}` }
-    )
+    const res = await imWs.publish({
+      pairId: now,
+      eventkey,
+      data
+    })
 
     console.log('publish res: ', res)
 

@@ -88,7 +88,10 @@ const fetchMarket = async () => {
   sportMarketSummary = res
 }
 
-const fetchSelfOrders = async () => await im.chatroomSelfOrders({ query: { iid: 1 } })
+const fetchSelfOrders = async () => {
+  const res = await im.chatroomSelfOrders({ query: { iid: 1 } })
+  return res.data.list
+}
 
 onMount(async ()=> {
   await fetchMarket()
