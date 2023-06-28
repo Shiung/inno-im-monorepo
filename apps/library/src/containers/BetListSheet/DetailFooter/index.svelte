@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { getInfo } from '$containers/Chatroom/context'
+  import { getUserInfo } from '$containers/Chatroom/context'
   import { CurrencyMap } from '../constant'
   import { t } from '$stores'
   import { twMerge } from 'tailwind-merge'
@@ -9,7 +9,7 @@
   export let self: boolean
 
   const dispatch = createEventDispatcher()
-  const { userCurrency } = getInfo()
+  const { userCurrency } = getUserInfo()
 
   $: transl = self ? 'chat.betList' : 'chat.follow'
 

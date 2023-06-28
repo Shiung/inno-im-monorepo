@@ -60,20 +60,24 @@
 
 
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
-  const { isOpen, displayType, height, size, showBetList } = setEnv($env)
-  const { userAccount, userToken, userVip } = setUserInfo($userInfo)
+  const { isOpen, displayType, height, size, showBetList, device } = setEnv($env)
+  const { userAccount, userToken, userVip, userCurrency } = setUserInfo($userInfo)
+  const { sportMarketSummary } = setOrdersInfo($ordersInfo)
   
   env.subscribe(e => {
     displayType.set(e.displayType)
     height.set(e.height)
     size.set(e.size)
     isOpen.set(e.isOpen)
+    device.set(e.device)
+    showBetList.set(e.showBetList)
   })
 
   userInfo.subscribe(e => {
     userAccount.set(e.userAccount)
     userToken.set(e.userToken)
     userVip.set(e.userVip)
+    userCurrency.set(e.userCurrency)
   })
 
   info.subscribe(e => {
@@ -83,8 +87,9 @@
     frequency.set(e.frequency)
   })
 
-  // $: setOrdersInfo($ordersInfo)
-
+  ordersInfo.subscribe(e => {
+    sportMarketSummary.set(e.sportMarketSummary)
+  })
 
   $: isWindow = $displayType === 'window'
 
