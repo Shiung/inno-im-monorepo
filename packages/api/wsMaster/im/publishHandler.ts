@@ -14,7 +14,7 @@ const requestEncode = (props: { pairId?: string | number, command: ECommand, dat
 
 export const sendMessage = (event: IWsMasterEvent) => {
   const requestMessageEntity = im.requestMessageEntity.encode({
-    contentType: im.enum.contentType.CHAT,
+    contentType: event.data.contentType,
     chatId: event.data.chatId,
     iid: event.data.iid,
     replyTo: event.data.replyTo,
