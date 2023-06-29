@@ -11,12 +11,13 @@ export const sendMessageParser = (decoded: IPush) => {
 export const pushMessageParser = (decoded: IPush) => {
   const pushMessageEntity = im.pushMessageEntity.decode(decoded.data?.value)
   const data = { eventkey: decoded.command, pairId: decoded.reqId, data: pushMessageEntity }
-  if (dev) console.log('ws onmessage SEND_MESSAGE: ', data)
+  if (dev) console.log('ws onmessage PUSH_MESSAGE: ', data)
 
   return data
 }
 
 export const fetchMessagesParser = (decoded: IPush) => {
+  console.log('==============================????????', decoded.data)
   const messages = im.pushMessageEntityWrapper.decode(decoded.data?.value)
   const data = { eventkey: decoded.command, pairId: decoded.reqId, data: messages }
   if (dev) console.log('ws onmessage FETCH_MESSAGES: ', data)
@@ -27,7 +28,7 @@ export const fetchMessagesParser = (decoded: IPush) => {
 export const subscribeChatParser = (decoded: IPush) => {
   const message = im.chatIdsWrapper.decode(decoded.data?.value)
   const data = { eventkey: decoded.command, pairId: decoded.reqId, data: message }
-  if (dev) console.log('ws onmessage SUBFETCH_MESSAGES: ', data)
+  if (dev) console.log('ws onmessage SUBSCRIBE_MESSAGES: ', data)
 
   return data
 }
@@ -35,7 +36,7 @@ export const subscribeChatParser = (decoded: IPush) => {
 export const unsubscribeChatParser = (decoded: IPush) => {
   const message = im.chatIdsWrapper.decode(decoded.data?.value)
   const data = { eventkey: decoded.command, pairId: decoded.reqId, data: message }
-  if (dev) console.log('ws onmessage UNSUBFETCH_MESSAGES: ', data)
+  if (dev) console.log('ws onmessage UNSUBSCRIBE_MESSAGES: ', data)
 
   return data
 }

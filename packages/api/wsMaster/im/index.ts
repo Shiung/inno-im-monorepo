@@ -25,6 +25,7 @@ const mock = localStorage.getItem('mock') === 'true'
 
 const ws = createWebsocket({
   url: mock ? 'ws://localhost:5174/proto/IM_API_URL' : getConfig().IM_CHAT_WS_URL,
+  // url: 'ws://172.28.30.117:3000/im/chat-ws/ws',
   binaryType: 'arraybuffer',
 
   pingPongParser: {
@@ -32,17 +33,19 @@ const ws = createWebsocket({
     pong: (event) => event.eventkey === im.enum.command.PING
   },
 
+
   messagePreparser: (event) => {
     const decoded = im.push.decode(event.data)
+    if (dev) console.log('ws onmessage PUSH DECODE: ', { ...decoded })
 
-    switch (decoded.command) {
+    switch (decoded?.command) {
       case im.enum.command.SEND_MESSAGE: return sendMessageParser(decoded)
       case im.enum.command.PUSH_MESSAGE: return pushMessageParser(decoded)
       case im.enum.command.FETCH_MESSAGES: return fetchMessagesParser(decoded)
       case im.enum.command.SUBSCRIBE_CHAT: return subscribeChatParser(decoded)
       case im.enum.command.UNSUBSCRIBE_CHAT: return unsubscribeChatParser(decoded)
       default:
-        return { eventkey: decoded.command, pairId: decoded.reqId, data: decoded.data?.value }
+        return { eventkey: decoded?.command, pairId: decoded?.reqId, data: decoded?.data?.value }
     }
   },
 

@@ -2,7 +2,8 @@
   import type { RouterRedirectCallback } from '../type'
   let routerRedirectCallback: RouterRedirectCallback = () => {}
   export const onRouterRedirectCallback = (callback: RouterRedirectCallback) => {
-    if (typeof callback !== 'function') return console.warn('onRouterRedirect parameter callback MUST be function')
+    if (typeof callback !== 'function')
+      return console.warn('onRouterRedirect parameter callback MUST be function')
     routerRedirectCallback = callback
   }
 </script>
@@ -45,8 +46,7 @@
     else if ($userVip < $vipLimit) {
       placeHolder = $t('chat.needVip', { vip: $vipLimit })
       routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
-    }
-    else {
+    } else {
       placeHolder = $t('chat.normalPlaceholder')
       disabled = false
       routerCallback = undefined
@@ -69,7 +69,7 @@
 
     const data = {
       contentType: im.enum.contentType.CHAT,
-      chatId: $chatId,
+      chatId: $chatId || String($iid),
       iid: $iid,
       // replyTo:
       content: waitSendMessage
@@ -91,18 +91,18 @@
   let showWarning: boolean = false
   const setWarningMsg = (code: string) => {
     const msgKey = warningCodeMap?.[code]
-    if(msgKey) warningMsg = $t(msgKey)
+    if (msgKey) warningMsg = $t(msgKey)
     showWarning = true
   }
 
   const onInputClick = () => {
-    if(!disabled) return
+    if (!disabled) return
 
     routerCallback && routerCallback()
   }
 
   const onInputKeyPress = (e: KeyboardEvent) => {
-    if(e.key === 'Enter') {
+    if (e.key === 'Enter') {
       publishMessage()
     }
   }
@@ -124,12 +124,12 @@
   }
 </script>
 
-<div class='relative'>
+<div class="relative">
   {#if showWarning}
     <div
       transition:fly|local={{ y: 32 }}
       class={twMerge(
-        "flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full",
+        'flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full',
         isWindow ? 'fixed' : 'absolute -translate-y-full'
       )}
       style:bottom={isWindow && `${blockHeight}px`}
@@ -146,7 +146,11 @@
     bind:this={dom}
   >
     <div class="flex items-center">
-      <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
+      <div
+        class="flex-1 flex items-center relative"
+        on:click={onInputClick}
+        on:keypress={onInputKeyPress}
+      >
         <input
           class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary"
           placeholder={placeHolder}

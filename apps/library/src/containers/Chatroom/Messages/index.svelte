@@ -5,9 +5,9 @@
   import { expoOut } from 'svelte/easing'
   import { createEventDispatcher, tick } from 'svelte'
   import { Ripple } from 'ui'
-  import { im } from 'api'
   import { t, locale } from '$stores'
   import { im as impb } from 'protobuf'
+  import { im as imWs } from 'api/wsMaster'
   import type { IPushMessageEntity } from 'protobuf/im/types'
 
   import flash from './flash'
@@ -33,8 +33,11 @@
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
 
-  const getOldestMessage = () => ($chatMessages.find(msg => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
-  const getNewestMessage = () => ($chatMessages.findLast(msg => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  const getOldestMessage = () =>
+    ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  const getNewestMessage = () =>
+    ($chatMessages.findLast((msg) => msg.visible === impb.enum.visible.ALL) ||
+      {}) as IPushMessageEntity
 
   const dispatch = createEventDispatcher()
 
@@ -112,8 +115,14 @@
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
-    const res = await im.chatroomPastMessage({ query: { chatId: $chatId, quantity: pastQuantity }, headers: { 'Accept-Language': $locale } })
-    chatMessages.update((messages) => [...res.data.list, ...messages])
+    // const res = await im.chatroomPastMessage({ query: { chatId: $chatId, quantity: pastQuantity }, headers: { 'Accept-Language': $locale } })
+    // chatMessages.update((messages) => [...res.data.list, ...messages])
+    console.log('magId: ', $chatMessages?.[0]?.msgId, $chatMessages)
+    const res = await imWs.publish({
+      eventkey: impb.enum.command.FETCH_MESSAGES,
+      data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId }
+    })
+    chatMessages.update((messages) => [...res.data.pushMessageEntity, ...messages])
     fetchMoreLoading = false
 
     await tick()
@@ -126,7 +135,6 @@
       window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
     else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
   }
-
 </script>
 
 <svelte:window on:scroll={isWindow && onWindowScroll} />

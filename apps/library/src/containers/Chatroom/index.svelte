@@ -136,6 +136,7 @@
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: 0, chatId: $chatId }
     })
+    res.data.pushMessageEntity.sort((a: any, b: any) => a.msgId - b.msgId)
     chatMessages.update((messages) => [...res.data.pushMessageEntity, ...messages])
     initFetchLoading = false
   }

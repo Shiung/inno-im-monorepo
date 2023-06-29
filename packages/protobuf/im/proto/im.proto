@@ -5,16 +5,17 @@ import "google/protobuf/any.proto";
 option go_package = "go/model/im";
 
 enum Command {
-	COMMAND_NONE     = 0;
-	SEND_MESSAGE     = 1;
-	FETCH_MESSAGES   = 2;
-	REPORT_ABUSE     = 3;
-	SWITCH_LANGUAGE  = 4;
-	SUBSCRIBE_CHAT   = 5;
-	UNSUBSCRIBE_CHAT = 6;
-	PING             = 7;
-	PUSH_MESSAGE     = 100;
-	USER_STATUS      = 200;
+	COMMAND_NONE       = 0;
+	SEND_MESSAGE       = 1;
+	FETCH_MESSAGES     = 2;
+	REPORT_ABUSE       = 3;
+	SWITCH_LANGUAGE    = 4;
+	SUBSCRIBE_CHAT     = 5;
+	UNSUBSCRIBE_CHAT   = 6;
+	PING               = 7;
+	FETCH_OTHER_ORDERS = 8;
+	PUSH_MESSAGE       = 100;
+	USER_STATUS        = 200;
 }
 
 enum Language {
@@ -139,4 +140,11 @@ message UserGroupStateArg {
 	int64     userId  = 2;
 	int64     groupId = 3;
 	StateType Status  = 4;
+}
+
+message FetchOtherOrders {
+	int64  vdId          = 1;
+	string sender        = 2;
+	string chatId        = 3;
+	int32  iid           = 4;
 }

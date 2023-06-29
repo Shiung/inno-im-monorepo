@@ -28,8 +28,8 @@
     })
 
     setChatInfo({
-      chatId: '1234',
-      iid: 123456,
+      chatId: '52252',
+      // iid: 9433737,
       vipLimit: 0,
       frequency: 0
     })
@@ -37,7 +37,7 @@
     setChatUserInfo({
       userAccount: 'bltest01',
       userToken:
-        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiZmJjZjIzNWQtNzFiZS00MDhhLWJjYzUtN2MxNjY3M2RjZTg5IiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg3ODU2NjkwMDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.2AKZUzjgNcD8Ywlak8WdbNInywd2LYNBHQ5CKc8i030',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiOGFiNzgxNmMtZDM3My00MDNhLThiY2QtMzQ2ZTM4MzQ3NTFiIiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4MDAzMTU4MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.PhX54qXOnvObyqZYtU5qm09mz0q-odbi54ppd7jYQGo',
       userVip: 10
     })
   }
