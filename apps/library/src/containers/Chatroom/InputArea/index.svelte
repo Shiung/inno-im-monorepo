@@ -62,7 +62,7 @@
     if (!message) return
     const now = Date.now()
     if (now - lastSend <= $frequency) {
-      return setWarningMsg('30003')
+      return setWarningMsg(4005)
     }
 
     const waitSendMessage = message
@@ -84,12 +84,14 @@
 
     console.log('publish res: ', res)
 
+    if(res.code !== 0) setWarningMsg(res.code)
+
     lastSend = now
   }
 
   let warningMsg: string
   let showWarning: boolean = false
-  const setWarningMsg = (code: string) => {
+  const setWarningMsg = (code: string | number) => {
     const msgKey = warningCodeMap?.[code]
     if (msgKey) warningMsg = $t(msgKey)
     showWarning = true
