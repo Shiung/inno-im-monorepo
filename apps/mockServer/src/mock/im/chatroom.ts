@@ -68,7 +68,7 @@ const expert: IMockData[] = [
     }
   },
   {
-    url: '/product/business/bets/ordersWithIid',
+    url: `${prefix}/product/business/bets/ordersWithIid`,
     timeout: 500,
     response: ({ query }) =>
       mock(
@@ -80,7 +80,7 @@ const expert: IMockData[] = [
       )
   },
   {
-    url: '/product/chat/betOrder/getOthers',
+    url: `${prefix}/product/chat/betOrder/getOthers`,
     timeout: 500,
     response: ({ query }) => 
       mock(
