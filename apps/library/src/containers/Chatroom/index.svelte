@@ -196,12 +196,7 @@
   }
 
   const resetStoreModule = () => {
-    setChatEnv({
-      displayType: 'window',
-      height: 0,
-      isOpen: false,
-      size: 'default'
-    })
+    setChatEnv(initEnv)
 
     setChatInfo({
       chatId: '',
