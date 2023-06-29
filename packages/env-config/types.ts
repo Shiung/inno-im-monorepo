@@ -26,8 +26,10 @@ export interface WindowEnv {
   FE_CDN_URL: string
   BE_CDN_URL: string
   VENDERID: VENDERID
+  vendor_id: number
   DEPLOY_ENV: string
   RESOURCE_URL: string
   ECHO_URL: string
   IM_API_URL: string
+  IM_CHAT_WS_URL: string
 }

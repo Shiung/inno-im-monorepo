@@ -6,7 +6,7 @@ interface IGoogleProtobufAny {
 }
 
 export interface IRequest {
-  reqId: string
+  reqId?: string
   command: ECommand
   data: IGoogleProtobufAny
 }
@@ -20,7 +20,7 @@ export interface IRequestMessageEntity {
 }
 
 export interface IPush {
-  reqId: string
+  reqId?: string
   command: ECommand
   code: number
   msg: string

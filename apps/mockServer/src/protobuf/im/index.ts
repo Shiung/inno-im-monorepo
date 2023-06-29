@@ -25,12 +25,12 @@ export const onClose = () => {
 }
 
 const onReceivePing = (ws: WebSocket) => {
-  const buffer = impb.push?.encode({ reqId: '', command: impb.enum.command.PING, code: 0, msg: '', data: { value: new Uint8Array() } })
+  const buffer = impb.push?.encode({ command: impb.enum.command.PING, code: 0, msg: '', data: { value: new Uint8Array() } })
   if (buffer) ws.send(buffer)
 }
 
 const sendReply = (ws: WebSocket, data: IRequest) => {
-  const buffer = impb.push?.encode({ reqId: data.reqId, command: data.command, code: 0, msg: '', data: { value: new Uint8Array() } })
+  const buffer = impb.push?.encode({ ...(data.reqId && { reqId: data.reqId }), command: data.command, code: 0, msg: '', data: data.data })
   if (buffer) ws.send(buffer)
 }
 const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
@@ -46,12 +46,11 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
     iid: message.iid
   })
 
-  const buf = pushMessage({ reqId: '', value: pushMsg })
+  const buf = pushMessage({ value: pushMsg })
   if (buf) ws.send(buf)
 }
 
-const onReceiveFetchMessages = (ws: WebSocket, data: IRequest) => {
-  sendReply(ws, data)
+const onReceiveFetchMessage = (ws: WebSocket, __data: IRequest) => {
   const _data = genPushMessages()
 
   const buf = impb.push?.encode({ reqId: '', command: impb.enum.command.FETCH_MESSAGES, code: 0, msg: '', data: { value: _data || new Uint8Array() } })
@@ -65,8 +64,8 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
       case impb.enum.command.PING: return onReceivePing(ws)
       case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
       case impb.enum.command.SUBSCRIBE_CHAT: return sendReply(ws, data)
-      case impb.enum.command.UNSUBSCRIBE_CHAT: return sendReply(ws, data)
-      case impb.enum.command.FETCH_MESSAGES: return onReceiveFetchMessages(ws, data)
+      case impb.enum.command.UNSUBSCRIBE_CHAT: return sendReply(ws, { ...data, data: { value: new Uint8Array() } })
+      case impb.enum.command.FETCH_MESSAGES: return onReceiveFetchMessage(ws, data)
     }
 
   } catch (e) {

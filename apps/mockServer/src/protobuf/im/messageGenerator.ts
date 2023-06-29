@@ -18,5 +18,5 @@ export const genPushMessages = () => {
   const data = Array.from({ length: 10 }, (_, idx) => ({
     ...messageEntityData(idx)
   }))
-  return impb.pushMessageEntityWrapper?.encode(data)
+  return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
 }

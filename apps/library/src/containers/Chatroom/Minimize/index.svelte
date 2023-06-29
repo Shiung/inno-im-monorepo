@@ -17,7 +17,11 @@
   const calculateUnread = (msgs: IChatMessage[], _lastReadId: number) => {
     const lastIdx = msgs.findIndex((msg) => msg.msgId === _lastReadId)
 
-    return getVisibleMsgs(msgs, lastIdx + 1).length
+    const unreadLength = getVisibleMsgs(msgs, lastIdx + 1).length
+
+    if(unreadLength > 99) return '99+'
+
+    return `${unreadLength}`
   }
 
   const getLatestMsgContent = (msgs: IChatMessage[]) => {
@@ -38,9 +42,9 @@
     <div class="relative">
       <Chat class="min-w-[20px]" width={20} height={20} fill="#666666" />
 
-      {#if unread !== 0}
+      {#if unread && unread !== '0'}
         <div
-          class="absolute bg-imprimary rounded-full top-[-30%] right-[-40%] px-[2px] text-[10px] text-white font-semibold min-w-[15px]"
+          class="absolute bg-imprimary rounded-full top-[-30%] left-[50%] px-[2px] text-[10px] text-white font-semibold min-w-[15px]"
         >
           {unread}
         </div>

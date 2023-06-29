@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { withData, genSelfOrder } from './utils'
+import { prefix, withData, genSelfOrder } from './utils'
 
 import { ECommand } from 'protobuf/im/constants'
 import type * as Types from 'api/im/types'
@@ -37,11 +37,11 @@ export const messageEntityData = (ts: number = Date.now(), props?: MessageEntity
 }
 
 export const pushMessageData = (props: { reqId?: string, value?: Uint8Array }) => {
-  const reqId = props.reqId || ''
+  const reqId = props.reqId
   const value = props.value || new Uint8Array()
 
   return {
-    reqId,
+    ...(reqId && { reqId }),
     command: ECommand.PUSH_MESSAGE,
     code: 0,
     msg: '',
@@ -53,7 +53,7 @@ let lastDateId = Date.now()
 
 const expert: IMockData[] = [
   {
-    url: '/v1/chat-room/past-message',
+    url: `${prefix}/v1/chat-room/past-message`,
     timeout: 500,
     response: ({ query }) => {
       const listLength = Number(query.quantity) || 30
