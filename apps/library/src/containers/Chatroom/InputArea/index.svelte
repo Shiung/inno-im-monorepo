@@ -28,7 +28,7 @@
 
   const { userToken, userVip } = getUserInfo()
   const { chatId, iid, vipLimit, frequency } = getInfo()
-  const { displayType } = getEnv()
+  const { displayType, showBetList } = getEnv()
 
   let placeHolder: string = ''
   let disabled: boolean = true
@@ -164,8 +164,10 @@
         </Ripple>
       </div>
 
-      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
-        <ShowS width={28} height={28} fill="#999999" />
+      <Ripple class='flex items-center justify-center rounded-full h-[36px] w-[36px]' 
+        on:click={() => ($showBetList = true)}
+      >
+        <ShowS width={28} height={28} fill='#999999' />
       </Ripple>
       <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
         <Plus width={28} height={28} fill="#999999" />

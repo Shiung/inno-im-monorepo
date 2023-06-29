@@ -9,6 +9,7 @@ const getDevConfig = (env: ENV): WindowEnv => {
   return {
     ODDS_BOARD_API_URL: 'https://api-dev.kioga.site/product',
     ODDS_BOARD_WEBSOCKET_URL: 'wss://api-dev.kioga.site/product',
+    FE_CDN_URL: 'https://fe-source.dev.mppwr.com',
     BE_CDN_URL: 'https://be-source.dev.mppwr.com',
     VENDERID: 'vd004',
     vendor_id: 4,

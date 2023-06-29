@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { writable } from 'svelte/store'
-  import { initEnv, initInfo, initUserInfo } from './context'
-  import type { IChatroomEnv, IChatroomInfo, IUserInfo } from './context'
+  import { initEnv, initInfo, initUserInfo, initOrdersInfo } from './context'
+  import type { IChatroomEnv, IChatroomInfo, IUserInfo, IOrdersInfo } from './context'
   import type { SizeChangedCallback, ToggledCallback } from './type'
 
   let env = writable(initEnv)
@@ -22,6 +22,10 @@
     sizeChangedCallback = callback
   }
 
+  let ordersInfo = writable(initOrdersInfo)
+  export const setChatOrdersInfo = (_platformInfo: Partial<IOrdersInfo>) =>
+    ordersInfo.update((e) => ({ ...e, ..._platformInfo }))
+  
   let toggledCallback: ToggledCallback = () => {}
   export const onToggledCallback = (callback: ToggledCallback) => {
     if (typeof callback !== 'function')
@@ -45,17 +49,20 @@
 
   import Empty from '$src/containers/Empty'
 
-  import { setInfo, setEnv, setUserInfo } from './context'
+  import { setInfo, setEnv, setUserInfo, setOrdersInfo } from './context'
   import Minimize from './Minimize/index.svelte'
   import Header from './Header/index.svelte'
   import Loading from './Loading.svelte'
   import Messages from './Messages/index.svelte'
   import InputArea from './InputArea/index.svelte'
+  import BetListSheet from '../BetListSheet/index.svelte'
   import { EChatroomSize } from './constant'
 
+
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
-  const { isOpen, displayType, height, size } = setEnv($env)
-  const { userAccount, userToken, userVip } = setUserInfo($userInfo)
+  const { isOpen, displayType, height, size, showBetList, device } = setEnv($env)
+  const { userAccount, userToken, userVip, userCurrency } = setUserInfo($userInfo)
+  const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
     const envUnsubscribe = env.subscribe((e) => {
@@ -63,12 +70,15 @@
       height.set(e.height)
       size.set(e.size)
       isOpen.set(e.isOpen)
+      device.set(e.device)
+      showBetList.set(e.showBetList)
     })
 
     const userInfoUnsubscribe = userInfo.subscribe((e) => {
       userAccount.set(e.userAccount)
       userToken.set(e.userToken)
       userVip.set(e.userVip)
+      userCurrency.set(e.userCurrency)
     })
 
     const infoUnsubscribe = info.subscribe((e) => {
@@ -78,14 +88,21 @@
       frequency.set(e.frequency)
     })
 
+    const ordersInfoUnsubscribe = ordersInfo.subscribe(e => {
+      sportMarketSummary.set(e.sportMarketSummary)
+      selfOrdersCallback.set(e.selfOrdersCallback)
+    })
+
     return () => {
       infoUnsubscribe()
       userInfoUnsubscribe()
       envUnsubscribe()
+      ordersInfoUnsubscribe()
     }
   }
 
   const unsubscribeStoreModule = subscribeStoreModule()
+
   $: isWindow = $displayType === 'window'
 
   let lastReadId: number
@@ -285,7 +302,9 @@
 
       <InputArea />
 
-      <div class="absolute inset-0 bg-white z-[-1]" />
+      <BetListSheet bind:open={$showBetList} />
+
+      <div class='absolute inset-0 bg-white z-[-1]'></div>
     </div>
   {/if}
 </div>

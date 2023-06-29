@@ -23,6 +23,7 @@ export type VENDERID = typeof activedVenders[number]
 export interface WindowEnv {
   ODDS_BOARD_API_URL: string
   ODDS_BOARD_WEBSOCKET_URL: string
+  FE_CDN_URL: string
   BE_CDN_URL: string
   VENDERID: VENDERID
   vendor_id: number

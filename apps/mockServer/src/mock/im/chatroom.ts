@@ -1,5 +1,5 @@
 import { mock, Random } from 'mockjs'
-import { prefix, withData } from './utils'
+import { prefix, withData, genSelfOrder } from './utils'
 
 import { ECommand } from 'protobuf/im/constants'
 import type * as Types from 'api/im/types'
@@ -7,6 +7,7 @@ import type { IMockData } from '../../types'
 
 export interface MessageEntityDataProps {
   content?: string
+  contentType?: number
   sender?: string
   isSelf?: boolean
   chatId?: string
@@ -16,10 +17,11 @@ export interface MessageEntityDataProps {
 export const messageEntityData = (ts: number = Date.now(), props?: MessageEntityDataProps) => {
   const _content = props?.content
   const _sender = props?.sender
-
+  const _contentType = props?.contentType
+  
   return mock({
     msgId: ts,
-    contentType: 1,
+    contentType: _contentType || 1,
     vdId: 4,
     senderName: _sender || '@name',
     isSelf: !!props?.isSelf,
@@ -65,6 +67,35 @@ const expert: IMockData[] = [
       return mock(withData<Types.IChatroomPastMessage>({ list }))
     }
   },
+  {
+    url: `${prefix}/product/business/bets/ordersWithIid`,
+    timeout: 500,
+    response: ({ query }) =>
+      mock(
+        withData<Types.IChatroomSelfOrders>({
+          list: Array.from({ length: Number(query.quantity) || 10 }, () => ({
+            ...genSelfOrder(Number(query.iid))
+          }))
+        })
+      )
+  },
+  {
+    url: `${prefix}/product/chat/betOrder/getOthers`,
+    timeout: 500,
+    response: ({ query }) => 
+      mock(
+        withData<Types.IChatroomOtherOrders>({
+          list: Array.from({ length: Number(query.quantity) || 10 }, () => ({
+            iid: Number(query.iid),
+            nickName: '@name',
+            account: '@name',
+            vip: Random.integer(1, 9),
+            avatar: Random.integer(1, 10),
+            betOrder: {...genSelfOrder(Number(query.iid))}
+          }))
+        })
+      )
+  }
 ]
 
 export default expert
