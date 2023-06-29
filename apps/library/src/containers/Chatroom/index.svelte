@@ -60,7 +60,7 @@
 
 
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
-  const { isOpen, displayType, height, size, showBetList, device } = setEnv($env)
+  const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse } = setEnv($env)
   const { userAccount, userToken, userVip, userCurrency } = setUserInfo($userInfo)
   const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
 
@@ -72,6 +72,7 @@
       isOpen.set(e.isOpen)
       device.set(e.device)
       showBetList.set(e.showBetList)
+      useScrollCollapse.set(e.useScrollCollapse)
     })
 
     const userInfoUnsubscribe = userInfo.subscribe((e) => {

@@ -34,7 +34,8 @@
       height: initHeight,
       isOpen: false,
       showBetList: false,
-      device: 'wap'
+      device: 'wap',
+      useScrollCollapse: true
     })
 
     setChatInfo({
