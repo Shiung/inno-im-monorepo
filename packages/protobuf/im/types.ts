@@ -57,3 +57,10 @@ export interface IReportAbuseAegs {
   userId: number
   reason: string
 }
+
+export interface IFetchOtherOrdersArgs {
+  vdId: number
+  sender: string
+  chatId :string
+  iid: number
+}

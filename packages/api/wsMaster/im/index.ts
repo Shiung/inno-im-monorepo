@@ -7,7 +7,8 @@ import {
   fetchMessages,
   subscribeChat,
   unsubscribeChat,
-  reportAbuse
+  reportAbuse,
+  fetchOtherOrders
 } from './publishHandler'
 
 import {
@@ -15,7 +16,8 @@ import {
   pushMessageParser,
   fetchMessagesParser,
   subscribeChatParser,
-  unsubscribeChatParser
+  unsubscribeChatParser,
+  fetchOtherOrdersParser
 } from './messagePreparser'
 
 
@@ -44,6 +46,7 @@ const ws = createWebsocket({
       case im.enum.command.FETCH_MESSAGES: return fetchMessagesParser(decoded)
       case im.enum.command.SUBSCRIBE_CHAT: return subscribeChatParser(decoded)
       case im.enum.command.UNSUBSCRIBE_CHAT: return unsubscribeChatParser(decoded)
+      case im.enum.command.FETCH_OTHER_ORDERS: return fetchOtherOrdersParser(decoded)
       default:
         return { eventkey: decoded?.command, pairId: decoded?.reqId, data: decoded?.data?.value }
     }
@@ -57,6 +60,7 @@ const ws = createWebsocket({
       case im.enum.command.SUBSCRIBE_CHAT: return subscribeChat(event)
       case im.enum.command.UNSUBSCRIBE_CHAT: return unsubscribeChat(event)
       case im.enum.command.REPORT_ABUSE: return reportAbuse(event)
+      case im.enum.command.FETCH_OTHER_ORDERS: return fetchOtherOrders(event)
 
       default: return event.data
     }

@@ -7,6 +7,7 @@ export enum ECommand {
   SUBSCRIBE_CHAT = 5,
   UNSUBSCRIBE_CHAT = 6,
   PING = 7,
+  FETCH_OTHER_ORDERS = 8,
   PUSH_MESSAGE = 100,
   USER_STATUS = 200
 }

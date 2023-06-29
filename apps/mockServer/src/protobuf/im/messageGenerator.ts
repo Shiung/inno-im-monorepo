@@ -2,7 +2,7 @@ import impb from 'protobuf/im/node'
 
 import { messageEntityData, pushMessageData } from '../../mock/im/chatroom'
 import type { MessageEntityDataProps } from '../../mock/im/chatroom'
-
+import { genSelfOrder } from '../../mock/im/utils'
 
 export const pushMessageEntity = (msg?: MessageEntityDataProps) => {
   const data = messageEntityData(Date.now(), msg)
@@ -17,6 +17,16 @@ export const pushMessage = (props?: { reqId?: string, value?: Uint8Array | undef
 export const genPushMessages = () => {
   const data = Array.from({ length: 10 }, (_, idx) => ({
     ...messageEntityData(idx)
+  }))
+  return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
+}
+
+export const genFetchOtherOrdersMessages = (props?: { iid: number }) => {
+  const data = Array.from({ length: 10 }, (_) => ({
+    ...messageEntityData(Date.now(), {
+      contentType: 2,
+      content: JSON.stringify(genSelfOrder(props?.iid || 0))
+    })
   }))
   return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
 }

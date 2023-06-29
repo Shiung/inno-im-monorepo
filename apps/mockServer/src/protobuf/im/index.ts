@@ -1,5 +1,5 @@
 import impb from 'protobuf/im/node'
-import { pushMessage, pushMessageEntity, genPushMessages } from './messageGenerator'
+import { pushMessage, pushMessageEntity, genPushMessages, genFetchOtherOrdersMessages } from './messageGenerator'
 
 import type { IRequest } from 'protobuf/im/types'
 import type { RawData, WebSocket } from 'ws'
@@ -57,6 +57,14 @@ const onReceiveFetchMessage = (ws: WebSocket, __data: IRequest) => {
   if (buf) ws.send(buf)
 }
 
+const onReceiveFetchOtherOrders = (ws: WebSocket, __data: IRequest) => {
+  const props = impb.fetchOtherOrdersArgs.decode(__data.data.value)
+  const _data = genFetchOtherOrdersMessages(props.iid)
+
+  const buf = impb.push?.encode({ reqId: '', command: impb.enum.command.FETCH_OTHER_ORDERS, code: 0, msg: '', data: { value: _data || new Uint8Array() } })
+  if (buf) ws.send(buf)
+}
+
 export const onMessage = (ws: WebSocket, event: RawData) => {
   try {
     const data = impb.request?.decode(event as Uint8Array)
@@ -66,6 +74,7 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
       case impb.enum.command.SUBSCRIBE_CHAT: return sendReply(ws, data)
       case impb.enum.command.UNSUBSCRIBE_CHAT: return sendReply(ws, { ...data, data: { value: new Uint8Array() } })
       case impb.enum.command.FETCH_MESSAGES: return onReceiveFetchMessage(ws, data)
+      case impb.enum.command.FETCH_OTHER_ORDERS: return onReceiveFetchOtherOrders(ws, data)
     }
 
   } catch (e) {

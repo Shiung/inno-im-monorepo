@@ -40,3 +40,11 @@ export const unsubscribeChatParser = (decoded: IPush) => {
 
   return data
 }
+
+export const fetchOtherOrdersParser = (decoded: IPush) => {
+  const messages = im.pushMessageEntityWrapper.decode(decoded.data?.value)
+  const data = { eventkey: decoded.command, pairId: decoded.reqId, data: messages }
+  if (dev) console.log('ws onmessage FETCH_OTHER_ORDERS: ', data)
+
+  return data
+}

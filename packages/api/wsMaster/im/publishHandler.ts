@@ -39,6 +39,20 @@ export const fetchMessages = (event: IWsMasterEvent) => {
   })
 }
 
+export const fetchOtherOrders = (event: IWsMasterEvent) => {
+  const fetchOtherOrdersArgs = im.fetchOtherOrdersArgs.encode({
+    vdId: event.data.vdId,
+    sender: event.data.sender,
+    chatId: event.data.chatId,
+    iid: event.data.iid,
+  })
+
+  return requestEncode({
+    pairId: event?.pairId, command: im.enum.command.FETCH_OTHER_ORDERS,
+    data: { type_url: 'type.googleapis.com/RequestMessageEntity', value: fetchOtherOrdersArgs }
+  })
+}
+
 export const subscribeChat = (event: IWsMasterEvent) => {
   const chatIdsWrapper = im.chatIdsWrapper.encode({
     chatIds: event.data.chatIds

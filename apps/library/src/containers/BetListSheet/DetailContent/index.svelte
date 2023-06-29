@@ -1,6 +1,8 @@
 <script lang="ts">
   import { im } from 'api'
-  import { getOrdersInfo, getInfo } from '$containers/Chatroom/context'
+  import { im as imWs } from 'api/wsMaster'
+  import { im as impb } from 'protobuf'
+  import { getOrdersInfo, getInfo, getUserInfo } from '$containers/Chatroom/context'
   import Container from './Container.svelte'
 
   import type { IFetchData, IBetOrder } from 'api/im/types'
@@ -9,7 +11,8 @@
   export let self: boolean
 
   const { selfOrdersCallback } = getOrdersInfo()
-  const { iid } = getInfo()
+  const { chatId, iid } = getInfo()
+  const { userAccount } = getUserInfo()
 
   const Self = () => import('./Self.svelte')
   const Other = () => import('./Other.svelte')
@@ -41,9 +44,32 @@
   const fetchOtherOrders = async () => {
     fetchData.loading = true
 
-    const res = await im.chatroomOtherOrders({ query: { iid: $iid } })
+    // const res = await im.chatroomOtherOrders({ query: { iid: $iid } })
+    // fetchData.data = res.data
 
-    fetchData.data = res.data
+    const res = await imWs.publish({
+      eventkey: impb.enum.command.FETCH_OTHER_ORDERS,
+      data: { vdId: 1, sender: $userAccount, chatId: $chatId, iid: $iid }
+    })
+
+    fetchData.data = {
+      list: res.data.pushMessageEntity.map(e => {
+        let content = {}
+        try {
+          content = JSON.parse(e.content)
+        } catch (error) {
+          console.error(error)
+        }
+
+        return {
+          avatar: e.avatar,
+          account: e.senderName,
+          iid: e.iid,
+          vip: e.vip,
+          betOrder: content
+        }
+      })
+    }
     fetchData.loading = false
   }
 

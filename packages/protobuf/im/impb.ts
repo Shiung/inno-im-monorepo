@@ -5,7 +5,7 @@ import { Enum } from './constants'
 import type {
   IRequest, IPush, IPushMessageEntity,
   IRequestMessageEntity, IChatIdsWrapper, IReportAbuseAegs,
-  IFetchArgs
+  IFetchArgs, IFetchOtherOrdersArgs
 } from './types'
 
 class ImBp {
@@ -17,6 +17,7 @@ class ImBp {
   public _chatIdsWrapper: ReturnType<Type['lookupType']> | null = null
   public _fetchArgs: ReturnType<Type['lookupType']> | null = null
   public _reportAbuseArgs: ReturnType<Type['lookupType']> | null = null
+  public _fetchOtherOrdersArgs: ReturnType<Type['lookupType']> | null = null
   public enum = Enum
   public done: boolean = false
 
@@ -34,6 +35,7 @@ class ImBp {
     this._chatIdsWrapper = root.lookupType('ChatIdsWrapper')
     this._fetchArgs = root.lookupType('FetchArgs')
     this._reportAbuseArgs = root.lookupType('ReportAbuseArgs')
+    this._fetchOtherOrdersArgs = root.lookupType('FetchOtherOrders')
     this.enum = {
       command: root.getEnum('Command') as unknown as typeof Enum['command'],
       visible: root.getEnum('Visible') as unknown as typeof Enum['visible'],
@@ -104,6 +106,13 @@ class ImBp {
     return {
       encode: (data: IReportAbuseAegs) => this.safeCode(() => this._reportAbuseArgs?.encode(data).finish()),
       decode: (data: ArrayBuffer) => this.safeCode(() => this._reportAbuseArgs?.decode(new Uint8Array(data)) as unknown as IReportAbuseAegs)
+    }
+  }
+
+  get fetchOtherOrdersArgs() {
+    return {
+      encode: (data: IFetchOtherOrdersArgs) => this.safeCode(() => this._fetchOtherOrdersArgs?.encode(data).finish()),
+      decode: (data: ArrayBuffer) => this.safeCode(() => this._fetchOtherOrdersArgs?.decode(new Uint8Array(data)) as unknown as IFetchOtherOrdersArgs)
     }
   }
 }
