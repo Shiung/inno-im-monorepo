@@ -3,6 +3,7 @@
   import { Tween } from 'ui'
   import { amountSymbolTransformer } from 'utils/amount'
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+  import { twMerge } from 'tailwind-merge'
 
   import ArrowUp from './images/arrow_up.svg'
   import fans from './images/fans_on.webp'
@@ -26,7 +27,10 @@
       on:keypress
     >
       <div
-        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]"
+        class={twMerge(
+          'absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]',
+          folder && 'overflow-hidden whitespace-nowrap text-ellipsis px-[5px]'
+        )}
         style:z-index="1"
         style:bottom={folder ? '3px' : '0px'}
       >
