@@ -49,7 +49,7 @@ export const fetchOtherOrders = (event: IWsMasterEvent) => {
 
   return requestEncode({
     pairId: event?.pairId, command: im.enum.command.FETCH_OTHER_ORDERS,
-    data: { type_url: 'type.googleapis.com/RequestMessageEntity', value: fetchOtherOrdersArgs }
+    data: { type_url: 'type.googleapis.com/FetchOtherOrders', value: fetchOtherOrdersArgs }
   })
 }
 
