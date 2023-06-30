@@ -45,7 +45,7 @@
 
     const data = {
       contentType: im.enum.contentType.ORDER,
-      chatId: $chatId,
+      chatId: $chatId || $iid,
       iid: $iid,
       content: JSON.stringify(waitSendMessage)
     }

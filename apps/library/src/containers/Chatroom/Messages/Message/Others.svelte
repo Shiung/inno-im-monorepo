@@ -2,14 +2,18 @@
   import type { IChatMessage } from 'api/im/types'
   import { fetchAvatar, fetchVip } from '$src/utils/images'
   import { im } from 'protobuf'
+  import BetOrder from './BetOrder/index.svelte'
 
   export let message: IChatMessage
   export let thisEl: HTMLDivElement
-  
+
   let avatarImg, vipImg
 
   const fetchAvatarImg = async () => {
-    if(message.contentType === im.enum.contentType.ANCHOR_HOST || message.contentType === im.enum.contentType.ANCHOR_MEMBER) {
+    if (
+      message.contentType === im.enum.contentType.ANCHOR_HOST ||
+      message.contentType === im.enum.contentType.ANCHOR_MEMBER
+    ) {
       avatarImg = message.avatar
       return
     }
@@ -31,18 +35,22 @@
   <div data-id={message.msgId} class="rounded-[10px]" bind:this={thisEl}>
     <div class="flex">
       <div class="min-w-[30px] h-[30px] rounded-full flex items-center justify-center">
-        {#if avatarImg}<img src={avatarImg} class='block w-[30px] h-[30px]' alt='avatar' />{/if}
+        {#if avatarImg}<img src={avatarImg} class="block w-[30px] h-[30px]" alt="avatar" />{/if}
       </div>
 
       <div class="ml-[4px]">
         <div class="flex items-center">
-          {#if vipImg}<img src={vipImg} class='block w-auto h-[14px] mr-2' alt='vip' />{/if}
+          {#if vipImg}<img src={vipImg} class="block w-auto h-[14px] mr-2" alt="vip" />{/if}
           <div class="text-imprimary text-[12px]">{message.senderName}:</div>
         </div>
 
-        <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
-          <div class="text-[14px]">{message.content}</div>
-        </div>
+        {#if message.contentType === im.enum.contentType.CHAT}
+          <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
+            <div class="text-[14px]">{message.content}</div>
+          </div>
+        {:else if message.contentType === im.enum.contentType.ORDER}
+          <BetOrder message={JSON.parse(message.content)} />
+        {/if}
       </div>
     </div>
   </div>

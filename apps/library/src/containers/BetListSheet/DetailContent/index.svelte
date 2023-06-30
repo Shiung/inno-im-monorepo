@@ -49,7 +49,7 @@
 
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_OTHER_ORDERS,
-      data: { vdId: VENDERID, sender: $userAccount, chatId: $chatId, iid: $iid }
+      data: { vdId: Number(VENDERID.slice(-2)), sender: $userAccount, chatId: $chatId, iid: $iid }
     })
 
     fetchData.data = {

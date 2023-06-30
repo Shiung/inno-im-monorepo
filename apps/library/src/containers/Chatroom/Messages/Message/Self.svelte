@@ -1,6 +1,8 @@
 <script lang="ts">
-  import type { IChatMessage } from 'api/im/types'
+  import { im } from 'protobuf'
   import BetOrder from './BetOrder/index.svelte'
+
+  import type { IChatMessage } from 'api/im/types'
 
   export let message: IChatMessage
   export let thisEl: HTMLDivElement
@@ -11,11 +13,11 @@
     <div />
 
     <div class="flex">
-      {#if message.contentType === 1}
+      {#if message.contentType === im.enum.contentType.CHAT}
         <div class="ml-[4px] bg-[#f5f5f5] rounded-[10px] p-[8px] bg-imprimary">
           <div class="text-[14px] text-white">{message.content}</div>
         </div>
-      {:else if message.contentType === 2}
+      {:else if message.contentType === im.enum.contentType.ORDER}
         <BetOrder message={JSON.parse(message.content)} />
       {/if}
 
