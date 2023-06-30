@@ -141,7 +141,7 @@
     subscribeRoom(_chatId)
     perviousChatId = _chatId
   }
-  $: if ($chatId || iid) subscribeNewAndUnsubscribePrevious($chatId || String($iid))
+  $: if ($chatId || String($iid)) subscribeNewAndUnsubscribePrevious($chatId || String($iid))
 
   let initFetchLoading: boolean = true
 
@@ -152,7 +152,7 @@
     subscribeNewAndUnsubscribePrevious($chatId || String($iid))
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
-      data: { pointer: 0, chatId: $chatId }
+      data: { pointer: 0, chatId: $chatId || String($iid) }
     })
     res.data.pushMessageEntity.sort((a: any, b: any) => a.msgId - b.msgId)
     chatMessages.update((messages) => [...res.data.pushMessageEntity, ...messages])
