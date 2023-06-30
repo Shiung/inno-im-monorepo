@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Ripple } from 'ui'
+  import { twMerge } from 'tailwind-merge'
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
   import { im as impb } from 'protobuf'
+  import { t, type ITransStore } from '$stores'
 
   import { getEnv } from '../context'
   import Chat from '../images/chat.svg'
-  import { twMerge } from 'tailwind-merge'
 
   const { useScrollCollapse }  = getEnv()
 
@@ -31,9 +32,18 @@
     return `${unreadLength}`
   }
 
-  const getLatestMsgContent = (msgs: IChatMessage[]) => {
+  const getLatestMsgContent = (msgs: IChatMessage[], t: ITransStore) => {
+    let content = ''
     const visibleMsgs = getVisibleMsgs(msgs)
-    return visibleMsgs[visibleMsgs.length - 1]?.content || ''
+    const latestMsg = visibleMsgs[visibleMsgs.length - 1]
+    if (latestMsg) {
+      if(latestMsg?.contentType === impb.enum.contentType.ORDER) {
+        content = `${latestMsg?.senderName} ${t('chat.showBet')}`
+      } else {
+        content = latestMsg?.content || ''
+      }
+    }
+    return content
   }
 
   const onWindowScroll = () => {
@@ -58,7 +68,7 @@
 
   $: unread = calculateUnread($chatMessages, lastReadId)
 
-  $: content = getLatestMsgContent($chatMessages)
+  $: content = getLatestMsgContent($chatMessages, $t)
 
 </script>
 
