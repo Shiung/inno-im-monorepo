@@ -18,7 +18,7 @@
           <div class="text-[14px] text-white">{message.content}</div>
         </div>
       {:else if message.contentType === im.enum.contentType.ORDER}
-        <BetOrder message={JSON.parse(message.content)} />
+        <BetOrder message={JSON.parse(message.content)} self />
       {/if}
 
       <!-- <div

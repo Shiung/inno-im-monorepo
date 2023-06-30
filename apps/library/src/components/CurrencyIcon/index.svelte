@@ -5,14 +5,14 @@
 
   let src: string
 
-  const fetchAvatar = async () => {
+  const fetchImg = async () => {
     const loader = () => import(`./images/${currency}.png`)
-    const comp = await loader()
-    return comp.default
+    const img = await loader()
+    return img.default
   }
 
   onMount(async () => {
-    src = await fetchAvatar()
+    src = await fetchImg()
   })
 </script>
 

@@ -1,14 +1,32 @@
 <script lang="ts">
-  import HeaderBg from './images/headerBg.png'
+  import { onMount } from 'svelte'
   import { t, locale } from '$stores'
   import { Win, Market, BetOn, Ante, Date } from '$containers/BetDetail'
-  import DoubleArrow from '$containers/Chatroom/images/double_arrow_down_small.svg'
-  export let message
 
-  // const status = isMarketClosed ? 'disable' : 'active'
-  const lang = ['zh_CN', 'zh_HK'].includes($locale) ? $locale : 'en_US'
-  const src = new URL(`./images/show_${lang}.png`, import.meta.url).pathname
+  import HeaderBg from './images/headerBg.png'
+  import DoubleArrow from '$containers/Chatroom/images/double_arrow_down_small.svg'
+
+  export let message
+  export let self: boolean = false
+
+  let src: string
+
   const { marketType } = message
+
+  const type = self ? 'show' : 'follow'
+  const lang = ['zh_CN', 'zh_HK'].includes($locale) ? $locale : 'en_US'
+  // const status = isMarketClosed ? 'disable' : 'active'
+  const status = 'active'
+
+  const fetchImg = async () => {
+    const loader = () => import(`./images/${type}_${lang}_${status}.png`)
+    const img = await loader()
+    return img.default
+  }
+
+  onMount(async () => {
+    src = await fetchImg()
+  })
 </script>
 
 <div class="w-[270px] text-[12px] im-shadow">
