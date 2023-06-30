@@ -21,7 +21,7 @@
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
 
-  const { chatId } = getInfo()
+  const { chatId, iid } = getInfo()
 
   const { displayType, height } = getEnv()
 
@@ -120,7 +120,7 @@
     console.log('magId: ', $chatMessages?.[0]?.msgId, $chatMessages)
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
-      data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId }
+      data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId || String($iid) }
     })
     chatMessages.update((messages) => [...res.data.pushMessageEntity, ...messages])
     fetchMoreLoading = false
