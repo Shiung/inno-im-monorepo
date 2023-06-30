@@ -3,6 +3,8 @@
   import { im as imWs } from 'api/wsMaster'
   import { im as impb } from 'protobuf'
   import { getOrdersInfo, getInfo, getUserInfo } from '$containers/Chatroom/context'
+  import { getConfig } from 'env-config'
+
   import Container from './Container.svelte'
 
   import type { IFetchData, IBetOrder } from 'api/im/types'
@@ -13,6 +15,7 @@
   const { selfOrdersCallback } = getOrdersInfo()
   const { chatId, iid } = getInfo()
   const { userAccount } = getUserInfo()
+  const { VENDERID } = getConfig()
 
   const Self = () => import('./Self.svelte')
   const Other = () => import('./Other.svelte')
@@ -34,7 +37,7 @@
     const mock = localStorage.getItem('mock') === 'true' || false
 
     let res = { data: { list: [] } }
-    if (!mock) res = await im.chatroomSelfOrders({ query: { iid: $iid } })
+    if (mock) res = await im.chatroomSelfOrders({ query: { iid: $iid } })
     else res.data.list = await $selfOrdersCallback()
 
     fetchData.data = res.data
@@ -44,16 +47,13 @@
   const fetchOtherOrders = async () => {
     fetchData.loading = true
 
-    // const res = await im.chatroomOtherOrders({ query: { iid: $iid } })
-    // fetchData.data = res.data
-
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_OTHER_ORDERS,
-      data: { vdId: 1, sender: $userAccount, chatId: $chatId, iid: $iid }
+      data: { vdId: VENDERID, sender: $userAccount, chatId: $chatId, iid: $iid }
     })
 
     fetchData.data = {
-      list: res.data.pushMessageEntity.map(e => {
+      list: res.data.pushMessageEntity.map((e) => {
         let content = {}
         try {
           content = JSON.parse(e.content)

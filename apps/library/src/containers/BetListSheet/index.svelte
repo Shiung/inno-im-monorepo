@@ -16,6 +16,8 @@
 
   export let open: boolean
 
+  let loading: boolean = false
+
   const { device } = getEnv()
   const { chatId, iid } = getInfo()
 
@@ -35,6 +37,8 @@
   }
 
   const handleShowOrder = async () => {
+    loading = true
+
     const eventkey = im.enum.command.SEND_MESSAGE
     const waitSendMessage = betData
     const now = Date.now()
@@ -54,6 +58,7 @@
 
     console.log('publish res: ', res)
 
+    loading = false
     open = false
     betData = null
   }
@@ -73,10 +78,10 @@
   </Header>
 
   <Content class="p-0">
-    <DetailContent bind:betData {self}/>
+    <DetailContent bind:betData {self} />
   </Content>
 
   <Footer class="p-0 bg-white">
-    <DetailFooter on:click={publishMessage} selected={!!betData} {self} />
+    <DetailFooter on:click={publishMessage} selected={!!betData} {self} {loading} />
   </Footer>
 </svelte:component>
