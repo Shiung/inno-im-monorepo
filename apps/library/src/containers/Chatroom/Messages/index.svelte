@@ -108,16 +108,12 @@
     top.set(_scrollH)
   }
 
-  let pastQuantity = 10
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
     const targetId = getOldestMessage().msgId
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
-    // const res = await im.chatroomPastMessage({ query: { chatId: $chatId, quantity: pastQuantity }, headers: { 'Accept-Language': $locale } })
-    // chatMessages.update((messages) => [...res.data.list, ...messages])
-    console.log('magId: ', $chatMessages?.[0]?.msgId, $chatMessages)
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId || String($iid) }
@@ -146,7 +142,6 @@
   bind:this={dom}
 >
   <DropdownLoader
-    quantity={pastQuantity}
     loading={fetchMoreLoading}
     root={dom}
     on:fetchMore={fetchMore}
