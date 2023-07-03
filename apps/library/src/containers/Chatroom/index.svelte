@@ -60,7 +60,7 @@
 
 
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
-  const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse } = setEnv($env)
+  const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse, animation } = setEnv($env)
   const { userAccount, userToken, userVip, userCurrency } = setUserInfo($userInfo)
   const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
 
@@ -73,6 +73,7 @@
       device.set(e.device)
       showBetList.set(e.showBetList)
       useScrollCollapse.set(e.useScrollCollapse)
+      animation.set(e.animation)
     })
 
     const userInfoUnsubscribe = userInfo.subscribe((e) => {
@@ -271,7 +272,7 @@
     )}
     style:min-height={isWindow ? boxContainerHeight : '100%'}
     style:max-height={isWindow ? !isTransition ? 'none' : boxContainerHeight : '100%'}
-    transition:fly|local={{ y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
+    transition:fly|local={$animation && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
     on:introend={() => {
       isTransition = false
     }}
