@@ -3,6 +3,7 @@ import { timestampToFormat } from 'utils/convertDateAndTimestamp'
 import { t } from '$stores'
 import Loading from './Loading.svelte'
 import Empty from '$containers/Empty'
+import { twMerge } from 'tailwind-merge'
 
 import type { IWebAnchorLife } from 'api/im/types'
 
@@ -44,13 +45,19 @@ const parseLifeData = (list?: typeof life.data.list) => {
 
           <div class='space-y-[20px] my-[16px]'>
             {#each stories as story}
-              <div class='grid grid-cols-[45px_80px_auto] gap-[15px]'>
+              {@const { image, day, time, context } = story || {}}
+
+              <div class={twMerge('grid gap-[15px]',
+                image ? 'grid-cols-[45px_80px_auto]' : 'grid-cols-[45px_auto]'
+              )}>
                 <div>
-                  <div class='text-[14px]'> {story.day} </div>
-                  <div class='text-[10px] text-[#999999]'> {story.time} </div>
+                  <div class='text-[14px]'> {day} </div>
+                  <div class='text-[10px] text-[#999999]'> {time} </div>
                 </div>
-                <img class='w-[80px] h-[80px]' src={story.image} alt='' />
-                <div class='text-[12px] h-full'> {story.context} </div>
+                {#if image}
+                  <img class='w-[80px] h-[80px]' src={image} alt='' />
+                {/if}
+                <div class='text-[12px] h-full'> {context} </div>
               </div>
             {/each}
           </div>
