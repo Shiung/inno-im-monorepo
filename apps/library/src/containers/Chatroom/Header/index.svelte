@@ -13,9 +13,10 @@ import Close from '../images/close.svg'
 import { getEnv } from '../context'
 
 export let isTransition: boolean
+export let fixed: boolean = false
 
 const dispatch = createEventDispatcher()
-const { displayType, height }  = getEnv()
+const { height }  = getEnv()
 
 let showRemind: boolean = false
 
@@ -25,7 +26,6 @@ $: blockHeight = dom?.getBoundingClientRect().height
 $: marqueeInfo = [
   $t('chat.remind')
 ]
-$: isWindow = $displayType === 'window'
 
 </script>
 
@@ -33,9 +33,9 @@ $: isWindow = $displayType === 'window'
   <div
     class={twMerge(
       'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30 transition-[top] duration-300 ease-in-out',
-      isWindow ? 'fixed' : 'sticky'
+      fixed ? 'fixed' : 'sticky'
     )}
-    style:top={!isTransition ? `${$height}px` : ''}
+    style:top={fixed ? !isTransition ? `${$height}px` : '' : '0'}
     bind:this={dom}
   >
     <div class='flex items-center'>
@@ -61,5 +61,5 @@ $: isWindow = $displayType === 'window'
     </Ripple>
   </div>
 
-  <div style:height={isWindow ? `${blockHeight}px` : 0} />
+  <div style:height={fixed && `${blockHeight}px`} />
 </div>

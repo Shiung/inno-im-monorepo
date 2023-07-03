@@ -107,7 +107,7 @@
   <div
     class={twMerge(
       'w-full bg-white h-[200px] duration-300',
-      expandType !== 'default' && 'fixed z-30',
+      isWindow && expandType !== 'default' && 'fixed z-30',
       isTransition ? 'transition-[height]' : 'transition-none'
     )}
     bind:this={dom}
@@ -118,15 +118,20 @@
   </div>
   <div
     class={twMerge('duration-300', isTransition ? 'transition-[height]' : 'transition-none')}
-    style:height={expandType !== 'default' ? `${changedHeight}px` : ''}
+    style:height={isWindow && expandType !== 'default' ? `${changedHeight}px` : ''}
   />
 
   <div
     class={twMerge(
       'h-[2000px] bg-red-500',
-      expandType !== 'default' ? 'fixed left-0 right-0' : 'static'
+      isWindow && expandType !== 'default' ? 'fixed left-0 right-0' : 'static'
     )}
   />
 </div>
 
-<Chatroom />
+<div
+  class={twMerge(!isWindow && 'fixed bottom-0 w-full transition-[top] duration-300')}
+  style:top={!isWindow ? `${changedHeight}px` : ''}
+>
+  <Chatroom />
+</div>

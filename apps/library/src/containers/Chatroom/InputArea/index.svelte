@@ -25,11 +25,11 @@
   import { getInfo, getEnv, getUserInfo } from '../context'
   import { inputAreaOffset } from './store'
 
-  export let fixed: boolean = true
+  export let fixed: boolean = false
 
   const { userToken, userVip } = getUserInfo()
   const { chatId, iid, vipLimit, frequency } = getInfo()
-  const { displayType, showBetList } = getEnv()
+  const { showBetList } = getEnv()
 
   let placeHolder: string = ''
   let disabled: boolean = true
@@ -109,10 +109,9 @@
     }
   }
 
-  $: isWindow = $displayType === 'window'
   $: {
     const warningHeight = showWarning ? 32 : 0
-    const offset = (isWindow ? blockHeight + 10 : 0) + warningHeight
+    const offset = (fixed ? blockHeight + 10 : 0) + warningHeight
 
     inputAreaOffset.set(offset)
   }
@@ -132,9 +131,9 @@
       transition:fly|local={{ y: 32 }}
       class={twMerge(
         'flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full',
-        isWindow ? 'fixed' : 'absolute -translate-y-full'
+        fixed ? 'fixed' : 'absolute -translate-y-full'
       )}
-      style:bottom={isWindow && `${blockHeight}px`}
+      style:bottom={fixed && `${blockHeight}px`}
     >
       {warningMsg}
     </div>
@@ -142,7 +141,7 @@
 
   <div
     class={twMerge(
-      'im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]',
+      'im-shadow bottom-0 w-full h-[83px] bg-white pt-[8px] px-[10px]',
       fixed ? 'fixed' : 'sticky'
     )}
     bind:this={dom}
