@@ -35,7 +35,8 @@
       isOpen: false,
       showBetList: false,
       device: 'wap',
-      useScrollCollapse: true
+      useScrollCollapse: true,
+      animation: true
     })
 
     setChatInfo({
@@ -103,7 +104,7 @@
   // }, 3000)
 </script>
 
-<div>
+<div class={!isWindow && expandType !== 'default' && 'fixed w-full top-0'}>
   <div
     class={twMerge(
       'w-full bg-white h-[200px] duration-300',
