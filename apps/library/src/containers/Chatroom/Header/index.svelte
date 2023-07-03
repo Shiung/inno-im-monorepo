@@ -34,7 +34,7 @@ $: marqueeInfo = [
     <div
       class={twMerge(
         'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30 transition-[top] duration-300 ease-in-out',
-        fixed ? 'fixed' : 'sticky'
+        fixed ? 'fixed left-0' : 'sticky'
       )}
       style:top={fixed ? !isTransition ? `${$height}px` : '' : '0'}
       bind:this={dom}
