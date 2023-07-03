@@ -14,10 +14,15 @@ export const pushMessage = (props?: { reqId?: string, value?: Uint8Array | undef
   return impb.push?.encode(data)
 }
 
+let lastDateId = Date.now()
+
 export const genPushMessages = () => {
   const data = Array.from({ length: 10 }, (_, idx) => ({
-    ...messageEntityData(idx)
+    ...messageEntityData(lastDateId - (10 - idx))
   }))
+
+  lastDateId = data[0].msgId
+
   return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
 }
 
