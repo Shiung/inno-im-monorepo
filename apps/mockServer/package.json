@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +16,8 @@
     "env-config": "workspace:*",
     "eslint": "^8.28.0",
     "mockjs": "^1.1.0",
+    "protobuf": "workspace:*",
+    "protobufjs": "^7.2.3",
     "utils": "workspace:*",
     "ws": "^8.13.0"
   },

@@ -33,7 +33,7 @@ const buildAsLibrary = () => {
           app: resolve(__dirname, './src/platform/app.ts'),
           anchors: resolve(__dirname, './src/platform/anchors/index.ts'),
           streaming: resolve(__dirname, './src/platform/streaming/index.ts'),
-          chartroom: resolve(__dirname, './src/platform/chatroom/index.ts'),
+          chatroom: resolve(__dirname, './src/platform/chatroom/index.ts'),
           expert: resolve(__dirname, './src/platform/expert/index.ts')        
         },
         name: 'im-library',

@@ -1,7 +1,7 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.32",
+  "version": "0.0.33",
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
@@ -31,7 +31,8 @@
     "tailwind-merge": "^1.10.0",
     "ui": "workspace:*",
     "utils": "workspace:*",
-    "vd-resource": "workspace:*"
+    "vd-resource": "workspace:*",
+    "protobuf": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",

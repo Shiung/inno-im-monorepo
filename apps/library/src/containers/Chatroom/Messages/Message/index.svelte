@@ -1,31 +1,45 @@
 <script lang="ts">
-import Others from './Others.svelte'
-import Self from './Self.svelte'
+  import { appHeight } from '$stores/layout'
+  import type { IChatMessage } from 'api/im/types'
 
-import type { IChatMessage } from 'api/im/types'
+  import { getInfo } from '../../context'
 
-export let lastReadId: string
-export let message: IChatMessage
-export let self: boolean
+  import Others from './Others.svelte'
+  import Self from './Self.svelte'
 
-let dom: HTMLDivElement
+  export let lastReadId: number
+  export let message: IChatMessage
+  export let self: boolean
 
-// TODO 待雪花算法上後再修正
-const checkAndSetLastReadId = (id: string) => {
-  if (!lastReadId) return lastReadId = id
-  if (Number(id) > Number(lastReadId)) return lastReadId = id
-}
+  let dom: HTMLDivElement
 
-const observer = new IntersectionObserver(entries => {
-  for (const entry of entries) {
-    if (entry.isIntersecting) checkAndSetLastReadId(entry.target.getAttribute('data-id'))
+  const { height } = getInfo()
+
+  // TODO 待雪花算法上後再修正
+  const checkAndSetLastReadId = (id: string) => {
+    const _id = Number(id)
+    if (!lastReadId) return (lastReadId = _id)
+    if (_id > lastReadId) return (lastReadId = _id)
   }
-})
 
-$: if (dom) observer.observe(dom)
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && entry.boundingClientRect.y > 0) {
+          checkAndSetLastReadId(entry.target.getAttribute('data-id'))
+        }
+      }
+    },
+    { rootMargin: `0px 0px -150px 0px` }
+  )
 
+  // 還不知道怎麼取到正確的 message container 高度，所以先寫死數值 (Header + inputArea)
+  $: boxContainerHeight = 100 * $appHeight - $height - 44 - 83
+
+  $: if (dom) {
+    if (dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))
+    observer.observe(dom)
+  }
 </script>
 
-<div data-id={message.id} class='rounded-[10px]' bind:this={dom}>
-  <svelte:component this={self ? Self : Others} message={message} />
-</div>
+<svelte:component this={self ? Self : Others} {message} bind:thisEl={dom} />

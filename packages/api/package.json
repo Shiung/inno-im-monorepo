@@ -10,11 +10,16 @@
   },
   "dependencies": {
     "@stomp/rx-stomp": "^2.0.0",
+    "@types/node": "^18.15.6",
     "env-config": "workspace:*",
-    "utils": "workspace:*",
-    "rxjs": "^7.8.1"
+    "protobuf": "workspace:*",
+    "rxjs": "^7.8.1",
+    "utils": "workspace:*"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@types/jest": "^29.5.0",
+    "@types/testing-library__jest-dom": "^5.14.5",
     "eslint-config-custom": "workspace:*"
   }
 }

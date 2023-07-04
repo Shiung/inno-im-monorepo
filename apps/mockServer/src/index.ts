@@ -1,13 +1,16 @@
-// import express from 'express'
 import { createServer } from 'http'
 import { URLSearchParams, parse } from 'url'
 
-import { createWebSocketServer } from './stomp'
+import { createStompSocketServer } from './stomp'
+import { createProtoSocketServer } from './protobuf'
+import { createEchoSocketServer } from './echo'
 import moduleDict from './moduleDict'
-import type { IMockData, IMethod } from'./types'
+import type { IMockData, IMethod } from './types'
 
 const app = createServer()
-const wss = createWebSocketServer()
+const stompSocketServer = createStompSocketServer()
+const protoSocketServer = createProtoSocketServer()
+const echoSocketServer = createEchoSocketServer()
 
 const getPathAndModule = (path: string) => {
   const pathArray = path.split('/')
@@ -22,7 +25,7 @@ const getPathAndModule = (path: string) => {
 }
 
 const getMockData = (module: IMockData[], method: IMethod, path: string) => {
-  const defGetData = module.map((data: IMockData) => ({ 
+  const defGetData = module.map((data: IMockData) => ({
     ...data,
     method: data?.method || 'get'
   }))
@@ -40,7 +43,7 @@ app.on('request', async (req, res) => {
   if (!req.url) return res.end()
 
   res.writeHead(200, {
-    'Access-Control-Allow-Origin': req.headers.origin,
+    'Access-Control-Allow-Origin': req?.headers?.origin || '*',
     'Access-Control-Allow-Headers': '*', //'Content-Type',
     'Content-Type': 'application/json'
   })
@@ -63,10 +66,22 @@ app.on('upgrade', (req, socket, head) => {
   const { pathname } = parse(req?.url || '')
 
   if (pathname?.match('/stomp')) {
-    wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit('connection', ws, req)
+    stompSocketServer.handleUpgrade(req, socket, head, (ws) => {
+      stompSocketServer.emit('connection', ws, req)
     })
   }
-})  
+
+  else if (pathname?.match('/proto')) {
+    protoSocketServer.handleUpgrade(req, socket, head, (ws) => {
+      protoSocketServer.emit('connection', ws, req)
+    })
+  }
+
+  else if (pathname?.match('/echo')) {
+    echoSocketServer.handleUpgrade(req, socket, head, (ws) => {
+      echoSocketServer.emit('connection', ws, req)
+    })
+  }
+})
 
 app.listen(5174)
