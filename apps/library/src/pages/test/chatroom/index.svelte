@@ -33,8 +33,7 @@
       vipLimit: 0,
       frequency: 0,
       device: 'wap',
-      subscribeBindingChatroom: true,
-      animation: true
+      subscribeBindingChatroom: true
     })
 
     controller.setChatUserInfo({
