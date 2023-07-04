@@ -38,12 +38,10 @@ const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.
   store.update((msg) => [...msg, data])
 })
 
-const fetchHistory = async (props: { chatId: string, iid: number }) => {
-  const store = getStore(props)
-
+const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
   const res = await imWs.publish({
     eventkey: impb.enum.command.FETCH_MESSAGES,
-    data: { pointer: 0, chatId: genId(props) }
+    data: { pointer: 0, chatId: id }
   })
 
   // sort msgId ascending order
@@ -59,29 +57,28 @@ const fetchHistory = async (props: { chatId: string, iid: number }) => {
 
 const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {
   const store = getStore(props)
+  const id = genId(props)
   if (get(store).length !== 0) return
 
-  fetchHistory(props)
+  fetchHistory(id, store)
 }
 
 export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
   const id = genId(props)
   subscribeSet.add(id)
 
-  if (imWs.socket.current?.readyState === WebSocket.OPEN) {
-    await imWs.publish({
-      eventkey: impb.enum.command.SUBSCRIBE_CHAT,
-      data: { chatIds: [id] }
-    })
+  if (imWs.socket.current?.readyState !== WebSocket.OPEN) return
 
-  }
-
+  await imWs.publish({
+    eventkey: impb.enum.command.SUBSCRIBE_CHAT,
+    data: { chatIds: [id] }
+  })
 
   checkIfNeedFetchHistory(props)
 }
 
-export const unsubscribeRoom = async ({ chatId, iid }: { chatId: string, iid?: number }) => {
-  const id = genId({ chatId, iid })
+export const unsubscribeRoom = async (props: { chatId: string, iid: number }) => {
+  const id = genId(props)
 
   await imWs.publish({
     eventkey: impb.enum.command.UNSUBSCRIBE_CHAT,
@@ -89,7 +86,13 @@ export const unsubscribeRoom = async ({ chatId, iid }: { chatId: string, iid?: n
   })
 
   subscribeSet.delete(id)
+  const store = getStore(props)
+  store.set([])
   messageMap.delete(id)
+}
+
+const clearAllStores = () => {
+  messageMap.forEach((store) => store.set([]))
 }
 
 const imWsConnect = (e: IUserInfo) => {
@@ -101,8 +104,18 @@ const imWsConnect = (e: IUserInfo) => {
   })
   imWs.setSubprotocols(e.userToken)
 
+  clearAllStores()
   if (imWs.enabled) imWs.reconnect()
   else imWs.activate()
+}
+
+const checkAllStoreIfNeedFetchHistory = () => {
+  Array.from(subscribeSet, (id) => {
+    const store = messageMap.get(id)
+    if (!store) return
+
+    fetchHistory(id, store)
+  })
 }
 
 const subscribeRooms = () => {
@@ -112,6 +125,8 @@ const subscribeRooms = () => {
     eventkey: impb.enum.command.SUBSCRIBE_CHAT,
     data: { chatIds: Array.from(subscribeSet) }
   })
+
+  checkAllStoreIfNeedFetchHistory()
 }
 
 let unSubUserInfo: ReturnType<typeof userInfo.subscribe>
