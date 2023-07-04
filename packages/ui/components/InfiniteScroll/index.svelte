@@ -9,6 +9,8 @@
   let dom: HTMLDivElement
 
   let observer = new IntersectionObserver(async (entries) => {
+    if (moreLoading) return
+
     for (const entry of entries) {
       if (entry.isIntersecting) {
         try {

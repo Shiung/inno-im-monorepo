@@ -83,7 +83,7 @@
 
   $: {
     window.scrollTo(0, 0)
-    init({ sid, type })
+    if(sid != null) init({ sid, type })
   }
 </script>
 
