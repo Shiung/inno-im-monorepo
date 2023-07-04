@@ -106,8 +106,10 @@ const imWsConnect = (e: IUserInfo) => {
   imWs.setSubprotocols(e.userToken)
 
   clearAllStores()
-  if (imWs.enabled) imWs.reconnect()
-  else imWs.activate()
+  // 先用 reconnect 的方式，因為平台在給 userInfo 後可能 ws 都還沒有連上
+  // if (imWs.enabled) imWs.reconnect()
+  // else imWs.activate()
+  imWs.reconnect()
 }
 
 const checkAllStoreIfNeedFetchHistory = () => {
