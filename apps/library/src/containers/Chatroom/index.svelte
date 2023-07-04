@@ -48,7 +48,7 @@
   import { EChatroomSize } from './constant'
 
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
-  const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse, animation } = setEnv($env)
+  const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse } = setEnv($env)
   const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -60,7 +60,6 @@
       device.set(e.device)
       showBetList.set(e.showBetList)
       useScrollCollapse.set(e.useScrollCollapse)
-      animation.set(e.animation)
     })
 
     const infoUnsubscribe = info.subscribe((e) => {
@@ -179,7 +178,7 @@
     class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
     style:min-height={isWindow ? boxContainerHeight : '100%'}
     style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-    transition:fly|local={$animation && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
+    transition:fly|local={$device === 'wap' && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
     on:introend={() => {
       isTransition = false
     }}

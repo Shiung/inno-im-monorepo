@@ -10,7 +10,6 @@ export interface IChatroomEnv {
   showBetList: boolean
   device: 'pc' | 'wap'
   useScrollCollapse: boolean
-  animation: boolean
 }
 
 export const initEnv: IChatroomEnv = {
@@ -20,8 +19,7 @@ export const initEnv: IChatroomEnv = {
   size: 'default',
   showBetList: false,
   device: 'wap',
-  useScrollCollapse: false,
-  animation: false,
+  useScrollCollapse: false
 }
 
 export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
