@@ -62,7 +62,9 @@
 
       <div class="flex items-end mt-[15px]">
         <img class="w-[30px] mr-[10px]" src={fans} alt="" />
-        <Tween value={amountSymbolTransformer($streaming.fansCount)} />
+        {#key $streaming.nickName}
+          <Tween value={amountSymbolTransformer($streaming.fansCount)} />
+        {/key}
       </div>
     </div>
   </div>
