@@ -2,7 +2,7 @@
 import { createEventDispatcher } from 'svelte'
 import { getMobileOSInfo, MobileOS } from 'utils'
 import { t } from '$stores'
-
+import { Ripple } from 'ui'
 import Circle from 'ui/core/button/loading.svelte'
 
 import DoubleArrow from '../images/double_arrow_down_small.svg'
@@ -12,12 +12,11 @@ const dispatch = createEventDispatcher()
 
 export let root: HTMLDivElement
 export let loading: boolean
-export let quantity: number = 10
 
 let dom: HTMLDivElement
 let canLoadmore: boolean
 
-const { displayType, height } = getEnv()
+const { displayType, height, device } = getEnv()
 $: isWindow = $displayType === 'window'
 
 const isIOS = getMobileOSInfo() === MobileOS.iOS
@@ -43,6 +42,8 @@ let loadIconYMove: number = 0
 let isScrollToTop: boolean = false
 
 $: offsetY = Math.max(Math.min((loadIconYMove - loadIconY) / 2, 100), 0)
+
+$: isPC = $device === 'pc'
 
 const onTouchstart = (e: TouchEvent) => {
   isScrollToTop = (isWindow ? window.scrollY : root.scrollTop) === 0
@@ -84,9 +85,9 @@ const onTouchend = () => {
 </script>
 
 <svelte:window
-  on:touchstart={onTouchstart} 
-  on:touchend={onTouchend}
-  on:touchmove={onTouchmove}
+  on:touchstart={!isPC && onTouchstart} 
+  on:touchend={!isPC && onTouchend}
+  on:touchmove={!isPC && onTouchmove}
 />
 
 
@@ -99,14 +100,23 @@ const onTouchend = () => {
       </div>
     </div>
   {:else}
-
-  <div class='flex items-center justify-center z-10' bind:this={dom}>
-    <div class='bg-white rounded-[10px]' style:transform={`translateY(${offsetY}px)`} >
-      <div class='flex items-center justify-center bg-[rgba(76,158,234,0.05)] rounded-[10px] h-[34px] px-[16px]' >
-        <div class='text-[12px] text-imprimary'> {$t('chat.dropToMore', { num: quantity })} </div>
-        <DoubleArrow width={16} height={16} fill='rgb(var(--im-monorepo-primary))' />
+    {#if isPC}
+      <Ripple class='flex items-center justify-center z-10 cursor-pointer' on:click={() => dispatch('fetchMore')}>
+        <div class='bg-white rounded-[10px]'>
+          <div class='flex items-center justify-center bg-[rgba(76,158,234,0.05)] rounded-[10px] h-[34px] px-[16px]' >
+            <div class='text-[12px] text-imprimary'> {$t('chat.clickToMore')} </div>
+          </div>
+        </div>
+      </Ripple>
+    {:else}
+      <div class='flex items-center justify-center z-10' bind:this={dom}>
+        <div class='bg-white rounded-[10px]' style:transform={`translateY(${offsetY}px)`} >
+          <div class='flex items-center justify-center bg-[rgba(76,158,234,0.05)] rounded-[10px] h-[34px] px-[16px]' >
+            <div class='text-[12px] text-imprimary'> {$t('chat.dropToMore')} </div>
+            <DoubleArrow width={16} height={16} fill='rgb(var(--im-monorepo-primary))' />
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    {/if}
   {/if}
 </div>

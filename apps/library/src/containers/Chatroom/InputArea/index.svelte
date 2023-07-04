@@ -24,10 +24,10 @@
   import { userInfo } from '../controller'
   import { inputAreaOffset } from './store'
 
-  export let fixed: boolean = true
+  export let fixed: boolean = false
 
   const { chatId, iid, vipLimit, frequency } = getInfo()
-  const { displayType, showBetList } = getEnv()
+  const { showBetList } = getEnv()
 
   let placeHolder: string = ''
   let disabled: boolean = true
@@ -107,10 +107,9 @@
     }
   }
 
-  $: isWindow = $displayType === 'window'
   $: {
     const warningHeight = showWarning ? 32 : 0
-    const offset = (isWindow ? blockHeight + 10 : 0) + warningHeight
+    const offset = (fixed ? blockHeight + 10 : 0) + warningHeight
 
     inputAreaOffset.set(offset)
   }
@@ -130,9 +129,9 @@
       transition:fly|local={{ y: 32 }}
       class={twMerge(
         'flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full',
-        isWindow ? 'fixed' : 'absolute -translate-y-full'
+        fixed ? 'fixed' : 'absolute -translate-y-full'
       )}
-      style:bottom={isWindow && `${blockHeight}px`}
+      style:bottom={fixed && `${blockHeight}px`}
     >
       {warningMsg}
     </div>

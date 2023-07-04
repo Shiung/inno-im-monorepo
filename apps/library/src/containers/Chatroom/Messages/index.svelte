@@ -103,7 +103,6 @@
     top.set(_scrollH)
   }
 
-  let pastQuantity = 10
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
     const targetId = getOldestMessage().msgId

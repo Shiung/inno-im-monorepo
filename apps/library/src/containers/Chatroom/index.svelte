@@ -60,6 +60,7 @@
       device.set(e.device)
       showBetList.set(e.showBetList)
       useScrollCollapse.set(e.useScrollCollapse)
+      animation.set(e.animation)
     })
 
     const infoUnsubscribe = info.subscribe((e) => {
@@ -171,49 +172,46 @@
   })
 </script>
 
-<div
-  data-cid="Chatroom"
-  class={twMerge(!isWindow && 'fixed w-full transition-[top] duration-300')}
-  style:top={!isWindow ? `${$height}px` : ''}
->
-  {#if !$isOpen}
-    <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
-  {:else}
-    <div
-      class={twMerge('relative flex-1 flex flex-col bg-white', isTransition && 'fixed w-full z-30 bottom-0')}
-      style:min-height={boxContainerHeight}
-      style:max-height={isWindow && !isTransition ? 'none' : boxContainerHeight}
-      transition:fly|local={{ y: 100 * $appHeight - $height, duration: 500 }}
-      on:introend={() => {
-        isTransition = false
-      }}
-      on:outroend={() => {
-        isTransition = false
-      }}
-      on:touchstart={onTouchStart}
-      on:touchmove={onTouchMove}
-    >
-      <Header {isTransition} on:close={foldChatroom} />
+{#if !$isOpen}
+  <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
+{:else}
+  <div
+    class={twMerge(
+      'relative flex flex-1 flex-col bg-white',
+      isWindow && isTransition && 'fixed w-full z-30 bottom-0'
+    )}
+    style:min-height={isWindow ? boxContainerHeight : '100%'}
+    style:max-height={isWindow ? !isTransition ? 'none' : boxContainerHeight : '100%'}
+    transition:fly|local={$animation && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
+    on:introend={() => {
+      isTransition = false
+    }}
+    on:outroend={() => {
+      isTransition = false
+    }}
+    on:touchstart={onTouchStart}
+    on:touchmove={onTouchMove}
+  >
+    <Header {isTransition} fixed={isWindow} on:close={foldChatroom} />
 
-      {#if initFetchLoading || isTransition}
-        <Loading />
-      {:else if $chatMessages.length === 0}
-        <Empty class="flex-1" title={$t('chat.empty')} />
-      {:else}
-        <Messages
-          bind:lastReadId
-          {chatMessages}
-          on:domBound={(e) => {
-            boxContainerDom = e.detail
-          }}
-        />
-      {/if}
+    {#if initFetchLoading || isTransition}
+      <Loading />
+    {:else if $chatMessages.length === 0}
+      <Empty class="flex-1" title={$t('chat.empty')} />
+    {:else}
+      <Messages
+        bind:lastReadId
+        {chatMessages}
+        on:domBound={(e) => {
+          boxContainerDom = e.detail
+        }}
+      />
+    {/if}
 
-      <InputArea />
+    <InputArea fixed={isWindow} />
 
-      <BetListSheet bind:open={$showBetList} />
+    <BetListSheet bind:open={$showBetList} />
 
-      <div class="absolute inset-0 bg-white z-[-1]" />
-    </div>
-  {/if}
-</div>
+    <div class='absolute inset-0 bg-white z-[-1]'></div>
+  </div>
+{/if}
