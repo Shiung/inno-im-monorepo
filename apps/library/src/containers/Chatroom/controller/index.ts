@@ -79,6 +79,7 @@ export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
 
 export const unsubscribeRoom = async (props: { chatId: string, iid: number }) => {
   const id = genId(props)
+  if (id === '0') return
 
   await imWs.publish({
     eventkey: impb.enum.command.UNSUBSCRIBE_CHAT,

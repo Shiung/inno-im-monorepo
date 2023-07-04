@@ -5,7 +5,9 @@
   import type { SizeChangedCallback, ToggledCallback } from './type'
 
   let info = writable(initInfo)
-  export const setChatInfo = (_info: Partial<IChatroomInfo>) => info.update((e) => ({ ...e, ..._info }))
+  export const setChatInfo = (_info: Partial<IChatroomInfo>) => {
+    info.update((e) => ({ ...e, ..._info }))
+  }
 
   let sizeChangedCallback: SizeChangedCallback = () => {}
   export const onSizeChangedCallback = (callback: SizeChangedCallback) => {
@@ -21,6 +23,8 @@
     if (typeof callback !== 'function') return console.warn('onToggledCallback parameter callback MUST be function')
     toggledCallback = callback
   }
+
+  let previous: { chatId: string; iid: number } = { chatId: '', iid: 0 }
 </script>
 
 <script lang="ts">
@@ -28,6 +32,7 @@
   import { fly } from 'svelte/transition'
   import { twMerge } from 'tailwind-merge'
   import { t } from '$stores'
+  import { get } from 'svelte/store'
   import { appHeight } from '$stores/layout'
   import BigNumber from 'bignumber.js'
 
@@ -54,8 +59,8 @@
       height.set(e.height)
       isOpen.set(e.isOpen)
       showBetList.set(e.showBetList)
-      chatId.set(e.chatId)
-      iid.set(e.iid)
+      if (get(chatId) !== e.chatId) chatId.set(e.chatId)
+      if (get(iid) !== e.iid) iid.set(e.iid)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -135,7 +140,11 @@
   }
 
   const resetStoreModule = () => {
-    setChatInfo(initInfo)
+    setChatInfo({
+      ...initInfo,
+      iid: $iid,
+      chatId: $chatId
+    })
   }
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
@@ -143,11 +152,13 @@
   // use 100 * $appHeight for compatibility between ios and android
   $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
 
-  let previous: { chatId: string; iid: number }
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
-    if (previous && genId(previous) !== id) unsubscribeRoom(previous)
-    subscribeRoom({ chatId: $chatId, iid: $iid })
+    
+    if (genId(previous) !== id) {
+      unsubscribeRoom(previous)
+      subscribeRoom({ chatId: $chatId, iid: $iid })
+    }
     previous = { chatId: $chatId, iid: $iid }
   }
 
