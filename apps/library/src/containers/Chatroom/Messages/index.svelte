@@ -135,7 +135,7 @@
   style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
 >
-  <DropdownLoader quantity={pastQuantity} loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
+  <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
 
   {#each $chatMessages as message (message.msgId)}
     <Message {message} bind:lastReadId self={message.isSelf} />
