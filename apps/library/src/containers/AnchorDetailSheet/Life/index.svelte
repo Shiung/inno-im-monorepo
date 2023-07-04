@@ -50,7 +50,7 @@ const parseLifeData = (list?: typeof life.data.list) => {
                   <div class='text-[10px] text-[#999999]'> {story.time} </div>
                 </div>
                 <img class='w-[80px] h-[80px]' src={story.image} alt='' />
-                <div class='text-[12px] h-full'> {story.context} </div>
+                <div class='text-[12px] h-full break-all'> {story.context} </div>
               </div>
             {/each}
           </div>

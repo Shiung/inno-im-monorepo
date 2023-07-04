@@ -92,7 +92,7 @@
     {#if initLoading}
       <Loading />
     {:else if !data?.length}
-      <Empty class="h-[300px]" />
+      <Empty class="h-[calc(100vh_-_170px)]" />
     {:else}
       <InfiniteScroll hasMore={hasMoreData} load={() => fetchAnchors({ keyWord, sid})}>
         {#each data || [] as anchor, idx}

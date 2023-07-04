@@ -26,7 +26,7 @@
       on:keypress
     >
       <div
-        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]"
+        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px] truncate px-1"
         style:z-index="1"
         style:bottom={folder ? '3px' : '0px'}
       >
@@ -62,7 +62,9 @@
 
       <div class="flex items-end mt-[15px]">
         <img class="w-[30px] mr-[10px]" src={fans} alt="" />
-        <Tween value={amountSymbolTransformer($streaming.fansCount)} />
+        {#key $streaming.houseId}
+          <Tween value={amountSymbolTransformer($streaming.fansCount)} />
+        {/key}
       </div>
     </div>
   </div>
