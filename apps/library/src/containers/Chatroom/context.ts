@@ -43,11 +43,13 @@ export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInf
 export interface IOrdersInfo {
   sportMarketSummary: ISportMarketSummary
   selfOrdersCallback: () => Promise<any>
+  followOrdersCallback: (data) => void
 }
 
 export const initOrdersInfo: IOrdersInfo = {
   sportMarketSummary: null,
-  selfOrdersCallback: null
+  selfOrdersCallback: null,
+  followOrdersCallback: null
 }
 
 export const [setOrdersInfo, getOrdersInfo] = createStoreContext<IOrdersInfo>('chatRoomOrdersInfo', initOrdersInfo)

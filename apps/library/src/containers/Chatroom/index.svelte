@@ -49,7 +49,7 @@
 
   const { chatId, iid, vipLimit, frequency } = setInfo($info)
   const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse } = setEnv($env)
-  const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
+  const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
     const envUnsubscribe = env.subscribe((e) => {
@@ -72,6 +72,7 @@
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
       sportMarketSummary.set(e.sportMarketSummary)
       selfOrdersCallback.set(e.selfOrdersCallback)
+      followOrdersCallback.set(e.followOrdersCallback)
     })
 
     return () => {
