@@ -120,7 +120,7 @@
     {#if initLoading}
       <Loading />
     {:else if !initData?.length}
-      <Empty class="h-[300px]" />
+      <Empty class="h-[calc(100vh_-_170px)]" />
     {:else}
       {#each initData || [] as anchor, idx}
         <Anchor {anchor} bg={anchorBgs[idx % anchorBgs.length]} />
