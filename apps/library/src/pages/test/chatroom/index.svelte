@@ -22,6 +22,7 @@
   let isTransition: boolean = false
   let sportMarketSummary: ISportMarketSummary
   let selfOrdersCallback: () => Promise<any>
+  let followOrdersCallback: (data) => void
 
   $: initHeight = dom?.getBoundingClientRect().height
 
@@ -56,7 +57,7 @@
   }
 
   $: setChatInfo({ height: changedHeight, size: expandType as any })
-  $: setChatOrdersInfo({ sportMarketSummary, selfOrdersCallback })
+  $: setChatOrdersInfo({ sportMarketSummary, selfOrdersCallback, followOrdersCallback })
 
   onSizeChangedCallback((option: SizeChangedOption) => {
     isTransition = option.transition
@@ -94,14 +95,19 @@
     return res.data.list
   }
 
+  const followOrders = (data) => {
+    console.log(data, '這裡是跟單資料')
+  }
+
   onMount(async () => {
     await fetchMarket()
     controller.active()
     selfOrdersCallback = fetchSelfOrders
+    followOrdersCallback = followOrders
   })
 
   onDestroy(() => {
-    controller.destory()
+    controller.destroy()
   })
 </script>
 

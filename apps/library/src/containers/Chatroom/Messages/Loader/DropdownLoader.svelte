@@ -2,12 +2,11 @@
   import { createEventDispatcher } from 'svelte'
   import { getMobileOSInfo, MobileOS } from 'utils'
   import { t } from '$stores'
-  import { Ripple } from 'ui'
   import Circle from 'ui/core/button/loading.svelte'
 
-  import DoubleArrow from '../images/double_arrow_down_small.svg'
-  import { getInfo } from '../context'
-  import { chatEnv } from '../controller'
+  import DoubleArrow from '../../images/double_arrow_down_small.svg'
+  import { getInfo } from '../../context'
+  import { chatEnv } from '../../controller'
 
   const dispatch = createEventDispatcher()
 
@@ -98,14 +97,6 @@
         <Circle stroke="rgb(var(--im-monorepo-primary))" />
       </div>
     </div>
-  {:else if isPC}
-    <Ripple class="flex items-center justify-center z-10 cursor-pointer" on:click={() => dispatch('fetchMore')}>
-      <div class="bg-white rounded-[10px]">
-        <div class="flex items-center justify-center bg-[rgba(76,158,234,0.05)] rounded-[10px] h-[34px] px-[16px]">
-          <div class="text-[12px] text-imprimary">{$t('chat.clickToMore')}</div>
-        </div>
-      </div>
-    </Ripple>
   {:else}
     <div class="flex items-center justify-center z-10" bind:this={dom}>
       <div class="bg-white rounded-[10px]" style:transform={`translateY(${offsetY}px)`}>

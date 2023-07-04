@@ -13,10 +13,12 @@
 
   import flash from './flash'
   import Message from './Message'
-  import DropdownLoader from './DropdownLoader.svelte'
+  import DropdownLoader from './Loader/DropdownLoader.svelte'
+  import ButtonLoader from './Loader/ButtonLoader.svelte'
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
+  import { chatEnv } from '../controller'
   import { inputAreaOffset } from '../InputArea/store'
 
   import type { Writable } from 'svelte/store'
@@ -86,6 +88,8 @@
 
   $: if (dom) dispatch('domBound', dom)
 
+  $: isPC = $chatEnv.device === 'pc'
+
   const checkWatched = () => {
     if (lastReadId === getNewestMessage().msgId) allWatched = true
     else allWatched = false
@@ -134,7 +138,11 @@
   style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
 >
-  <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
+  {#if isPC}
+    <ButtonLoader loading={fetchMoreLoading} on:fetchMore={fetchMore} />
+  {:else}
+    <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
+  {/if}
 
   {#each $chatMessages as message (message.msgId)}
     <Message {message} bind:lastReadId self={message.isSelf} />

@@ -118,14 +118,12 @@ let unSubUserInfo: ReturnType<typeof userInfo.subscribe>
 
 let pushMessageSub: ReturnType<typeof imWs.subscribe>
 export const active = () => {
-  console.log('active in')
   unSubUserInfo = userInfo.subscribe(imWsConnect)
   pushMessageSub = subscribePushMessage()
   imWs.register(subscribeRooms)
 }
 
-export const destory = () => {
-  console.log('destory')
+export const destroy = () => {
   unSubUserInfo()
   if (pushMessageSub) pushMessageSub.unsubscribe()
   imWs.deactivate()

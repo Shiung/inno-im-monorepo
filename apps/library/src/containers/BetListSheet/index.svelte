@@ -3,7 +3,7 @@
   import Wap from './Wap.svelte'
 
   import { Header, Content, Footer } from 'ui/components/BottomSheet'
-  import { getInfo } from '$containers/Chatroom/context'
+  import { getInfo, getOrdersInfo } from '$containers/Chatroom/context'
   import { chatEnv } from '$containers/Chatroom/controller'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
@@ -20,6 +20,7 @@
   let loading: boolean = false
 
   const { chatId, iid } = getInfo()
+  const { followOrdersCallback } = getOrdersInfo()
 
   const Container = $chatEnv.device === 'pc' ? Pc : Wap
 
@@ -33,7 +34,8 @@
   let betData: IBetOrder
 
   const handleFollowOrder = () => {
-    console.log('click followOrder')
+    const waitSendMessage = betData
+    $followOrdersCallback(waitSendMessage)
   }
 
   const handleShowOrder = async () => {
