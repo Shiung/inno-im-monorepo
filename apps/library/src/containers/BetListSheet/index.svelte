@@ -79,7 +79,7 @@
     <DetailHeader bind:activedTab tabs={Object.keys(tabs)} />
   </Header>
 
-  <Content class="p-0">
+  <Content class="px-[10px] overflow-x-hidden">
     <DetailContent bind:betData {self} />
   </Content>
 

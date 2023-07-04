@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { FollowUserInfo, Win, Market, BetOn, Ante, CashOut, Date } from '$containers/BetDetail'
+  import { FollowUserInfo, ResultIcon, Win, Market, BetOn, Ante, CashOut, Date } from '$containers/BetDetail'
 
   import type { IBetOrder } from 'api/im/types'
 
   export let betItem: IBetOrder
-  
-  const components = [FollowUserInfo, Win, Market, BetOn, Ante, CashOut, Date]
 
+  const components = [FollowUserInfo, ResultIcon, Win, Market, BetOn, Ante, CashOut, Date]
 </script>
 
 {#each components as component}
