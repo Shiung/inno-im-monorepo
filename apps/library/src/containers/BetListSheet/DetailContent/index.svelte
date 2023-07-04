@@ -61,14 +61,8 @@
         } catch (error) {
           console.error(error)
         }
-
-        return {
-          avatar: e.avatar,
-          account: e.senderName,
-          iid: e.iid,
-          vip: e.vip,
-          betOrder: content
-        }
+        
+        return content
       })
     }
     fetchData.loading = false

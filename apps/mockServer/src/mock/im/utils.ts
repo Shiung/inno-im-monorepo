@@ -1,4 +1,4 @@
-import { Random } from 'mockjs'
+import { mock, Random } from 'mockjs'
 import { getRandomItemFromArray } from 'utils'
 
 import type { IPredictionMarket } from 'api/im/types'
@@ -148,4 +148,15 @@ export const genOrderDetail = (iid: number) => {
     scoreType: 'NORMAL',
     matchScore: { h: '', a: '' }
   }
+}
+
+export const genOtherOrder = (iid: number) => {
+  return mock({
+    iid,
+    nickName: Random.name(),
+    account:  Random.name(),
+    vip: Random.integer(1, 9),
+    avatar: Random.integer(1, 10),
+    betOrder: { ...genSelfOrder(iid) },
+  })
 }
