@@ -15,8 +15,9 @@ import type { Writable } from 'svelte/store'
 export * from './env'
 
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
+const subscribeSet = new Set<string>()
 
-const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
+export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
 
 const getStore = (props: { chatId: string, iid: number }) => {
   const id = genId(props)
@@ -37,7 +38,7 @@ const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.
   store.update((msg) => [...msg, data])
 })
 
-const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {
+const fetchHistory = async (props: { chatId: string, iid: number }) => {
   const store = getStore(props)
 
   const res = await imWs.publish({
@@ -48,27 +49,47 @@ const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) =
   // sort msgId ascending order
   res.data.pushMessageEntity.sort((a: any, b: any) => a.msgId - b.msgId)
 
-  store.update((messages) => [...res.data.pushMessageEntity, ...messages])
+  store.update((messages) => {
+    const set = new Set()
+    // 去除重複msgId避免掛掉
+    const result = [...res.data.pushMessageEntity, ...messages].filter(item => !set.has(item.msgId) ? set.add(item.msgId) : false)
+    return result
+  })
+}
+
+const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {
+  const store = getStore(props)
+  if (get(store).length !== 0) return
+
+  fetchHistory(props)
 }
 
 export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
-  console.log('subscribeRoom', props)
   const id = genId(props)
+  subscribeSet.add(id)
 
-  await imWs.publish({
-    eventkey: impb.enum.command.SUBSCRIBE_CHAT,
-    data: { chatIds: [id] }
-  })
+  if (imWs.socket.current?.readyState === WebSocket.OPEN) {
+    await imWs.publish({
+      eventkey: impb.enum.command.SUBSCRIBE_CHAT,
+      data: { chatIds: [id] }
+    })
+
+  }
+
 
   checkIfNeedFetchHistory(props)
 }
 
 export const unsubscribeRoom = async ({ chatId, iid }: { chatId: string, iid?: number }) => {
   const id = genId({ chatId, iid })
-  imWs.publish({
+
+  await imWs.publish({
     eventkey: impb.enum.command.UNSUBSCRIBE_CHAT,
     data: { chatIds: [id] }
   })
+
+  subscribeSet.delete(id)
+  messageMap.delete(id)
 }
 
 const imWsConnect = (e: IUserInfo) => {
@@ -85,9 +106,11 @@ const imWsConnect = (e: IUserInfo) => {
 }
 
 const subscribeRooms = () => {
+  if (subscribeSet.size === 0) return
+
   imWs.publish({
     eventkey: impb.enum.command.SUBSCRIBE_CHAT,
-    data: { chatIds: messageMap.keys() }
+    data: { chatIds: Array.from(subscribeSet) }
   })
 }
 

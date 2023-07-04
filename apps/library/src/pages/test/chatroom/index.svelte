@@ -4,10 +4,8 @@
   import { onDestroy, onMount } from 'svelte'
   import { locale } from '$stores'
   import Chatroom, {
-    setChatEnv,
-    setChatInfo,
     controller,
-    // setChatUserInfo,
+    setChatInfo,
     setChatOrdersInfo,
     onSizeChangedCallback,
     onToggledCallback,
@@ -30,40 +28,34 @@
   $: changedHeight = initHeight
 
   $: if (dom) {
-    setChatEnv({
-      displayType: isWindow ? 'window' : 'block',
-      height: initHeight,
-      isOpen: false,
-      showBetList: false,
-      device: 'wap',
-      useScrollCollapse: true,
-      animation: true
-    })
-
-    setChatInfo({
-      chatId: '9434287',
-      // iid: 9433737,
+    controller.setChatEnv({
       vipLimit: 0,
-      frequency: 0
+      frequency: 0,
+      device: 'wap',
+      subscribeBindingChatroom: true,
+      animation: true
     })
 
     controller.setChatUserInfo({
       userAccount: 'bltest01',
       userToken:
-        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiMDgxODkxZmYtYWFkZi00YTMzLWJhMTMtNzJiMjAyMWQ4MTY4IiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4MzU0ODQ3MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.ldXY1Dhe39X2rsoMhnQY2xInZsgtA4lWedkxqfoY_r0',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiNWZkYWUxZDYtNWIyZS00OWNiLTkxNzItYmNiNDNiMWEwMWE4IiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4MzY1MDE4MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.Ex_UNjFcMzT-zZlx5UPgtIYwcdphMA1db5sTVPjord8',
       userVip: 10,
       userCurrency: 'CNY'
     })
 
-    setTimeout(() => {
-      console.log('=================================chatId chaged================================')
-      setChatInfo({
-        chatId: '0011227'
-      })
-    }, 3000)
+    setChatInfo({
+      displayType: isWindow ? 'window' : 'block',
+      useScrollCollapse: true,
+      chatId: '9434287',
+      height: initHeight,
+      // iid: 9433737,
+      isOpen: false,
+      showBetList: false
+    })
   }
 
-  $: setChatEnv({ height: changedHeight, size: expandType as any })
+  $: setChatInfo({ height: changedHeight, size: expandType as any })
   $: setChatOrdersInfo({ sportMarketSummary, selfOrdersCallback })
 
   onSizeChangedCallback((option: SizeChangedOption) => {
@@ -86,7 +78,7 @@
   })
 
   onToggledCallback((open) => {
-    setChatEnv({ isOpen: open })
+    setChatInfo({ isOpen: open })
   })
 
   const fetchMarket = async () => {

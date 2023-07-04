@@ -17,7 +17,6 @@ export const pushMessageParser = (decoded: IPush) => {
 }
 
 export const fetchMessagesParser = (decoded: IPush) => {
-  console.log('==============================????????', decoded.data)
   const messages = im.pushMessageEntityWrapper.decode(decoded.data?.value)
   const data = { eventkey: decoded.command, pairId: decoded.reqId, data: messages }
   if (dev) console.log('ws onmessage FETCH_MESSAGES: ', data)

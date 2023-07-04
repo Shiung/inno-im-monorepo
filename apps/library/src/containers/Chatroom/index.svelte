@@ -1,11 +1,8 @@
 <script lang="ts" context="module">
   import { writable } from 'svelte/store'
-  import { initEnv, initInfo, initOrdersInfo } from './context'
-  import type { IChatroomEnv, IChatroomInfo, IOrdersInfo } from './context'
+  import { initInfo, initOrdersInfo } from './context'
+  import type { IChatroomInfo, IOrdersInfo } from './context'
   import type { SizeChangedCallback, ToggledCallback } from './type'
-
-  let env = writable(initEnv)
-  export const setChatEnv = (_env: Partial<IChatroomEnv>) => env.update((e) => ({ ...e, ..._env }))
 
   let info = writable(initInfo)
   export const setChatInfo = (_info: Partial<IChatroomInfo>) => info.update((e) => ({ ...e, ..._info }))
@@ -36,8 +33,8 @@
 
   import Empty from '$src/containers/Empty'
 
-  import { userInfo, subscribeRoom, unsubscribeRoom, getMessages } from './controller'
-  import { setInfo, setEnv, setOrdersInfo } from './context'
+  import { genId, subscribeRoom, unsubscribeRoom, getMessages, chatEnv } from './controller'
+  import { setInfo, setOrdersInfo } from './context'
 
   import Minimize from './Minimize/index.svelte'
   import Header from './Header/index.svelte'
@@ -47,27 +44,18 @@
   import BetListSheet from '../BetListSheet/index.svelte'
   import { EChatroomSize } from './constant'
 
-  const { chatId, iid, vipLimit, frequency } = setInfo($info)
-  const { isOpen, displayType, height, size, showBetList, device, useScrollCollapse, animation } = setEnv($env)
+  const { displayType, useScrollCollapse, height, isOpen, showBetList, chatId, iid } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
-    const envUnsubscribe = env.subscribe((e) => {
-      displayType.set(e.displayType)
-      height.set(e.height)
-      size.set(e.size)
-      isOpen.set(e.isOpen)
-      device.set(e.device)
-      showBetList.set(e.showBetList)
-      useScrollCollapse.set(e.useScrollCollapse)
-      animation.set(e.animation)
-    })
-
     const infoUnsubscribe = info.subscribe((e) => {
+      displayType.set(e.displayType)
+      useScrollCollapse.set(e.useScrollCollapse)
+      height.set(e.height)
+      isOpen.set(e.isOpen)
+      showBetList.set(e.showBetList)
       chatId.set(e.chatId)
       iid.set(e.iid)
-      vipLimit.set(e.vipLimit)
-      frequency.set(e.frequency)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -77,7 +65,6 @@
 
     return () => {
       infoUnsubscribe()
-      envUnsubscribe()
       ordersInfoUnsubscribe()
     }
   }
@@ -147,8 +134,6 @@
   }
 
   const resetStoreModule = () => {
-    setChatEnv(initEnv)
-
     setChatInfo({
       chatId: '',
       iid: 0
@@ -160,10 +145,17 @@
   // use 100 * $appHeight for compatibility between ios and android
   $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
 
-  $: if ($chatId || $iid) subscribeRoom({ chatId: $chatId, iid: $iid })
+  let previous: { chatId: string; iid: number }
+  const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
+    const id = genId({ chatId: $chatId, iid: $iid })
+    if (previous && genId(previous) !== id) unsubscribeRoom(previous)
+    subscribeRoom({ chatId: $chatId, iid: $iid })
+    previous = { chatId: $chatId, iid: $iid }
+  }
+
+  $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
   onMount(() => {
     initBodyHeight()
-    // imWs.register(() => console.warn('register hi'))
   })
 
   onDestroy(() => {
@@ -179,7 +171,7 @@
     class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
     style:min-height={isWindow ? boxContainerHeight : '100%'}
     style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-    transition:fly|local={$animation && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
+    transition:fly|local={$chatEnv.animation && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
     on:introend={() => {
       isTransition = false
     }}

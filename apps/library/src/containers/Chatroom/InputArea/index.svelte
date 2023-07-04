@@ -20,14 +20,13 @@
   import Plus from '../images/plus.svg'
 
   import { warningCodeMap } from '../constant'
-  import { getInfo, getEnv } from '../context'
-  import { userInfo } from '../controller'
+  import { getInfo } from '../context'
+  import { userInfo, chatEnv } from '../controller'
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = false
 
-  const { chatId, iid, vipLimit, frequency } = getInfo()
-  const { showBetList } = getEnv()
+  const { chatId, iid, showBetList } = getInfo()
 
   let placeHolder: string = ''
   let disabled: boolean = true
@@ -41,8 +40,8 @@
       routerCallback = () => routerRedirectCallback({ location: 'login' })
     }
     // TODO: deposit limit check
-    else if ($userInfo.userVip < $vipLimit) {
-      placeHolder = $t('chat.needVip', { vip: $vipLimit })
+    else if ($userInfo.userVip < $chatEnv.vipLimit) {
+      placeHolder = $t('chat.needVip', { vip: $chatEnv.vipLimit })
       routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
     } else {
       placeHolder = $t('chat.normalPlaceholder')
@@ -59,7 +58,7 @@
   const publishMessage = async () => {
     if (!message) return
     const now = Date.now()
-    if (now - lastSend <= $frequency) {
+    if (now - lastSend <= $chatEnv.frequency) {
       return setWarningMsg(4005)
     }
 

@@ -16,14 +16,13 @@
   import DropdownLoader from './DropdownLoader.svelte'
   import Arrow from '../images/arrow_down_small.svg'
 
-  import { getInfo, getEnv } from '../context'
+  import { getInfo } from '../context'
   import { inputAreaOffset } from '../InputArea/store'
 
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
 
-  const { chatId, iid } = getInfo()
-  const { displayType, height } = getEnv()
+  const { chatId, iid, displayType, height } = getInfo()
 
   $: isWindow = $displayType === 'window'
 
@@ -135,7 +134,7 @@
   style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
 >
-  <DropdownLoader quantity={pastQuantity} loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
+  <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
 
   {#each $chatMessages as message (message.msgId)}
     <Message {message} bind:lastReadId self={message.isSelf} />

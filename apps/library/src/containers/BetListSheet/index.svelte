@@ -3,7 +3,8 @@
   import Wap from './Wap.svelte'
 
   import { Header, Content, Footer } from 'ui/components/BottomSheet'
-  import { getEnv, getInfo } from '$containers/Chatroom/context'
+  import { getInfo } from '$containers/Chatroom/context'
+  import { chatEnv } from '$containers/Chatroom/controller'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
 
@@ -18,10 +19,9 @@
 
   let loading: boolean = false
 
-  const { device } = getEnv()
   const { chatId, iid } = getInfo()
 
-  const Container = $device === 'pc' ? Pc : Wap
+  const Container = $chatEnv.device === 'pc' ? Pc : Wap
 
   const tabs: ITabs = {
     'chat.betList': () => import('./DetailContent/Self.svelte'),

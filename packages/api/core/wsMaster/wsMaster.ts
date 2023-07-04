@@ -92,9 +92,9 @@ class WsMaster {
   }
 
   async activate() {
-    if (this.socket.current?.readyState === 0) return
-    if (this.socket.current?.readyState === 1) return
-    if (this.socket.current?.readyState === 2) await this.waitingSocketClosed()
+    if (this.socket.current?.readyState === WebSocket.CONNECTING) return
+    if (this.socket.current?.readyState === WebSocket.OPEN) return
+    if (this.socket.current?.readyState === WebSocket.CLOSING) await this.waitingSocketClosed()
     const url = new URL(this.url)
     const searchParams = new URLSearchParams(this.params as unknown as URLSearchParams)
     if (searchParams.size !== 0) url.search = searchParams.toString()
@@ -155,7 +155,7 @@ class WsMaster {
   private async waitingSocketClosed() {
     return new Promise(resolve => {
       const checkState = () => {
-        if (this.socket.current?.readyState === 3) resolve(true)
+        if (this.socket.current?.readyState === WebSocket.CLOSED) resolve(true)
         else setTimeout(checkState, 10)
       }
       checkState()
@@ -166,7 +166,7 @@ class WsMaster {
   async waitingSocketConnect() {
     return new Promise(resolve => {
       const checkState = () => {
-        if (this.socket.current?.readyState === 1) resolve(true)
+        if (this.socket.current?.readyState === WebSocket.OPEN) resolve(true)
         else setTimeout(checkState, 10)
       }
       checkState()
@@ -249,7 +249,7 @@ class WsMaster {
 
   // 每次重連都會執行的function
   register(callback: () => void) {
-    if (this.socket.current?.readyState === 1) callback()
+    if (this.socket.current?.readyState === WebSocket.OPEN) callback()
     this.registrations.push(callback)
   }
 
