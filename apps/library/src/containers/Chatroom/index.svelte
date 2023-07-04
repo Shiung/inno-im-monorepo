@@ -161,6 +161,9 @@
   $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
 
   $: if ($chatId || $iid) subscribeRoom({ chatId: $chatId, iid: $iid })
+
+  $: isPC = $device === 'pc'
+
   onMount(() => {
     initBodyHeight()
     // imWs.register(() => console.warn('register hi'))
@@ -179,7 +182,7 @@
     class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
     style:min-height={isWindow ? boxContainerHeight : '100%'}
     style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-    transition:fly|local={$device === 'wap' && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
+    transition:fly|local={!isPC && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
     on:introend={() => {
       isTransition = false
     }}
