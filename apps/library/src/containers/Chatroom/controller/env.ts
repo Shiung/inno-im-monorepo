@@ -2,7 +2,6 @@ import { writable } from 'svelte/store'
 
 export interface IChatroomEnv {
   device: 'pc' | 'wap'
-  animation: boolean
   vipLimit: number
   frequency: number
   subscribeBindingChatroom: boolean
@@ -10,10 +9,9 @@ export interface IChatroomEnv {
 
 export const initEnv: IChatroomEnv = {
   device: 'wap',
-  animation: false,
   vipLimit: 0,
   frequency: 5000,
-  subscribeBindingChatroom: false
+  subscribeBindingChatroom: true
 }
 
 export const chatEnv = writable(initEnv)
