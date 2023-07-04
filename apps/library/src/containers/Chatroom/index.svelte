@@ -135,10 +135,7 @@
   }
 
   const resetStoreModule = () => {
-    setChatInfo({
-      chatId: '',
-      iid: 0
-    })
+    setChatInfo(initInfo)
   }
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
