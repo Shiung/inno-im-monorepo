@@ -4,9 +4,10 @@
   import { fly } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
   import { createEventDispatcher, tick } from 'svelte'
-  import { Ripple } from 'ui'
-  import { t, locale } from '$stores'
   import { im as impb } from 'protobuf'
+  import { Ripple } from 'ui'
+
+  import { t } from '$stores'
   import { im as imWs } from 'api/wsMaster'
   import type { IPushMessageEntity } from 'protobuf/im/types'
 
@@ -22,7 +23,6 @@
   import type { IChatMessage } from 'api/im/types'
 
   const { chatId, iid } = getInfo()
-
   const { displayType, height } = getEnv()
 
   $: isWindow = $displayType === 'window'
@@ -33,11 +33,8 @@
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
 
-  const getOldestMessage = () =>
-    ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
-  const getNewestMessage = () =>
-    ($chatMessages.findLast((msg) => msg.visible === impb.enum.visible.ALL) ||
-      {}) as IPushMessageEntity
+  const getOldestMessage = () => ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
 
   const dispatch = createEventDispatcher()
 
@@ -62,9 +59,7 @@
     if (!mutation) return
 
     const target = isWindow ? window : (mutation.target as HTMLDivElement)
-    const _scrollH = isWindow
-      ? document.documentElement.scrollHeight
-      : (mutation.target as HTMLDivElement).scrollHeight
+    const _scrollH = isWindow ? document.documentElement.scrollHeight : (mutation.target as HTMLDivElement).scrollHeight
 
     const { msgId } = getNewestMessage()
     if (scrollToNewest) {
@@ -115,9 +110,6 @@
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
-    // const res = await im.chatroomPastMessage({ query: { chatId: $chatId, quantity: pastQuantity }, headers: { 'Accept-Language': $locale } })
-    // chatMessages.update((messages) => [...res.data.list, ...messages])
-    console.log('magId: ', $chatMessages?.[0]?.msgId, $chatMessages)
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId || String($iid) }
@@ -131,8 +123,7 @@
     const headerHeight = 44
     const loadmoreHeight = 34
     const offset = 10
-    if (isWindow)
-      window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
+    if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
     else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
   }
 </script>
@@ -145,12 +136,7 @@
   style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
 >
-  <DropdownLoader
-    quantity={pastQuantity}
-    loading={fetchMoreLoading}
-    root={dom}
-    on:fetchMore={fetchMore}
-  />
+  <DropdownLoader quantity={pastQuantity} loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
 
   {#each $chatMessages as message (message.msgId)}
     <Message {message} bind:lastReadId self={message.isSelf} />
@@ -159,10 +145,7 @@
   {#if !scrollToNewest && !allWatched}
     <div
       in:fly={{ y: 50, duration: 300 }}
-      class={twMerge(
-        'flex justify-center mx-auto !mt-0 z-10',
-        isWindow ? 'fixed left-1/2 -translate-x-1/2' : 'sticky'
-      )}
+      class={twMerge('flex justify-center mx-auto !mt-0 z-10', isWindow ? 'fixed left-1/2 -translate-x-1/2' : 'sticky')}
       style:bottom={`${$inputAreaOffset}px`}
     >
       <Ripple

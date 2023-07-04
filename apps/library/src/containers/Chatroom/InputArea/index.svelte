@@ -2,8 +2,7 @@
   import type { RouterRedirectCallback } from '../type'
   let routerRedirectCallback: RouterRedirectCallback = () => {}
   export const onRouterRedirectCallback = (callback: RouterRedirectCallback) => {
-    if (typeof callback !== 'function')
-      return console.warn('onRouterRedirect parameter callback MUST be function')
+    if (typeof callback !== 'function') return console.warn('onRouterRedirect parameter callback MUST be function')
     routerRedirectCallback = callback
   }
 </script>
@@ -11,7 +10,6 @@
 <script lang="ts">
   import { fly } from 'svelte/transition'
   import { twMerge } from 'tailwind-merge'
-  // import stomp from 'api/stompMaster'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
   import { Ripple } from 'ui'
@@ -22,28 +20,28 @@
   import Plus from '../images/plus.svg'
 
   import { warningCodeMap } from '../constant'
-  import { getInfo, getEnv, getUserInfo } from '../context'
+  import { getInfo, getEnv } from '../context'
+  import { userInfo } from '../controller'
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = true
 
-  const { userToken, userVip } = getUserInfo()
   const { chatId, iid, vipLimit, frequency } = getInfo()
   const { displayType, showBetList } = getEnv()
 
   let placeHolder: string = ''
   let disabled: boolean = true
   let lastSend: number = 0
-  let routerCallback
+  let routerCallback: () => void
 
   $: {
     disabled = true
-    if (!$userToken) {
+    if (!$userInfo.userToken) {
       placeHolder = $t('chat.needLogin')
       routerCallback = () => routerRedirectCallback({ location: 'login' })
     }
     // TODO: deposit limit check
-    else if ($userVip < $vipLimit) {
+    else if ($userInfo.userVip < $vipLimit) {
       placeHolder = $t('chat.needVip', { vip: $vipLimit })
       routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
     } else {
@@ -84,7 +82,7 @@
 
     console.log('publish res: ', res)
 
-    if(res.code !== 0) setWarningMsg(res.code)
+    if (res.code !== 0) setWarningMsg(res.code)
 
     lastSend = now
   }
@@ -141,18 +139,11 @@
   {/if}
 
   <div
-    class={twMerge(
-      'im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]',
-      fixed ? 'fixed' : 'sticky'
-    )}
+    class={twMerge('im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]', fixed ? 'fixed' : 'sticky')}
     bind:this={dom}
   >
     <div class="flex items-center">
-      <div
-        class="flex-1 flex items-center relative"
-        on:click={onInputClick}
-        on:keypress={onInputKeyPress}
-      >
+      <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
           class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary"
           placeholder={placeHolder}
@@ -170,10 +161,8 @@
         </Ripple>
       </div>
 
-      <Ripple class='flex items-center justify-center rounded-full h-[36px] w-[36px]' 
-        on:click={() => ($showBetList = true)}
-      >
-        <ShowS width={28} height={28} fill='#999999' />
+      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={() => ($showBetList = true)}>
+        <ShowS width={28} height={28} fill="#999999" />
       </Ripple>
       <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
         <Plus width={28} height={28} fill="#999999" />

@@ -30,15 +30,15 @@ const ws = createWebsocket({
   // url: 'ws://172.28.30.117:3000/im/chat-ws/ws',
   binaryType: 'arraybuffer',
 
-  pingPongParser: {
-    ping: () => im.request.encode({ reqId: '', command: im.enum.command.PING, data: { value: new Uint8Array() } }),
-    pong: (event) => event.eventkey === im.enum.command.PING
-  },
+  // pingPongParser: {
+  //   ping: () => im.request.encode({ reqId: '', command: im.enum.command.PING, data: { value: new Uint8Array() } }),
+  //   pong: (event) => event.eventkey === im.enum.command.PING
+  // },
 
 
   messagePreparser: (event) => {
     const decoded = im.push.decode(event.data)
-    if (dev) console.log('ws onmessage PUSH DECODE: ', { ...decoded })
+    if (dev && decoded.command !== im.enum.command.PING) console.log('ws onmessage PUSH DECODE: ', { ...decoded })
 
     switch (decoded?.command) {
       case im.enum.command.SEND_MESSAGE: return sendMessageParser(decoded)

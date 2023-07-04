@@ -48,7 +48,7 @@ export interface IOrdersInfo {
 export const initOrdersInfo: IOrdersInfo = {
   sportMarketSummary: null,
   selfOrdersCallback: null
- }
+}
 
 export const [setOrdersInfo, getOrdersInfo] = createStoreContext<IOrdersInfo>('chatRoomOrdersInfo', initOrdersInfo)
 
@@ -59,11 +59,11 @@ export interface IUserInfo {
   userCurrency: string
 }
 
-export const initUserInfo: IUserInfo = {
-  userAccount: '',
-  userToken: '',
-  userVip: 0,
-  userCurrency: 'CNY',
-}
-
-export const [setUserInfo, getUserInfo] = createStoreContext<IUserInfo>('chatRoomUserInfo', initUserInfo)
+// export const initUserInfo: IUserInfo = {
+//   userAccount: '',
+//   userToken: '',
+//   userVip: 0,
+//   userCurrency: 'CNY',
+// }
+//
+// export const [setUserInfo, getUserInfo] = createStoreContext<IUserInfo>('chatRoomUserInfo', initUserInfo)

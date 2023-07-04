@@ -5,6 +5,7 @@ import wsObservables from './wsObservables'
 type PromiseResolver = { resolve: (value: any) => void; timer: ReturnType<typeof setTimeout> }
 
 class WsMaster {
+  registrations: Array<() => void> = []
   // listener 是用來做 sync 用，會根據eventkey 以及 pairId 來決定是否為 等待的回應
   listeners: { [eventkey: string]: PromiseResolver[] }
   defaultSyncTimeout: number
@@ -103,6 +104,7 @@ class WsMaster {
 
     this.socket.current.onopen = () => {
       console.log('ws connected.')
+      this.registrations.forEach(cb => cb())
       this.enabled = true
       this.retryTimes = 0
     }
@@ -243,6 +245,12 @@ class WsMaster {
     const key = this.genSyncEventkey(event)
     const observable = wsObservables.get(key)
     observable?.notify(event)
+  }
+
+  // 每次重連都會執行的function
+  register(callback: () => void) {
+    if (this.socket.current?.readyState === 1) callback()
+    this.registrations.push(callback)
   }
 
 }

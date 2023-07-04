@@ -1,12 +1,13 @@
 <script lang="ts">
   import { im } from 'api'
   import { twMerge } from 'tailwind-merge'
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { locale } from '$stores'
   import Chatroom, {
     setChatEnv,
     setChatInfo,
-    setChatUserInfo,
+    controller,
+    // setChatUserInfo,
     setChatOrdersInfo,
     onSizeChangedCallback,
     onToggledCallback,
@@ -39,19 +40,26 @@
     })
 
     setChatInfo({
-      chatId: '52252',
+      chatId: '9434287',
       // iid: 9433737,
       vipLimit: 0,
       frequency: 0
     })
 
-    setChatUserInfo({
+    controller.setChatUserInfo({
       userAccount: 'bltest01',
       userToken:
-        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiOGFiNzgxNmMtZDM3My00MDNhLThiY2QtMzQ2ZTM4MzQ3NTFiIiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4MDAzMTU4MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.PhX54qXOnvObyqZYtU5qm09mz0q-odbi54ppd7jYQGo',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiMDgxODkxZmYtYWFkZi00YTMzLWJhMTMtNzJiMjAyMWQ4MTY4IiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4MzU0ODQ3MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.ldXY1Dhe39X2rsoMhnQY2xInZsgtA4lWedkxqfoY_r0',
       userVip: 10,
       userCurrency: 'CNY'
     })
+
+    setTimeout(() => {
+      console.log('=================================chatId chaged================================')
+      setChatInfo({
+        chatId: '0011227'
+      })
+    }, 3000)
   }
 
   $: setChatEnv({ height: changedHeight, size: expandType as any })
@@ -95,12 +103,13 @@
 
   onMount(async () => {
     await fetchMarket()
+    controller.active()
     selfOrdersCallback = fetchSelfOrders
   })
 
-  // setTimeout(() => {
-  //   videoPlay = true
-  // }, 3000)
+  onDestroy(() => {
+    controller.destory()
+  })
 </script>
 
 <div>
@@ -121,12 +130,7 @@
     style:height={expandType !== 'default' ? `${changedHeight}px` : ''}
   />
 
-  <div
-    class={twMerge(
-      'h-[2000px] bg-red-500',
-      expandType !== 'default' ? 'fixed left-0 right-0' : 'static'
-    )}
-  />
+  <div class={twMerge('h-[2000px] bg-red-500', expandType !== 'default' ? 'fixed left-0 right-0' : 'static')} />
 </div>
 
 <Chatroom />
