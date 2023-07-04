@@ -46,8 +46,6 @@
 
   $: offsetY = Math.max(Math.min((loadIconYMove - loadIconY) / 2, 100), 0)
 
-  $: isPC = $chatEnv.device === 'pc'
-
   const onTouchstart = (e: TouchEvent) => {
     isScrollToTop = (isWindow ? window.scrollY : root.scrollTop) === 0
     if (!canLoadmore) return
@@ -87,7 +85,7 @@
   }
 </script>
 
-<svelte:window on:touchstart={!isPC && onTouchstart} on:touchend={!isPC && onTouchend} on:touchmove={!isPC && onTouchmove} />
+<svelte:window on:touchstart={onTouchstart} on:touchend={onTouchend} on:touchmove={onTouchmove} />
 
 <div class="w-full flex justify-center">
   {#if loading}
