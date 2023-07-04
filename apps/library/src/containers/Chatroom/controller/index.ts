@@ -101,7 +101,7 @@ export const active = () => {
   imWs.register(subscribeRooms)
 }
 
-export const destory = () => {
+export const destroy = () => {
   console.log('destory')
   unSubUserInfo()
   if (pushMessageSub) pushMessageSub.unsubscribe()
