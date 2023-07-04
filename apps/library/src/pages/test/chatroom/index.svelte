@@ -134,8 +134,6 @@
   <div class={twMerge('h-[2000px] bg-red-500', expandType !== 'default' ? 'fixed left-0 right-0' : 'static')} />
 </div>
 
-<div
-  class={twMerge(!isWindow && 'fixed bottom-0 w-full transition-[top] duration-300')}
-  style:top={!isWindow ? `${changedHeight}px` : ''}
->
+<div class={twMerge(!isWindow && 'fixed bottom-0 w-full transition-[top] duration-300')} style:top={!isWindow ? `${changedHeight}px` : ''}>
   <Chatroom />
+</div>
