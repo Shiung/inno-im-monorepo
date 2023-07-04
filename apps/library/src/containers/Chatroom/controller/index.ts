@@ -141,5 +141,8 @@ export const active = () => {
 export const destroy = () => {
   unSubUserInfo()
   if (pushMessageSub) pushMessageSub.unsubscribe()
+
+  clearAllStores()
+  subscribeSet.clear()
   imWs.deactivate()
 }
