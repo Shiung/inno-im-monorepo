@@ -26,7 +26,7 @@
       on:keypress
     >
       <div
-        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]"
+        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px] truncate px-1"
         style:z-index="1"
         style:bottom={folder ? '3px' : '0px'}
       >
