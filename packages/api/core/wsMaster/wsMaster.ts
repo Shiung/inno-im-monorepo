@@ -83,12 +83,12 @@ class WsMaster {
 
   setParams(params: { [key: string]: string | number }) {
     if (this.params === params) return
-    this.params = params
+    this.params = Object.fromEntries(Object.entries(params).filter(([_, v]) => !!v))
   }
 
   setSubprotocols(subprotocols: WsMasterProps['subprotocols']) {
     if (this.subprotocols === subprotocols) return
-    this.subprotocols = subprotocols
+    this.subprotocols = subprotocols || undefined
   }
 
   async activate() {

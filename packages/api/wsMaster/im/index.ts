@@ -29,12 +29,12 @@ const ws = createWebsocket({
   url: mock ? 'ws://localhost:5174/proto/IM_API_URL' : getConfig().IM_CHAT_WS_URL,
   // url: 'ws://172.28.30.117:3000/im/chat-ws/ws',
   binaryType: 'arraybuffer',
+  reconnectInterval: 0.3 * 1000,
 
-  // pingPongParser: {
-  //   ping: () => im.request.encode({ reqId: '', command: im.enum.command.PING, data: { value: new Uint8Array() } }),
-  //   pong: (event) => event.eventkey === im.enum.command.PING
-  // },
-
+  pingPongParser: {
+    ping: () => im.request.encode({ reqId: '', command: im.enum.command.PING, data: { value: new Uint8Array() } }),
+    pong: (event) => event.eventkey === im.enum.command.PING
+  },
 
   messagePreparser: (event) => {
     const decoded = im.push.decode(event.data)
