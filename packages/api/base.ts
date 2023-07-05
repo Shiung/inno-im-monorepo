@@ -7,7 +7,7 @@ const mock = localStorage.getItem('mock') === 'true' || false
 const MOCK_SERVER = `http://${window.location.hostname}:5174`
 
 export default class Base {
-  private baseUrl: string
+  private baseUrl: string | number
   private apiPrefix: string
 
 
@@ -22,12 +22,12 @@ export default class Base {
       }
 
       const baseUrl = getConfig()[API_KEY]
-      if (!baseUrl) throw('[missing a certain API_KEY]')
+      if (!baseUrl) throw ('[missing a certain API_KEY]')
 
       this.baseUrl = baseUrl
 
     } catch (e) {
-      console.error(e, `missing ${API_KEY} at window._env_`) 
+      console.error(e, `missing ${API_KEY} at window._env_`)
     }
   }
 

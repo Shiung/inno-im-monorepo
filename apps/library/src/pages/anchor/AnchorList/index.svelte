@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
-  import Circle from 'ui/core/button/loading.svelte'
   import { im } from 'api'
   import convertSid from 'utils/convertSid'
+  import { locale } from '$stores'
+  import { params } from 'svelte-spa-router'
+
+  import InfiniteScroll from 'ui/components/InfiniteScroll'
 
   import Empty from '$src/containers/Empty'
 
-  import { locale } from '$stores'
-
-  import { params } from 'svelte-spa-router'
   import Loading from './Loading.svelte'
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
@@ -24,30 +23,35 @@
   let pageSize = 20
 
   let initLoading: boolean = false
-  let initData: Awaited<ReturnType<typeof im.webAnchors>>['data']['list']
-
+  let data: Awaited<ReturnType<typeof im.webAnchors>>['data']['list'] = []
   let hasMoreData: boolean = false
-  let moreAnchors = []
-  let moreLoading = false
 
   const anchorBgs = [bg0, bg1, bg2, bg3]
 
-  const fetchAnchors = (props: {
-    pageIdx: number
-    keyWord: string
-    sid: ReturnType<typeof convertSid>
-  }) => {
-    const { pageIdx, keyWord, sid } = props
+  const fetchAnchors = async (props: { keyWord: string; sid: ReturnType<typeof convertSid> }) => {
+    const { keyWord, sid } = props
 
-    return im.webAnchors({
-      query: {
-        ...(sid && { sid }),
-        ...(keyWord && { keyWord }),
-        pageIdx,
-        pageSize
-      },
-      headers: { 'Accept-Language': $locale}
-    })
+    try {
+      const response = await im.webAnchors({
+        query: {
+          ...(sid && { sid }),
+          ...(keyWord && { keyWord }),
+          pageIdx,
+          pageSize
+        },
+        headers: { 'Accept-Language': $locale }
+      })
+
+      const { list, pager } = response?.data || {}
+
+      if (list?.length) data = [...data, ...list]
+
+      const { totalPage } = pager || {}
+      hasMoreData = totalPage > pageIdx
+      if (hasMoreData) pageIdx++
+    } catch (error) {
+      hasMoreData = false
+    }
   }
 
   const init = async ({
@@ -58,59 +62,27 @@
     sid: ReturnType<typeof convertSid>
   }) => {
     pageIdx = 1
-    moreAnchors = []
-    initData = []
+    data = []
 
     try {
       initLoading = true
-      const response = await fetchAnchors({ pageIdx, keyWord, sid })
-      const { list, pager } = response?.data || {}
-
-      if (list?.length) initData = list
-
-      const { totalPage } = pager || {}
-      hasMoreData = totalPage > pageIdx
-      if (hasMoreData) pageIdx++
+      await fetchAnchors({ keyWord, sid })
     } catch (error) {
-      initData = []
+      data = []
     } finally {
       initLoading = false
     }
   }
 
+  $: sid = convertSid($params?.anchorSid)
+
   $: {
-    if ($params?.anchorSid) {
+    if (sid != null) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
-      init({ keyWord, sid: convertSid($params?.anchorSid) })
+      init({ keyWord, sid })
     }
   }
-
-  let domOfLoading: HTMLDivElement
-  let intersectionObserver = new IntersectionObserver(async (entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        moreLoading = true
-        const res = await fetchAnchors({ pageIdx, keyWord, sid: convertSid($params?.anchorSid) })
-        const { list, pager } = res?.data || {}
-
-        if (list?.length) moreAnchors = [...moreAnchors, ...res.data.list]
-
-        const { totalPage } = pager || {}
-        hasMoreData = totalPage > pageIdx
-        if (hasMoreData) pageIdx++
-
-        moreLoading = false
-      }
-    }
-  })
-
-  $: if (domOfLoading) intersectionObserver.observe(domOfLoading)
-
-  onDestroy(() => {
-    intersectionObserver.disconnect()
-    intersectionObserver = null
-  })
 </script>
 
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
@@ -119,29 +91,14 @@
   <div class="space-y-[12px]">
     {#if initLoading}
       <Loading />
-    {:else if !initData?.length}
-      <Empty class="h-[300px]" />
+    {:else if !data?.length}
+      <Empty class="h-[calc(100vh_-_170px)]" />
     {:else}
-      {#each initData || [] as anchor, idx}
-        <Anchor {anchor} bg={anchorBgs[idx % anchorBgs.length]} />
-      {/each}
-
-      {#each moreAnchors as anchor, idx}
-        <Anchor {anchor} bg={anchorBgs[(initData.length + idx) % anchorBgs.length]} />
-      {/each}
-
-      <!-- if init fetch data less then pageSize that meaning no more data. -->
-      {#if hasMoreData}
-        <div bind:this={domOfLoading}>
-          {#if moreLoading}
-            <div class="relative h-[30px] overflow-hidden">
-              <Circle stroke="rgb(var(--im-monorepo-primary))" />
-            </div>
-          {:else}
-            <div />
-          {/if}
-        </div>
-      {/if}
+      <InfiniteScroll hasMore={hasMoreData} load={() => fetchAnchors({ keyWord, sid})}>
+        {#each data || [] as anchor, idx}
+          <Anchor {anchor} bg={anchorBgs[idx % anchorBgs.length]} />
+        {/each}
+      </InfiniteScroll>
     {/if}
   </div>
 </div>

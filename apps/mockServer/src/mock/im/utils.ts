@@ -1,7 +1,9 @@
-import { Random } from 'mockjs'
+import { mock, Random } from 'mockjs'
 import { getRandomItemFromArray } from 'utils'
 
 import type { IPredictionMarket } from 'api/im/types'
+
+export const prefix = '/api-gateway'
 
 export const withData = <T extends { res: { data: any } }>(data: T['res']['data']) => ({
   code: 0,
@@ -12,16 +14,16 @@ export const withData = <T extends { res: { data: any } }>(data: T['res']['data'
 
 export const randomPostTime = () => {
   const now = Date.now()
-  const unit = getRandomItemFromArray(['sec', 'min', 'hour', 'day']) 
+  const unit = getRandomItemFromArray(['sec', 'min', 'hour', 'day'])
 
   switch (unit) {
     case 'sec': return now - Random.integer(1000, 59 * 1000)
     case 'min': return now - Random.integer(60 * 1000, 60 * 59 * 1000)
     case 'hour': return now - Random.integer(60 * 60 * 1000, 60 * 60 * 23 * 1000)
-    case 'day': return now - Random.integer(60 * 60 * 24 * 1000, 60 * 60 * 24* 30 * 1000)
+    case 'day': return now - Random.integer(60 * 60 * 24 * 1000, 60 * 60 * 24 * 30 * 1000)
     default: return now
   }
-} 
+}
 
 export const genPager = (query: { pageIdx?: number, pageSize?: number }) => ({
   pageIdx: query.pageIdx || 1,
@@ -89,4 +91,72 @@ export const genTeamInfo = (isAnchor?: boolean) => {
     awayName: "@cname",
     awayId
   }
+}
+
+export const genSelfOrder = (iid: number) => {
+  return {
+    uuid: RegExp(/^\d{12}-[a-z0-9]{6}$/),
+    ante: Random.integer(0, 1000000),
+    totalAnte: Random.integer(0, 1000000),
+    payout: 0,
+    mayWinAmount: Random.integer(0, 1000000),
+    netWin: Random.integer(-1000000, 1000000),
+    parlayBet: false,
+    parlay: 1,
+    option: 1,
+    canceled: false,
+    details: [genOrderDetail(iid)],
+    marketType: Random.pick(['ML', 'EU', 'IN', 'HK']),
+    status: 2,
+    cashOut: Random.boolean(),
+    currency: Random.pick(['CNY', 'nIDR', 'WBTC_ERC20', 'BCH']),
+    tnPriority: 50131,
+    orderStatus: 0,
+    safeFlag: true,
+    betTime: '@datetime'
+  }
+}
+
+export const genOrderDetail = (iid: number) => {
+  return {
+    sid: 1,
+    tournamentName: '@region',
+    iid,
+    homeName: '@region',
+    awayName: '@region',
+    kickOffTime: '@datetime',
+    odds: `${Random.float(0, 10, 1, 2)}`,
+    market: Random.pick(['ah', 'tg', 'cs_1st', '1x2_1st', 'ou_1st', 'ou', 'ah_1st']),
+    betOn: Random.pick(['a', '2-3', '2-2', 'ud', 'h']),
+    conditions: `${Random.float(-10, 10, 1, 1)}`,
+    settle: Random.integer(0, 1),
+    outright: false,
+    inplay: false,
+    period: Random.string(6),
+    stage: '',
+    cashoutPeriod: '',
+    cashoutStage: '',
+    orderPhase: Random.integer(1, 4),
+    homeScore: `${Random.integer(1, 10)}`,
+    awayScore: `${Random.integer(1, 10)}`,
+    probability: `${Random.float(0, 1, 1, 5)}`,
+    vendor: Random.string(6),
+    tid: 25741,
+    homeId: 342277,
+    awayId: 45,
+    safeFlag: true,
+    scoreType: 'NORMAL',
+    matchScore: { h: '', a: '' }
+  }
+}
+
+export const genOtherOrder = (iid: number) => {
+  return mock({
+    iid,
+    nickName: Random.name(),
+    account:  Random.name(),
+    vip: Random.integer(1, 9),
+    avatar: Random.integer(1, 10),
+    betOrder: { ...genSelfOrder(iid) },
+  })
 }

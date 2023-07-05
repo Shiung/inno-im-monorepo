@@ -57,7 +57,7 @@ const parseLifeData = (list?: typeof life.data.list) => {
                 {#if image.length}
                   <img class='w-[80px] h-[80px]' src={image[0]} alt='' />
                 {/if}
-                <div class='text-[12px] h-full'> {context} </div>
+                <div class='text-[12px] h-full break-all'> {context} </div>
               </div>
             {/each}
           </div>

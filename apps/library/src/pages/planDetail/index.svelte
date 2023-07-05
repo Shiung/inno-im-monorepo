@@ -90,7 +90,9 @@
 
     
     {#if !loading && !isPast}
-      <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
+      {#key $locale}
+        <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
+      {/key}
     {/if}
   </div>
 

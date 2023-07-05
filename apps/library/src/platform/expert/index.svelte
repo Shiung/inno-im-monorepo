@@ -21,6 +21,13 @@
 <script lang="ts">
   import ExpertList from './List/index.svelte'
   import { locale } from '$stores'
+  import { onDestroy } from 'svelte'
+
+  onDestroy(() => {
+    matchInfo.set(null)
+    goToExpertDetail.set(null)
+    goToPlanDetail.set(null)
+  })
 </script>
 
 {#key $locale}

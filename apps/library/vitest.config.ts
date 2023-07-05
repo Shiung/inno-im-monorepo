@@ -1,15 +1,15 @@
 import { resolve } from 'path'
-import {defineConfig} from 'vitest/config'
-import {svelte} from '@sveltejs/vite-plugin-svelte'
+import { defineConfig } from 'vitest/config'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 export default defineConfig({
-  plugins: [svelte({hot: !process.env.VITEST})],
+  plugins: [svelte({ hot: !process.env.VITEST })],
   test: {
     include: [
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-      'node_modules/{ui,utils}/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,ts}'
+      'node_modules/{ui,utils,api}/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,ts}'
     ],
-    exclude:[],
+    exclude: [],
     globals: true,
     environment: 'jsdom',
   },

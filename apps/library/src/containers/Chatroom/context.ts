@@ -1,37 +1,41 @@
 import { createStoreContext } from 'utils/storeContext'
+import type { EChatroomSize } from './constant'
+import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
 export interface IChatroomInfo {
-  roomId: number
-  userId: string
-  userVip: number
-  isLogin: boolean
-  isCharged: boolean
-  vipLimit: number
-  frequency: number
-}
-
-export interface IChatroomEnv {
   displayType: 'window' | 'block'
+  size: `${EChatroomSize}`
+  useScrollCollapse: boolean
   height: number
-  minimize: boolean
+  isOpen: boolean
+  showBetList: boolean
+  chatId: string
+  iid: number
 }
 
 export const initInfo: IChatroomInfo = {
-  roomId: 124,
-  userId: 'loki',
-  userVip: 6,
-  isLogin: true,
-  isCharged: true,
-  vipLimit: 6,
-  frequency: 5000
+  displayType: 'window',
+  size: 'default',
+  useScrollCollapse: false,
+  height: 0,
+  isOpen: false,
+  showBetList: false,
+  chatId: '',
+  iid: 0,
 }
 
 export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)
 
-export const initEnv: IChatroomEnv = {
-  displayType: 'window',
-  height: 0,
-  minimize: true
+export interface IOrdersInfo {
+  sportMarketSummary: ISportMarketSummary
+  selfOrdersCallback: () => Promise<any>
+  followOrdersCallback: (data) => void
 }
 
-export const [setEnv, getEnv] = createStoreContext<IChatroomEnv>('chatRoomEnv', initEnv)
+export const initOrdersInfo: IOrdersInfo = {
+  sportMarketSummary: null,
+  selfOrdersCallback: null,
+  followOrdersCallback: null
+}
+
+export const [setOrdersInfo, getOrdersInfo] = createStoreContext<IOrdersInfo>('chatRoomOrdersInfo', initOrdersInfo)
