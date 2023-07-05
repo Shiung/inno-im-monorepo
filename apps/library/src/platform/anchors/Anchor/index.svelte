@@ -26,7 +26,7 @@ $: isSteaming = $streaming?.houseId === houseId
       dispatch('change', $store)
     }}
   >
-    <img class='rounded-[10px] min-w-[110px] h-full object-cover' src={$store.houseImage} alt='' />
+    <img class='rounded-[10px] w-[110px] h-full object-cover' src={$store.houseImage} alt='' />
 
     <div class='flex flex-col overflow-hidden space-y-[8px] ml-[8px]'>
       <div class='flex items-center'>
