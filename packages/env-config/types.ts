@@ -31,5 +31,5 @@ export interface WindowEnv {
   RESOURCE_URL: string
   ECHO_URL: string
   IM_API_URL: string
-  IM_CHAT_WS_URL: string
+  IM_WS_URL: string
 }

@@ -20,13 +20,11 @@ import {
   fetchOtherOrdersParser
 } from './messagePreparser'
 
-
-
 const dev = localStorage.getItem('dev') === 'true'
 const mock = localStorage.getItem('mock') === 'true'
 
 const ws = createWebsocket({
-  url: mock ? 'ws://localhost:5174/proto/IM_API_URL' : getConfig().IM_CHAT_WS_URL,
+  url: mock ? 'ws://172.28.10.196:5174/proto/IM_API_URL' : `${getConfig().IM_WS_URL}/chat-ws/ws`,
   // url: 'ws://172.28.30.117:3000/im/chat-ws/ws',
   binaryType: 'arraybuffer',
   reconnectInterval: 0.3 * 1000,
