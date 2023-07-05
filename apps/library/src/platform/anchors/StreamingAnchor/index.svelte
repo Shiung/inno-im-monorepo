@@ -3,6 +3,8 @@
   import { Tween } from 'ui'
   import { amountSymbolTransformer } from 'utils/amount'
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+  import AnchorImage from '$src/components/AnchorImage'
+  import { twMerge } from 'tailwind-merge'
 
   import ArrowUp from './images/arrow_up.svg'
   import fans from './images/fans_on.webp'
@@ -32,9 +34,11 @@
       >
         {$streaming.nickName}
       </div>
-      <img
-        class="w-[90px] min-w-[90px] h-[90px] min-h-[90px] rounded-full border border-imprimary ease-out duration-300"
-        style:opacity={folder ? 0 : 1}
+      <AnchorImage
+        class={twMerge(
+          "w-[90px] min-w-[90px] h-[90px] min-h-[90px] rounded-full border border-imprimary ease-out duration-300",
+          folder ? "opacity-0" : "opacity-100"
+        )}
         src={$streaming.userImage}
         alt=""
       />
