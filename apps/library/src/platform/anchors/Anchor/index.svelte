@@ -29,12 +29,12 @@ $: isSteaming = $streaming?.houseId === houseId
     <img class='rounded-[10px] min-w-[110px] h-full object-cover' src={$store.houseImage} alt='' />
 
     <div class='flex flex-col overflow-hidden space-y-[8px] ml-[8px]'>
-      <div class='flex items-center leading-none'>
+      <div class='flex items-center'>
         <img class='max-h-[20px] max-w-[20px] rounded-full' src={$store.userImage} alt='' />
         <span class='text-imprimary text-[16px]'> {$store.houseName} </span>
       </div>
 
-      <div class='text-[11px] truncate text-left leading-none'> {$store.houseIntroduction} </div>
+      <div class='text-[11px] truncate text-left'> {$store.houseIntroduction} </div>
       <div class='flex'>
         <span class='items-center px-[5px] rounded-[5px] text-[#999999] text-[6px] bg-[rgba(238,238,238,0.5)]'> 
           {$store.anchorTypeName}
