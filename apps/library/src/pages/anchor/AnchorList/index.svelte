@@ -76,17 +76,21 @@
 
   $: sid = convertSid($params?.anchorSid)
 
+  const initSearch = (e) => {
+    keyWord = e.detail.keyWord
+    init({ keyWord, sid })
+  }
+
   $: {
     if (sid != null) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
-      init({ keyWord, sid })
     }
   }
 </script>
 
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
-  <Search on:searchEvent={(e) => (keyWord = e.detail.keyWord)} />
+  <Search on:searchEvent={(e) => initSearch(e)} />
 
   <div class="space-y-[12px]">
     {#if initLoading}

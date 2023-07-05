@@ -2,6 +2,8 @@
 import { createEventDispatcher } from 'svelte'
 import { Search } from 'ui'
 import { t, locale } from '$stores'
+import convertSid from 'utils/convertSid'
+import { params } from 'svelte-spa-router'
 
 const dispatch = createEventDispatcher()
 
@@ -28,6 +30,11 @@ const changeDict = async (_locale: typeof $locale) => {
 
 $: changeDict($locale)
 
+const handleSearch = () => dispatch('searchEvent', { keyWord: value })
+
+$: sid = convertSid($params?.anchorSid)
+$: if (sid != null) handleSearch()
+
 
 </script>
 
@@ -37,8 +44,8 @@ $: changeDict($locale)
     value = e.detail
     dispatch('searchEvent', { keyWord: e.detail })
   }}
-  on:clear={e => {
-    if (!e.detail.isFocused) dispatch('searchEvent', { keyWord: '' })
+  on:clear={() => {
+    dispatch('searchEvent', { keyWord: '' })
   }}
   placeholder={$t('anchor.search.placeholder')}
 />
