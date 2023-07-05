@@ -120,6 +120,11 @@
       showWarning = false
     }, 2000)
   }
+
+  const handleOrderClick = () => {    
+    if (!$userInfo.userToken) routerCallback && routerCallback()
+    else $showBetList = true
+  }
 </script>
 
 <div class="relative">
@@ -159,12 +164,12 @@
         </Ripple>
       </div>
 
-      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={() => ($showBetList = true)}>
+      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
         <ShowS width={28} height={28} fill="#999999" />
       </Ripple>
-      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
+      <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
         <Plus width={28} height={28} fill="#999999" />
-      </Ripple>
+      </Ripple> -->
     </div>
   </div>
 
