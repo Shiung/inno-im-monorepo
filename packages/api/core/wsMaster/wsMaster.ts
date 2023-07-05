@@ -92,6 +92,7 @@ class WsMaster {
   }
 
   async activate() {
+    this.enabled = true
     if (this.socket.current?.readyState === WebSocket.CONNECTING) return
     if (this.socket.current?.readyState === WebSocket.OPEN) return
     if (this.socket.current?.readyState === WebSocket.CLOSING) await this.waitingSocketClosed()
@@ -105,7 +106,6 @@ class WsMaster {
     this.socket.current.onopen = () => {
       console.log('ws connected.')
       this.registrations.forEach(cb => cb())
-      this.enabled = true
       this.retryTimes = 0
     }
 
