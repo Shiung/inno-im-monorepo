@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { t, locale } from '$stores'
-  import { Win, Market, BetOn, Ante, Date } from '$containers/BetDetail'
+  import { Win, ResultIcon, Market, BetOn, Ante, Date } from '$containers/BetDetail'
 
   import HeaderBg from './images/headerBg.png'
   import DoubleArrow from '$containers/Chatroom/images/double_arrow_down_small.svg'
@@ -46,12 +46,13 @@
     </div>
   </div>
 
-  <div class="flex flex-col justify-center items-center space-y-[4px] pb-[8px]">
+  <div class="relative flex flex-col justify-center items-center space-y-[4px] pb-[8px]">
     <Win
       class="mt-[15px] mb-[8px] leading-[20px] text-[rgb(var(--im-monorepo-primary))]"
       betItem={message}
       chatMessage
     />
+    <ResultIcon betItem={message} />
     <Market betItem={message} />
     <BetOn betItem={message} />
     <Ante betItem={message} color={'#999'} />
