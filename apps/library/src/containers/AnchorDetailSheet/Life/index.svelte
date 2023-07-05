@@ -48,14 +48,14 @@ const parseLifeData = (list?: typeof life.data.list) => {
               {@const { image, day, time, context } = story || {}}
 
               <div class={twMerge('grid gap-[15px]',
-                image ? 'grid-cols-[45px_80px_auto]' : 'grid-cols-[45px_auto]'
+                image.length ? 'grid-cols-[45px_80px_auto]' : 'grid-cols-[45px_auto]'
               )}>
                 <div>
                   <div class='text-[14px]'> {day} </div>
                   <div class='text-[10px] text-[#999999]'> {time} </div>
                 </div>
-                {#if image}
-                  <img class='w-[80px] h-[80px]' src={image} alt='' />
+                {#if image.length}
+                  <img class='w-[80px] h-[80px]' src={image[0]} alt='' />
                 {/if}
                 <div class='text-[12px] h-full'> {context} </div>
               </div>
