@@ -17,9 +17,14 @@ export * from './env'
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
 const subscribeSet = new Set<string>()
 
-export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
+const MAX_MESSAGES_LIMIT = 500
+const SLICE_SIZE = 200
 
-const getStore = (props: { chatId: string, iid: number }) => {
+type IdInfo = { chatId: string, iid: number }
+
+export const genId = ({ chatId, iid }: IdInfo) => chatId || String(iid)
+
+const getStore = (props: IdInfo) => {
   const id = genId(props)
   if (id === '0') return writable([]) // 0 用來當空聊天室
 
@@ -31,7 +36,13 @@ const getStore = (props: { chatId: string, iid: number }) => {
   return _store
 }
 
-export const getMessages = (props: { chatId: string, iid: number }) => getStore(props)
+export const getMessages = (props: IdInfo) => getStore(props)
+
+export const rmvPrevMsgsWhenOverLimit = (props: IdInfo) => {
+  const messages = getStore(props)
+
+  while (get(messages).length > MAX_MESSAGES_LIMIT) messages.update(e => e.slice(SLICE_SIZE))
+}
 
 const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.PUSH_MESSAGE }, ({ data }) => {
   const store = getStore({ chatId: data.chatId, iid: data.iid })
@@ -55,7 +66,7 @@ const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
   })
 }
 
-const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {
+const checkIfNeedFetchHistory = async (props: IdInfo) => {
   const store = getStore(props)
   const id = genId(props)
   if (get(store).length !== 0) return
@@ -63,7 +74,7 @@ const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) =
   fetchHistory(id, store)
 }
 
-export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
+export const subscribeRoom = async (props: IdInfo) => {
   const id = genId(props)
   subscribeSet.add(id)
 
@@ -77,7 +88,7 @@ export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
   checkIfNeedFetchHistory(props)
 }
 
-export const unsubscribeRoom = async (props: { chatId: string, iid: number }) => {
+export const unsubscribeRoom = async (props: IdInfo) => {
   const id = genId(props)
   if (id === '0') return
 

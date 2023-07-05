@@ -18,7 +18,7 @@
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
-  import { chatEnv } from '../controller'
+  import { chatEnv, rmvPrevMsgsWhenOverLimit } from '../controller'
   import { inputAreaOffset } from '../InputArea/store'
 
   import type { Writable } from 'svelte/store'
@@ -64,6 +64,7 @@
 
     const { msgId } = getNewestMessage()
     if (scrollToNewest) {
+      rmvPrevMsgsWhenOverLimit({ chatId: $chatId, iid: $iid })
       lastReadId = msgId
       target.scrollTo({ top: _scrollH })
     }
