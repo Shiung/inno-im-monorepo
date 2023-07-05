@@ -35,6 +35,7 @@
   let scrollToNewest: boolean = false
 
   const getOldestMessage = () => ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  //@ts-ignore findLast 會噴錯，不知原因
   const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
 
   const dispatch = createEventDispatcher()
