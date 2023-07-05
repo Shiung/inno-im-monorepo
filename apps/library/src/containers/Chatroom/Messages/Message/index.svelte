@@ -30,7 +30,7 @@
         }
       }
     },
-    { rootMargin: `0px 0px -150px 0px` }
+    { rootMargin: `0px 0px -88px 0px` } // greater than input area by 5 px
   )
 
   // 還不知道怎麼取到正確的 message container 高度，所以先寫死數值 (Header + inputArea)

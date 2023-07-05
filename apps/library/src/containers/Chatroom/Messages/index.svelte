@@ -76,11 +76,17 @@
   const scrollToUnread = () => {
     const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
     if (unreadDom) {
-      unreadDom.scrollIntoView({ block: 'end' })
-      flash(unreadDom)
+      // workaround 1
+      // need to consider browser collapse height (window.outerHeight - window.innerHeight)
+      // unreadDom.scrollIntoView({ block: 'end' })
+      // if (isWindow) window.scrollTo({ top: window.scrollY + (window.outerHeight - window.innerHeight) + 83 })
 
-      const offset = 83
-      if (isWindow) window.scrollTo({ top: window.scrollY + offset })
+      // workaround 2 - better
+      // 44 = header height, 83 = input height
+      const { offsetTop, offsetHeight, } = unreadDom
+      window.scrollTo(0, offsetTop - (window.innerHeight - $height - 44 - 83) + offsetHeight)
+
+      flash(unreadDom)
     }
   }
 
