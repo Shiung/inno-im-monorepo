@@ -17,7 +17,7 @@ const getDevConfig = (env: ENV): WindowEnv => {
     RESOURCE_URL: '',
     ECHO_URL: 'https://echo.zuplo.io',
     IM_API_URL: `https://tiger-api.inno${env}.site/im`,
-    IM_CHAT_WS_URL: `wss://tiger-api.inno${env}.site/im/chat-ws/ws`
+    IM_WS_URL: `wss://tiger-api.inno${env}.site/im`
   }
 }
 
