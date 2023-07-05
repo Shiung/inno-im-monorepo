@@ -4,7 +4,7 @@
 
   export let betItem
 
-  const isShow = betItem?.details[0].settle !== 0 || betItem.cashOut
+  const isShow = betItem?.details[0].settle !== 0
 
   const lang = ['zh_CN', 'zh_HK'].includes($locale) ? $locale : 'en_US'
 
