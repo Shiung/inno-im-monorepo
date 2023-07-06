@@ -14,7 +14,9 @@ enum Command {
 	UNSUBSCRIBE_CHAT   = 6;
 	PING               = 7;
 	FETCH_OTHER_ORDERS = 8;
+	FETCH_CHAT_SETTING = 9;
 	PUSH_MESSAGE       = 100;
+	CHAT_SETTING       = 101;
 	USER_STATUS        = 200;
 }
 
@@ -147,4 +149,8 @@ message FetchOtherOrders {
 	string sender        = 2;
 	string chatId        = 3;
 	int32  iid           = 4;
+}
+
+message ChatSetting {
+  string setting = 1;
 }

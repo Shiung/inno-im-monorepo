@@ -64,3 +64,7 @@ export interface IFetchOtherOrdersArgs {
   chatId :string
   iid: number
 }
+
+export interface IChatSetting {
+  setting: string
+}
