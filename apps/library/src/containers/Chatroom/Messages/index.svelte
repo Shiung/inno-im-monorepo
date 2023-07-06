@@ -25,6 +25,7 @@
   import type { IChatMessage } from 'api/im/types'
 
   const { chatId, iid, displayType, height } = getInfo()
+  const { header: headerHeight, loadMore: loadMoreHeight, input: inputHeight } = $chatCompHeight
 
   $: isWindow = $displayType === 'window'
 
@@ -77,11 +78,20 @@
   const scrollToUnread = () => {
     const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
     if (unreadDom) {
-      unreadDom.scrollIntoView({ block: 'end' })
-      flash(unreadDom)
+      // workaround 1
+      // need to consider browser collapse height (window.outerHeight - window.innerHeight)
+      // unreadDom.scrollIntoView({ block: 'end' })
+      // if (isWindow) window.scrollTo({ top: window.scrollY + (window.outerHeight - window.innerHeight) + 83 })
 
-      const offset = 83
-      if (isWindow) window.scrollTo({ top: window.scrollY + offset })
+      // workaround 2 - better
+      if(isWindow) {
+        const { offsetTop, offsetHeight } = unreadDom
+        window.scrollTo(0, offsetTop - (window.innerHeight - $height - headerHeight - inputHeight) + offsetHeight)
+      } else {
+        unreadDom.scrollIntoView({ block: 'end' })
+      }
+
+      // flash(unreadDom)
     }
   }
 
@@ -123,7 +133,6 @@
     await tick()
     targetDom?.scrollIntoView()
 
-    const { header: headerHeight, loadMore: loadMoreHeight } = $chatCompHeight
     const offset = 10
     if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadMoreHeight - offset - $height })
     dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
