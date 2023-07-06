@@ -1,6 +1,7 @@
 <script lang='ts'>
 import { createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
+import FrontCoverImage from '$components/FrontCoverImage'
 
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 
@@ -26,7 +27,7 @@ $: isSteaming = $streaming?.houseId === houseId
       dispatch('change', $store)
     }}
   >
-    <img class='rounded-[10px] w-[110px] h-full object-cover' src={$store.houseImage} alt='' />
+    <FrontCoverImage class='rounded-[10px] w-[110px] h-full object-cover' src={$store.houseImage}/>
 
     <div class='flex flex-col overflow-hidden space-y-[8px] ml-[8px]'>
       <div class='flex items-center'>
