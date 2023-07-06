@@ -18,7 +18,7 @@ export const messageEntityData = (ts: number = Date.now(), props?: MessageEntity
   const _content = props?.content
   const _sender = props?.sender
   const _contentType = props?.contentType
-  
+
   return mock({
     msgId: ts,
     contentType: _contentType || 1,
@@ -82,7 +82,7 @@ const expert: IMockData[] = [
   {
     url: `${prefix}/product/chat/betOrder/getOthers`,
     timeout: 500,
-    response: ({ query }) => 
+    response: ({ query }) =>
       mock(
         withData<Types.IChatroomOtherOrders>({
           list: Array.from({ length: Number(query.quantity) || 10 }, () => ({
@@ -91,7 +91,7 @@ const expert: IMockData[] = [
             account: '@name',
             vip: Random.integer(1, 9),
             avatar: Random.integer(1, 10),
-            betOrder: {...genSelfOrder(Number(query.iid))}
+            betOrder: { ...genSelfOrder(Number(query.iid)) }
           }))
         })
       )
