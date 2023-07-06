@@ -12,6 +12,8 @@
     type SizeChangedOption
   } from '$src/containers/Chatroom'
 
+  import { getUser, type IUser } from './utils'
+
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
   const isWindow: boolean = true
@@ -23,6 +25,8 @@
   let sportMarketSummary: ISportMarketSummary
   let selfOrdersCallback: () => Promise<any>
   let followOrdersCallback: (data) => void
+
+  let user: IUser = { account: '', token: '' }
 
   $: initHeight = dom?.getBoundingClientRect().height
 
@@ -37,9 +41,8 @@
     })
 
     controller.setChatUserInfo({
-      userAccount: 'bltest01',
-      userToken:
-        'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiNWZkYWUxZDYtNWIyZS00OWNiLTkxNzItYmNiNDNiMWEwMWE4IiwidmVuZG9ySWQiOjEsInR5cGUiOjEsInVzZXJJZCI6MzA3Njg3LCJsb2dpbkRvbWFpbiI6ImVuLXZkMDAxLXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4MzY1MDE4MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMTU0MDk2MDAwLCJ2ZW5kb3IiOiJkdjIiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJibHRlc3QwMSJ9.Ex_UNjFcMzT-zZlx5UPgtIYwcdphMA1db5sTVPjord8',
+      userAccount: user.account,
+      userToken: user.token,
       userVip: 10,
       userCurrency: 'CNY'
     })
@@ -99,6 +102,7 @@
   }
 
   onMount(async () => {
+    user = await getUser()
     await fetchMarket()
     controller.active()
     selfOrdersCallback = fetchSelfOrders

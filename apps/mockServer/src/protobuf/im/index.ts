@@ -1,6 +1,8 @@
 import impb from 'protobuf/im/node'
 import { pushMessage, pushMessageEntity, genPushMessages, genFetchOtherOrdersMessages } from './messageGenerator'
 
+import { subscribed } from './store'
+
 import type { IRequest } from 'protobuf/im/types'
 import type { RawData, WebSocket } from 'ws'
 
@@ -69,14 +71,27 @@ const onReceiveFetchOtherOrders = (ws: WebSocket, __data: IRequest) => {
   if (buf) ws.send(buf)
 }
 
+const onSubscribeChat = (ws: WebSocket, data: IRequest) => {
+  const chatIdsWrapper = impb.chatIdsWrapper.decode(data.data.value)
+  for (const id of chatIdsWrapper.chatIds) subscribed.add(id)
+  sendReply(ws, data)
+}
+
+const onUnsubscribeChat = (ws: WebSocket, data: IRequest) => {
+  const chatIdsWrapper = impb.chatIdsWrapper.decode(data.data.value)
+  for (const id of chatIdsWrapper.chatIds) subscribed.delete(id)
+  const sub = impb.chatIdsWrapper.encode({ chatIds: Array.from(subscribed) })
+  sendReply(ws, { ...data, data: { value: sub } })
+}
+
 export const onMessage = (ws: WebSocket, event: RawData) => {
   try {
     const data = impb.request?.decode(event as Uint8Array)
     switch (data.command) {
       case impb.enum.command.PING: return onReceivePing(ws)
       case impb.enum.command.SEND_MESSAGE: return onReceiveSendMessage(ws, data)
-      case impb.enum.command.SUBSCRIBE_CHAT: return sendReply(ws, data)
-      case impb.enum.command.UNSUBSCRIBE_CHAT: return sendReply(ws, { ...data, data: { value: new Uint8Array() } })
+      case impb.enum.command.SUBSCRIBE_CHAT: return onSubscribeChat(ws, data)
+      case impb.enum.command.UNSUBSCRIBE_CHAT: return onUnsubscribeChat(ws, data)
       case impb.enum.command.FETCH_MESSAGES: return onReceiveFetchMessage(ws, data)
       case impb.enum.command.FETCH_OTHER_ORDERS: return onReceiveFetchOtherOrders(ws, data)
     }

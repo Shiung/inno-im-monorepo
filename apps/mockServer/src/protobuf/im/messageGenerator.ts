@@ -1,4 +1,7 @@
 import impb from 'protobuf/im/node'
+import { getRandomItemFromArray } from 'utils'
+
+import { subscribed } from './store'
 
 import { messageEntityData, pushMessageData } from '../../mock/im/chatroom'
 import type { MessageEntityDataProps } from '../../mock/im/chatroom'
@@ -10,7 +13,8 @@ export const pushMessageEntity = (msg?: MessageEntityDataProps) => {
 }
 
 export const pushMessage = (props?: { reqId?: string, value?: Uint8Array | undefined }) => {
-  const data = pushMessageData({ reqId: props?.reqId, value: props?.value || pushMessageEntity() })
+  const chatId = getRandomItemFromArray(Array.from(subscribed))
+  const data = pushMessageData({ reqId: props?.reqId, value: props?.value || pushMessageEntity({ chatId }) })
   return impb.push?.encode(data)
 }
 

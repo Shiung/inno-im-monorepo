@@ -30,6 +30,7 @@ export interface WindowEnv {
   DEPLOY_ENV: string
   RESOURCE_URL: string
   ECHO_URL: string
+  PLATFORM_API_URL: string
   IM_API_URL: string
   IM_WS_URL: string
 }
