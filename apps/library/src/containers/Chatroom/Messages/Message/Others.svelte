@@ -56,4 +56,6 @@
       </div>
     </div>
   </div>
+{:else}
+  <div data-id={`invisible-${message.msgId}`}}></div>
 {/if}
