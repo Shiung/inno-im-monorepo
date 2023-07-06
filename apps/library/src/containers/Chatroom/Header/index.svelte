@@ -12,6 +12,7 @@
 
   import { getInfo } from '../context'
   import { chatEnv } from '../controller'
+  import { chatCompHeight } from '../store'
 
   export let isTransition: boolean
   export let fixed: boolean = false
@@ -22,7 +23,7 @@
   let showRemind: boolean = false
 
   let dom: HTMLDivElement
-  $: blockHeight = dom?.getBoundingClientRect().height
+  $: if (dom) chatCompHeight.update(e => ({ ...e, header: dom?.getBoundingClientRect().height }))
 
   $: marqueeInfo = [$t('chat.remind')]
 </script>
@@ -58,7 +59,7 @@
       </Ripple>
     </div>
 
-    <div style:height={fixed && `${blockHeight}px`} />
+    <div style:height={fixed && `${$chatCompHeight.header}px`} />
   {:else}
     <div class="flex justify-center items-center w-full min-h-[30px] text-[#bbb] text-xs">{$t('chat.remind')}</div>
   {/if}

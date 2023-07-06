@@ -6,7 +6,7 @@
 
   import DoubleArrow from '../../images/double_arrow_down_small.svg'
   import { getInfo } from '../../context'
-  import { chatEnv } from '../../controller'
+  import { chatCompHeight } from '../../store'
 
   const dispatch = createEventDispatcher()
 
@@ -32,13 +32,16 @@
           canLoadmore = entry.isIntersecting
         }
       },
-      { root: !isWindow ? root : null, rootMargin: `${!isWindow ? 0 : -($height + 44)}px 0px 0px 0px` }
+      { root: !isWindow ? root : null, rootMargin: `${!isWindow ? 0 : -($height + $chatCompHeight.header)}px 0px 0px 0px` }
     )
 
     if (dom) intersectionObserver.observe(dom)
   }
 
-  $: if (dom) intersectionObserver.observe(dom)
+  $: if (dom) {
+    intersectionObserver.observe(dom)
+    chatCompHeight.update(e => ({ ...e, loadMore: dom?.getBoundingClientRect()?.height }))
+  }
 
   let loadIconY: number = 0
   let loadIconYMove: number = 0

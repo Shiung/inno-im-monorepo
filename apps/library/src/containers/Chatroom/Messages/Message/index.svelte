@@ -2,6 +2,7 @@
   import type { IChatMessage } from 'api/im/types'
 
   import { getInfo } from '../../context'
+  import { chatCompHeight } from '../../store'
 
   import Others from './Others.svelte'
   import Self from './Self.svelte'
@@ -13,6 +14,7 @@
   let dom: HTMLDivElement
 
   const { height } = getInfo()
+  const { header: headerHeight, input: inputHeight } = $chatCompHeight
 
   // TODO 待雪花算法上後再修正
   const checkAndSetLastReadId = (id: string) => {
@@ -29,11 +31,10 @@
         }
       }
     },
-    { rootMargin: `0px 0px -150px 0px` }
+    { rootMargin: `0px 0px -${inputHeight}px 0px` }
   )
 
-  // 還不知道怎麼取到正確的 message container 高度，所以先寫死數值 (Header + inputArea)
-  $: boxContainerHeight = window.innerHeight - $height - 44 - 83
+  $: boxContainerHeight = window.innerHeight - $height - headerHeight - inputHeight
 
   $: if (dom) {
     if (dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))

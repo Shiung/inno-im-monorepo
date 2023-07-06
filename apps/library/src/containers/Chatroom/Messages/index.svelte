@@ -19,7 +19,7 @@
 
   import { getInfo } from '../context'
   import { chatEnv } from '../controller'
-  import { inputAreaOffset } from '../InputArea/store'
+  import { chatCompHeight, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
@@ -123,11 +123,10 @@
     await tick()
     targetDom?.scrollIntoView()
 
-    const headerHeight = 44
-    const loadmoreHeight = 34
+    const { header: headerHeight, loadMore: loadMoreHeight } = $chatCompHeight
     const offset = 10
-    if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
-    else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
+    if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadMoreHeight - offset - $height })
+    dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
   }
 </script>
 

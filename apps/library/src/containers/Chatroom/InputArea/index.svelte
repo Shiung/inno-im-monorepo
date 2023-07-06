@@ -22,7 +22,7 @@
   import { warningCodeMap } from '../constant'
   import { getInfo } from '../context'
   import { userInfo, chatEnv } from '../controller'
-  import { inputAreaOffset } from './store'
+  import { chatCompHeight, inputAreaOffset } from '../store'
 
   export let fixed: boolean = false
 
@@ -51,7 +51,7 @@
   }
 
   let dom: HTMLDivElement
-  $: blockHeight = dom?.getBoundingClientRect().height
+  $: if (dom) chatCompHeight.update(e => ({ ...e, input: dom?.getBoundingClientRect()?.height || 0 }))
 
   let message: string
 
@@ -108,7 +108,7 @@
 
   $: {
     const warningHeight = showWarning ? 32 : 0
-    const offset = (fixed ? blockHeight + 10 : 0) + warningHeight
+    const offset = (fixed ? $chatCompHeight.input + 10 : 0) + warningHeight
 
     inputAreaOffset.set(offset)
   }
@@ -135,7 +135,7 @@
         'flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full',
         fixed ? 'fixed' : 'absolute -translate-y-full'
       )}
-      style:bottom={fixed && `${blockHeight}px`}
+      style:bottom={fixed && `${$chatCompHeight.input}px`}
     >
       {warningMsg}
     </div>
@@ -173,5 +173,5 @@
     </div>
   </div>
 
-  <div style:height={fixed && `${blockHeight}px`} />
+  <div style:height={fixed && `${$chatCompHeight.input}px`} />
 </div>
