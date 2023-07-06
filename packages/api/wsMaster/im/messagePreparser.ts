@@ -49,7 +49,7 @@ export const fetchOtherOrdersParser = (decoded: IPush) => {
 }
 
 export const chatSettingParser = (decoded: IPush) => {
-  const chatSetting = im.ChatSetting.decode(decoded.data?.value)
+  const chatSetting = im.chatSetting.decode(decoded.data?.value)
   const data = { eventkey: decoded.command, pairId: decoded.reqId, data: chatSetting }
   if (dev) console.log('ws onmessage CHAT_SETTING: ', data)
 

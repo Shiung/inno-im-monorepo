@@ -118,7 +118,7 @@ class ImBp {
     }
   }
 
-  get ChatSetting() {
+  get chatSetting() {
     return {
       encode: (data: IChatSetting) => this.safeCode(() => this._chatSetting?.encode(data).finish()),
       decode: (data: ArrayBuffer) => this.safeCode(() => this._chatSetting?.decode(new Uint8Array(data)) as unknown as IChatSetting)

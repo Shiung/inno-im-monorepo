@@ -1,5 +1,11 @@
 import impb from 'protobuf/im/node'
-import { pushMessage, pushMessageEntity, genPushMessages, genFetchOtherOrdersMessages } from './messageGenerator'
+import {
+  pushMessage,
+  pushMessageEntity,
+  genPushMessages,
+  genFetchOtherOrdersMessages,
+  pushChatSetting
+} from './messageGenerator'
 
 import { subscribed } from './store'
 
@@ -14,6 +20,9 @@ export const onConnection = (ws: WebSocket) => {
     setTimeout(() => onConnection(ws), 10)
     return
   }
+
+  const chatSettingBuffer = pushChatSetting()
+  if(chatSettingBuffer) ws.send(chatSettingBuffer)
 
   sendInterval = setInterval(() => {
     const buffer = pushMessage()
@@ -71,6 +80,12 @@ const onReceiveFetchOtherOrders = (ws: WebSocket, __data: IRequest) => {
   if (buf) ws.send(buf)
 }
 
+const onReceiveFetchChatSetting = (ws: WebSocket) => {
+  const chatSetting = pushChatSetting()
+
+  if (chatSetting) ws.send(chatSetting)
+}
+
 const onSubscribeChat = (ws: WebSocket, data: IRequest) => {
   const chatIdsWrapper = impb.chatIdsWrapper.decode(data.data.value)
   for (const id of chatIdsWrapper.chatIds) subscribed.add(id)
@@ -94,6 +109,7 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
       case impb.enum.command.UNSUBSCRIBE_CHAT: return onUnsubscribeChat(ws, data)
       case impb.enum.command.FETCH_MESSAGES: return onReceiveFetchMessage(ws, data)
       case impb.enum.command.FETCH_OTHER_ORDERS: return onReceiveFetchOtherOrders(ws, data)
+      case impb.enum.command.FETCH_CHAT_SETTING: return onReceiveFetchChatSetting(ws)
     }
 
   } catch (e) {
