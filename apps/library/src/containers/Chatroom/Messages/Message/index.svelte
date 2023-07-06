@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { appHeight } from '$stores/layout'
   import type { IChatMessage } from 'api/im/types'
 
   import { getInfo } from '../../context'
@@ -34,7 +33,7 @@
   )
 
   // 還不知道怎麼取到正確的 message container 高度，所以先寫死數值 (Header + inputArea)
-  $: boxContainerHeight = 100 * $appHeight - $height - 44 - 83
+  $: boxContainerHeight = window.innerHeight - $height - 44 - 83
 
   $: if (dom) {
     if (dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))
