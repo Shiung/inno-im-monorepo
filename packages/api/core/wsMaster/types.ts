@@ -19,7 +19,7 @@ export interface IWsMasterEvent {
   pairId?: string | number,
   code?: number,
   msg?: string,
-  data: any,
+  data?: any,
 }
 
 export interface WsMasterProps {

@@ -44,6 +44,7 @@ const sendReply = (ws: WebSocket, data: IRequest) => {
   const buffer = impb.push?.encode({ ...(data.reqId && { reqId: data.reqId }), command: data.command, code: 0, msg: '', data: data.data })
   if (buffer) ws.send(buffer)
 }
+
 const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
   sendReply(ws, data)
   const message = impb.requestMessageEntity?.decode(data.data.value as Uint8Array)
@@ -80,7 +81,8 @@ const onReceiveFetchOtherOrders = (ws: WebSocket, __data: IRequest) => {
   if (buf) ws.send(buf)
 }
 
-const onReceiveFetchChatSetting = (ws: WebSocket) => {
+const onReceiveFetchChatSetting = (ws: WebSocket, data: IRequest) => {
+  sendReply(ws, data)
   const chatSetting = pushChatSetting()
 
   if (chatSetting) ws.send(chatSetting)
@@ -109,7 +111,7 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
       case impb.enum.command.UNSUBSCRIBE_CHAT: return onUnsubscribeChat(ws, data)
       case impb.enum.command.FETCH_MESSAGES: return onReceiveFetchMessage(ws, data)
       case impb.enum.command.FETCH_OTHER_ORDERS: return onReceiveFetchOtherOrders(ws, data)
-      case impb.enum.command.FETCH_CHAT_SETTING: return onReceiveFetchChatSetting(ws)
+      case impb.enum.command.FETCH_CHAT_SETTING: return onReceiveFetchChatSetting(ws, data)
     }
 
   } catch (e) {
