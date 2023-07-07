@@ -34,9 +34,9 @@
   let lastSend: number = 0
   let routerCallback: () => void
 
-  $: setPhAndRouteCb($userInfo, $chatroomSetting, $t)
+  $: setStatusAndCallbackByCondition($userInfo, $chatroomSetting, $t)
 
-  const setPhAndRouteCb = (userInfo: IUserInfo, chatroomSetting: IChatroomSetting, _t: ITransStore) => {
+  const setStatusAndCallbackByCondition = (userInfo: IUserInfo, chatroomSetting: IChatroomSetting, _t: ITransStore) => {
     resetStatus()
 
     const { userToken, userCurrency } = userInfo
@@ -57,6 +57,7 @@
   const setWithoutLogin = (_t: ITransStore) => {
     placeHolder = _t('chat.needLogin')
     routerCallback = () => routerRedirectCallback({ location: 'login' })
+    message = ''
   }
 
   const setByChatSettingError = (chatroomSetting: IChatroomSetting, userCurrency: IUserInfo['userCurrency'], _t: ITransStore) => {
@@ -65,10 +66,12 @@
       const limitRule = depositLimit.find(item => item.currency === userCurrency)
       placeHolder = _t(errorCodeMsgMap[EErrorCode.CURRENCY_LIMIT], { currency: limitRule?.currency, amount: limitRule?.amount})
       routerCallback = () => routerRedirectCallback({ location: 'deposit' })
+      message = ''
     }
     const _onVipLimit = (vip: IChatroomSetting['vip'], _t) => {
       placeHolder = _t(errorCodeMsgMap[EErrorCode.VIP_LIMIT], { vip })
       routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
+      message = ''
     }
 
     switch(errorCode) {
