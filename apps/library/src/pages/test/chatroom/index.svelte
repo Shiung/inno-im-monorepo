@@ -9,6 +9,7 @@
     setChatOrdersInfo,
     onSizeChangedCallback,
     onToggledCallback,
+    onRouterRedirectCallback,
     type SizeChangedOption
   } from '$src/containers/Chatroom'
 
@@ -80,6 +81,20 @@
 
   onToggledCallback((open) => {
     setChatInfo({ isOpen: open })
+  })
+
+  onRouterRedirectCallback((option) => {
+    switch (option.location) {
+      case 'login':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to login')
+        break
+      case 'vipCenter':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to vipCenter')
+        break
+      case 'deposit':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to deposit')
+        break
+    }
   })
 
   const fetchMarket = async () => {

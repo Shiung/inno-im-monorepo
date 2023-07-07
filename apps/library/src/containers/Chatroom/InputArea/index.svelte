@@ -155,7 +155,7 @@
   }
 
   const handleOrderClick = () => {    
-    if (!$userInfo.userToken) routerCallback && routerCallback()
+    if (disabled) routerCallback && routerCallback()
     else $showBetList = true
   }
 </script>
