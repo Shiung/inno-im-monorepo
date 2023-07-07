@@ -9,8 +9,10 @@ export let closeH: number
 
 let moving: boolean = false
 let maxCalled: boolean = false
+let startHeight: number
 
 const onTouchStart = () => {
+  startHeight = height
   moving = true
 }
 
@@ -35,6 +37,8 @@ const onTouchEnd = () => {
     }
   }
 }
+
+$: if (height > startHeight + 10) height = maxHeight
 
 </script>
 
