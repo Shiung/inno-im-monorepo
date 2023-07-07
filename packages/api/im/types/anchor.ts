@@ -108,7 +108,7 @@ export interface IWebAnchorInfo {
     weight: string
     birthday: string
     favorite: string
-    state: 1 | 2 | 3 // 1单身 2恋爱中 3保密
+    state: 0 | 1 | 2 | 3 // 0未填資料 1单身 2恋爱中 3保密
   }>
 }
 
