@@ -18,7 +18,8 @@ export const sendMessage = (event: IWsMasterEvent) => {
     chatId: event.data.chatId,
     iid: event.data.iid,
     replyTo: event.data.replyTo,
-    content: event.data.content
+    content: event.data.content,
+    houseId: event.data.houseId
   })
 
   return requestEncode({

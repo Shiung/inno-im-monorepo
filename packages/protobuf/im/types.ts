@@ -17,6 +17,7 @@ export interface IRequestMessageEntity {
   iid: number
   replyTo: number
   content: string
+  houseId?: string
 }
 
 export interface IPush {
@@ -41,6 +42,7 @@ export interface IPushMessageEntity {
   content: string
   visible: EVisible
   timestamp: number
+  houseId?: string
 }
 
 
