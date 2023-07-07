@@ -48,7 +48,7 @@ export let tabs: string[]
         style:background-color={activedTab === tab ? 'rgb(var(--im-monorepo-primary))' : 'white'}
       >
         <Ripple 
-          class={twMerge('text-[#333333] h-[32px] px-[20px]',
+          class={twMerge('text-[#333333] py-[6px] px-[20px]',
             activedTab === tab && 'text-white'
           )}
           ripple='#ffffff'
