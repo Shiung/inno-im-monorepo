@@ -49,7 +49,8 @@
       contentType: im.enum.contentType.ORDER,
       chatId: $chatId || String($iid),
       iid: $iid,
-      content: JSON.stringify(waitSendMessage)
+      content: JSON.stringify(waitSendMessage),
+      ...($chatId && { houseId: $chatId })
     }
 
     const res = await imWs.publish({

@@ -74,6 +74,7 @@ message RequestMessageEntity {
 	int32       iid         = 3; // 賽事id
 	int64       replyTo     = 4; // 回覆的訊息id
 	string      content     = 5;
+	string      houseId     = 6; // 主播id
 }
 
 message PushMessageEntity {
@@ -91,6 +92,7 @@ message PushMessageEntity {
 	string      content     = 12;
 	Visible     visible     = 13;
 	int64       timestamp   = 14;
+	string      houseId     = 15;
 }
 
 message FetchArgs {
