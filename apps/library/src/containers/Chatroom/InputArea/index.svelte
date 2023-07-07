@@ -13,15 +13,16 @@
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
   import { Ripple } from 'ui'
-  import { t } from '$stores'
+  import { t, type ITransStore } from '$stores'
 
   import Send from '../images/send.svg'
   import ShowS from '../images/show_s.svg'
   import Plus from '../images/plus.svg'
 
-  import { warningCodeMap } from '../constant'
+  import { EErrorCode, errorCodeMsgMap } from '../constant'
   import { getInfo } from '../context'
-  import { userInfo, chatEnv } from '../controller'
+  import { userInfo, type IUserInfo } from '../controller/env'
+  import { chatroomSetting, type IChatroomSetting } from '../controller/localEnv'
   import { inputAreaOffset } from './store'
 
   export let fixed: boolean = false
@@ -33,21 +34,53 @@
   let lastSend: number = 0
   let routerCallback: () => void
 
-  $: {
+  $: setPhAndRouteCb($userInfo, $chatroomSetting, $t)
+
+  const setPhAndRouteCb = (userInfo: IUserInfo, chatroomSetting: IChatroomSetting, _t: ITransStore) => {
+    resetStatus()
+
+    const { userToken, userCurrency } = userInfo
+
+    if (!userToken) return setWithoutLogin(_t)
+
+    if (chatroomSetting.errorCode !== 0) return setByChatSettingError(chatroomSetting, userCurrency, _t)
+
+    setNormal(_t)
+  }
+
+  const resetStatus = () => {
+    placeHolder = ''
     disabled = true
-    if (!$userInfo.userToken) {
-      placeHolder = $t('chat.needLogin')
-      routerCallback = () => routerRedirectCallback({ location: 'login' })
+    routerCallback = () => {}
+  }
+
+  const setWithoutLogin = (_t: ITransStore) => {
+    placeHolder = _t('chat.needLogin')
+    routerCallback = () => routerRedirectCallback({ location: 'login' })
+  }
+
+  const setByChatSettingError = (chatroomSetting: IChatroomSetting, userCurrency: IUserInfo['userCurrency'], _t: ITransStore) => {
+    const { errorCode, vip, depositLimit } = chatroomSetting
+    const _onCurrencyLimit = (depositLimit: IChatroomSetting['depositLimit'], userCurrency: string, _t: ITransStore) => {
+      const limitRule = depositLimit.find(item => item.currency === userCurrency)
+      placeHolder = _t(errorCodeMsgMap[EErrorCode.CURRENCY_LIMIT], { currency: limitRule?.currency, amount: limitRule?.amount})
+      routerCallback = () => routerRedirectCallback({ location: 'deposit' })
     }
-    // TODO: deposit limit check
-    else if ($userInfo.userVip < $chatEnv.vipLimit) {
-      placeHolder = $t('chat.needVip', { vip: $chatEnv.vipLimit })
+    const _onVipLimit = (vip: IChatroomSetting['vip'], _t) => {
+      placeHolder = _t(errorCodeMsgMap[EErrorCode.VIP_LIMIT], { vip })
       routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
-    } else {
-      placeHolder = $t('chat.normalPlaceholder')
-      disabled = false
-      routerCallback = undefined
     }
+
+    switch(errorCode) {
+      case EErrorCode.VIP_LIMIT: return _onVipLimit(vip, _t)
+      case EErrorCode.CURRENCY_LIMIT: return _onCurrencyLimit(depositLimit, userCurrency, _t)
+    }
+  }
+
+  const setNormal = (_t: ITransStore) => {
+    placeHolder = _t('chat.normalPlaceholder')
+    disabled = false
+    routerCallback = undefined
   }
 
   let dom: HTMLDivElement
@@ -58,8 +91,8 @@
   const publishMessage = async () => {
     if (!message) return
     const now = Date.now()
-    if (now - lastSend <= $chatEnv.frequency) {
-      return setWarningMsg(4005)
+    if (now - lastSend <= $chatroomSetting.timeInterval) {
+      return setWarningMsg(EErrorCode.TOO_OFTEN)
     }
 
     const waitSendMessage = message
@@ -81,16 +114,16 @@
 
     console.log('publish res: ', res)
 
-    if (res.code !== 0) setWarningMsg(res.code)
+    if (res.code !== 0) setWarningMsg(res.code, res.msg)
 
     lastSend = now
   }
 
   let warningMsg: string
   let showWarning: boolean = false
-  const setWarningMsg = (code: string | number) => {
-    const msgKey = warningCodeMap?.[code]
-    if (msgKey) warningMsg = $t(msgKey)
+  const setWarningMsg = (code: number, message?: string) => {
+    const mapped = EErrorCode?.[code]
+    warningMsg = mapped ? $t(errorCodeMsgMap[code]) : message
     showWarning = true
   }
 
@@ -157,7 +190,7 @@
 
         <Ripple
           class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
-          disabled={!message}
+          disabled={disabled || !message}
           on:click={publishMessage}
         >
           <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />

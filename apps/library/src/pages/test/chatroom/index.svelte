@@ -34,8 +34,6 @@
 
   $: if (dom) {
     controller.setChatEnv({
-      vipLimit: 0,
-      frequency: 0,
       device: 'wap',
       subscribeBindingChatroom: true
     })

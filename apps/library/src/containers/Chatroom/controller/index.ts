@@ -11,7 +11,7 @@ import { userInfo } from './env'
 import type { IChatMessage } from 'api/im/types'
 import type { IUserInfo } from './env'
 import type { Writable } from 'svelte/store'
-
+import { setChatroomSetting } from './localEnv'
 export * from './env'
 
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
@@ -36,6 +36,18 @@ export const getMessages = (props: { chatId: string, iid: number }) => getStore(
 const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.PUSH_MESSAGE }, ({ data }) => {
   const store = getStore({ chatId: data.chatId, iid: data.iid })
   store.update((msg) => [...msg, data])
+})
+
+const subscribeChatSetting = () => imWs.subscribe({ eventkey: impb.enum.command.CHAT_SETTING }, ({ data, code }) => {
+  if (code !== 0) {
+    
+  }
+
+  try {
+    const parsed = JSON.parse(data?.setting)
+    setChatroomSetting({ ...parsed, errorCode: code })
+  } catch (e) {
+  }
 })
 
 const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
@@ -135,15 +147,20 @@ const subscribeRooms = () => {
 let unSubUserInfo: ReturnType<typeof userInfo.subscribe>
 
 let pushMessageSub: ReturnType<typeof imWs.subscribe>
+
+let chatSettingSub: ReturnType<typeof imWs.subscribe>
+
 export const active = () => {
   unSubUserInfo = userInfo.subscribe(imWsConnect)
   pushMessageSub = subscribePushMessage()
+  chatSettingSub = subscribeChatSetting()
   imWs.register(subscribeRooms)
 }
 
 export const destroy = () => {
   unSubUserInfo()
   if (pushMessageSub) pushMessageSub.unsubscribe()
+  if (chatSettingSub) chatSettingSub.unsubscribe()
 
   clearAllStores()
   subscribeSet.clear()

@@ -185,7 +185,7 @@ export const pushChatSettingData = (props: { reqId?: string; value?: Uint8Array 
   return {
     ...(reqId && { reqId }),
     command: ECommand.CHAT_SETTING,
-    code: Random.pick([0, 4005, 4007, 4008]),
+    code: Random.pick([0, 4007, 4008]),
     msg: '',
     data: { value }
   }
