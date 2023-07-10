@@ -2,10 +2,8 @@
   import { im } from 'api'
   import { im as imWs } from 'api/wsMaster'
   import { im as impb } from 'protobuf'
-  import { getConfig } from 'env-config'
 
   import { getOrdersInfo, getInfo } from '$containers/Chatroom/context'
-  import { userInfo } from '$containers/Chatroom/controller'
 
   import Container from './Container.svelte'
 
@@ -16,7 +14,6 @@
 
   const { selfOrdersCallback } = getOrdersInfo()
   const { chatId, iid } = getInfo()
-  const { VENDERID } = getConfig()
 
   const Self = () => import('./Self.svelte')
   const Other = () => import('./Other.svelte')
@@ -50,7 +47,10 @@
 
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_OTHER_ORDERS,
-      data: { vdId: Number(VENDERID.slice(-2)), sender: $userInfo.userAccount, chatId: $chatId || String($iid), iid: $iid }
+      data: {
+        chatId: $chatId || String($iid),
+        iid: $iid
+      }
     })
 
     fetchData.data = {

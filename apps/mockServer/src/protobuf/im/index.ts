@@ -63,7 +63,8 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
 }
 
 const onReceiveFetchMessage = (ws: WebSocket, __data: IRequest) => {
-  const _data = genPushMessages()
+  const fetchArgs = impb.fetchArgs.decode(__data.data.value)
+  const _data = genPushMessages({ chatId: fetchArgs.chatId })
 
   const buf = impb.push?.encode({ reqId: '', command: impb.enum.command.FETCH_MESSAGES, code: 0, msg: '', data: { value: _data || new Uint8Array() } })
   if (buf) {
@@ -115,6 +116,6 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
     }
 
   } catch (e) {
-    console.log('decode error: ', event, e)
+    console.debug('decode error: ', event, e)
   }
 }

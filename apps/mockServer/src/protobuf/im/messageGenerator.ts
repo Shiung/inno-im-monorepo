@@ -30,9 +30,9 @@ export const pushChatSetting = (props?: { reqId?: string, value?: Uint8Array | u
 
 let lastDateId = Date.now()
 
-export const genPushMessages = () => {
-  const data = Array.from({ length: 10 }, (_, idx) => ({
-    ...messageEntityData(lastDateId - (10 - idx))
+export const genPushMessages = (msg?: MessageEntityDataProps) => {
+  const data = Array.from({ length: 100 }, (_, idx) => ({
+    ...messageEntityData(lastDateId - (10 - idx), msg)
   }))
 
   lastDateId = data[0].msgId

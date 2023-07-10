@@ -38,7 +38,7 @@ const ws = createWebsocket({
 
   messagePreparser: (event) => {
     const decoded = im.push.decode(event.data)
-    if (dev && decoded.command !== im.enum.command.PING) console.log('ws onmessage PUSH DECODE: ', { ...decoded })
+    if (dev && decoded.command !== im.enum.command.PING) console.debug('ws onmessage PUSH DECODE: ', { ...decoded })
 
     switch (decoded?.command) {
       case im.enum.command.SEND_MESSAGE: return sendMessageParser(decoded)
@@ -54,7 +54,7 @@ const ws = createWebsocket({
   },
 
   publishPreprocessor: (event) => {
-    if (dev) console.log('ws publish: ', { ...event })
+    if (dev) console.debug('ws publish: ', { ...event })
     switch (event.eventkey) {
       case im.enum.command.SEND_MESSAGE: return sendMessage(event)
       case im.enum.command.FETCH_MESSAGES: return fetchMessages(event)

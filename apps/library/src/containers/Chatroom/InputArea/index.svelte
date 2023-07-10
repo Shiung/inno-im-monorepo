@@ -105,7 +105,8 @@
       chatId: $chatId || String($iid),
       iid: $iid,
       // replyTo:
-      content: waitSendMessage
+      content: waitSendMessage,
+      ...($chatId && { houseId: $chatId })
     }
 
     message = ''

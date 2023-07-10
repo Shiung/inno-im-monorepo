@@ -104,7 +104,7 @@ class WsMaster {
     if (this.binaryType) this.socket.current.binaryType = this.binaryType
 
     this.socket.current.onopen = () => {
-      console.log('ws connected.')
+      console.debug('ws im-monorepo connected.')
       this.registrations.forEach(cb => cb())
       this.retryTimes = 0
     }
@@ -124,13 +124,13 @@ class WsMaster {
     }
 
     this.socket.current.onclose = e => {
-      console.log('ws closed: ', e)
+      console.debug('ws im-monorepo closed: ', e)
       if (this.stopIfRetryOverTimes && this.retryTimes >= this.stopIfRetryOverTimes) this.deactivate()
       else if (this.enabled) this.reconnect()
       this.retryTimes = this.retryTimes + 1
     }
     this.socket.current.onerror = e => {
-      console.log('ws error: ', e)
+      console.debug('ws im-monorepo error: ', e)
     }
     this.watchdog.start()
   }
