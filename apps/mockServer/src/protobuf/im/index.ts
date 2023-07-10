@@ -98,6 +98,6 @@ export const onMessage = (ws: WebSocket, event: RawData) => {
     }
 
   } catch (e) {
-    console.log('decode error: ', event, e)
+    console.debug('decode error: ', event, e)
   }
 }
