@@ -5,7 +5,7 @@ import { Enum } from './constants'
 import type {
   IRequest, IPush, IPushMessageEntity,
   IRequestMessageEntity, IChatIdsWrapper, IReportAbuseArgs,
-  IFetchArgs, IFetchOtherOrdersArgs
+  IFetchArgs, IFetchOtherOrdersArgs, IChatSetting
 } from './types'
 
 class ImBp {
