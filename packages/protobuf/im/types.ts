@@ -43,6 +43,7 @@ export interface IPushMessageEntity {
   visible: EVisible
   timestamp: number
   houseId?: string
+  lang: string
 }
 
 
@@ -55,14 +56,12 @@ export interface IFetchArgs {
   chatId: string
 }
 
-export interface IReportAbuseAegs {
+export interface IReportAbuseArgs {
   userId: number
   reason: string
 }
 
 export interface IFetchOtherOrdersArgs {
-  vdId: number
-  sender: string
   chatId :string
   iid: number
 }

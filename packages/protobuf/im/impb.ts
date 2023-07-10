@@ -4,7 +4,7 @@ import type { Type } from 'protobufjs'
 import { Enum } from './constants'
 import type {
   IRequest, IPush, IPushMessageEntity,
-  IRequestMessageEntity, IChatIdsWrapper, IReportAbuseAegs,
+  IRequestMessageEntity, IChatIdsWrapper, IReportAbuseArgs,
   IFetchArgs, IFetchOtherOrdersArgs
 } from './types'
 
@@ -102,10 +102,10 @@ class ImBp {
     }
   }
 
-  get reportAbuseAegs() {
+  get reportAbuseArgs() {
     return {
-      encode: (data: IReportAbuseAegs) => this.safeCode(() => this._reportAbuseArgs?.encode(data).finish()),
-      decode: (data: ArrayBuffer) => this.safeCode(() => this._reportAbuseArgs?.decode(new Uint8Array(data)) as unknown as IReportAbuseAegs)
+      encode: (data: IReportAbuseArgs) => this.safeCode(() => this._reportAbuseArgs?.encode(data).finish()),
+      decode: (data: ArrayBuffer) => this.safeCode(() => this._reportAbuseArgs?.decode(new Uint8Array(data)) as unknown as IReportAbuseArgs)
     }
   }
 
