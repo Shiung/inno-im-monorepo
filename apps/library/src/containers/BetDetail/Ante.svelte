@@ -7,7 +7,7 @@
   export let betItem
   export let color: string = 'rgb(var(--im-monorepo-primary))'
 
-  const { currency } = betItem
+  const { currency, totalAnte } = betItem
 </script>
 
 <div class="flex items-center">
@@ -16,6 +16,6 @@
   <CurrencyIcon class="w-[15px] h-[15px] mx-[5px]" {currency} />
 
   <div class="text-[14px]" style:color>
-    {amountThousandthTransformer(betItem.totalAnte)}
+    {amountThousandthTransformer(totalAnte, { decimal: 2, trimZero: true })}
   </div>
 </div>

@@ -4,6 +4,7 @@ interface ITransformerOption {
 	decimal: number
 	roundMode?: BigNumber.RoundingMode
 	format?: BigNumber.Format
+	trimZero?: boolean
 }
 
 export const amountThousandthTransformer = (
@@ -12,11 +13,14 @@ export const amountThousandthTransformer = (
 		decimal: 0
 	}
 ): string => {
-	const { decimal = 0, roundMode = BigNumber.ROUND_HALF_UP, format } = options
+	const { decimal = 0, roundMode = BigNumber.ROUND_HALF_UP, format, trimZero } = options
 	const valBigNumber = new BigNumber(amount)
 	if (valBigNumber.isNaN()) return ''
 
-	const value = valBigNumber.toFormat(decimal, roundMode, format)
+	let value = valBigNumber.toFormat(decimal, roundMode, format)
+
+	if (trimZero) value = value.replace(/\.?0+$/, '')
+		
 	return value
 }
 
