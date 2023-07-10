@@ -24,7 +24,7 @@
   let isTransition: boolean = false
   let sportMarketSummary: ISportMarketSummary
   let selfOrdersCallback: () => Promise<any>
-  let followOrdersCallback: (data) => void
+  let followOrdersCallback: (data) => Promise<any>
 
   let user: IUser = { account: '', token: '' }
 
@@ -97,7 +97,12 @@
     return res.data.list
   }
 
-  const followOrders = (data) => {
+  const followOrders = async (data) => {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 1000)
+    })
     console.log(data, '這裡是跟單資料')
   }
 
