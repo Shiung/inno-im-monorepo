@@ -4,7 +4,7 @@
   export let betItem
 
   const { FE_CDN_URL, DEPLOY_ENV, VENDERID } = getConfig()
-  const { nickName, account, vip } = betItem
+  const { nickName = '', account = '', vip } = betItem
   const name = (nickName || account).substring(0, 3) + '***** :'
   const vipUrl = `${FE_CDN_URL}/frontend/${DEPLOY_ENV}/fe-images/${VENDERID}/chatRoom/vip/${vip}.png`
 </script>
