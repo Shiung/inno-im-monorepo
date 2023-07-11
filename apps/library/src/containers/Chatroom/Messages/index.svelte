@@ -19,13 +19,12 @@
 
   import { getInfo } from '../context'
   import { chatEnv } from '../controller'
-  import { chatCompHeight, inputAreaOffset } from '../store'
+  import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
 
   const { chatId, iid, displayType, height } = getInfo()
-  const { header: headerHeight, loadMore: loadMoreHeight, input: inputHeight } = $chatCompHeight
 
   $: isWindow = $displayType === 'window'
 
@@ -84,9 +83,9 @@
       // if (isWindow) window.scrollTo({ top: window.scrollY + (window.outerHeight - window.innerHeight) + 83 })
 
       // workaround 2 - better
-      if(isWindow) {
+      if (isWindow) {
         const { offsetTop, offsetHeight } = unreadDom
-        window.scrollTo(0, offsetTop - (window.innerHeight - $height - headerHeight - inputHeight) + offsetHeight)
+        window.scrollTo(0, offsetTop - (window.innerHeight - $height - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight)
       } else {
         unreadDom.scrollIntoView({ block: 'end' })
       }
@@ -134,8 +133,8 @@
     targetDom?.scrollIntoView()
 
     const offset = 10
-    if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadMoreHeight - offset - $height })
-    dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
+    if (isWindow) window.scrollTo({ top: window.scrollY - $headerRect?.height - $loadMoreRect?.height - offset - $height })
+    dom.scrollTo({ top: dom.scrollTop - $headerRect?.height - offset })
   }
 </script>
 

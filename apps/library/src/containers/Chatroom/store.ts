@@ -1,15 +1,9 @@
 import { writable } from 'svelte/store'
 
-export const chatCompHeight = writable<{
-  header: number
-  loadMore: number
-  box: number
-  input: number
-}>({
-  header: 0,
-  loadMore: 0,
-  box: 0,
-  input: 0
-})
+export const headerRect = writable<DOMRect>(null)
+
+export const loadMoreRect = writable<DOMRect>(null)
+
+export const inputRect = writable<DOMRect>(null)
 
 export const inputAreaOffset = writable<number>(0)

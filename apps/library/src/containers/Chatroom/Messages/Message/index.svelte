@@ -2,7 +2,7 @@
   import type { IChatMessage } from 'api/im/types'
 
   import { getInfo } from '../../context'
-  import { chatCompHeight } from '../../store'
+  import { inputRect, headerRect } from '../../store'
 
   import Others from './Others.svelte'
   import Self from './Self.svelte'
@@ -14,7 +14,6 @@
   let dom: HTMLDivElement
 
   const { height } = getInfo()
-  const { header: headerHeight, input: inputHeight } = $chatCompHeight
 
   // TODO 待雪花算法上後再修正
   const checkAndSetLastReadId = (id: string) => {
@@ -31,10 +30,10 @@
         }
       }
     },
-    { rootMargin: `0px 0px -${inputHeight}px 0px` }
+    { rootMargin: `0px 0px -${$inputRect?.height}px 0px` }
   )
 
-  $: boxContainerHeight = window.innerHeight - $height - headerHeight - inputHeight
+  $: boxContainerHeight = window.innerHeight - $height - $headerRect?.height - $inputRect?.height
 
   $: if (dom) {
     if (dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))

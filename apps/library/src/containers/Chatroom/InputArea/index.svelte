@@ -22,12 +22,11 @@
   import { warningCodeMap } from '../constant'
   import { getInfo } from '../context'
   import { userInfo, chatEnv } from '../controller'
-  import { chatCompHeight, inputAreaOffset } from '../store'
+  import { inputRect, inputAreaOffset } from '../store'
 
   export let fixed: boolean = false
 
   const { chatId, iid, showBetList } = getInfo()
-  const { input: inputHeight } = $chatCompHeight
   let placeHolder: string = ''
   let disabled: boolean = true
   let lastSend: number = 0
@@ -51,7 +50,7 @@
   }
 
   let dom: HTMLDivElement
-  $: if (dom) chatCompHeight.update(e => ({ ...e, input: dom?.getBoundingClientRect()?.height || 0 }))
+  $: if (dom) inputRect.set(dom?.getBoundingClientRect())
 
   let message: string
 
@@ -109,7 +108,7 @@
 
   $: {
     const warningHeight = showWarning ? 32 : 0
-    const offset = (fixed ? inputHeight + 10 : 0) + warningHeight
+    const offset = (fixed ? $inputRect?.height + 10 : 0) + warningHeight
 
     inputAreaOffset.set(offset)
   }
@@ -136,7 +135,7 @@
         'flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full',
         fixed ? 'fixed' : 'absolute -translate-y-full'
       )}
-      style:bottom={fixed && `${inputHeight}px`}
+      style:bottom={fixed && `${$inputRect?.height}px`}
     >
       {warningMsg}
     </div>
@@ -174,5 +173,5 @@
     </div>
   </div>
 
-  <div style:height={fixed && `${inputHeight}px`} />
+  <div style:height={fixed && `${$inputRect?.height}px`} />
 </div>
