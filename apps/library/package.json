@@ -1,10 +1,11 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.36",
+  "version": "0.0.37",
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
+    "dev:login": "LOGIN=true zx ./env_scripts/login.mjs",
     "build": "npm run locales && npm run _build",
     "build:library": "APP_ENV=library vite build",
     "build:library-watch": "APP_ENV=library vite build -w",
@@ -27,12 +28,12 @@
     "d3": "^7.8.4",
     "env-config": "workspace:*",
     "localforage": "^1.10.0",
+    "protobuf": "workspace:*",
     "svelte-spa-router": "^3.3.0",
     "tailwind-merge": "^1.10.0",
     "ui": "workspace:*",
     "utils": "workspace:*",
-    "vd-resource": "workspace:*",
-    "protobuf": "workspace:*"
+    "vd-resource": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",

@@ -18,7 +18,8 @@ export const sendMessage = (event: IWsMasterEvent) => {
     chatId: event.data.chatId,
     iid: event.data.iid,
     replyTo: event.data.replyTo,
-    content: event.data.content
+    content: event.data.content,
+    ...(event.data.houseId && { houseId: event.data.houseId })
   })
 
   return requestEncode({
@@ -41,8 +42,6 @@ export const fetchMessages = (event: IWsMasterEvent) => {
 
 export const fetchOtherOrders = (event: IWsMasterEvent) => {
   const fetchOtherOrdersArgs = im.fetchOtherOrdersArgs.encode({
-    vdId: event.data.vdId,
-    sender: event.data.sender,
     chatId: event.data.chatId,
     iid: event.data.iid,
   })
@@ -76,14 +75,14 @@ export const unsubscribeChat = (event: IWsMasterEvent) => {
 }
 
 export const reportAbuse = (event: IWsMasterEvent) => {
-  const reportAbuseAegs = im.reportAbuseAegs.encode({
+  const reportAbuseArgs = im.reportAbuseArgs.encode({
     userId: event.data.userId,
     reason: event.data.reason
   })
 
   return requestEncode({
     pairId: event?.pairId, command: im.enum.command.REPORT_ABUSE,
-    data: { type_url: 'type.googleapis.com/ChatIdsWrapper', value: reportAbuseAegs }
+    data: { type_url: 'type.googleapis.com/ChatIdsWrapper', value: reportAbuseArgs }
   })
 }
 

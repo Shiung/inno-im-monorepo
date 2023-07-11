@@ -12,7 +12,7 @@ const svelteSVGPlugin = () => svelteSVG({
 })
 
 const buildToPlatformNodeModules = () => {
-  if(!process?.env?.PLATFORM_OUT_DIR) {
+  if (!process?.env?.PLATFORM_OUT_DIR) {
     console.warn("\x1b[33m[WARNING] buildToPlatformNodeModules miss PLATFORM_OUT_DIR variable which is defined in .env file, use default setting.\n\x1b[0m")
     return null
   }
@@ -34,7 +34,7 @@ const buildAsLibrary = () => {
           anchors: resolve(__dirname, './src/platform/anchors/index.ts'),
           streaming: resolve(__dirname, './src/platform/streaming/index.ts'),
           chatroom: resolve(__dirname, './src/platform/chatroom/index.ts'),
-          expert: resolve(__dirname, './src/platform/expert/index.ts')        
+          expert: resolve(__dirname, './src/platform/expert/index.ts')
         },
         name: 'im-library',
         // the proper extensions will be added
@@ -51,12 +51,13 @@ const buildAsLibrary = () => {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   Object.assign(process.env, loadEnv(mode, process.cwd(), ''))
- 
+
   return {
     define: {
       'process.env.name': JSON.stringify(packageJson.name),
       'process.env.version': JSON.stringify(packageJson.version),
       'process.env.commitHEAD': JSON.stringify(execSync('git rev-parse HEAD').toString()),
+      'process.env.login': process.env.LOGIN
     },
     plugins: [
       svelte(),

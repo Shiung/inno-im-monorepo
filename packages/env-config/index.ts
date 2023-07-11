@@ -16,6 +16,7 @@ const getDevConfig = (env: ENV): WindowEnv => {
     DEPLOY_ENV: env,
     RESOURCE_URL: '',
     ECHO_URL: 'https://echo.zuplo.io',
+    PLATFORM_API_URL: `https://tiger-api.inno${env}.site/platform`,
     IM_API_URL: `https://tiger-api.inno${env}.site/im`,
     IM_WS_URL: `wss://tiger-api.inno${env}.site/im`
   }

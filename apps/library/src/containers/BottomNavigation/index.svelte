@@ -29,12 +29,12 @@ let genIcons = (_t: ITransStore) => ([
     text: _t('common.anchor'),
     onClick: () => push('/anchor')
   },
-  {
-    id: 'expert',
-    icon: () => import('./images/expert.svg'),
-    text: _t('common.expert'),
-    onClick: () => push('/expert')
-  }
+  // {
+  //   id: 'expert',
+  //   icon: () => import('./images/expert.svg'),
+  //   text: _t('common.expert'),
+  //   onClick: () => push('/expert')
+  // }
 ])
 
 $: icons = genIcons($t)
