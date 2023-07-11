@@ -20,6 +20,7 @@ const stateTrans = (state: typeof personal.data.state): string => {
     case 1: return 'anchor.state.single' 
     case 2: return 'anchor.state.inRelationship'
     case 3: return 'anchor.state.secret'
+    default: return 'anchor.state.secret'
   }
 }
 
