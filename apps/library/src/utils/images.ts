@@ -7,6 +7,11 @@ export const fetchAvatar = async (id: string) => {
 
   let path
   switch (id) {
+    case '-1': {
+      const promise = await import('$src/assets/avatar/-1.png')
+      path = promise?.default
+      break
+    }
     case '0': {
       const promise = await import('$src/assets/avatar/0.png')
       path = promise?.default
