@@ -37,9 +37,11 @@
   <div class="flex justify-end">
 
     <div class="flex">
-      <div class='inline-block mr-1'>
+      <div class='inline-block mr-2'>
         {#if message.contentType === im.enum.contentType.CHAT}
-          <div class="bg-[#f5f5f5] rounded-[10px] p-[8px] bg-imprimary">
+          <div class="rounded-[10px] p-[8px] bg-imprimary relative
+            after:content-[''] after:absolute after:right-0 after:top-[12px] after:translate-x-full
+            after:border-transparent after:border-[5px] after:border-l-[rgb(var(--im-monorepo-primary))]">
             <div class="text-[14px] text-white">{message.content}</div>
           </div>
         {:else if message.contentType === im.enum.contentType.ORDER}
