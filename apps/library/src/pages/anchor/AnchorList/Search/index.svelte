@@ -10,7 +10,7 @@ const cn = () => import('./dict/cn')
 
 
 let dict: string[] = []
-let value: string
+export let value: string
 
 const changeDict = async (_locale: typeof $locale) => {
   switch (_locale) {
@@ -28,17 +28,16 @@ const changeDict = async (_locale: typeof $locale) => {
 
 $: changeDict($locale)
 
-
 </script>
 
 <Search class='mb-[10px] text-[11px]' dict={dict} bind:value={value}
-  on:submit={() => dispatch('searchEvent', { keyWord: value })}
-  on:select={e => {
+  on:submit={() => dispatch('searchEvent')}
+  on:select={(e) => {
     value = e.detail
-    dispatch('searchEvent', { keyWord: e.detail })
+    dispatch('searchEvent')
   }}
-  on:clear={e => {
-    if (!e.detail.isFocused) dispatch('searchEvent', { keyWord: '' })
+  on:clear={(e) => {
+    if (!e.detail.isFocused) dispatch('searchEvent')
   }}
   placeholder={$t('anchor.search.placeholder')}
 />

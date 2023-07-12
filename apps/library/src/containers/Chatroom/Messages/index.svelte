@@ -18,8 +18,8 @@
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
-  import { chatEnv } from '../controller'
-  import { inputAreaOffset } from '../InputArea/store'
+  import { chatEnv, filterDuplicatesByMsgId } from '../controller'
+  import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
@@ -34,9 +34,9 @@
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
 
-  const getOldestMessage = () => ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  const getOldestMessage = () => ($chatMessages?.[0] || {}) as IPushMessageEntity
   //@ts-ignore findLast 會噴錯，不知原因
-  const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+  const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.isSelf || msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
 
   const dispatch = createEventDispatcher()
 
@@ -56,6 +56,13 @@
     onScroll(window.scrollY, window.innerHeight, document.documentElement.scrollHeight)
   }
 
+  const rmvPrevMsgsWhenOverLimit = () => {
+    const MAX_MESSAGES_LIMIT = 500
+    const SLICE_SIZE = 300
+
+    if($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update(e => e.slice(-SLICE_SIZE))
+  }
+
   const observer = new MutationObserver((mutations) => {
     const mutation = mutations[0]
     if (!mutation) return
@@ -65,6 +72,7 @@
 
     const { msgId } = getNewestMessage()
     if (scrollToNewest) {
+      rmvPrevMsgsWhenOverLimit()
       lastReadId = msgId
       target.scrollTo({ top: _scrollH })
     }
@@ -77,11 +85,20 @@
   const scrollToUnread = () => {
     const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
     if (unreadDom) {
-      unreadDom.scrollIntoView({ block: 'end' })
-      flash(unreadDom)
+      // workaround 1
+      // need to consider browser collapse height (window.outerHeight - window.innerHeight)
+      // unreadDom.scrollIntoView({ block: 'end' })
+      // if (isWindow) window.scrollTo({ top: window.scrollY + (window.outerHeight - window.innerHeight) + 83 })
 
-      const offset = 83
-      if (isWindow) window.scrollTo({ top: window.scrollY + offset })
+      // workaround 2 - better
+      if (isWindow) {
+        const { offsetTop, offsetHeight } = unreadDom
+        window.scrollTo(0, offsetTop - (window.innerHeight - $height - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight)
+      } else {
+        unreadDom.scrollIntoView({ block: 'end' })
+      }
+
+      // flash(unreadDom)
     }
   }
 
@@ -109,25 +126,23 @@
 
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
-    const targetId = getOldestMessage().msgId
-    const targetDom = document.querySelector(`div[data-id='${targetId}']`)
+    const oldest = getOldestMessage()
+    const targetDom = document.querySelector(`div[data-id='${oldest?.msgId}']`)
 
     fetchMoreLoading = true
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
-      data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId || String($iid) }
+      data: { pointer: oldest?.msgId || 0, chatId: $chatId || String($iid) }
     })
-    chatMessages.update((messages) => [...res.data.pushMessageEntity, ...messages])
+    chatMessages.update((messages) => filterDuplicatesByMsgId(messages, res.data.pushMessageEntity))
     fetchMoreLoading = false
 
     await tick()
     targetDom?.scrollIntoView()
 
-    const headerHeight = 44
-    const loadmoreHeight = 34
     const offset = 10
-    if (isWindow) window.scrollTo({ top: window.scrollY - headerHeight - loadmoreHeight - offset - $height })
-    else dom.scrollTo({ top: dom.scrollTop - headerHeight - offset })
+    if (isWindow) window.scrollTo({ top: window.scrollY - $headerRect?.height - $loadMoreRect?.height - offset - $height })
+    dom.scrollTo({ top: dom.scrollTop - $headerRect?.height - offset })
   }
 </script>
 

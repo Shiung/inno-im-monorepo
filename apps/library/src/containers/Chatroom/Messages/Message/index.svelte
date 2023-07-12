@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { appHeight } from '$stores/layout'
   import type { IChatMessage } from 'api/im/types'
 
   import { getInfo } from '../../context'
+  import { inputRect, headerRect } from '../../store'
 
   import Others from './Others.svelte'
   import Self from './Self.svelte'
@@ -30,11 +30,10 @@
         }
       }
     },
-    { rootMargin: `0px 0px -150px 0px` }
+    { rootMargin: `0px 0px -${$inputRect?.height}px 0px` }
   )
 
-  // 還不知道怎麼取到正確的 message container 高度，所以先寫死數值 (Header + inputArea)
-  $: boxContainerHeight = 100 * $appHeight - $height - 44 - 83
+  $: boxContainerHeight = window.innerHeight - $height - $headerRect?.height - $inputRect?.height
 
   $: if (dom) {
     if (dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))

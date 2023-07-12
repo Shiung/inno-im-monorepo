@@ -2,6 +2,7 @@
 import Loading from './Loading.svelte'
 import Match from './Match/index.svelte'
 import { locale } from '$stores'
+import Empty from '$containers/Empty'
 
 import { getMatches } from './utils'
 
@@ -16,10 +17,15 @@ const matchesPromise = getMatches(houseId, $locale)
     <Loading />
 
   {:then data}
+    {@const { matchList } = data || {}}
 
-    {#each data?.matchList as match}
-      <Match match={match} />
-    {/each}
+    {#if matchList.length}
+      {#each matchList as match}
+        <Match match={match} />
+      {/each}
+    {:else}
+      <Empty class="h-[250px]"/>
+    {/if}
 
   {/await}
 </div>

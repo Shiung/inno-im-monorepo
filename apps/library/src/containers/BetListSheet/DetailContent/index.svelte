@@ -38,6 +38,8 @@
     if (mock) res = await im.chatroomSelfOrders({ query: { iid: $iid } })
     else res.data.list = await $selfOrdersCallback()
 
+    if (!self) return
+
     fetchData.data = res.data
     fetchData.loading = false
   }
@@ -53,6 +55,8 @@
       }
     })
 
+    if (self) return
+
     fetchData.data = {
       list: res.data.pushMessageEntity.map((e) => {
         let content = {}
@@ -61,7 +65,7 @@
         } catch (error) {
           console.error(error)
         }
-        
+
         return content
       })
     }
