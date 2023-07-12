@@ -9,15 +9,18 @@ export let closeH: number
 
 let moving: boolean = false
 let maxCalled: boolean = false
+let startHeight: number
 
 const onTouchStart = () => {
+  startHeight = height
   moving = true
 }
 
 const onTouchMove = (e: TouchEvent) => {
   if (!moving) return
 
-  height = window.innerHeight - e.targetTouches[0].clientY
+  if (height > startHeight + 10) height = maxHeight
+  else height = window.innerHeight - e.targetTouches[0].clientY
 }
 
 const onTouchEnd = () => {
