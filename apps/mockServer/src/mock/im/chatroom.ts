@@ -204,3 +204,20 @@ export const pushChatSettingData = (props: { reqId?: string; value?: Uint8Array 
     data: { value }
   }
 }
+
+const expert: IMockData[] = [
+  {
+    url: `${prefix}/product/business/bets/ordersWithIid`,
+    timeout: 500,
+    response: ({ query }) =>
+      mock(
+        withData<Types.IChatroomSelfOrders>({
+          list: Array.from({ length: Number(query.quantity) || 10 }, () => ({
+            ...genSelfOrder(Number(query.iid))
+          }))
+        })
+      )
+  }
+]
+
+export default expert
