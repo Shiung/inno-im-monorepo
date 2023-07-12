@@ -33,8 +33,8 @@
 
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
-  // 用來做下滑加載後的定位
-  const getOldestVisibleMessage = () => ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
+
+  const getOldestMessage = () => ($chatMessages?.[0] || {}) as IPushMessageEntity
   //@ts-ignore findLast 會噴錯，不知原因
   const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.isSelf || msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
 
@@ -118,13 +118,13 @@
 
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
-    const targetId = getOldestVisibleMessage().msgId
-    const targetDom = document.querySelector(`div[data-id='${targetId}']`)
+    const oldest = getOldestMessage()
+    const targetDom = document.querySelector(`div[data-id='${oldest?.msgId}']`)
 
     fetchMoreLoading = true
     const res = await imWs.publish({
       eventkey: impb.enum.command.FETCH_MESSAGES,
-      data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId || String($iid) }
+      data: { pointer: oldest?.msgId || 0, chatId: $chatId || String($iid) }
     })
     chatMessages.update((messages) => filterDuplicatesByMsgId(messages, res.data.pushMessageEntity))
     fetchMoreLoading = false
