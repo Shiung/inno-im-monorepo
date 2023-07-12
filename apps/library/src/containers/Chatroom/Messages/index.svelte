@@ -56,6 +56,13 @@
     onScroll(window.scrollY, window.innerHeight, document.documentElement.scrollHeight)
   }
 
+  const rmvPrevMsgsWhenOverLimit = () => {
+    const MAX_MESSAGES_LIMIT = 500
+    const SLICE_SIZE = 300
+
+    if($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update(e => e.slice(-SLICE_SIZE))
+  }
+
   const observer = new MutationObserver((mutations) => {
     const mutation = mutations[0]
     if (!mutation) return
@@ -65,6 +72,7 @@
 
     const { msgId } = getNewestMessage()
     if (scrollToNewest) {
+      rmvPrevMsgsWhenOverLimit()
       lastReadId = msgId
       target.scrollTo({ top: _scrollH })
     }
