@@ -18,7 +18,7 @@
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
-  import { chatEnv } from '../controller'
+  import { chatEnv, filterDuplicatesByMsgId } from '../controller'
   import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
@@ -33,8 +33,8 @@
 
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
-
-  const getOldestMessage = () => $chatMessages[0] as IPushMessageEntity
+  // 用來做下滑加載後的定位
+  const getOldestVisibleMessage = () => ($chatMessages.find((msg) => msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
   //@ts-ignore findLast 會噴錯，不知原因
   const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.isSelf || msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
 
@@ -118,7 +118,7 @@
 
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
-    const targetId = getOldestMessage().msgId
+    const targetId = getOldestVisibleMessage().msgId
     const targetDom = document.querySelector(`div[data-id='${targetId}']`)
 
     fetchMoreLoading = true
@@ -126,7 +126,7 @@
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: $chatMessages?.[0]?.msgId || 0, chatId: $chatId || String($iid) }
     })
-    chatMessages.update((messages) => [...res.data.pushMessageEntity, ...messages])
+    chatMessages.update((messages) => filterDuplicatesByMsgId(messages, res.data.pushMessageEntity))
     fetchMoreLoading = false
 
     await tick()
