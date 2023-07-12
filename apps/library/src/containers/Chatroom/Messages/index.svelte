@@ -57,9 +57,9 @@
 
   const rmvPrevMsgsWhenOverLimit = () => {
     const MAX_MESSAGES_LIMIT = 500
-    const SLICE_SIZE = 200
+    const SLICE_SIZE = 300
 
-    while ($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update(e => e.slice(SLICE_SIZE))
+    if($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update(e => e.slice(-SLICE_SIZE))
   }
 
   const observer = new MutationObserver((mutations) => {
