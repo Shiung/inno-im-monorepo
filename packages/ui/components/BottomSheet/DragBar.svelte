@@ -19,7 +19,8 @@ const onTouchStart = () => {
 const onTouchMove = (e: TouchEvent) => {
   if (!moving) return
 
-  height = window.innerHeight - e.targetTouches[0].clientY
+  if (height > startHeight + 10) height = maxHeight
+  else height = window.innerHeight - e.targetTouches[0].clientY
 }
 
 const onTouchEnd = () => {
@@ -37,8 +38,6 @@ const onTouchEnd = () => {
     }
   }
 }
-
-$: if (height > startHeight + 10) height = maxHeight
 
 </script>
 
