@@ -32,7 +32,7 @@ let lastDateId = Date.now()
 
 export const genPushMessages = (msg?: MessageEntityDataProps) => {
   const data = Array.from({ length: 100 }, (_, idx) => ({
-    ...messageEntityData(lastDateId - (10 - idx), msg)
+    ...messageEntityData(lastDateId - (100 - idx), msg)
   }))
 
   lastDateId = data[0].msgId

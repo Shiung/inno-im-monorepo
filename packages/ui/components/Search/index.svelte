@@ -14,6 +14,7 @@ export let placeholder: string = ''
 export let value: string
 let isFocused = false
 let dom: HTMLDivElement
+let input: HTMLInputElement
 
 $: {
   pinYin.cleanDict()
@@ -35,6 +36,7 @@ $: if (value) {
 const handleClearClick = () => {
   value = ''
   dispatch('clear', { isFocused })
+  if(isFocused) input.focus()
 }
 
 const onKeydown = (e: KeyboardEvent) => {
@@ -46,11 +48,13 @@ const onKeydown = (e: KeyboardEvent) => {
 <div class={$$props.class} bind:this={dom}>
   <div class='relative flex items-center'>
     <Search class='absolute left-[8px]' width={18} height={18} fill='#333333' />
+    <!-- 行為順序為 blur -> focus，所以 focus 也需加上 setTimeout -->
     <input class='px-[35px] h-[40px] w-full bg-[#F7F8F9] rounded-[20px] outline-imprimary'
-      on:focus={() => isFocused= true}
+      on:focus={() => setTimeout(() => isFocused = true, 100)}
       on:blur={() => setTimeout(() => isFocused = false, 100)}
       on:keydown={onKeydown}
       bind:value={value}
+      bind:this={input}
       placeholder={placeholder}
     />
 

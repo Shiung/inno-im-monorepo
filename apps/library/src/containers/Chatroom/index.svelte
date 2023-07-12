@@ -33,8 +33,6 @@
   import { twMerge } from 'tailwind-merge'
   import { t } from '$stores'
   import { get } from 'svelte/store'
-  import { appHeight } from '$stores/layout'
-  import BigNumber from 'bignumber.js'
 
   import Empty from '$src/containers/Empty'
 
@@ -122,11 +120,6 @@
     touchMoveOffset = startY - moveY
   }
 
-  const initBodyHeight = () => {
-    const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
-    appHeight.set(Number(vh))
-  }
-
   const changeRoomSizeByTouchMove = (moveOffset: number) => {
     const scrollY = isWindow ? window.scrollY : boxContainerDom?.scrollTop
 
@@ -149,8 +142,8 @@
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
 
-  // use 100 * $appHeight for compatibility between ios and android
-  $: boxContainerHeight = `calc(100 * ${$appHeight}px - ${$height}px)`
+  // use window.innerHeight for compatibility between ios and android
+  $: boxContainerHeight = `${window.innerHeight - $height}px`
 
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
@@ -165,10 +158,6 @@
   $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
   $: isPC = $chatEnv.device === 'pc'
 
-  onMount(() => {
-    initBodyHeight()
-  })
-
   onDestroy(() => {
     resetStoreModule()
     unsubscribeStoreModule()
@@ -182,7 +171,7 @@
     class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
     style:min-height={isWindow ? boxContainerHeight : '100%'}
     style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-    transition:fly|local={!isPC && { y: isWindow ? 100 * $appHeight - $height : '100%', duration: 500 }}
+    transition:fly|local={!isPC && { y: isWindow ? window.innerHeight - $height : '100%', duration: 500 }}
     on:introend={() => {
       isTransition = false
     }}

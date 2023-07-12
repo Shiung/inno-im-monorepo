@@ -56,4 +56,6 @@
       </div>
     </div>
   </div>
+{:else}
+  <div data-id={message.msgId} data-status='invisible' class='!mt-0'></div>
 {/if}

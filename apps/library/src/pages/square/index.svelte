@@ -41,8 +41,8 @@
     <StreamBlock {streaming} />
 
     <AnchorBlock on:change={onChange} />
-    {#if sid === 1 || sid === 2}
+    <!-- {#if sid === 1 || sid === 2}
       <ExpertBlock />
-    {/if}
+    {/if} -->
   </div>
 </div>

@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom'
 import BigNumber from 'bignumber.js'
 import {
+  amountThousandthTransformer,
   amountSymbolTransformer
 } from './index'
 
@@ -49,4 +50,15 @@ test('正負數四捨五入', () => {
 
   const input4 = amountSymbolTransformer('-111.15', { decimalPoint: 1, roundingMode: BigNumber.ROUND_HALF_UP })
   expect(input4) .toBe('-111.2')
+})
+
+test('刪除小數點後多餘的0', () => {
+  const input1 = amountThousandthTransformer('6000.10445', { decimal: 7, trimZero: true })
+  expect(input1) .toBe('6,000.10445')
+ 
+  const input2 = amountThousandthTransformer('6000.0123', { decimal: 2, trimZero: true })
+  expect(input2) .toBe('6,000.01')
+
+  const input3 = amountThousandthTransformer('6000.00001', { decimal: 2, trimZero: true })
+  expect(input3) .toBe('6,000')
 })

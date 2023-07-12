@@ -16,19 +16,23 @@ const photosPromise = im.webAnchorPhotos({
 
 const stateTrans = (state: typeof personal.data.state): string => {
   switch (state) {
+    case 0: return 'anchor.state.secret' 
     case 1: return 'anchor.state.single' 
     case 2: return 'anchor.state.inRelationship'
     case 3: return 'anchor.state.secret'
+    default: return 'anchor.state.secret'
   }
 }
 
+const stateDefault = $t('anchor.state.secret')
+
 $: info = [
-  { i18n: 'anchor.country', value: personal?.data?.country || '' },
-  { i18n: 'anchor.height', value: personal?.data?.height || '' },
-  { i18n: 'anchor.weight', value: personal?.data?.weight || '' },
-  { i18n: 'anchor.birthday', value: personal?.data?.birthday || '' },
-  { i18n: 'anchor.favorite', value: personal?.data?.favorite || '' },
-  { i18n: 'anchor.state', value: $t(stateTrans(personal?.data?.state)) || '' }
+  { i18n: 'anchor.country', value: personal?.data?.country || stateDefault },
+  { i18n: 'anchor.height', value: personal?.data?.height || stateDefault },
+  { i18n: 'anchor.weight', value: personal?.data?.weight || stateDefault },
+  { i18n: 'anchor.birthday', value: personal?.data?.birthday || stateDefault },
+  { i18n: 'anchor.favorite', value: personal?.data?.favorite || stateDefault },
+  { i18n: 'anchor.state', value: $t(stateTrans(personal?.data?.state)) || stateDefault }
 ]
 
 
