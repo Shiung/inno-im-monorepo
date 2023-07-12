@@ -50,7 +50,7 @@ export const messageEntityData = (ts: number = Date.now(), props?: MessageEntity
   })
 }
 
-export const pushMessageData = (props: { reqId?: string, value?: Uint8Array }) => {
+export const pushMessageData = (props: { reqId?: string; value?: Uint8Array }) => {
   const reqId = props.reqId
   const value = props.value || new Uint8Array()
 
@@ -58,6 +58,148 @@ export const pushMessageData = (props: { reqId?: string, value?: Uint8Array }) =
     ...(reqId && { reqId }),
     command: ECommand.PUSH_MESSAGE,
     code: 0,
+    msg: '',
+    data: { value }
+  }
+}
+
+export interface ChatSettingDataProps {
+  timeInterval: number
+  chatLimitType: number
+  vip: number
+  depositLimit: any[]
+}
+
+export const chatSettingData = (props?: ChatSettingDataProps) => {
+  return mock({
+    timeInterval: props?.timeInterval || Random.integer(0, 5) * 1000,
+    chatLimitType: props?.chatLimitType || Random.integer(0, 2),
+    vip: props?.vip || Random.integer(0, 10),
+    depositLimit: props?.depositLimit || [
+      {
+        currency: 'CNY',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'MYR',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'IDR',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'VND',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'USD',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'HKD',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'KRW',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'INR',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'THB',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'JPY',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'USDT_OMNI',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'USDT_ERC20',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'USDT_TRC20',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'USDC_ERC20',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'BTC',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'ETH',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'LTC',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'DASH',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'DOGE',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'BCH',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'ETC',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'DAI_ERC20',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'AAVE_ERC20',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'WBTC_ERC20',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'UNI_ERC20',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'TRX',
+        amount: Random.float(0.00000001, 0.000001)
+      },
+      {
+        currency: 'nVND',
+        amount: Random.integer(1, 200)
+      },
+      {
+        currency: 'nIDR',
+        amount: Random.integer(1, 200)
+      }
+    ]
+  })
+}
+
+export const pushChatSettingData = (props: { reqId?: string; value?: Uint8Array }) => {
+  const reqId = props.reqId
+  const value = props.value || new Uint8Array()
+
+  return {
+    ...(reqId && { reqId }),
+    command: ECommand.CHAT_SETTING,
+    code: Random.pick([0, 4007, 4008]),
     msg: '',
     data: { value }
   }

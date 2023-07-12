@@ -3,8 +3,8 @@ import { getRandomItemFromArray } from 'utils'
 
 import { subscribed } from './store'
 
-import { messageEntityData, pushMessageData } from '../../mock/im/chatroom'
-import type { MessageEntityDataProps } from '../../mock/im/chatroom'
+import { messageEntityData, pushMessageData, pushChatSettingData, chatSettingData } from '../../mock/im/chatroom'
+import type { MessageEntityDataProps, ChatSettingDataProps } from '../../mock/im/chatroom'
 import { genOtherOrder } from '../../mock/im/utils'
 
 export const pushMessageEntity = (msg?: MessageEntityDataProps) => {
@@ -12,9 +12,19 @@ export const pushMessageEntity = (msg?: MessageEntityDataProps) => {
   return impb.pushMessageEntity?.encode(data)
 }
 
+export const genChatSetting = (setting?: ChatSettingDataProps) => {
+  const data = chatSettingData(setting)
+  return impb.chatSetting?.encode({ setting: JSON.stringify(data) })
+}
+
 export const pushMessage = (props?: { reqId?: string, value?: Uint8Array | undefined }) => {
   const chatId = getRandomItemFromArray(Array.from(subscribed))
   const data = pushMessageData({ reqId: props?.reqId, value: props?.value || pushMessageEntity({ chatId }) })
+  return impb.push?.encode(data)
+}
+
+export const pushChatSetting = (props?: { reqId?: string, value?: Uint8Array | undefined }) => {
+  const data = pushChatSettingData({ reqId: props?.reqId, value: props?.value || genChatSetting() })
   return impb.push?.encode(data)
 }
 
