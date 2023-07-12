@@ -33,9 +33,13 @@
 
   let betData: IBetOrder
 
-  const handleFollowOrder = () => {
+  const handleFollowOrder = async () => {
     const waitSendMessage = betData
-    $followOrdersCallback(waitSendMessage)
+    loading = true
+    await $followOrdersCallback(waitSendMessage)
+    loading = false
+    open = false
+    betData = null
   }
 
   const handleShowOrder = async () => {
@@ -73,6 +77,12 @@
   }
 
   $: self = activedTab === 'chat.betList'
+  $: {
+    // reset betData when activedTab change
+    if (activedTab) {
+      betData = null
+    }
+  }
 </script>
 
 <svelte:component this={Container} bind:open>
