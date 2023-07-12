@@ -17,14 +17,9 @@ export * from './env'
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
 const subscribeSet = new Set<string>()
 
-const MAX_MESSAGES_LIMIT = 500
-const SLICE_SIZE = 200
+export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
 
-type IdInfo = { chatId: string, iid: number }
-
-export const genId = ({ chatId, iid }: IdInfo) => chatId || String(iid)
-
-const getStore = (props: IdInfo) => {
+const getStore = (props: { chatId: string, iid: number }) => {
   const id = genId(props)
   if (id === '0') return writable([]) // 0 用來當空聊天室
 
@@ -36,13 +31,7 @@ const getStore = (props: IdInfo) => {
   return _store
 }
 
-export const getMessages = (props: IdInfo) => getStore(props)
-
-export const rmvPrevMsgsWhenOverLimit = (props: IdInfo) => {
-  const messages = getStore(props)
-
-  while (get(messages).length > MAX_MESSAGES_LIMIT) messages.update(e => e.slice(SLICE_SIZE))
-}
+export const getMessages = (props: { chatId: string, iid: number }) => getStore(props)
 
 const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.PUSH_MESSAGE }, ({ data }) => {
   const store = getStore({ chatId: data.chatId, iid: data.iid })
@@ -66,7 +55,7 @@ const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
   })
 }
 
-const checkIfNeedFetchHistory = async (props: IdInfo) => {
+const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {
   const store = getStore(props)
   const id = genId(props)
   if (get(store).length !== 0) return
@@ -74,7 +63,7 @@ const checkIfNeedFetchHistory = async (props: IdInfo) => {
   fetchHistory(id, store)
 }
 
-export const subscribeRoom = async (props: IdInfo) => {
+export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
   const id = genId(props)
   subscribeSet.add(id)
 
@@ -88,7 +77,7 @@ export const subscribeRoom = async (props: IdInfo) => {
   checkIfNeedFetchHistory(props)
 }
 
-export const unsubscribeRoom = async (props: IdInfo) => {
+export const unsubscribeRoom = async (props: { chatId: string, iid: number }) => {
   const id = genId(props)
   if (id === '0') return
 
