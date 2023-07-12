@@ -19,7 +19,7 @@ export const amountThousandthTransformer = (
 
 	let value = valBigNumber.toFormat(decimal, roundMode, format)
 
-	if (trimZero) value = value.replace(/\.?0+$/, '')
+	if (trimZero && decimal > 0) value = value.replace(/\.?0+$/, '')
 		
 	return value
 }
