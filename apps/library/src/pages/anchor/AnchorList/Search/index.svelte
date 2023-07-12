@@ -2,8 +2,6 @@
 import { createEventDispatcher } from 'svelte'
 import { Search } from 'ui'
 import { t, locale } from '$stores'
-import convertSid from 'utils/convertSid'
-import { params } from 'svelte-spa-router'
 
 const dispatch = createEventDispatcher()
 
