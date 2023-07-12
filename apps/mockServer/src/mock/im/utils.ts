@@ -97,10 +97,10 @@ export const genSelfOrder = (iid: number) => {
   return {
     uuid: RegExp(/^\d{12}-[a-z0-9]{6}$/),
     ante: Random.integer(0, 1000000),
-    totalAnte: Random.integer(0, 1000000),
+    totalAnte: Random.float(0, 1000000, 2, 2),
     payout: 0,
-    mayWinAmount: Random.integer(0, 1000000),
-    netWin: Random.integer(-1000000, 1000000),
+    mayWinAmount: Random.float(0, 1000000, 2, 2),
+    netWin: Random.float(-1000000, 1000000, 2, 2),
     parlayBet: false,
     parlay: 1,
     option: 1,
