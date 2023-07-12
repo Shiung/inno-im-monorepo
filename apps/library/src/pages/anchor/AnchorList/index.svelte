@@ -54,13 +54,7 @@
     }
   }
 
-  const init = async ({
-    keyWord,
-    sid
-  }: {
-    keyWord: string
-    sid: ReturnType<typeof convertSid>
-  }) => {
+  const init = async ({ sid }: { sid: ReturnType<typeof convertSid> }) => {
     pageIdx = 1
     data = []
 
@@ -76,21 +70,17 @@
 
   $: sid = convertSid($params?.anchorSid)
 
-  const initSearch = (e) => {
-    keyWord = e.detail.keyWord
-    init({ keyWord, sid })
-  }
-
   $: {
     if (sid != null) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
+      init({ sid })
     }
   }
 </script>
 
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
-  <Search on:searchEvent={(e) => initSearch(e)} />
+  <Search bind:value={keyWord} on:searchEvent={() => init({ sid })} />
 
   <div class="space-y-[12px]">
     {#if initLoading}
