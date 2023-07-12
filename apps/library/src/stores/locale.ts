@@ -53,17 +53,16 @@ const fetchLocaleData = async (name: string) => {
   if (!name) return
   const _name = name.split('.')[0]
   const path = `${get(locale)}_${_name.replace('/', '_')}` // 檔名不能有/
+
   if (get(fetchedName).has(path)) return
 
-
   const fetcher = localeFetcher(path)
-  const data = await fetcher()
+  fetchedName.update(names => names.add(path))
 
+  const data = await fetcher()
   const renamed = putLocaleBeforeName(data.default)
 
   localeData.update((_data) => ({ ..._data, ... renamed }))
-  fetchedName.update(names => names.add(path))
-
   triggerT()
 }
 

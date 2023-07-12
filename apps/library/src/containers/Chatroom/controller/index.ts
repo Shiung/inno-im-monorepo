@@ -11,11 +11,14 @@ import { userInfo } from './env'
 import type { IChatMessage } from 'api/im/types'
 import type { IUserInfo } from './env'
 import type { Writable } from 'svelte/store'
-
+import { setChatroomSetting } from './localEnv'
 export * from './env'
 
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
 const subscribeSet = new Set<string>()
+
+let pollingChatSettingTimer: ReturnType<typeof setInterval>
+let pollingChatSettingInterval = 10 * 1000
 
 export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
 
@@ -37,6 +40,23 @@ const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.
   const store = getStore({ chatId: data.chatId, iid: data.iid })
   store.update((msg) => [...msg, data])
 })
+
+const subscribeChatSetting = () => imWs.subscribe({ eventkey: impb.enum.command.CHAT_SETTING }, ({ data, code }) => {
+  let parsed
+  try {
+    parsed = JSON.parse(data?.setting)
+  } catch (e) {
+    console.error(e)
+  }
+
+  setChatroomSetting({ ...(parsed && { ...parsed }), errorCode: code })
+})
+
+const pollingChatSetting = () => {
+  return setInterval(() => {
+    imWs.publish({ eventkey: impb.enum.command.FETCH_CHAT_SETTING })
+  }, pollingChatSettingInterval)
+}
 
 const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
   const res = await imWs.publish({
@@ -107,6 +127,7 @@ const imWsConnect = (e: IUserInfo) => {
   imWs.setSubprotocols(e.userToken)
 
   clearAllStores()
+  if (pollingChatSettingTimer) clearInterval(pollingChatSettingTimer)
   // 先用 reconnect 的方式，因為平台在給 userInfo 後可能 ws 都還沒有連上
   // if (imWs.enabled) imWs.reconnect()
   // else imWs.activate()
@@ -136,15 +157,24 @@ const subscribeRooms = () => {
 let unSubUserInfo: ReturnType<typeof userInfo.subscribe>
 
 let pushMessageSub: ReturnType<typeof imWs.subscribe>
+
+let chatSettingSub: ReturnType<typeof imWs.subscribe>
+
 export const active = () => {
   unSubUserInfo = userInfo.subscribe(imWsConnect)
   pushMessageSub = subscribePushMessage()
-  imWs.register(subscribeRooms)
+  chatSettingSub = subscribeChatSetting()
+  imWs.register(() => {
+    subscribeRooms()
+    pollingChatSettingTimer = pollingChatSetting()
+  })
 }
 
 export const destroy = () => {
   unSubUserInfo()
   if (pushMessageSub) pushMessageSub.unsubscribe()
+  if (chatSettingSub) chatSettingSub.unsubscribe()
+  if (pollingChatSettingTimer) clearInterval(pollingChatSettingTimer)
 
   clearAllStores()
   subscribeSet.clear()

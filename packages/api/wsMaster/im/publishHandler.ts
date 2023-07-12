@@ -86,3 +86,9 @@ export const reportAbuse = (event: IWsMasterEvent) => {
   })
 }
 
+export const fetchChatSetting = (event: IWsMasterEvent) => {
+  return requestEncode({
+    pairId: event?.pairId, command: im.enum.command.FETCH_CHAT_SETTING,
+    data: { type_url: 'type.googleapis.com/FetchChatSetting' }
+  })
+}

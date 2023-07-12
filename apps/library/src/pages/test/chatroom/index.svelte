@@ -9,6 +9,7 @@
     setChatOrdersInfo,
     onSizeChangedCallback,
     onToggledCallback,
+    onRouterRedirectCallback,
     type SizeChangedOption
   } from '$src/containers/Chatroom'
 
@@ -34,8 +35,6 @@
 
   $: if (dom) {
     controller.setChatEnv({
-      vipLimit: 0,
-      frequency: 0,
       device: 'wap',
       subscribeBindingChatroom: true
     })
@@ -84,6 +83,20 @@
     setChatInfo({ isOpen: open })
   })
 
+  onRouterRedirectCallback((option) => {
+    switch (option.location) {
+      case 'login':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to login')
+        break
+      case 'vipCenter':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to vipCenter')
+        break
+      case 'deposit':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to deposit')
+        break
+    }
+  })
+
   const fetchMarket = async () => {
     const lang = $locale.toLowerCase().replace(/_/g, '-')
     const res = await fetch(
@@ -112,6 +125,15 @@
     controller.active()
     selfOrdersCallback = fetchSelfOrders
     followOrdersCallback = followOrders
+
+    // setTimeout(() => {
+    //   controller.setChatUserInfo({
+    //     userAccount: 'owen222',
+    //     userToken: 'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiOTY0MmE1ZDEtNDMyMy00MWMzLWFkZmMtOTI1MTUzYTFhY2Q5IiwidmVuZG9ySWQiOjQsInR5cGUiOjEsInVzZXJJZCI6MzA3NzMyLCJsb2dpbkRvbWFpbiI6ImVuLXZkMDA0LXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4NzE4NTA2MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMzIyODQ3MDAwLCJ2ZW5kb3IiOiJkdjUiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJvd2VuMjIyIn0.QUDRQqq6JyNIhrqj2hkzto0BbzBiTZKpHdUzpHAZxTg',
+    //     userVip: 0,
+    //     userCurrency: 'CNY'
+    //   })
+    // }, 15 * 1000)
   })
 
   onDestroy(() => {
