@@ -32,7 +32,10 @@ $: changeDict($locale)
 
 <Search class='mb-[10px] text-[11px]' dict={dict} bind:value={value}
   on:submit={() => dispatch('searchEvent')}
-  on:select={() => dispatch('searchEvent')}
+  on:select={(e) => {
+    value = e.detail
+    dispatch('searchEvent')
+  }}
   on:clear={(e) => {
     if (!e.detail.isFocused) dispatch('searchEvent')
   }}
