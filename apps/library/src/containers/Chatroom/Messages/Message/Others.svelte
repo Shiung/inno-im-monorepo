@@ -57,5 +57,5 @@
     </div>
   </div>
 {:else}
-  <div data-id={`invisible-${message.msgId}`}} class='!mt-0'></div>
+  <div data-id={`invisible-${message.msgId}`} class='!mt-0'></div>
 {/if}
