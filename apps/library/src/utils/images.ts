@@ -358,7 +358,7 @@ export const fetchAvatar = async (id: string) => {
       break
     }
     default: {
-      const promise = await import('$src/assets/avatar/default.png')
+      const promise = await import('$src/assets/avatar/defaultAvatar.png')
       path = promise?.default
       break
     }
