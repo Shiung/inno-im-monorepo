@@ -53,7 +53,7 @@ const subscribeChatSetting = () => imWs.subscribe({ eventkey: impb.enum.command.
 })
 
 const pollingChatSetting = () => {
-  if(pollingChatSettingTimer) clearInterval(pollingChatSettingTimer)
+  if (pollingChatSettingTimer) clearInterval(pollingChatSettingTimer)
 
   pollingChatSettingTimer = setInterval(() => {
     imWs.publish({ eventkey: impb.enum.command.FETCH_CHAT_SETTING })
