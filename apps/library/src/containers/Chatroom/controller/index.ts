@@ -53,8 +53,12 @@ const subscribeChatSetting = () => imWs.subscribe({ eventkey: impb.enum.command.
 })
 
 const pollingChatSetting = () => {
-  return setInterval(() => {
+  if (pollingChatSettingTimer) clearTimeout(pollingChatSettingTimer)
+
+  pollingChatSettingTimer = setTimeout(() => {
     imWs.publish({ eventkey: impb.enum.command.FETCH_CHAT_SETTING })
+
+    pollingChatSetting()
   }, pollingChatSettingInterval)
 }
 
@@ -127,7 +131,7 @@ const imWsConnect = (e: IUserInfo) => {
   imWs.setSubprotocols(e.userToken)
 
   clearAllStores()
-  if (pollingChatSettingTimer) clearInterval(pollingChatSettingTimer)
+  if (pollingChatSettingTimer) clearTimeout(pollingChatSettingTimer)
   // 先用 reconnect 的方式，因為平台在給 userInfo 後可能 ws 都還沒有連上
   // if (imWs.enabled) imWs.reconnect()
   // else imWs.activate()
@@ -166,7 +170,7 @@ export const active = () => {
   chatSettingSub = subscribeChatSetting()
   imWs.register(() => {
     subscribeRooms()
-    pollingChatSettingTimer = pollingChatSetting()
+    pollingChatSetting()
   })
 }
 
@@ -174,7 +178,7 @@ export const destroy = () => {
   unSubUserInfo()
   if (pushMessageSub) pushMessageSub.unsubscribe()
   if (chatSettingSub) chatSettingSub.unsubscribe()
-  if (pollingChatSettingTimer) clearInterval(pollingChatSettingTimer)
+  if (pollingChatSettingTimer) clearTimeout(pollingChatSettingTimer)
 
   clearAllStores()
   subscribeSet.clear()

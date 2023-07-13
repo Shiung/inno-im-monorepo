@@ -133,11 +133,7 @@
   }
 
   const resetStoreModule = () => {
-    setChatInfo({
-      ...initInfo,
-      iid: $iid,
-      chatId: $chatId
-    })
+    setChatInfo({ ...initInfo })
   }
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
@@ -161,6 +157,10 @@
   onDestroy(() => {
     resetStoreModule()
     unsubscribeStoreModule()
+    if($chatEnv.subscribeBindingChatroom) {
+      unsubscribeRoom(previous)
+    }
+    previous = { chatId: '', iid: 0 }
   })
 </script>
 
