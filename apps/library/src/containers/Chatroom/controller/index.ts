@@ -65,6 +65,7 @@ const pollingChatSetting = () => {
 const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
   const res = await imWs.publish({
     eventkey: impb.enum.command.FETCH_MESSAGES,
+    pairId: id,
     data: { pointer: 0, chatId: id }
   })
 
@@ -90,6 +91,8 @@ const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) =
 
 export const subscribeRoom = async (props: { chatId: string, iid: number }) => {
   const id = genId(props)
+  if (id === '0') return
+  
   subscribeSet.add(id)
 
   if (imWs.socket.current?.readyState !== WebSocket.OPEN) return
