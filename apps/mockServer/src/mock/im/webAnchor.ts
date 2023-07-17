@@ -21,7 +21,7 @@ const webAnchors: IMockData[] = [
     url: `${prefix}/v1/anchor/web-anchors`,
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IWebAnchors>({
-      list: Array.from({ length: Number(query.pageSize) || 20 }, () => ({
+      list: Array.from({ length: Number(query.pageSize) || 20 }, (_, idx) => ({
         houseId: genHouseId(),
         houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
         userImage: getRandomItemFromArray([
@@ -34,6 +34,7 @@ const webAnchors: IMockData[] = [
         nickName: "@ANCHORNICKNAME",
         playStreamAddress: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
         liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
+        anchorSid: idx % 3 === 0 ? 100 : Random.integer(1,3) as Types.IWebAnchor['anchorSid'],
         fansCount: Random.natural(0, 10000000),
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10)
