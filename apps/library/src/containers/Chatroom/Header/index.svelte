@@ -61,6 +61,6 @@
 
     <div style:height={fixed && `${$headerRect?.height}px`} />
   {:else}
-    <div class="flex justify-center items-center w-full min-h-[30px] text-[#bbb] text-xs">{$t('chat.remind')}</div>
+    <div bind:this={dom} class="flex justify-center items-center w-full min-h-[30px] text-[#bbb] text-xs">{$t('chat.remind')}</div>
   {/if}
 </div>
