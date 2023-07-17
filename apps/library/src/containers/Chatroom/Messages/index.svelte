@@ -11,7 +11,7 @@
   import { im as imWs } from 'api/wsMaster'
   import type { IPushMessageEntity } from 'protobuf/im/types'
 
-  import flash from './flash'
+  import { messageBoxRect } from '../store'
   import Message from './Message'
   import DropdownLoader from './Loader/DropdownLoader.svelte'
   import ButtonLoader from './Loader/ButtonLoader.svelte'
@@ -104,7 +104,10 @@
 
   $: if (dom) scrollToUnread()
 
-  $: if (dom) dispatch('domBound', dom)
+  $: if (dom) {
+    messageBoxRect.set(dom?.getBoundingClientRect())
+    dispatch('domBound', dom)
+  }
 
   $: isPC = $chatEnv.device === 'pc'
 
