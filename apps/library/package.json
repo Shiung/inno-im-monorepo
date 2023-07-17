@@ -1,7 +1,7 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.40",
+  "version": "0.0.41",
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
