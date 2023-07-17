@@ -1,6 +1,6 @@
 <script lang='ts' context='module'>
 let onReadyCallback: () => void = () => {}
-let onErrorCallback: (e: ErrorEvent) => void = () => {} 
+let onErrorCallback: (e?: ErrorEvent) => void = () => {} 
 let onPausedCallback: (p: boolean) => void = () => {}
 let onMutedCallback: (p: boolean) => void = () => {}
 let muteHandler: () => void
@@ -47,6 +47,7 @@ export let urlm3u8: string = ''
 let video: HTMLVideoElementIOS
 let paused: boolean = false
 let muted: boolean = true
+let timer: NodeJS.Timeout
 
 const removeSource = () => {
   [...video.childNodes].forEach((c, i) => {
@@ -56,6 +57,8 @@ const removeSource = () => {
   })
   video.removeEventListener('canplay', onReadyCallback)
   video.removeEventListener('error', onErrorCallback)
+  video.removeEventListener('pause', handleVideoPause)
+  video.removeEventListener('timeupdate', timeUpdateHandler)
 }
 
 const playVideo = (urlm3u8: string) => {
@@ -68,11 +71,25 @@ const playVideo = (urlm3u8: string) => {
 
   video.addEventListener('canplay', onReadyCallback)
   video.addEventListener('error', onErrorCallback)
-  
+  video.addEventListener('pause', handleVideoPause)
+  video.addEventListener('timeupdate', timeUpdateHandler)
+
   video.oncancel = (e) => {
     console.log('cancel', e)
     alert('cancel ***')
   }
+}
+
+const handleVideoPause = () => {
+  clearTimeout(timer)
+}
+
+const timeUpdateHandler = () => {
+  if (timer) clearTimeout(timer);
+
+  timer = setTimeout(() => {
+    onErrorCallback()
+  }, 300);
 }
 
 pauseHandler = (isLive: boolean) => {
