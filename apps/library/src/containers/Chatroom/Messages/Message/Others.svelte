@@ -45,12 +45,12 @@
         </div>
 
         <div class='inline-block'>
-          {#if message.contentType === im.enum.contentType.CHAT}
+          {#if message.contentType === im.enum.contentType.ORDER}
+            <BetOrder message={JSON.parse(message.content)} />
+          {:else}
             <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
               <div class="text-[14px]">{message.content}</div>
             </div>
-          {:else if message.contentType === im.enum.contentType.ORDER}
-            <BetOrder message={JSON.parse(message.content)} />
           {/if}
         </div>
       </div>
