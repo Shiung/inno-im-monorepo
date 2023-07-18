@@ -1,41 +1,78 @@
 <script lang='ts'>
 import type { IWebAnchor } from 'api/im/types'
-import { Ripple } from 'ui'
-import { t } from '$stores'
+import { Ripple, Badget } from 'ui'
+import { t, locale } from '$stores'
+import { im } from 'api'
+import type { ILanguages } from 'env-config'
 
-import AnchorStatus from '$containers/AnchorStatus'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 import AnchorImage from '$src/components/AnchorImage'
-
-import Smile from '../images/smile.svg'
+import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
+import Loading from './Loading.svelte'
+import { SIDi18nKey } from '$src/constant'
+import type { IWebAnchorMatch } from 'api/im/types'
 
 export let anchor: IWebAnchor
-export let bg: string
 
 let openDetailSheet: boolean = false
+let match: IWebAnchorMatch = null
+let loading: boolean = true
 
-$: containerStyle = `background-image:url("${bg}")`
+const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
+  loading = true
+  const matchesPromise = await im.webAnchorMatchList({ query: { houseId }, headers: { 'Accept-Language': lang }})
+  loading = false
+  if(matchesPromise?.data?.matchList?.length > 0) {
+    match = matchesPromise?.data?.matchList[0]
+    return
+  }
+
+  match = null
+}
+
+$: isMatchType = anchor.anchorSid !== 100
+
+$: if(isMatchType) {
+  fetchAnchorMatches(anchor.houseId, $locale)
+} else {
+  loading = false
+}
+
+$: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
 </script>
 
 <div>
-  <Ripple class='w-full flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]' style={containerStyle} on:click>
-    <div class='text-imprimary'> { anchor.houseName } </div>
-    <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
-    <div class='flex items-center'>
-      <AnchorStatus liveStatus={anchor.liveStatus} />
-    </div>
+  {#if loading}
+    <Loading />
+  {:else}
+    <Ripple class='w-full flex flex-col items-center h-[139px] im-shadow rounded-[10px] p-2 space-y-1' on:click>
+      <div class='flex justify-center'>
+        <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+      </div>
 
-    <div class='flex flex-1 justify-between items-end overflow-hidden'>
-      <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-imprimary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
-        on:click={() => openDetailSheet = true}
-      >
-        <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />
-        <div>{$t('anchor.detail')}</div>
-      </Ripple>
-      <AnchorImage class='w-[75px]' src={anchor.userImage} />
-    </div>
+      <div class='flex w-full items-center justify-between'>
+        <div class='flex items-center space-x-1'>
+          <AnchorImage src={anchor.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]' />
+          <span class='text-imprimary leading-[18px] text-[18px]'> {anchor.houseName} </span>
+        </div>
 
-  </Ripple>
+        <Badget
+          class='rounded-[6px] leading-3 h-3 text-[10px]'
+          background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
+        >
+          {$t(badgeStr)}
+        </Badget>
+      </div>
 
+      <div class='w-full leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
+        {#if match}
+          {match.homeName} VS {match.awayName}
+        {:else}
+          {anchor.houseIntroduction}
+        {/if}
+      </div>
+
+    </Ripple>
+  {/if}
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
 </div>

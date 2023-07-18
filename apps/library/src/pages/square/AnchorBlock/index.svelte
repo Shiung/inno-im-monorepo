@@ -14,13 +14,7 @@ import Anchor from './Anchor'
 import Loading from './Loading.svelte'
 import Arrow from './images/arrow_right_small.svg'
 
-import bg0 from './images/bg_style1_0.webp'
-import bg1 from './images/bg_style1_1.webp'
-import bg2 from './images/bg_style1_2.webp'
-import bg3 from './images/bg_style1_3.webp'
-
 let anchorsPromise: ReturnType<typeof im.webAnchors>
-const anchorBgs = [ bg0, bg1, bg2, bg3 ]
 
 $: {
   if ($params?.sid && $params.sid !== '0') anchorsPromise = im.webAnchors({
@@ -57,8 +51,8 @@ const onAnchorClick = (anchor: IWebAnchor) => {
 
     {:else}
       <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
-        {#each anchors?.data?.list || [] as anchor, idx}
-          <Anchor anchor={anchor} bg={anchorBgs[idx % anchorBgs.length]} on:click={() => onAnchorClick(anchor)} />
+        {#each anchors?.data?.list || [] as anchor}
+          <Anchor anchor={anchor} on:click={() => onAnchorClick(anchor)} />
         {/each}
       </div>
     {/if}
