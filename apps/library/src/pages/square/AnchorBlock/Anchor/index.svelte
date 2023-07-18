@@ -45,8 +45,8 @@ $: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
   {#if loading}
     <Loading />
   {:else}
-    <Ripple class='w-full flex flex-col items-center h-[139px] im-shadow rounded-[10px] p-2 space-y-1' on:click>
-      <div class='flex justify-center'>
+    <Ripple class='w-full flex flex-col h-[139px] im-shadow rounded-[10px] p-2 space-y-1' on:click>
+      <div class='flex w-full justify-center'>
         <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
       </div>
 
@@ -64,7 +64,7 @@ $: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
         </Badget>
       </div>
 
-      <div class='w-full leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
+      <div class='w-full self-start leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
         {#if match}
           {match.homeName} VS {match.awayName}
         {:else}

@@ -90,7 +90,7 @@ onDestroy(() => {
   {#if loading}
     <Loading />
   {:else}
-    <div class='flex im-shadow h-[97px] rounded-[10px] px-[8px]'>
+    <div class='flex im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2'>
       <div class='flex flex-none items-center'>
         <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
       </div>

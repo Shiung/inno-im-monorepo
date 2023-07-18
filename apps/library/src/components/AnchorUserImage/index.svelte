@@ -1,6 +1,7 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge'
-  
+  import AnchorImage from '$components/AnchorImage'
+
   export let user: string
   export let type: 'match' | 'deposit'
 
@@ -21,5 +22,5 @@
 
   <img class='block w-full h-auto' src={bg} alt="background">
   
-  <img class='absolute block bottom-0 left-1/2 -translate-x-[50%] w-1/2' src={user} alt="user">
+  <AnchorImage class='absolute block bottom-0 left-1/2 -translate-x-[50%] w-1/2' src={user} />
 </div>
