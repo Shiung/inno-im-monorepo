@@ -69,7 +69,12 @@ const playVideo = (urlm3u8: string) => {
   sourceDom.setAttribute('src', urlm3u8)
   video.appendChild(sourceDom)
 
-  video.addEventListener('canplay', onReadyCallback)
+  // if "canplay" event not triggered, call error by 15 secs after.
+  let timer = setTimeout(() => {
+    onErrorCallback()
+  }, 15 * 1000)
+
+  video.addEventListener('canplay', () => { clearTimeout(timer); onReadyCallback() })
   video.addEventListener('error', onErrorCallback)
   video.addEventListener('pause', handleVideoPause)
   video.addEventListener('timeupdate', timeUpdateHandler)
