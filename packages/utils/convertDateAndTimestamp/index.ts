@@ -1,6 +1,8 @@
 import type { ILanguages } from 'env-config'
 import type { IDiffPast } from './types'
-import dayjs from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 export const timestampToFormat = (props: { ts: number, format?: string }): string => {
   const { ts, format = 'YYYY-MM-DD hh-mm-ss' } = props
@@ -56,3 +58,9 @@ export const languagesToDateFormat = (lang: ILanguages, time: string) => {
       return dayjs(time).locale('en-us').format('DD MMM HH:mm')
   }
 }
+
+export const getLocalTimestamp = (diff?: number) => diff ? Number(dayjs().valueOf()) + diff : dayjs().valueOf()
+
+export const transformUTCTime = (ts: number, gmt: string | number = -4): Dayjs => dayjs(ts).utcOffset(gmt)
+
+export const getEndDate = (d: Dayjs) => d.endOf('date')

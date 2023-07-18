@@ -12,6 +12,7 @@ export let setGoHome = (callback?: () => void) => {
 import { onDestroy, onMount } from 'svelte'
 import Router, { location } from 'svelte-spa-router'
 import BottomNavigation from '$containers/BottomNavigation'
+import VIPNotification from '$containers/VIPNotification'
 import { bottomNav, showBottomNav } from '$stores/layout'
 import { throttle } from 'utils'
 import routes from './routes'
@@ -48,6 +49,7 @@ onDestroy(() => {
 </script>
 
 <main class='im-library'>
+  <VIPNotification />
   <Router {routes} on:routeLoading={routeLoading} />
   {#if $showBottomNav}
     <BottomNavigation goHome={() => goHomeCallback()} />
