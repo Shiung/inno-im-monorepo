@@ -25,6 +25,9 @@ class IM extends Base {
   expertMatchArticle = this.apiGenerator<Types.IExpertMatchArticle>({ url: `${prefix}/v1/expert/match/article` })
   expertArticleDetail = this.apiGenerator<Types.IExpertArticleDetail>({ url: `${prefix}/v1/expert/article/detail` })
 
+  userVipList = this.apiGenerator<Types.IUserVipList>({ url: `${prefix}/v1/user/vip-level` })
+  userKeyInfo = this.apiGenerator<Types.IUserKeyInfo>({ url: `${prefix}/v1/user/key` })
+
   // for testing
   chatroomPastMessage = this.apiGenerator<Types.IChatroomPastMessage>({ url: `${prefix}/v1/chat-room/past-message` })
   chatroomSelfOrders = this.apiGenerator<Types.IChatroomSelfOrders>({ url: `${prefix}/product/business/bets/ordersWithIid` })
