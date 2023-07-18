@@ -89,7 +89,7 @@ const timeUpdateHandler = () => {
 
   timer = setTimeout(() => {
     onErrorCallback()
-  }, 300);
+  }, 800);
 }
 
 pauseHandler = (isLive: boolean) => {
