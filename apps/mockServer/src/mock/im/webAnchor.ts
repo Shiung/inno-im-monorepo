@@ -37,7 +37,8 @@ const webAnchors: IMockData[] = [
         anchorSid: idx % 3 === 0 ? 100 : Random.integer(1,3) as Types.IWebAnchor['anchorSid'],
         fansCount: Random.natural(0, 10000000),
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
-        matchCount: Random.natural(0, 10)
+        matchCount: Random.natural(0, 10),
+        houseIntroduction: "@csentence"
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
     }))

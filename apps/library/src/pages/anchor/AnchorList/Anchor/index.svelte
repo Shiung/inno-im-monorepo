@@ -1,68 +1,145 @@
 <script lang='ts'>
+import { onDestroy } from 'svelte'
 import { Ripple } from 'ui'
-import AnchorStatus from '$containers/AnchorStatus'
+import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
 import AnchorMatches from '$containers/AnchorMatches/index.svelte'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
-import AnchorImage from '$src/components/AnchorImage'
+import AnchorImage from '$components/AnchorImage'
+import { Badget } from 'ui'
 import { t } from '$stores'
+import { locale } from '$stores'
+import { im } from 'api'
+import type { ILanguages } from 'env-config'
+import type { IWebAnchorMatch } from 'api/im/types'
+import Loading from './Loading.svelte'
 
-import Smile from '../../images/smile.svg'
-import Arrow from '../../images/arrow_down_small.svg'
+import Arrow from '../images/arrow_down_small.svg'
+import MatchHistory from '../images/matchHistory.svg'
 import type { IWebAnchor } from 'api/im/types'
+import { SIDi18nKey } from '$src/constant'
 
 
 export let anchor: IWebAnchor
-export let bg: string
 
 let showMatchList: boolean
 let openDetailSheet: boolean
+let dom: HTMLDivElement
+let firstMatch: IWebAnchorMatch = null
+let restMatchList: IWebAnchorMatch[] = []
+let loading: boolean = true
+let observer: IntersectionObserver
 
+const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
+  const matchesPromise = await im.webAnchorMatchList({ query: { houseId }, headers: { 'Accept-Language': lang }})
+  
+  if(matchesPromise?.data?.matchList?.length > 0) {
+    return { first: matchesPromise?.data?.matchList[0], rest: matchesPromise?.data?.matchList.slice(1)}
+  }
+  
+  return { first: null, rest: [] }
+}
+
+const createObserver = (dom: HTMLDivElement) => {
+  if(!dom) return
+  
+  let isFetched: boolean = false
+  observer = new IntersectionObserver(async (entries) => {
+    const { matchCount, houseId } = anchor
+    if (isFetched) return
+
+    if (!matchCount) {
+      loading = false
+      isFetched = true
+      return
+    }
+
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        loading = true
+        const { first, rest } = await fetchAnchorMatches(houseId, $locale)
+        loading = false
+  
+        firstMatch = first
+        restMatchList = rest
+        isFetched = true
+      }
+    }
+  }, { rootMargin: `0px 0px 500px 0px`})
+
+  observer.observe(dom)
+}
+
+const init = (dom: HTMLDivElement, isMatchType: boolean) => {
+  if(!isMatchType) return (loading = false)
+
+  createObserver(dom)
+}
+
+$: isMatchType = anchor.anchorSid !== 100
+
+$: init(dom, isMatchType)
+
+$: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
+
+onDestroy(() => {
+  observer && observer.disconnect()
+})
 </script>
 
-<div>
-  <div class='grid grid-cols-[100px_1fr_30px] im-shadow h-[100px] rounded-[10px] px-[8px]'>
-    <div class='w-[95px] flex items-end bg-contain bg-no-repeat bg-bottom overflow-hidden' style:background-image={`url("${bg}")`}> 
-      <AnchorImage src={anchor?.userImage} />
-    </div>
-
-    <div class='flex flex-col py-[10px] justify-between'>
-      <div>
-        <div class='text-imprimary text-[18px]'> {anchor.houseName} </div>
-        <div class='text-[12px] text-[#999999]'> {anchor.nickName} </div>
+<div data-id={anchor.houseId} bind:this={dom}>
+  {#if loading}
+    <Loading />
+  {:else}
+    <div class='flex im-shadow h-[97px] rounded-[10px] px-[8px]'>
+      <div class='flex flex-none items-center'>
+        <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
       </div>
-    
-      <div class='flex items-center'>
-        <AnchorStatus class='mr-[5px]' liveStatus={anchor.liveStatus} />
 
-        {#if anchor?.matchCount}
-          <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
-            <Ripple class='flex items-center text-imprimary text-[10px] h-[20px] pl-[10px]'
-              ripple='#eeeeee'
-              on:click={() => showMatchList = !showMatchList}
-            > 
-              <span>{$t('anchor.matchList')} </span>
-              <div class='duration-300' style:transform={showMatchList ? 'rotate(180deg)' : ''}>
-                <Arrow class='mx-[5px]' width={13} height={14} fill='rgb(var(--im-monorepo-primary))' />
-              </div>
-            </Ripple>
+      <div class='flex-1 flex flex-col justify-between py-[10px] overflow-hidden'>
+        <div class='flex flex-1 flex-col items-start overflow-hidden'>
+          <div class='flex items-center space-x-1'>
+            <AnchorImage src={anchor.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]' />
+            <span class='text-imprimary leading-[18px] text-[18px]'> {anchor.houseName} </span>
+          </div>
+
+          <div class='w-full leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
+            {#if firstMatch}
+              {firstMatch.homeName} VS {firstMatch.awayName}
+            {:else}
+              {anchor.houseIntroduction}
+            {/if}
+          </div>
+
+          <Badget
+            class='rounded-[6px] leading-3 h-3 text-[10px]'
+            background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
+          >
+            {$t(badgeStr)}
+          </Badget>
+        </div>
+
+        {#if restMatchList.length}
+          <div class='flex items-center justify-end'>
+            <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
+              <Ripple class='flex items-center h-[18px] px-1 space-x-1'
+                ripple='#eeeeee'
+                on:click={() => showMatchList = !showMatchList}
+              > 
+                <MatchHistory width={10} height={10} />
+                <span class='leading-[18px] text-[10px] text-imprimary'>{restMatchList.length}</span>
+                <div class='duration-300' style:transform={showMatchList ? 'rotate(180deg)' : ''}>
+                  <Arrow width={13} height={14} fill='rgb(var(--im-monorepo-primary))' />
+                </div>
+              </Ripple>
+            </div>
           </div>
         {/if}
       </div>
+    
     </div>
-
-    <div class='py-[8px]'>
-      <Ripple class='flex items-center justify-center h-[30px] w-[30px] im-shadow rounded-[9px] bg-white'
-        on:click={() => openDetailSheet = true }
-      >
-        <Smile width={18} height={18} fill='rgb(var(--im-monorepo-primary))' />
-      </Ripple>
-    </div>
-  </div>
-
-  {#if showMatchList}
-    <AnchorMatches houseId={anchor.houseId} />
   {/if}
-
+  {#if showMatchList}
+    <AnchorMatches data={restMatchList} />
+  {/if}
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />
 </div>
-

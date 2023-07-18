@@ -12,11 +12,6 @@
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
 
-  import bg0 from '../images/bg_style2_0.webp'
-  import bg1 from '../images/bg_style2_1.webp'
-  import bg2 from '../images/bg_style2_2.webp'
-  import bg3 from '../images/bg_style2_3.webp'
-
   let keyWord = ''
 
   let pageIdx = 1
@@ -25,8 +20,6 @@
   let initLoading: boolean = false
   let data: Awaited<ReturnType<typeof im.webAnchors>>['data']['list'] = []
   let hasMoreData: boolean = false
-
-  const anchorBgs = [bg0, bg1, bg2, bg3]
 
   const fetchAnchors = async (props: { keyWord: string; sid: ReturnType<typeof convertSid> }) => {
     const { keyWord, sid } = props
@@ -90,7 +83,7 @@
     {:else}
       <InfiniteScroll hasMore={hasMoreData} load={() => fetchAnchors({ keyWord, sid})}>
         {#each data || [] as anchor, idx}
-          <Anchor {anchor} bg={anchorBgs[idx % anchorBgs.length]} />
+          <Anchor {anchor} />
         {/each}
       </InfiniteScroll>
     {/if}

@@ -13,6 +13,7 @@ export interface IWebAnchor {
   fansCount: number
   attentionStatus: 0 | 1 | 2 // 0:未关注 1:已关注 2:无需出现关注按钮(主播自己)
   matchCount: number
+  houseIntroduction: string
 }
 
 export interface IWebAnchors {
