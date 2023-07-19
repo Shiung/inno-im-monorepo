@@ -33,6 +33,7 @@ const webAnchors: IMockData[] = [
         houseName: "@ANCHORHOUSENAME",
         nickName: "@ANCHORNICKNAME",
         playStreamAddress: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
+        playStreamAddress2: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
         liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
         anchorSid: idx % 3 === 0 ? 100 : Random.integer(1,3) as Types.IWebAnchor['anchorSid'],
         fansCount: Random.natural(0, 10000000),
