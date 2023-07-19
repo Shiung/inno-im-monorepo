@@ -57,14 +57,14 @@ $: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
         </div>
 
         <Badget
-          class='rounded-[6px] leading-3 h-3 text-[10px]'
+          class='rounded-[6px] leading-3 h-3 text-[9px]'
           background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
         >
           {$t(badgeStr)}
         </Badget>
       </div>
 
-      <div class='w-full self-start leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
+      <div class='w-full text-left leading-[15px] text-[10px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
         {#if match}
           {match.homeName} VS {match.awayName}
         {:else}

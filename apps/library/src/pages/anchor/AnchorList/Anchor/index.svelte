@@ -111,7 +111,7 @@ onDestroy(() => {
           </div>
 
           <Badget
-            class='rounded-[6px] leading-3 h-3 text-[10px]'
+            class='rounded-[6px] leading-3 h-3 text-[9px]'
             background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
           >
             {$t(badgeStr)}
