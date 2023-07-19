@@ -1,3 +1,3 @@
-export const imgRatio = 235 / 375
+export const imgRatio = 9 / 16
 
 export const imgHeight = `${Math.round(window.innerWidth * imgRatio)}px`
