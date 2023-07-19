@@ -36,4 +36,6 @@
     style:background-image={`url(${src})`}
     style:height={imgHeight}
   ></div>
+{:else}
+  <div style:height={imgHeight}></div>
 {/if}
