@@ -17,8 +17,6 @@ export let prediction: IExpertPrediction
 export let goToExpertDetailCallback: GoToExpertDetail = null
 export let goToPlanDetailCallback: GoToPlanDetail = null
 
-const { userToken } = $userInfo
-
 const convertReleaseTime = (releaseTime: number) => {
   const time = convertTimeDiffToPast({now: Date.now(), past: releaseTime})
 
@@ -32,7 +30,7 @@ const convertReleaseTime = (releaseTime: number) => {
 }
 
 const goToExpertDetail = () => {
-  if (!userToken) return $goLoginCallback()
+  if (!$userInfo.userToken) return $goLoginCallback()
 
   if (typeof goToExpertDetailCallback !== 'function') return push(`/expertDetail/${prediction.expertId}/plan`)
 
@@ -40,7 +38,7 @@ const goToExpertDetail = () => {
 }
 
 const goToPlanDetail = () => {
-  if (!userToken) return $goLoginCallback()
+  if (!$userInfo.userToken) return $goLoginCallback()
 
   if (typeof goToPlanDetailCallback !== 'function') return push(`/planDetail/${prediction.expertId}/${prediction.articleId}`)
 

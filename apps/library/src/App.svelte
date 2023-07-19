@@ -1,16 +1,19 @@
 <script lang='ts' context='module'>
 import { locale, goHomeCallback, goLoginCallback, goVipCenterCallback } from '$stores'
 
-export let setGoHome = (callback?: () => void) => {
-  if (callback) goHomeCallback.set(callback)
+export const setGoHome = (callback: () => void) => {
+  if (typeof callback !== 'function') return console.warn('setGoHome parameter callback MUST be function')
+  goHomeCallback.set(callback)
 }
 
-export let setGoLogin = (callback?: () => void) => {
-  if (callback) goLoginCallback.set(callback)
+export const setGoLogin = (callback: () => void) => {
+  if (typeof callback !== 'function') return console.warn('setGoLogin parameter callback MUST be function')
+  goLoginCallback.set(callback)
 }
 
-export let setGoVipCenter = (callback?: () => void) => {
-  if (callback) goVipCenterCallback.set(callback)
+export const setGoVipCenter = (callback: () => void) => {
+  if (typeof callback !== 'function') return console.warn('setGoVipCenter parameter callback MUST be function')
+  goVipCenterCallback.set(callback)
 }
 
 // plateform 設定im語系
