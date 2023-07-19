@@ -22,6 +22,7 @@ import routes from './routes'
 import BigNumber from 'bignumber.js'
 import { appHeight } from '$stores/layout'
 import versionInfo from './utils/versionInfo'
+import { fetchUserKeyInfo, fetchUserVipList } from '$api/index'
 
 versionInfo()
 $: console.log('=========[im-library] location==========', $location)
@@ -42,6 +43,8 @@ const setVh = () => {
 const handleResize = throttle(setVh, 250)
 
 onMount(() => {
+  fetchUserVipList({ token: '', pvd: 1, lang: $locale })
+  fetchUserKeyInfo({ token: '', account: '', pvd: 1, lang: $locale })
   setVh()
   window.addEventListener('resize', handleResize)
 })

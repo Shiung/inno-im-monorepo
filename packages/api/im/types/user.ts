@@ -16,7 +16,7 @@ export interface IVipList {
 
 export interface IUserVipList {
   query: {
-    currency: string
+    pvd: number
   }
   body: null
   res: withData<IVipList[]>
@@ -24,7 +24,7 @@ export interface IUserVipList {
 
 export interface IUserKeyInfo {
   query: {
-    vendor: number
+    pvd: number
     account: string
   }
   body: null
