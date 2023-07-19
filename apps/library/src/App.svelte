@@ -1,10 +1,12 @@
 <script lang='ts' context='module'>
-import { push } from 'svelte-spa-router'
-import { locale } from '$stores'
-let goHomeCallback: () => void = () => push('/')
+import { locale, goHomeCallback, goLoginCallback } from '$stores'
 
 export let setGoHome = (callback?: () => void) => {
-  if (callback) goHomeCallback = callback
+  if (callback) goHomeCallback.set(callback)
+}
+
+export let setGoLogin = (callback?: () => void) => {
+  if (callback) goLoginCallback.set(callback)
 }
 
 // plateform 設定im語系
@@ -54,6 +56,6 @@ onDestroy(() => {
 <main class='im-library'>
   <Router {routes} on:routeLoading={routeLoading} />
   {#if $showBottomNav}
-    <BottomNavigation goHome={() => goHomeCallback()} />
+    <BottomNavigation goHome={() => $goHomeCallback()} />
   {/if}
 </main>
