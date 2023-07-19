@@ -1,5 +1,5 @@
 <script lang='ts' context='module'>
-import { locale, goHomeCallback, goLoginCallback } from '$stores'
+import { locale, goHomeCallback, goLoginCallback, goVipCenterCallback } from '$stores'
 
 export let setGoHome = (callback?: () => void) => {
   if (callback) goHomeCallback.set(callback)
@@ -7,6 +7,10 @@ export let setGoHome = (callback?: () => void) => {
 
 export let setGoLogin = (callback?: () => void) => {
   if (callback) goLoginCallback.set(callback)
+}
+
+export let setGoVipCenter = (callback?: () => void) => {
+  if (callback) goVipCenterCallback.set(callback)
 }
 
 // plateform 設定im語系
