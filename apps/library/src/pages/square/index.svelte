@@ -1,7 +1,6 @@
-<script lang='ts'>
+<script lang="ts">
   import { im } from 'api'
   import { params } from 'svelte-spa-router'
-  import { createEventDispatcher } from 'svelte'
   import type { IWebAnchor } from 'api/im/types'
 
   import { locale } from '$stores'
@@ -44,7 +43,7 @@
 <div>
   <Header />
 
-  <div class='space-y-[10px]'>
+  <div class="space-y-[10px]">
     <StreamBlock {streaming} {loading} />
 
     <AnchorBlock {list} {loading} on:change={onChange} />
