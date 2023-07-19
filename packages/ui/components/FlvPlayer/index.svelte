@@ -55,6 +55,8 @@ let paused: boolean = true
 let muted: boolean = true
 
 export let url: string = ''
+export let controls: boolean = false
+
 let video: HTMLVideoElement
 let noDataCount: number = 0
 
@@ -127,7 +129,7 @@ onDestroy(() => {
 
 </script>
 
-<video  class={twMerge('w-full h-full', !url && 'h-0', $$props.class)} autoplay bind:this={video} bind:paused bind:muted>
+<video  class={twMerge('w-full h-full', !url && 'h-0', $$props.class)} autoplay bind:this={video} bind:paused bind:muted {controls}>
   <track kind='captions' />
   Your browser is too old which doesn't support HTML5 video.
 </video>
