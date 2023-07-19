@@ -1,7 +1,7 @@
-<script lang='ts'>
+<script lang="ts">
   import { params, replace } from 'svelte-spa-router'
   import type { IWebAnchor } from 'api/im/types'
-  
+
   import HeaderNavigation from '$containers/HeaderNavigation'
 
   import StreamBlock from './StreamBlock'
@@ -14,7 +14,7 @@
 
   $: sid = convertSid($params?.sid)
 
-  const headNavIcons: { sid: SidType, onClick: () => void }[] = [
+  const headNavIcons: { sid: SidType; onClick: () => void }[] = [
     {
       sid: 1,
       onClick: () => replace('/square/1')
@@ -37,7 +37,7 @@
 <div>
   <HeaderNavigation active={sid} icons={headNavIcons} />
 
-  <div class='space-y-[10px]'>
+  <div class="space-y-[10px]">
     <StreamBlock {streaming} />
 
     <AnchorBlock on:change={onChange} />
