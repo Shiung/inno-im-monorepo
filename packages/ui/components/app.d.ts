@@ -11,7 +11,7 @@ declare module '*.svg' {
 }
 
 declare namespace svelteHTML {
-  interface HTMLAttributes<T> {
+  interface HTMLAttributes {
     'on:dismiss'?: (node: Element) => void
   }
 }
