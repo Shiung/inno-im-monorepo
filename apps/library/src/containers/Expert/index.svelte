@@ -8,6 +8,7 @@ import type { IExpertPrediction } from 'api/im/types'
 import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
 import MarketBadget from '$src/components/MarketBadget'
+import UnlockButton from '$components/UnlockButton/index.svelte'
 
 import type { GoToExpertDetail, GoToPlanDetail } from './type'
 
@@ -64,7 +65,12 @@ const goToPlanDetail = () => {
     </div>
 
     <div class='flex flex-col justify-between pl-[6px]'>
-      <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.limitFree')} </Button>
+      <!-- 後續需補上未登入都是解鎖預測狀態 prediction.articleStatus === 1 && !token -->
+      {#if prediction.articleStatus === 1}
+        <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.plan.prediction')} </Button>
+        {:else}
+        <UnlockButton class="rounded-[8px] self-end" />
+      {/if}
 
       <div class='flex text-[10px] items-end self-end'>
         <span class='text-[#666666]'> {$t('expert.hitRate')} </span>

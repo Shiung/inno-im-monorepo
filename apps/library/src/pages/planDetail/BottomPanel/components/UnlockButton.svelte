@@ -3,7 +3,7 @@
   import { t } from '$stores'
 
   import { amountThousandthTransformer } from 'utils/amount'
-  import Lock from '../../images/lock.svg'
+  import Lock from '$assets/lock.svg'
 
   export let coin: number
   export let onButtonClick

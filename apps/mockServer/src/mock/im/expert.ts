@@ -69,6 +69,7 @@ const expert: IMockData[] = [
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         ...genMarket(),
         articleId: "@word",
+        articleStatus: Random.integer(1, 2) as Types.IArticle['articleStatus'],
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
         title: "@cparagraph",

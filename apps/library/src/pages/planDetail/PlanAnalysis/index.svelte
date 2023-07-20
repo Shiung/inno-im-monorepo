@@ -4,7 +4,7 @@
   
   import TeamOdds from './components/TeamOdds.svelte'
   
-  import Lock from '../images/lock.svg'
+  import Lock from '$assets/lock.svg'
 
   export let data: IArticleDetail
   export let isLocked: boolean

@@ -82,6 +82,7 @@ export interface IExpertInfo {
 
 export interface IArticle extends IPredictionMarket {
   articleId: string
+  articleStatus?: ArticleStatus,
   releaseTime: number
   closeTime: number
   title: string
