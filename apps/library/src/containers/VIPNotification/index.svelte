@@ -1,8 +1,11 @@
 <script lang='ts'>
   import { convertDateAndTimestamp } from 'utils'
-  import unlock_idle from './images/unlock_idle.png'
   import Modal from 'ui/components/Modal'
   import { t, userInfo, userAuth } from '$stores'
+  import { push } from 'svelte-spa-router'
+
+  import unlock_idle from './images/unlock_idle.png'
+  import PopClose from '$assets/modal/pop_close_dark.svg'
 
   let open: boolean = false
 
@@ -24,6 +27,11 @@
     }
   }
 
+  const gotoHandler = () => {
+    open = false
+    push('/expert')
+  }
+
   $: if (!$userAuth.userToken) checkExpired()
 
 </script>
@@ -33,10 +41,15 @@
   <div class='w-[345px] relative'>
     <img src={unlock_idle} alt='lock' class='w-full' />
     <div class='absolute top-0 left-0 flex flex-col items-center w-full pt-[76px]'>
+      <div class='absolute top-0 right-[30px]' on:click={() => open = !open} on:keypress >
+        <PopClose width={30} height={30}/>
+      </div>
       <div class='text-[26px] leading-[26px] text-white vip'>VIP{$userInfo.userVip}</div>
       <div class='text-[36px] leading-[36px] text-white font-bold mt-[15px] freeLock'>{$t('expert.unlockForFree')}</div>
       <div class='text-[20px] leading-[20px] text-white mt-[15px]'>{$t('user.dailyAmount', { count: expertKey })}</div>
-      <div class='text-[21px] leading-[21px] text-white mt-[80px] goto'>{$t('common.checkOutNow')}</div>
+      <div class='text-[21px] leading-[21px] text-white mt-[80px] goto' on:click={gotoHandler} on:keydown>
+        {$t('common.checkOutNow')}
+      </div>
     </div>
   </div>
 </Modal>
