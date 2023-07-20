@@ -1,5 +1,5 @@
 import { im } from 'api'
-import { userKeyInfo, userVipList } from '$stores/library'
+import { userKeyInfo, userVipList } from '$stores/user'
 import type { IRequestParams } from './types'
 
 export const fetchUserVipList = async (params: IRequestParams) => {

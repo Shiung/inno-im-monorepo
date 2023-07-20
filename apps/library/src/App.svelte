@@ -19,6 +19,9 @@ import BigNumber from 'bignumber.js'
 import { appHeight } from '$stores/layout'
 import versionInfo from './utils/versionInfo'
 import { fetchUserKeyInfo, fetchUserVipList } from '$api/index'
+import { locale } from '$stores'
+import { userAuth } from '$stores/user'
+import { getConfig } from 'env-config'
 
 versionInfo()
 $: console.log('=========[im-library] location==========', $location)
@@ -38,9 +41,22 @@ const setVh = () => {
 
 const handleResize = throttle(setVh, 250)
 
+$: if($userAuth.userToken) {
+  fetchUserVipList({ 
+    token: $userAuth.userToken, 
+    pvd: getConfig().vendor_id, 
+    lang: $locale 
+  })
+
+  fetchUserKeyInfo({ 
+    token: $userAuth.userToken, 
+    account: $userAuth.userAccount, 
+    pvd: getConfig().vendor_id, 
+    lang: $locale 
+  })
+}
+
 onMount(() => {
-  fetchUserVipList({ token: '', pvd: 1, lang: $locale })
-  fetchUserKeyInfo({ token: '', account: '', pvd: 1, lang: $locale })
   setVh()
   window.addEventListener('resize', handleResize)
 })
