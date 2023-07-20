@@ -1,11 +1,11 @@
-import type { Currency } from '$src/types'
+import type { TKeyOfCurrency } from '$src/types'
 import { writable } from 'svelte/store'
 
 export interface IChatroomSetting {
   errorCode: number
   vip: number
   timeInterval: number
-  depositLimit: Array<{ currency: `${Currency}`, amount: number }>
+  depositLimit: Array<{ currency: TKeyOfCurrency, amount: number }>
   chatLimitType: number // 0: unlimited, 1: deposit, 2: vip
 }
 
