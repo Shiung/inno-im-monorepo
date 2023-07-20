@@ -1,5 +1,5 @@
 <script lang="ts">
-  import StreamPlayer, { onError, onLostData, onReady, isFlvUse } from '$containers/StreamingPlayer'
+  import StreamingPlayer, { onError, onLostData, onReady, isFlvUse } from '$containers/StreamingPlayer'
   import Circle from 'ui/core/button/loading.svelte'
   import type { IWebAnchor } from 'api/im/types'
 
@@ -61,7 +61,7 @@
       </div>
     {/if}
 
-    <StreamPlayer {streaming} useDefControls />
+    <StreamingPlayer {streaming} useDefControls />
   </div>
   <!-- {/if} -->
 {/if}
