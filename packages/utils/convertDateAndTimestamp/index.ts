@@ -19,6 +19,14 @@ export const getTime = (timestamp: number): string => {
   return timestampToFormat({ ts: timestamp, format: 'hh:mm' })
 }
 
+export const getTimeWithSeconds = (timestamp: number): string => {
+  return timestampToFormat({ ts: timestamp, format: 'hh:mm:ss' })
+}
+
+export const getTimeDifference = (timestamp: number): number => {
+  return timestamp - Date.now()
+}
+
 export const dateTimeToTimestamp = (date: string): number | undefined => {  
   const timestamp = new Date(date).getTime()
   return timestamp
