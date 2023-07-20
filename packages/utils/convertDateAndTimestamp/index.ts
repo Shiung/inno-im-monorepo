@@ -59,7 +59,7 @@ export const languagesToDateFormat = (lang: ILanguages, time: string) => {
   }
 }
 
-export const getLocalTimestamp = (diff?: number) => diff ? Number(dayjs().valueOf()) + diff : dayjs().valueOf()
+export const getLocalAlignTimestamp = (diff?: number) => diff ? Number(dayjs().valueOf()) + diff : dayjs().valueOf()
 
 export const transformUTCTime = (ts: number, gmt: string | number = -4): Dayjs => dayjs(ts).utcOffset(gmt)
 
