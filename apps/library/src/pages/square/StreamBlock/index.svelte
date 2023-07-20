@@ -12,15 +12,14 @@
   let streamError = false
   let prevStreamUrl: string
 
-  onError(() => {
+  const errorCallback = () => {
     streamLoading = false
     streamError = true
-  })
+  }
 
-  onLostData(() => {
-    streamLoading = false
-    streamError = true
-  })
+  onError(errorCallback)
+
+  onLostData(errorCallback)
 
   onReady(() => {
     streamLoading = false
