@@ -75,11 +75,11 @@ const init = (dom: HTMLDivElement, isMatchType: boolean) => {
   createObserver(dom)
 }
 
-$: isMatchType = anchor.anchorSid !== 100
+$: isMatchType = anchor.sid !== 100
 
 $: init(dom, isMatchType)
 
-$: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
+$: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.deposit`
 
 onDestroy(() => {
   observer && observer.disconnect()

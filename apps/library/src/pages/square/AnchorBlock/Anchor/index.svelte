@@ -30,7 +30,7 @@ const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
   match = null
 }
 
-$: isMatchType = anchor.anchorSid !== 100
+$: isMatchType = anchor.sid !== 100
 
 $: if(isMatchType) {
   fetchAnchorMatches(anchor.houseId, $locale)
@@ -38,7 +38,7 @@ $: if(isMatchType) {
   loading = false
 }
 
-$: badgeStr = isMatchType ? SIDi18nKey[anchor.anchorSid] : `common.deposit`
+$: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.deposit`
 </script>
 
 <div>
