@@ -1,4 +1,4 @@
-import { list } from '$src/platform/anchors/store'
+import { list } from '$src/platform/store'
 import type { IPlatformAnchor } from '$src/platform/anchors/types'
 
 const genAnchor = (houseId: string): IPlatformAnchor => ({

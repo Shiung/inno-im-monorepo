@@ -6,10 +6,9 @@ import { im as imWs } from 'api/wsMaster'
 
 import { locale } from '$stores'
 
-import { userInfo } from './env'
+import { userAuth, type IUserAuth} from '$stores'
 
 import type { IChatMessage } from 'api/im/types'
-import type { IUserInfo } from './env'
 import type { Writable } from 'svelte/store'
 import { setChatroomSetting } from './localEnv'
 export * from './env'
@@ -124,7 +123,7 @@ const clearAllStores = () => {
   messageMap.forEach((store) => store.set([]))
 }
 
-const imWsConnect = (e: IUserInfo) => {
+const imWsConnect = (e: IUserAuth) => {
   imWs.setParams({
     account: e.userAccount,
     vd: getConfig().vendor_id,
@@ -135,7 +134,7 @@ const imWsConnect = (e: IUserInfo) => {
 
   clearAllStores()
   if (pollingChatSettingTimer) clearTimeout(pollingChatSettingTimer)
-  // 先用 reconnect 的方式，因為平台在給 userInfo 後可能 ws 都還沒有連上
+  // 先用 reconnect 的方式，因為平台在給 userAuth 後可能 ws 都還沒有連上
   // if (imWs.enabled) imWs.reconnect()
   // else imWs.activate()
   imWs.reconnect()
@@ -161,14 +160,14 @@ const subscribeRooms = () => {
   checkAllStoreIfNeedFetchHistory()
 }
 
-let unSubUserInfo: ReturnType<typeof userInfo.subscribe>
+let unSubUserInfo: ReturnType<typeof userAuth.subscribe>
 
 let pushMessageSub: ReturnType<typeof imWs.subscribe>
 
 let chatSettingSub: ReturnType<typeof imWs.subscribe>
 
 export const active = () => {
-  unSubUserInfo = userInfo.subscribe(imWsConnect)
+  unSubUserInfo = userAuth.subscribe(imWsConnect)
   pushMessageSub = subscribePushMessage()
   chatSettingSub = subscribeChatSetting()
   imWs.register(() => {
