@@ -63,12 +63,10 @@
 
   $: sid = convertSid($params?.anchorSid)
 
-  $: {
-    if (sid != null) {
-      document.body.scrollTo(0, 0)
-      window.scrollTo(0, 0)
-      init({ sid })
-    }
+  $: if (sid != null) {
+    document.body.scrollTo(0, 0)
+    window.scrollTo(0, 0)
+    init({ sid })
   }
 </script>
 
@@ -82,7 +80,7 @@
       <Empty class="h-[calc(100vh_-_170px)]" />
     {:else}
       <InfiniteScroll hasMore={hasMoreData} load={() => fetchAnchors({ keyWord, sid})}>
-        {#each data || [] as anchor, idx}
+        {#each data || [] as anchor}
           <Anchor {anchor} />
         {/each}
       </InfiniteScroll>
