@@ -2,8 +2,7 @@
 import { Button, Ripple } from 'ui'
 import { convertTimeDiffToPast } from 'utils/convertDateAndTimestamp'
 import { push } from 'svelte-spa-router'
-import { t, goLoginCallback } from '$stores'
-import { userInfo } from '../Chatroom/controller/env'
+import { t, userAuth, goLoginCallback } from '$stores'
 
 import type { IExpertPrediction } from 'api/im/types'
 
@@ -30,7 +29,7 @@ const convertReleaseTime = (releaseTime: number) => {
 }
 
 const goToExpertDetail = () => {
-  if (!$userInfo.userToken) return $goLoginCallback()
+  if (!$userAuth.userToken) return $goLoginCallback()
 
   if (typeof goToExpertDetailCallback !== 'function') return push(`/expertDetail/${prediction.expertId}/plan`)
 
@@ -38,7 +37,7 @@ const goToExpertDetail = () => {
 }
 
 const goToPlanDetail = () => {
-  if (!$userInfo.userToken) return $goLoginCallback()
+  if (!$userAuth.userToken) return $goLoginCallback()
 
   if (typeof goToPlanDetailCallback !== 'function') return push(`/planDetail/${prediction.expertId}/${prediction.articleId}`)
 
