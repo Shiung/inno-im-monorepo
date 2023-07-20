@@ -1,9 +1,10 @@
 <script lang='ts'>
-import { onDestroy } from 'svelte'
+import { onDestroy, createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
 import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
 import AnchorMatches from '$containers/AnchorMatches/index.svelte'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+import StreamingPlayer from '$containers/StreamingPlayer'
 import AnchorImage from '$components/AnchorImage'
 import { Badget } from 'ui'
 import { t } from '$stores'
@@ -20,6 +21,7 @@ import { SIDi18nKey } from '$src/constant'
 
 
 export let anchor: IWebAnchor
+export let preview: boolean = false
 
 let showMatchList: boolean
 let openDetailSheet: boolean
@@ -27,7 +29,10 @@ let dom: HTMLDivElement
 let firstMatch: IWebAnchorMatch = null
 let restMatchList: IWebAnchorMatch[] = []
 let loading: boolean = true
-let observer: IntersectionObserver
+let matchObserver: IntersectionObserver
+let previewObserver: IntersectionObserver
+
+const dispatch = createEventDispatcher()
 
 const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
   const matchesPromise = await im.webAnchorMatchList({ query: { houseId }, headers: { 'Accept-Language': lang }})
@@ -39,11 +44,11 @@ const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
   return { first: null, rest: [] }
 }
 
-const createObserver = (dom: HTMLDivElement) => {
+const createMatchObserver = (dom: HTMLDivElement) => {
   if(!dom) return
   
   let isFetched: boolean = false
-  observer = new IntersectionObserver(async (entries) => {
+  matchObserver = new IntersectionObserver(async (entries) => {
     const { matchCount, houseId } = anchor
     if (isFetched) return
 
@@ -66,23 +71,43 @@ const createObserver = (dom: HTMLDivElement) => {
     }
   }, { rootMargin: `0px 0px 500px 0px`})
 
-  observer.observe(dom)
+  matchObserver.observe(dom)
+}
+
+const createPreviewObserver = (dom: HTMLDivElement) => {
+  if(!dom) return
+  
+  let marginTop = 30
+  let marginBottom = ((window.innerHeight * 0.7 - 10) / window.innerHeight * 100).toFixed(2)
+
+  previewObserver = new IntersectionObserver((entries) => {
+    for(const entry of entries) {
+      if (entry.isIntersecting && window.scrollY !== 0) {
+        dispatch('preview', anchor.houseId)
+      }
+    }
+  }, { root: null, rootMargin: `${-marginTop}% 0% ${-marginBottom}% 0%` })
+
+  previewObserver.observe(dom)
 }
 
 const init = (dom: HTMLDivElement, isMatchType: boolean) => {
   if(!isMatchType) return (loading = false)
 
-  createObserver(dom)
+  createMatchObserver(dom)
 }
 
 $: isMatchType = anchor.sid !== 100
 
 $: init(dom, isMatchType)
 
+$: createPreviewObserver(dom)
+
 $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.deposit`
 
 onDestroy(() => {
-  observer && observer.disconnect()
+  matchObserver && matchObserver.disconnect()
+  previewObserver && previewObserver.disconnect()
 })
 </script>
 
@@ -92,7 +117,13 @@ onDestroy(() => {
   {:else}
     <div class='flex im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2'>
       <div class='flex flex-none items-center'>
-        <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+        {#if preview && anchor.liveStatus === 2}
+          <div class='w-[143px] h-[80px]'>
+            <StreamingPlayer streaming={anchor} />
+          </div>
+        {:else}
+          <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+        {/if}
       </div>
 
       <div class='flex-1 flex flex-col justify-between py-[10px] overflow-hidden'>
