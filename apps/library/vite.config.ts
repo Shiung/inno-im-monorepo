@@ -35,7 +35,7 @@ const buildAsLibrary = () => {
           streaming: resolve(__dirname, './src/platform/streaming/index.ts'),
           chatroom: resolve(__dirname, './src/platform/chatroom/index.ts'),
           expert: resolve(__dirname, './src/platform/expert/index.ts'),
-          store: resolve(__dirname, './src/stores/EntryPoint.ts')
+          store: resolve(__dirname, './src/platform/store/entry.ts')
         },
         name: 'im-library',
         // the proper extensions will be added
