@@ -1,5 +1,5 @@
 <script lang='ts' context='module'>
-import { list } from './store'
+import { list } from '../store'
 
 import type { IPlatformAnchor } from './types'
 

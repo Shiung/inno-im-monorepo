@@ -1,0 +1,1 @@
+<div class='w-full animate-pulse bg-[#999] min-h-[200px]'></div>

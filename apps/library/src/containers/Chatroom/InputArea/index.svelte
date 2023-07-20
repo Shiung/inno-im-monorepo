@@ -21,7 +21,7 @@
 
   import { EErrorCode, errorCodeMsgMap } from '../constant'
   import { getInfo } from '../context'
-  import { userInfo, type IUserInfo } from '../controller/env'
+  import { userInfo, userAuth, type IUserInfo, type IUserAuth } from '$stores'
   import { chatroomSetting, type IChatroomSetting } from '../controller/localEnv'
   import { inputRect, inputAreaOffset } from '../store'
 
@@ -33,12 +33,13 @@
   let lastSend: number = 0
   let routerCallback: () => void
 
-  $: setStatusAndCallbackByCondition($userInfo, $chatroomSetting, $t)
+  $: setStatusAndCallbackByCondition($userInfo, $userAuth, $chatroomSetting, $t)
 
-  const setStatusAndCallbackByCondition = (userInfo: IUserInfo, chatroomSetting: IChatroomSetting, _t: ITransStore) => {
+  const setStatusAndCallbackByCondition = (userInfo: IUserInfo, userAuth: IUserAuth, chatroomSetting: IChatroomSetting, _t: ITransStore) => {
     resetStatus()
 
-    const { userToken, userCurrency } = userInfo
+    const { userCurrency } = userInfo
+    const { userToken } = userAuth
 
     if (!userToken) return setWithoutLogin(_t)
 
