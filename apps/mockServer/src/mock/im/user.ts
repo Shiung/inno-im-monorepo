@@ -31,7 +31,7 @@ const user: IMockData[] = [
     url: `${prefix}/v1/user/key`,
     response: () => mock(withData<Types.IUserKeyInfo>({
       remainCount: Random.natural(3, 10),
-      totalCount: Random.natural(1, 10),
+      totalCount: Random.natural(10, 20),
       keyCdList: Array.from({ length: Random.natural(0, 5) }, () => randomPostTime())
     }))
   },
