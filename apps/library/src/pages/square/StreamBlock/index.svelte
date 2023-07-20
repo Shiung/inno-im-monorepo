@@ -1,43 +1,9 @@
 <script lang="ts">
-  import {
-    onError as _onError,
-    onReady as _onReady,
-    onLostData as _onLostData,
-    // onMuted as _onMuted,
-    // onPaused as _onPaused,
-    // setMute as _setMute,
-    // setPause as _setPause,
-    // setFullScreen as _setFullScreen,
-    isFlvUse
-  } from 'ui/components/FlvPlayer'
-  import {
-    onError as _onErrorIOS,
-    onReady as _onReadyIOS,
-    // onMuted as _onMutedIOS,
-    // onPaused as _onPausedIOS,
-    // setMute as _setMuteIOS,
-    // setPause as _setPauseIOS,
-    // setFullScreen as _setFullScreenIOS
-  } from 'ui/components/VideoPlayer'
-
-  import FlvPlayer from 'ui/components/FlvPlayer'
-  import VideoPlayer from 'ui/components/VideoPlayer'
-
+  import StreamPlayer, { onError, onLostData, onReady, isFlvUse } from '$containers/StreamingPlayer'
   import Circle from 'ui/core/button/loading.svelte'
-  import HouseImage from '$src/components/HouseImage/index.svelte'
   import type { IWebAnchor } from 'api/im/types'
 
   import Loading from './Loading.svelte'
-
-  const onError = isFlvUse ? _onError : _onErrorIOS
-  const onReady = isFlvUse ? _onReady : _onReadyIOS
-  const onLostData = isFlvUse ? _onLostData : _onErrorIOS
-  // const onMuted = isFlvUse ? _onMuted : _onMutedIOS
-  // const onPaused = isFlvUse ? _onPaused : _onPausedIOS
-
-  // const setMute = isFlvUse ? _setMute : _setMuteIOS
-  // const setPause = isFlvUse ? _setPause : _setPauseIOS
-  // const setFullScreen = isFlvUse ? _setFullScreen : _setFullScreenIOS
 
   export let streaming: IWebAnchor
   export let loading: boolean
@@ -84,10 +50,10 @@
 
 {#if loading}
   <Loading />
-{:else if streaming?.liveStatus === 2}
+{:else}
   <!-- {#if !streamError} -->
   <div class="relative min-h-[200px]">
-    {#if streamLoading}
+    {#if streaming?.liveStatus === 2 && streamLoading}
       <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
         <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
           <Circle stroke="rgb(var(--im-monorepo-primary))" />
@@ -95,13 +61,7 @@
       </div>
     {/if}
 
-    {#if isFlvUse}
-      <FlvPlayer url={streaming?.playStreamAddress} controls />
-    {:else}
-      <VideoPlayer urlm3u8={streaming?.playStreamAddress2} controls />
-    {/if}
+    <StreamPlayer {streaming} useDefControls />
   </div>
   <!-- {/if} -->
-{:else}
-  <HouseImage src={streaming?.houseImage} />
 {/if}
