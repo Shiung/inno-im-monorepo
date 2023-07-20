@@ -115,22 +115,10 @@ export interface IWebAnchorInfo {
   }>
 }
 
-export interface IWebAnchorRecommend {
-  query: {
-    sid?: number
-  }
+export interface IWebAnchorsRecommend {
+  query: null
   body: null
   res: withData<{
-    houseId: string
-    liveStatus: number // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
-    nickName: string
-    personalIntroduction: string
-    playStreamAddress: string
-    anchorTitle: string
-    houseIntroduction: string
-    userImage: string
-    homeName: string
-    awayName: string
-    competitionName: string
+    list: IWebAnchor[]
   }>
 }

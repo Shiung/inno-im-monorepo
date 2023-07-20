@@ -12,32 +12,29 @@
   import ExpertBlock from './ExpertBlock'
 
   let streaming: IWebAnchor
-  let list: Awaited<ReturnType<typeof im.webAnchors>>['data']['list'] = []
+  let list: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
   let loading: boolean = false
 
   const onChange = (e: CustomEvent<IWebAnchor>) => {
     streaming = e.detail
   }
 
-  $: fetchAnchors(convertSid($params?.sid))
-
   const fetchAnchors = async (sid: number) => {
     if (!sid || sid === 0) return
 
     loading = true
-    const response = await im.webAnchors({
-      query: { sid, pageIdx: 1, pageSize: 4 },
+    const response = await im.webAnchorsRecommend({
       headers: { 'Accept-Language': $locale }
     })
     loading = false
 
     if(response?.data?.list.length) {
-      list = response.data.list
-
-      streaming = list[0]
+      streaming = response.data.list[0]
+      list = response.data.list.slice(1)
     }
   }
 
+  $: fetchAnchors(convertSid($params?.sid))
 </script>
 
 <div>
