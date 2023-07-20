@@ -8,7 +8,7 @@
 
   import ArrowUp from './images/arrow_up.svg'
   import fans from './images/fans_on.webp'
-  import { streaming } from '../store'
+  import { streaming } from '../../store'
 
   let folder: boolean = false
   let openDetailSheet: boolean

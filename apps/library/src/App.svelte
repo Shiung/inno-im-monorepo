@@ -16,9 +16,6 @@ export const setGoVipCenter = (callback: () => void) => {
   goVipCenterCallback.set(callback)
 }
 
-// plateform 設定im語系
-export const setImLocale = locale.set
-
 </script>
 
 <script lang="ts">

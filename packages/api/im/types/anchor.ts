@@ -8,6 +8,7 @@ export interface IWebAnchor {
   houseName: string
   nickName: string
   playStreamAddress: string
+  playStreamAddress2: string
   liveStatus: 1 | 2 | 3 | 4 // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
   fansCount: number
   attentionStatus: 0 | 1 | 2 // 0:未关注 1:已关注 2:无需出现关注按钮(主播自己)
