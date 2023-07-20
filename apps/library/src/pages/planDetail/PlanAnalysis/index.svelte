@@ -3,6 +3,7 @@
   import type { IArticleDetail } from 'api/im/types'
   
   import TeamOdds from './components/TeamOdds.svelte'
+  import UnlockPlan from './components/unlockPlan/index.svelte';
   
   import Lock from '$assets/lock.svg'
 
@@ -25,7 +26,10 @@
           <span class='inline-block align-middle'> {$t('expert.planDetail.planStillLocked')} </span>
         </p>
 
-        <span class='inline-block text-[12px] leading-[18px] text-[#666] mb-[30px]'> {$t('expert.planDetail.unlockDescription')} </span>
+        <span class='inline-block text-[12px] leading-[18px] text-[#666] mb-[15px]'> {$t('expert.planDetail.unlockDescription')} </span>
+       <div class="mb-3">
+          <UnlockPlan />
+       </div>
       </div>
     {:else}
       <div class="mt-3">
