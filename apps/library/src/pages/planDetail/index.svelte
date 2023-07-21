@@ -1,7 +1,6 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
-  import { Timer } from 'utils'
   import { t, locale } from '$stores'
   import type { ILanguages } from 'env-config'
 
