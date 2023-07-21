@@ -1,3 +1,12 @@
+<script lang='ts' context='module'>
+  import { writable } from 'svelte/store'
+
+
+  // TODO fake
+  const vipLevel = writable<{ vip: number, expertKey: number }[]>([{ vip: 100, expertKey: 100}])
+</script>
+
+
 <script lang='ts'>
   import { convertDateAndTimestamp } from 'utils'
   import Modal from 'ui/components/Modal'
@@ -7,11 +16,14 @@
   import unlock_idle from './images/unlock_idle.png'
   import PopClose from '$assets/modal/pop_close_dark.svg'
 
+  const keyOfLocalStorage: string = 'imVIPNotify'
+
   let open: boolean = false
 
-  const keyOfLocalStorage: string = 'imVIPNotify'
   const diffTime: number = 0
-  let expertKey: number = 0
+
+  $: userVIP = $userInfo.userVip
+  $: matchLevel = $vipLevel.find(({ vip: vipL }) => vipL === userVIP)
 
   const setExpiredStore = (ts: number) => localStorage.setItem(keyOfLocalStorage, JSON.stringify(ts))
 
@@ -32,8 +44,7 @@
     push('/expert')
   }
 
-  $: if (!$userAuth.userToken) checkExpired()
-
+  $: if ($userAuth.userToken && matchLevel) checkExpired()
 </script>
 
 
@@ -44,9 +55,9 @@
       <div class='absolute top-0 right-[30px]' on:click={() => open = !open} on:keypress >
         <PopClose width={30} height={30}/>
       </div>
-      <div class='text-[26px] leading-[26px] text-white vip'>VIP{$userInfo.userVip}</div>
+      <div class='text-[26px] leading-[26px] text-white vip'>VIP{userVIP}</div>
       <div class='text-[36px] leading-[36px] text-white font-bold mt-[15px] freeLock'>{$t('expert.unlockForFree')}</div>
-      <div class='text-[20px] leading-[20px] text-white mt-[15px]'>{$t('user.dailyAmount', { count: expertKey })}</div>
+      <div class='text-[20px] leading-[20px] text-white mt-[15px]'>{$t('user.dailyAmount', { count: matchLevel?.expertKey ?? 0 })}</div>
       <div class='text-[21px] leading-[21px] text-white mt-[80px] goto' on:click={gotoHandler} on:keydown>
         {$t('common.checkOutNow')}
       </div>
