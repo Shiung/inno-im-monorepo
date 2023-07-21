@@ -1,12 +1,22 @@
 <script lang="ts">
   import { t } from '$stores'
-  import { userKeyInfo } from '$stores/user'
+  import { userKeyInfo, userVipList, userInfo } from '$stores/user'
   import { onDestroy, onMount } from 'svelte'
+  import { twMerge } from 'tailwind-merge'
 
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
 
   import { getTimeWithSeconds, getTimeDifference } from 'utils/convertDateAndTimestamp'
+  import type { VipGiftItem } from './type'
+
+  import Close from '$assets/close.svg'
+  import vip from './images/vip.png'
+  import diamond from './images/diamond.png'
+  import envelope from './images/envelope.png'
+  import gift from './images/gift.png'
+  import key from './images/key.png'
+  import treasure from './images/treasure.png'
 
   let show = false
   let time: string
@@ -16,6 +26,44 @@
   }
 
   const interval = setInterval(setTime, 1000)
+
+  let vipGiftItem: VipGiftItem[] = []
+  $: vipGiftItemLength = vipGiftItem.length
+
+  $: {
+    const vipList = $userVipList.find(({ level }) => level === $userInfo.userVip + 1)
+    const { expertKey, levelUpgradeGift, monthlyGift, birthdayGift, luxuryGiftType } = vipList || {}
+
+    if (vipList) {
+      vipGiftItem = [
+        {
+          img: key,
+          title: $t('user.expertKey'),
+          content: expertKey
+        },
+        {
+          img: treasure,
+          title: $t('user.promotionBonus'),
+          content: levelUpgradeGift
+        },
+        {
+          img: envelope,
+          title: $t('user.vipEnvelop'),
+          content: monthlyGift
+        },
+        {
+          img: gift,
+          title: $t('user.birthdayBonus'),
+          content: birthdayGift
+        },
+        {
+          img: diamond,
+          title: $t('user.exclusiveGift'),
+          content: luxuryGiftType
+        }
+      ]
+    }
+  }
 
   onMount(() => {
     setTime()
@@ -27,8 +75,39 @@
 </script>
 
 <div>
-  <Button class="w-full min-h-[56px] rounded-[12px] text-sm" on:click={() => (show = true)}>
+  <Button
+    disabled={!vipGiftItemLength}
+    class={twMerge('w-full min-h-[56px] rounded-[12px] text-sm', !vipGiftItemLength && '!bg-[#BBBBBB]')}
+    on:click={() => (show = true)}
+  >
     <p>{$t('user.unlockedKeyCount')}: <span class="w-[60px] inline-block">{time}</span></p>
-    {$t('user.upgradeVipGetKey')}
+    {#if vipGiftItemLength}
+      <p>{$t('user.upgradeVipGetKey')}</p>
+    {/if}
   </Button>
+
+  <Modal bind:show class="relative px-6 pb-5">
+    <div on:click={() => (show = false)} on:keypress>
+      <Close class="absolute right-0 -top-1 z-[1]" width={30} height={30} fill="#BBBBBB" />
+    </div>
+    <img class="absolute right-0 -top-7 w-[168px] h-[84px]" src={vip} alt="" />
+    <Header variant="mark" class="text-2xl text-left w-full mb-2">{$t('common.prompt')}</Header>
+    <p class="text-[#666666] text-left w-full mb-5">{$t('user.upgradeVIPContent')}</p>
+    <ul class="grid grid-cols-2 gap-4 w-full mb-10">
+      {#each vipGiftItem as item}
+        {@const { img, title, content } = item}
+
+        <li class="flex">
+          <div class="bg-[rgba(76,158,234,0.1)] w-[40px] h-[40px] relative rounded-full">
+            <img class="w-[26px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" src={img} alt="" />
+          </div>
+          <div class="ml-[10px] mt-1">
+            <p class="text-xs font-bold mb-1">{title}</p>
+            <p class="text-xs text-[rgb(var(--im-monorepo-primary))]">{content}</p>
+          </div>
+        </li>
+      {/each}
+    </ul>
+    <Button class="h-[44px] w-full text-base rounded-xl" on:click={() => (show = false)}>{$t('user.goUpgradeVIP')}</Button>
+  </Modal>
 </div>
