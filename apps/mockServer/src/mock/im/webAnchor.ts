@@ -257,7 +257,7 @@ const genLangMockData = (length: number): Types.IWebAnchorLanguage['res']['data'
   const randDefault = Random.pick(randIndexes)
 
   return {
-    langs: langList.filter((_, idx) => randIndexes.includes(idx)),
+    lang: langList.filter((_, idx) => randIndexes.includes(idx)),
     defaultLangCode: langList[randDefault].code
   }
 }

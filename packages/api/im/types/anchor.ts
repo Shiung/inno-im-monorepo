@@ -136,7 +136,7 @@ export interface IWebAnchorLanguage {
   query: null
   body: null
   res: withData<{
-    langs: Array<{
+    lang: Array<{
       code: string
       name: string
       describe: string

@@ -1,6 +1,7 @@
 import { writable, get } from 'svelte/store'
 import { writableSyncLocalStorage } from './utils'
 import localeFetcher from '../locales/fetcher'
+import { im } from 'api'
 
 import type { ILanguages } from 'env-config/types'
 
@@ -10,7 +11,6 @@ export type ITransStore = (
     [key: string]: string | number
   }
 ) => string
-
 
 // 為了配合 universe-portal-wap 專案 的語系同步
 const getProtalLocalandSet = () => {
@@ -66,6 +66,19 @@ const fetchLocaleData = async (name: string) => {
   triggerT()
 }
 
+type AdminLangInfo = Awaited<ReturnType<typeof im.webAnchorLanguage>>['data']
+export const adminLangInfo = writable<AdminLangInfo>(null)
+
+export const fetchAdminLangList = async () => {
+  try {
+    const response = await im.webAnchorLanguage()
+    if (response.data) {
+      adminLangInfo.set(response.data)
+    }
+  } catch (error) {
+    adminLangInfo.set(null)
+  }
+}
 
 // triggerT if locale changed
 locale.subscribe(triggerT)
