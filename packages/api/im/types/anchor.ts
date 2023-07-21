@@ -131,3 +131,16 @@ export interface IWebAnchorRecommend {
     competitionName: string
   }>
 }
+
+export interface IWebAnchorLanguage {
+  query: null
+  body: null
+  res: withData<{
+    langs: Array<{
+      code: string
+      name: string
+      describe: string
+    }>
+    defaultLangCode: string
+  }>
+}
