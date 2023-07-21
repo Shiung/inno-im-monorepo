@@ -3,6 +3,7 @@
   import { params, replace } from 'svelte-spa-router'
   import type { IWebAnchor } from 'api/im/types'
 
+  import VIPNotification from '$containers/VIPNotification'
   import HeaderNavigation from '$containers/HeaderNavigation'
 
   import { locale } from '$stores'
@@ -59,6 +60,7 @@
 
 </script>
 
+<VIPNotification />
 <div>
   <HeaderNavigation active={sid} icons={headNavIcons} />
 
