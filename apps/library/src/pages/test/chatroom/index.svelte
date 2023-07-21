@@ -1,26 +1,170 @@
-<script lang='ts'>
-import { twMerge } from 'tailwind-merge'
-import Chatroom, { setChatEnv } from '$src/containers/Chatroom'
+<script lang="ts">
+  import { im } from 'api'
+  import { twMerge } from 'tailwind-merge'
+  import { onDestroy, onMount } from 'svelte'
+  import { locale, setUserAuth, setUserInfo } from '$stores'
+  import Chatroom, {
+    controller,
+    setChatInfo,
+    setChatOrdersInfo,
+    onSizeChangedCallback,
+    onToggledCallback,
+    onRouterRedirectCallback,
+    type SizeChangedOption
+  } from '$src/containers/Chatroom'
 
-const isWindow: boolean = false
-let dom: HTMLDivElement
-$: blockHeight = dom?.getBoundingClientRect().height
+  import { getUser, type IUser } from './utils'
 
-$: if (dom) setChatEnv({
-  displayType: isWindow ? 'window' : 'block',
-  height: blockHeight,
-  minimize: false
-})
+  import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
+  const isWindow: boolean = true
+  let expandType: string = 'default'
+  let dom: HTMLDivElement
+  let changedHeight: number
+  let videoPlay: boolean = false
+  let isTransition: boolean = false
+  let sportMarketSummary: ISportMarketSummary
+  let selfOrdersCallback: () => Promise<any>
+  let followOrdersCallback: (data) => Promise<any>
+
+  let user: IUser = { account: '', token: '' }
+
+  $: initHeight = dom?.getBoundingClientRect().height
+
+  $: changedHeight = initHeight
+
+  $: if (dom) {
+    controller.setChatEnv({
+      device: 'wap',
+      subscribeBindingChatroom: true
+    })
+
+    setUserAuth({
+      userAccount: user.account,
+      userToken: user.token,
+    })
+
+    setUserInfo({
+      userVip: 10,
+      userCurrency: 'CNY'
+    })
+
+    setChatInfo({
+      displayType: isWindow ? 'window' : 'block',
+      useScrollCollapse: true,
+      chatId: '9434287',
+      height: initHeight,
+      // iid: 9433737,
+      isOpen: false,
+      showBetList: false
+    })
+  }
+
+  $: setChatInfo({ height: changedHeight, size: expandType as any })
+  $: setChatOrdersInfo({ sportMarketSummary, selfOrdersCallback, followOrdersCallback })
+
+  onSizeChangedCallback((option: SizeChangedOption) => {
+    isTransition = option.transition
+
+    switch (option.size) {
+      case 'default':
+        expandType = 'default'
+        break
+      case 'normal':
+        expandType = 'normal'
+        changedHeight = initHeight
+        break
+      case 'expand':
+        if (videoPlay) return
+        expandType = 'expand'
+        changedHeight = 0
+        break
+    }
+  })
+
+  onToggledCallback((open) => {
+    setChatInfo({ isOpen: open })
+  })
+
+  onRouterRedirectCallback((option) => {
+    switch (option.location) {
+      case 'login':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to login')
+        break
+      case 'vipCenter':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to vipCenter')
+        break
+      case 'deposit':
+        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to deposit')
+        break
+    }
+  })
+
+  const fetchMarket = async () => {
+    const lang = $locale.toLowerCase().replace(/_/g, '-')
+    const res = await fetch(
+      `https://tiger-api.innodev.site/platform/systatus/proxy/sports/dev/Java/json/${lang}/market_property_setting`
+    ).then((res) => res.json())
+    sportMarketSummary = res
+  }
+
+  const fetchSelfOrders = async () => {
+    const res = await im.chatroomSelfOrders({ query: { iid: 1 } })
+    return res.data.list
+  }
+
+  const followOrders = async (data) => {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 1000)
+    })
+    console.log(data, '這裡是跟單資料')
+  }
+
+  onMount(async () => {
+    user = await getUser()
+    await fetchMarket()
+    controller.active()
+    selfOrdersCallback = fetchSelfOrders
+    followOrdersCallback = followOrders
+
+    // setTimeout(() => {
+    //   controller.setChatUserInfo({
+    //     userAccount: 'owen222',
+    //     userToken: 'eyJhbGciOiJIUzI1NiJ9.eyJzbXNPdHBNb2RlIjowLCJpcCI6IjYxLjIxNi45MC4xIiwicGxhdGZvcm1VdWlkIjoiOTY0MmE1ZDEtNDMyMy00MWMzLWFkZmMtOTI1MTUzYTFhY2Q5IiwidmVuZG9ySWQiOjQsInR5cGUiOjEsInVzZXJJZCI6MzA3NzMyLCJsb2dpbkRvbWFpbiI6ImVuLXZkMDA0LXRpZ2VyLXBvcnRhbC5pbm5vZGV2LnNpdGUiLCJsYXN0TG9naW5UaW1lIjoxNjg4NzE4NTA2MDAwLCJhcHBUeXBlIjoyLCJzaWduVXBUaW1lIjoxNjIxMzIyODQ3MDAwLCJ2ZW5kb3IiOiJkdjUiLCJjdXJyZW5jeSI6IkNOWSIsImxvZ2luUHJvdG9jb2wiOiJodHRwcyIsImRldmljZSI6Ik1PQklMRSIsImFjY291bnQiOiJvd2VuMjIyIn0.QUDRQqq6JyNIhrqj2hkzto0BbzBiTZKpHdUzpHAZxTg',
+    //     userVip: 0,
+    //     userCurrency: 'CNY'
+    //   })
+    // }, 15 * 1000)
+  })
+
+  onDestroy(() => {
+    controller.destroy()
+  })
 </script>
 
-<div>
-  <div class={twMerge('w-full bg-white h-[200px] z-30', isWindow && 'fixed')} bind:this={dom}> 
+<div class={!isWindow && expandType !== 'default' && 'fixed w-full top-0'}>
+  <div
+    class={twMerge(
+      'w-full bg-white h-[200px] duration-300',
+      isWindow && expandType !== 'default' && 'fixed z-30',
+      isTransition ? 'transition-[height]' : 'transition-none'
+    )}
+    bind:this={dom}
+    style:height={expandType !== 'default' ? `${changedHeight}px` : ''}
+    style:overflow={!isWindow ? 'hidden' : ''}
+  >
     this platform area
   </div>
-  <div style:height={isWindow ? `${blockHeight}px` : ''}/>
+  <div
+    class={twMerge('duration-300', isTransition ? 'transition-[height]' : 'transition-none')}
+    style:height={isWindow && expandType !== 'default' ? `${changedHeight}px` : ''}
+  />
+
+  <div class={twMerge('h-[2000px] bg-red-500', expandType !== 'default' ? 'fixed left-0 right-0' : 'static')} />
 </div>
 
-<div class={twMerge(isWindow && 'fixed w-full')}>
+<div class={twMerge(!isWindow && 'fixed bottom-0 w-full transition-[top] duration-300')} style:top={!isWindow ? `${changedHeight}px` : ''}>
   <Chatroom />
 </div>

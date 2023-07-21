@@ -31,3 +31,6 @@ yarn-error.log*
 
 # locales
 apps/library/src/locales
+
+# test data
+apps/library/src/assets/user.ts

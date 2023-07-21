@@ -2,7 +2,8 @@
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
   import { Timer } from 'utils'
-  import { t } from '$stores'
+  import { t, locale } from '$stores'
+  import type { ILanguages } from 'env-config'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
@@ -38,9 +39,9 @@
 
   const TWENTY_FOUR_HOURS = 86400000
 
-  const fetchArticleDetail = async (articleId: string) => {
+  const fetchArticleDetail = async (articleId: string, lang: ILanguages) => {
     loading = true
-    response = await im.expertArticleDetail({ query: { articleId }})
+    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
     loading = false
     const { past, articleStatus, closeTime } = response?.data
     if (past) isPast = true
@@ -69,7 +70,7 @@
 
   $: setIsPast({ isPast })
 
-  $: $params?.articleId && fetchArticleDetail($params?.articleId)
+  $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale)
 </script>
 
 <div data-cid='planDetail'>
@@ -107,7 +108,9 @@
 
     
     {#if !loading && !isPast}
-      <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
+      {#key $locale}
+        <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
+      {/key}
     {/if}
   </div>
 

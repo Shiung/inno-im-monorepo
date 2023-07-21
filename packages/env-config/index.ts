@@ -9,17 +9,21 @@ const getDevConfig = (env: ENV): WindowEnv => {
   return {
     ODDS_BOARD_API_URL: 'https://api-dev.kioga.site/product',
     ODDS_BOARD_WEBSOCKET_URL: 'wss://api-dev.kioga.site/product',
+    FE_CDN_URL: 'https://fe-source.dev.mppwr.com',
     BE_CDN_URL: 'https://be-source.dev.mppwr.com',
-    VENDERID: 'vd004',
+    VENDERID: 'vd001',
+    vendor_id: 1,
     DEPLOY_ENV: env,
     RESOURCE_URL: '',
     ECHO_URL: 'https://echo.zuplo.io',
-    IM_API_URL: `https://tiger-api.inno${env}.site/im/api-gateway`
+    PLATFORM_API_URL: `https://tiger-api.inno${env}.site/platform`,
+    IM_API_URL: `https://tiger-api.inno${env}.site/im`,
+    IM_WS_URL: `wss://tiger-api.inno${env}.site/im`
   }
 }
 
 declare global {
-  interface Window { _env_: WindowEnv }
+  interface Window { _env_: WindowEnv, _version_: any }
 }
 
 let config: WindowEnv = getDevConfig(env)

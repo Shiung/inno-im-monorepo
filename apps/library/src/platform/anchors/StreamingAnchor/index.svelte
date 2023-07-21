@@ -3,10 +3,12 @@
   import { Tween } from 'ui'
   import { amountSymbolTransformer } from 'utils/amount'
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+  import AnchorImage from '$src/components/AnchorImage'
+  import { twMerge } from 'tailwind-merge'
 
   import ArrowUp from './images/arrow_up.svg'
   import fans from './images/fans_on.webp'
-  import { streaming } from '../store'
+  import { streaming } from '../../store'
 
   let folder: boolean = false
   let openDetailSheet: boolean
@@ -26,15 +28,17 @@
       on:keypress
     >
       <div
-        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px]"
+        class="absolute w-full text-center bg-imprimary rounded-[20px] text-white text-[14px] truncate px-1"
         style:z-index="1"
         style:bottom={folder ? '3px' : '0px'}
       >
         {$streaming.nickName}
       </div>
-      <img
-        class="w-[90px] min-w-[90px] h-[90px] min-h-[90px] rounded-full border border-imprimary ease-out duration-300"
-        style:opacity={folder ? 0 : 1}
+      <AnchorImage
+        class={twMerge(
+          "w-[90px] h-[90px] rounded-full border border-imprimary ease-out duration-300",
+          folder ? "opacity-0" : "opacity-100"
+        )}
         src={$streaming.userImage}
         alt=""
       />
@@ -62,7 +66,9 @@
 
       <div class="flex items-end mt-[15px]">
         <img class="w-[30px] mr-[10px]" src={fans} alt="" />
-        <Tween value={amountSymbolTransformer($streaming.fansCount)} />
+        {#key $streaming.houseId}
+          <Tween value={amountSymbolTransformer($streaming.fansCount)} />
+        {/key}
       </div>
     </div>
   </div>

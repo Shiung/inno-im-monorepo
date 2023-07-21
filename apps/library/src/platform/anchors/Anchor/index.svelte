@@ -1,11 +1,12 @@
 <script lang='ts'>
 import { createEventDispatcher } from 'svelte'
 import { Ripple } from 'ui'
+import FrontCoverImage from '$components/FrontCoverImage'
 
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 
 import Announcement from '../images/announcement.svg'
-import { list, streaming } from '../store'
+import { list, streaming } from '../../store'
 const dispatch = createEventDispatcher()
 
 export let houseId: string
@@ -20,13 +21,13 @@ $: isSteaming = $streaming?.houseId === houseId
   style:height={isSteaming ? '0px' : '85px'} 
   style:margin-top={isSteaming ? '0px' : '8px'}
 >
-  <Ripple class='flex w-full px-[8px] py-[10px] bg-white rounded-[10px]' ripple={false}
+  <Ripple class='flex w-full px-[8px] py-[10px] bg-white rounded-[10px] h-full' ripple={false}
     on:click={() => {
       $streaming = $store
       dispatch('change', $store)
     }}
   >
-    <img class='rounded-[10px] max-w-[100px] h-full' src={$store.houseImage} alt='' />
+    <FrontCoverImage class='rounded-[10px] w-[110px] h-full object-cover' src={$store.houseImage}/>
 
     <div class='flex flex-col overflow-hidden space-y-[8px] ml-[8px]'>
       <div class='flex items-center'>
