@@ -27,7 +27,6 @@
   import BetButton from './BottomPanel/components/BetButton.svelte'
 
   import { setIsPast } from './context'
-  import { time } from './store'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
@@ -35,29 +34,14 @@
   let bonus: number = 100000
   let isPast = false
   let isLocked = false
-  let timer: Timer
-
-  const TWENTY_FOUR_HOURS = 86400000
 
   const fetchArticleDetail = async (articleId: string, lang: ILanguages) => {
     loading = true
     response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
     loading = false
-    const { past, articleStatus, closeTime } = response?.data
+    const { past, articleStatus } = response?.data
     if (past) isPast = true
     if (articleStatus === 2) isLocked = true
-    
-    const diffTime = closeTime - new Date().getTime()
-    if(diffTime < TWENTY_FOUR_HOURS) {
-      timer = new Timer({
-        start: response?.serverTime,
-        end: closeTime,
-        tickCallback: (timeObj) => { time.set(timeObj) },
-        stopCallback: () => { console.log('stop!!!' )}
-      })
-      time.set(timer.currentTime)
-      timer.start()
-    }
   }
 
   const onUnlockClick = () => {

@@ -26,7 +26,7 @@ class Timer {
   #endTime: number
   #currentTime: number
   #count: number
-  #status: 'started' | 'paused' | 'stopped'
+  #status: 'started' | 'stopped' | 'default' = 'default'
   #fakeStartTime: number
 
   tickCallback: (timeInfo: TimeInfo) => void
@@ -38,10 +38,12 @@ class Timer {
 
     this.type = type
     this.#startTime = isNaN(new Date(start).valueOf()) ? Date.now() : new Date(start).getTime()
-    
+    this.#fakeStartTime = this.#startTime
     this.#endTime = isNaN(new Date(end).valueOf()) ? Date.now() : new Date(end).getTime()
+
     this.#currentTime = this.#calCurrentTime(this.#startTime)
     this.#count = 0
+
     this.tickCallback = typeof tickCallback === 'function' ? tickCallback : noop
     this.stopCallback = typeof stopCallback === 'function' ? stopCallback : noop
   }
@@ -49,24 +51,9 @@ class Timer {
   start() {
     if(this.#status === 'started' || this.#status === 'stopped') return
 
-    if(this.#status === 'paused') {
-      if(this.type === 'countUp') {
-        this.#count -= 1
-        this.#fakeStartTime = Date.now() - this.#count * ONE_SECOND
-      }
-    } else {
-      this.#fakeStartTime = Date.now()
-    }
-    
     this.#status = 'started'
+    this.#fakeStartTime = Date.now()
     this.#tick()
-  }
-
-  pause() {
-    if(this.#status === 'stopped' || this.#status === 'paused') return
-
-    this.#timerId && clearTimeout(this.#timerId)
-    this.#status = 'paused'
   }
 
   stop() {

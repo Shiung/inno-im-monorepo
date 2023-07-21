@@ -24,9 +24,6 @@
   const start = (timer: Timer) => {
     timer.start()
   }
-  const pause = (timer: Timer) => {
-    timer.pause()
-  }
   const stop = (timer: Timer) => {
     timer.stop()
   }
@@ -51,7 +48,6 @@
 
   <div class='space-x-3'>
     <button class='border rounded-md' on:click={() => start(timer1)}>start</button>
-    <button class='border rounded-md' on:click={() => pause(timer1)}>pause</button>
     <button class='border rounded-md' on:click={() => stop(timer1)}>stop</button>
   </div>
 </div>
@@ -75,7 +71,6 @@
 
   <div class='space-x-3'>
     <button class='border rounded-md' on:click={() => start(timer2)}>start</button>
-    <button class='border rounded-md' on:click={() => pause(timer2)}>pause</button>
     <button class='border rounded-md' on:click={() => stop(timer2)}>stop</button>
   </div>
 </div>
@@ -99,7 +94,6 @@
 
   <div class='space-x-3'>
     <button class='border rounded-md' on:click={() => start(timer3)}>start</button>
-    <button class='border rounded-md' on:click={() => pause(timer3)}>pause</button>
     <button class='border rounded-md' on:click={() => stop(timer3)}>stop</button>
   </div>
 </div>
