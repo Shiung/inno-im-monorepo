@@ -1,7 +1,6 @@
 import { writable, get } from 'svelte/store'
 import { writableSyncLocalStorage } from './utils'
 import localeFetcher from '../locales/fetcher'
-import { im } from 'api'
 
 import type { ILanguages } from 'env-config/types'
 
@@ -64,20 +63,6 @@ const fetchLocaleData = async (name: string) => {
 
   localeData.update((_data) => ({ ..._data, ... renamed }))
   triggerT()
-}
-
-type AdminLangInfo = Awaited<ReturnType<typeof im.webAnchorLanguage>>['data']
-export const adminLangInfo = writable<AdminLangInfo>(null)
-
-export const fetchAdminLangList = async () => {
-  try {
-    const response = await im.webAnchorLanguage()
-    if (response.data) {
-      adminLangInfo.set(response.data)
-    }
-  } catch (error) {
-    adminLangInfo.set(null)
-  }
 }
 
 // triggerT if locale changed

@@ -367,6 +367,57 @@ const webAnchors: IMockData[] = [
   {
     url: `${prefix}/v1/anchor/web-anchor/language`,
     response: () => mock(withData<Types.IWebAnchorLanguage>(genLangMockData(Random.integer(0, 40))))
+  },
+  {
+    url: `${prefix}/v1/anchor/web-anchor/language/constants`,
+    response: () => mock(withData<Types.IWebAnchorLanguageConstants>({
+      lang: [
+        {
+            "code": "th_TH",
+            "thirdCode": "tha"
+        },
+        {
+            "code": "vi_VN",
+            "thirdCode": "vie"
+        },
+        {
+            "code": "zh_CN",
+            "thirdCode": "zh"
+        },
+        {
+            "code": "zh_HK",
+            "thirdCode": "tw"
+        },
+        {
+            "code": "hi_IN",
+            "thirdCode": "hin"
+        },
+        {
+            "code": "id_ID",
+            "thirdCode": "ind"
+        },
+        {
+            "code": "ms_MY",
+            "thirdCode": "ml"
+        },
+        {
+            "code": "pt_PT",
+            "thirdCode": "por"
+        },
+        {
+            "code": "en_US",
+            "thirdCode": "en"
+        },
+        {
+            "code": "ja_JP",
+            "thirdCode": "jp"
+        },
+        {
+            "code": "ko_KR",
+            "thirdCode": "kor"
+        }
+      ]
+    }))
   }
 ]
 

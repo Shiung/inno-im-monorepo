@@ -144,3 +144,14 @@ export interface IWebAnchorLanguage {
     defaultLangCode: string
   }>
 }
+
+export interface IWebAnchorLanguageConstants {
+  query: null
+  body: null
+  res: withData<{
+    lang: Array<{
+      code: string
+      thirdCode: string
+    }>
+  }>
+}
