@@ -1,13 +1,15 @@
 <script lang="ts">
   import { t } from '$stores'
   import { userKeyInfo, userVipList, userInfo } from '$stores/user'
-  import { onDestroy, onMount } from 'svelte'
+  import { diffTime } from '$stores/common'
+  import { onDestroy } from 'svelte'
   import { twMerge } from 'tailwind-merge'
 
   import { Button } from 'ui'
-  import Modal, { Header, Mark } from 'ui/components/Modal'
+  import Modal, { Header } from 'ui/components/Modal'
 
-  import { getTimeWithSeconds, getTimeDifference } from 'utils/convertDateAndTimestamp'
+  import { getLocalAlignTimestamp } from 'utils/convertDateAndTimestamp'
+  import Timer, { type TimeInfo } from 'utils/timer'
   import type { VipGiftItem } from './type'
 
   import Close from '$assets/close.svg'
@@ -18,14 +20,8 @@
   import key from './images/key.png'
   import treasure from './images/treasure.png'
 
+  export let handleFetchUserKeyInfo: () => void
   let show = false
-  let time: string
-
-  const setTime = () => {
-    time = getTimeWithSeconds(getTimeDifference($userKeyInfo.keyCdList[0]))
-  }
-
-  const interval = setInterval(setTime, 1000)
 
   let vipGiftItem: VipGiftItem[] = []
   $: vipGiftItemLength = vipGiftItem.length
@@ -65,12 +61,27 @@
     }
   }
 
-  onMount(() => {
-    setTime()
+  let time: TimeInfo
+  let isFinish: boolean = false
+
+  const timer = new Timer({
+    start: getLocalAlignTimestamp($diffTime),
+    end: $userKeyInfo.keyCdList[0],
+    type: 'countDown',
+    tickCallback: (timeInfo) => {
+      time = timeInfo
+      isFinish = Object.values(timeInfo).every((val) => Number(val) === 0)
+    },
+    paddedNum: true
   })
 
+  time = timer.currentTime
+  timer.start()
+
+  $: if (isFinish) handleFetchUserKeyInfo();
+  
   onDestroy(() => {
-    clearInterval(interval)
+    timer.stop()
   })
 </script>
 
@@ -80,7 +91,10 @@
     class={twMerge('w-full min-h-[56px] rounded-[12px] text-sm', !vipGiftItemLength && '!bg-[#BBBBBB]')}
     on:click={() => (show = true)}
   >
-    <p>{$t('user.unlockedKeyCount')}: <span class="w-[60px] inline-block">{time}</span></p>
+    <p>
+      {$t('user.unlockedKeyCount')}:
+      <span class="w-[60px] inline-block">{time.hour}:{time.minute}:{time.second}</span>
+    </p>
     {#if vipGiftItemLength}
       <p>{$t('user.upgradeVipGetKey')}</p>
     {/if}

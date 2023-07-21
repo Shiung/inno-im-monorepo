@@ -1,6 +1,10 @@
 <script lang="ts">
   import { userKeyInfo } from '$stores/user'
   import type { IUserKeyInfo } from 'api/im/types'
+  import { fetchUserKeyInfo } from '$api/index'
+  import { locale } from '$stores'
+  import { userAuth } from '$stores/user'
+  import { getConfig } from 'env-config'
 
   const Unlock = () => import('./Unlock.svelte')
   const UpgradeVip = () => import('./UpgradeVip.svelte')
@@ -21,10 +25,19 @@
     // 使用者身上沒鑰匙，VIP中心沒鑰匙可領取
     if (remainCount === 0 && unredeemedQuantity === 0) return (promise = UpgradeVip())
   }
-  
+
   $: if ($userKeyInfo) fetchComponent($userKeyInfo)
+
+  const handleFetchUserKeyInfo = () => {
+    fetchUserKeyInfo({
+      token: $userAuth.userToken,
+      account: $userAuth.userAccount,
+      pvd: getConfig().vendor_id,
+      lang: $locale
+    })
+  }
 </script>
 
 {#await promise then comp}
-  <svelte:component this={comp?.default} />
+  <svelte:component this={comp?.default} {handleFetchUserKeyInfo} />
 {/await}
