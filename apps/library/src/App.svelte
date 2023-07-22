@@ -9,64 +9,64 @@ export let setGoHome = (callback?: () => void) => {
 </script>
 
 <script lang="ts">
-import { onDestroy, onMount } from 'svelte'
-import Router, { location } from 'svelte-spa-router'
-import BottomNavigation from '$containers/BottomNavigation'
-import { bottomNav, showBottomNav } from '$stores/layout'
-import { throttle } from 'utils'
-import routes from './routes'
-import BigNumber from 'bignumber.js'
-import { appHeight } from '$stores/layout'
-import versionInfo from './utils/versionInfo'
-import { fetchUserKeyInfo, fetchUserVipList } from '$api/index'
-import { locale } from '$stores'
-import { userAuth } from '$stores/user'
-import { getConfig } from 'env-config'
+  import { onDestroy, onMount } from 'svelte'
+  import Router, { location } from 'svelte-spa-router'
+  import BottomNavigation from '$containers/BottomNavigation'
+  import { bottomNav, showBottomNav } from '$stores/layout'
+  import { throttle } from 'utils'
+  import routes from './routes'
+  import BigNumber from 'bignumber.js'
+  import { appHeight } from '$stores/layout'
+  import versionInfo from './utils/versionInfo'
+  import { fetchUserKeyInfo, fetchUserVipList } from '$api/index'
+  import { locale } from '$stores'
+  import { userAuth } from '$stores/user'
+  import { getConfig } from 'env-config'
 
-versionInfo()
-$: console.log('=========[im-library] location==========', $location)
+  versionInfo()
+  $: console.log('=========[im-library] location==========', $location)
 
-const routeLoading = (event: CustomEvent) => {
-  bottomNav.set(event?.detail?.userData?.bottomNav)
+  const routeLoading = (event: CustomEvent) => {
+    bottomNav.set(event?.detail?.userData?.bottomNav)
 
-  if (event?.detail?.userData?.showBottomNav === false) showBottomNav.set(false)
-  else showBottomNav.set(true)
-}
+    if (event?.detail?.userData?.showBottomNav === false) showBottomNav.set(false)
+    else showBottomNav.set(true)
+  }
 
-const setVh = () => {
-  const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
-  document.body.style.setProperty('--vh', `${vh}px`)
-  appHeight.set(Number(vh))
-}
+  const setVh = () => {
+    const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
+    document.body.style.setProperty('--vh', `${vh}px`)
+    appHeight.set(Number(vh))
+  }
 
-const handleResize = throttle(setVh, 250)
+  const handleResize = throttle(setVh, 250)
 
-$: if($userAuth.userToken) {
-  fetchUserVipList({ 
-    token: $userAuth.userToken, 
-    pvd: getConfig().vendor_id, 
-    lang: $locale 
+  $: if($userAuth.userToken) {
+    fetchUserVipList({ 
+      token: $userAuth.userToken, 
+      pvd: getConfig().vendor_id, 
+      lang: $locale 
+    })
+
+    fetchUserKeyInfo({ 
+      token: $userAuth.userToken, 
+      account: $userAuth.userAccount, 
+      pvd: getConfig().vendor_id, 
+      lang: $locale 
+    })
+  }
+
+  onMount(() => {
+    setVh()
+    window.addEventListener('resize', handleResize)
   })
 
-  fetchUserKeyInfo({ 
-    token: $userAuth.userToken, 
-    account: $userAuth.userAccount, 
-    pvd: getConfig().vendor_id, 
-    lang: $locale 
+  onDestroy(() => {
+    window.removeEventListener('resize', handleResize)
   })
-}
-
-onMount(() => {
-  setVh()
-  window.addEventListener('resize', handleResize)
-})
-
-onDestroy(() => {
-  window.removeEventListener('resize', handleResize)
-})
 </script>
 
-<main class='im-library'>
+<main class="im-library">
   <Router {routes} on:routeLoading={routeLoading} />
   {#if $showBottomNav}
     <BottomNavigation goHome={() => goHomeCallback()} />
