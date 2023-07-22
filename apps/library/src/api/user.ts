@@ -1,23 +1,10 @@
 import { im } from 'api'
-import { userKeyInfo, userVipList } from '$stores/user'
+import { get } from 'svelte/store'
+import { userKeyInfo, userAuth } from '$stores/user'
 import { diffTime } from '$stores/common'
-import type { IRequestParams } from './types'
 
-export const fetchUserVipList = async (params: IRequestParams) => {
-  const { token, lang, pvd } = params
-  const res = await im.userVipList({
-    query: { pvd },
-    headers: { 'Accept-Language': lang, 'Authorization': token }
-  })
-  userVipList.set(res.data)
-}
-
-export const fetchUserKeyInfo = async (params: IRequestParams) => {
-  const { token, lang, account, pvd } = params
-  const res = await im.userKeyInfo({
-    query: { account, pvd },
-    headers: { 'Accept-Language': lang, 'Authorization': token }
-  })
+export const fetchUserKeyInfo = async () => {
+  const res = await im.userKeyInfo({ query: { account: get(userAuth).userAccount }, })
   userKeyInfo.set(res.data)
   diffTime.set(res.serverTime - Date.now())
 }

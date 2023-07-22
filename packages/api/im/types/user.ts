@@ -15,16 +15,13 @@ export interface IVipList {
 }
 
 export interface IUserVipList {
-  query: {
-    pvd: number
-  }
+  query: null
   body: null
   res: withData<IVipList[]>
 }
 
 export interface IUserKeyInfo {
   query: {
-    pvd: number
     account: string
   }
   body: null

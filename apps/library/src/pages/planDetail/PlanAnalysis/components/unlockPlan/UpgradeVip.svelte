@@ -5,6 +5,8 @@
   import { onDestroy } from 'svelte'
   import { twMerge } from 'tailwind-merge'
 
+  import { fetchUserKeyInfo } from '$api/index'
+
   import { Button } from 'ui'
   import Modal, { Header } from 'ui/components/Modal'
 
@@ -20,7 +22,6 @@
   import key from './images/key.png'
   import treasure from './images/treasure.png'
 
-  export let handleFetchUserKeyInfo: () => void
   let show = false
 
   let vipGiftItem: VipGiftItem[] = []
@@ -78,7 +79,7 @@
   time = timer.currentTime
   timer.start()
 
-  $: if (isFinish) handleFetchUserKeyInfo();
+  $: if (isFinish) fetchUserKeyInfo();
   
   onDestroy(() => {
     timer.stop()

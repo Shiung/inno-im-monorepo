@@ -5,7 +5,6 @@
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
 
-  export let handleFetchUserKeyInfo: () => void
   let show = false
 </script>
 

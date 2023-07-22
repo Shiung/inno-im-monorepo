@@ -18,10 +18,9 @@ export let setGoHome = (callback?: () => void) => {
   import BigNumber from 'bignumber.js'
   import { appHeight } from '$stores/layout'
   import versionInfo from './utils/versionInfo'
-  import { fetchUserKeyInfo, fetchUserVipList } from '$api/index'
-  import { locale } from '$stores'
-  import { userAuth } from '$stores/user'
-  import { getConfig } from 'env-config'
+  import { im } from 'api'
+  import { fetchUserKeyInfo } from '$api/index'
+  import { userAuth, userVipList } from '$stores/user'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
@@ -41,19 +40,14 @@ export let setGoHome = (callback?: () => void) => {
 
   const handleResize = throttle(setVh, 250)
 
-  $: if($userAuth.userToken) {
-    fetchUserVipList({ 
-      token: $userAuth.userToken, 
-      pvd: getConfig().vendor_id, 
-      lang: $locale 
-    })
+  const fetchUserVipList = async () => {
+    const res = await im.userVipList()
+    userVipList.set(res.data)
+  }
 
-    fetchUserKeyInfo({ 
-      token: $userAuth.userToken, 
-      account: $userAuth.userAccount, 
-      pvd: getConfig().vendor_id, 
-      lang: $locale 
-    })
+  $: if($userAuth.userToken) {
+    fetchUserVipList()
+    fetchUserKeyInfo()
   }
 
   onMount(() => {

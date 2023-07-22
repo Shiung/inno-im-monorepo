@@ -1,10 +1,6 @@
 <script lang="ts">
   import { userKeyInfo } from '$stores/user'
   import type { IUserKeyInfo } from 'api/im/types'
-  import { fetchUserKeyInfo } from '$api/index'
-  import { locale } from '$stores'
-  import { userAuth } from '$stores/user'
-  import { getConfig } from 'env-config'
 
   const Unlock = () => import('./Unlock.svelte')
   const UpgradeVip = () => import('./UpgradeVip.svelte')
@@ -28,16 +24,8 @@
 
   $: if ($userKeyInfo) fetchComponent($userKeyInfo)
 
-  const handleFetchUserKeyInfo = () => {
-    fetchUserKeyInfo({
-      token: $userAuth.userToken,
-      account: $userAuth.userAccount,
-      pvd: getConfig().vendor_id,
-      lang: $locale
-    })
-  }
 </script>
 
 {#await promise then comp}
-  <svelte:component this={comp?.default} {handleFetchUserKeyInfo} />
+  <svelte:component this={comp?.default} />
 {/await}
