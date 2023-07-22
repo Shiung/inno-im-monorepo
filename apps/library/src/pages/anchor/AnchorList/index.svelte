@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import convertSid from 'utils/convertSid'
+  import { convertSid, AbortControllers } from 'utils'
   import { locale, getUseLang } from '$stores'
   import { params } from 'svelte-spa-router'
 
@@ -28,7 +28,7 @@
 
   const anchorBgs = [bg0, bg1, bg2, bg3]
 
-  let controllers = []
+  const abortControllers = new AbortControllers()
 
   const loadAnchors = async (props: { keyWord: string; sid: ReturnType<typeof convertSid> }) => {
     const { keyWord, sid } = props
@@ -52,6 +52,7 @@
       hasMoreData = totalPage > pageIdx
       if (hasMoreData) pageIdx++
     } catch (error) {
+      console.error(error)
       hasMoreData = false
     }
   }
@@ -60,26 +61,31 @@
     pageIdx = 1
     data = []
 
+    abortControllers.abortControllers('fetch-im.webAnchors')
     const controller = {
       ctl: new AbortController(),
-      isAborted: false
+      isAborted: false,
+      key: 'fetch-im.webAnchors'
     }
-    controllers.push(controller)
+    abortControllers.addController(controller)
 
     try {
       initLoading = true
-      const response = await im.webAnchors({
-        query: {
-          ...(sid && { sid }),
-          ...(keyWord && { keyWord }),
-          pageIdx,
-          pageSize,
-          lang: useLang
+      const response = await im.webAnchors(
+        {
+          query: {
+            ...(sid && { sid }),
+            ...(keyWord && { keyWord }),
+            pageIdx,
+            pageSize,
+            lang: useLang
+          },
+          headers: { 'Accept-Language': $locale }
         },
-        headers: { 'Accept-Language': $locale }
-      }, {
-        signal: controller.ctl.signal
-      })
+        {
+          signal: controller.ctl.signal
+        }
+      )
       const { list, pager } = response?.data || {}
 
       if (list?.length) data = list
@@ -88,14 +94,12 @@
       hasMoreData = totalPage > pageIdx
       if (hasMoreData) pageIdx++
     } catch (error) {
+      console.error(error)
       hasMoreData = false
     } finally {
       if (!controller.isAborted) initLoading = false
 
-      const currentIndex = controllers.indexOf(controller) // -1
-      if(~currentIndex) {
-        controllers.splice(currentIndex, 1)
-      }
+      abortControllers.spliceController(controller)
     }
   }
 
@@ -104,12 +108,6 @@
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
 
-      if(controllers.length) {
-        for(let i = 0; i < controllers.length; i++) {
-          controllers[0].ctl.abort()
-          controllers[0].isAborted = true
-        }
-      }
       fetchInit({ sid })
     }
   }
@@ -117,7 +115,7 @@
   $: sid = convertSid($params?.anchorSid)
 
   $: useLang = $getUseLang()
-  
+
   $: init(sid, useLang)
 </script>
 

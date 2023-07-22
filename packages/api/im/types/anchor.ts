@@ -143,7 +143,7 @@ export interface IWebAnchorLanguage {
       name: string
       describe: string
     }>
-    defaultLangCode: string
+    defaultLang: string
   }>
 }
 
