@@ -181,3 +181,13 @@ export interface IExpertArticleDetail {
   body: null
   res: withData<IArticleDetail>
 }
+
+export interface IExpertArticleUnlock {
+  query: null
+  body: {
+    articleId: string
+  }
+  res: withData<{
+    articleStatus: number
+  }>
+}

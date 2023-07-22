@@ -25,7 +25,7 @@
   import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
   import BetButton from './BottomPanel/components/BetButton.svelte'
 
-  import { setIsPast } from './context'
+  import { setIsPast, getIsUnlockingInProgress, setIsUnlockingInProgress } from './context'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
@@ -54,6 +54,10 @@
   $: setIsPast({ isPast })
 
   $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale)
+  
+  setIsUnlockingInProgress({ isUnlockingInProgress: false })
+  const { isUnlockingInProgress } = getIsUnlockingInProgress()
+  $: $isUnlockingInProgress && fetchArticleDetail($params?.articleId, $locale)
 </script>
 
 <div data-cid='planDetail'>

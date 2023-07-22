@@ -5,9 +5,26 @@
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
 
-  let show = false
-</script>
+  import { params } from 'svelte-spa-router'
+  import { im } from 'api'
+  import { fetchUserKeyInfo } from '$api/index'
 
+  import { setIsUnlockingInProgress } from '$pages/planDetail/context'
+
+  let show = false
+  let isUnlockingInProgress = false
+  
+  const handleUnclock = async () => {
+    show = false
+
+    const res = await im.expertArticleUnlock({ body: { articleId: $params.articleId } })
+    if (res.data.articleStatus === 1) isUnlockingInProgress = true
+
+    fetchUserKeyInfo()
+  }
+
+  $: setIsUnlockingInProgress ({ isUnlockingInProgress })
+</script>
 <div>
   <Button class="w-full min-h-[56px] rounded-[12px] text-sm" on:click={() => (show = true)}>
     {$t('expert.unlockPlan')}
@@ -18,7 +35,7 @@
     <p class="text-[rgb(var(--im-monorepo-primary))]">{$t('expert.keyDeduct')}</p>
     <p class="text-[rgb(var(--im-monorepo-primary))] mb-3">({`${$userKeyInfo.remainCount}/${$userKeyInfo.totalCount}`})</p>
     <div class="flex flex-col w-full">
-      <Button class="h-[56px] mb-3" on:click={() => (show = false)}>{$t('common.confirm')}</Button>
+      <Button class="h-[56px] mb-3" on:click={handleUnclock}>{$t('common.confirm')}</Button>
       <Button class="h-[56px]" variant="outline" on:click={() => (show = false)}>{$t('common.cancel')}</Button>
     </div>
   </Modal>

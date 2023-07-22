@@ -179,6 +179,15 @@ const expert: IMockData[] = [
       }
     ))
   },
+  {
+    url: `${prefix}/v1/expert/article/unlock`,
+    method: 'post',
+    response: () => mock(withData<Types.IExpertArticleUnlock>(
+      {
+        articleStatus: 1,
+      }
+    ))
+  },
 ]
 
 export default expert
