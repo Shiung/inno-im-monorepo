@@ -13,7 +13,7 @@ export let onChange = (callback: typeof onChangeCallback) => {
   onChangeCallback = callback  
 }
 
-export const subscribeFilterAnchorsByLang = filterListByLang.subscribe
+export const getFilterAnchorsByLang = filterListByLang.subscribe
 </script>
 
 <script lang='ts'>
