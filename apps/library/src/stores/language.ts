@@ -12,9 +12,15 @@ const fetchAdminLangList = async () => {
   try {
     const response = await im.webAnchorLanguage()
     if (response.data) {
-      const map = response.data?.lang?.reduce((map, lang) => Object.assign(map, { [lang.code]: true }), {}) || {}
+      const map =
+        response.data?.lang?.reduce<AdminLangInfo['langs']>((map, lang) => {
+          const langCodeLC = lang?.code?.toLocaleLowerCase()
+          if (langCodeLC) return Object.assign(map, { [langCodeLC]: true })
+          return map
+        }, {}) || {}
+
       adminLangInfo.set({
-        defaultLang: response.data?.defaultLang || '',
+        defaultLang: response.data?.defaultLang?.toLocaleLowerCase() || '',
         langs: map
       })
     }
@@ -31,7 +37,14 @@ const fetchPlatformLangMap = async () => {
   try {
     const response = await im.webAnchorLanguageConstants()
     if (response?.data?.lang?.length) {
-      const map = response.data?.lang?.reduce((map, lang) => Object.assign(map, { [lang.code]: lang.thirdCode }), {}) || {}
+      const map =
+        response.data?.lang?.reduce((map, lang) => {
+          const langCodeLC = lang?.code?.toLocaleLowerCase()
+          const thirdCodeLC = lang?.thirdCode?.toLocaleLowerCase()
+          if (langCodeLC && thirdCodeLC) return Object.assign(map, { [langCodeLC]: thirdCodeLC })
+          return map
+        }, {}) || {}
+
       langMap.set(map)
     }
   } catch (error) {
@@ -58,7 +71,7 @@ export const getUseLang = writable<GetUseLang>(() => {
 
   return NO_LANG
 })
-const triggerGetUseLang = () => getUseLang.update(func => func)
+const triggerGetUseLang = () => getUseLang.update((func) => func)
 locale.subscribe(triggerGetUseLang)
 adminLangInfo.subscribe(triggerGetUseLang)
 langMap.subscribe(triggerGetUseLang)
@@ -66,10 +79,9 @@ langMap.subscribe(triggerGetUseLang)
 type FilterListByLang = <T extends { languageType: string }>(array: T[]) => T[]
 export const filterListByLang = writable<FilterListByLang>((array) => {
   const useLang = get(getUseLang)()
-  console.log('⛔️⛔️⛔️⛔️⛔️ filterListByLang useLang', useLang)
-  if(useLang === NO_LANG) return []
+  if (useLang === NO_LANG) return []
 
-  return array.filter(item => item.languageType === useLang)
+  return array.filter((item) => item.languageType === useLang)
 })
-const triggerFilterListByLang = () => filterListByLang.update(func => func)
+const triggerFilterListByLang = () => filterListByLang.update((func) => func)
 getUseLang.subscribe(triggerFilterListByLang)
