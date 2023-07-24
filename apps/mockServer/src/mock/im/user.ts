@@ -7,8 +7,8 @@ import type { IMockData } from '../../types'
 const user: IMockData[] = [
   {
     url: `${prefix}/v1/user/vip-level`,
-    response: () => mock(withData<Types.IUserVipList>(
-      Array.from({ length: 10 }, (_, index) => {
+    response: () => mock(withData<Types.IUserVipList>({
+      list: Array.from({ length: 10 }, (_, index) => {
         const level = index + 1
         const multiplyByLevel = genMultiply(level)
         return ({
@@ -25,6 +25,7 @@ const user: IMockData[] = [
           retainEffectiveBetAmountLimit: multiplyByLevel(1000)
         })
       }),
+    }
     ))
   },
   {

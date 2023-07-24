@@ -42,7 +42,7 @@ export let setGoHome = (callback?: () => void) => {
 
   const fetchUserVipList = async () => {
     const res = await im.userVipList()
-    userVipList.set(res.data)
+    userVipList.set(res.data.list)
   }
 
   $: if($userAuth.userToken) {

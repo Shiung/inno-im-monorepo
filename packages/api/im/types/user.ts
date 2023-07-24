@@ -17,7 +17,9 @@ export interface IVipList {
 export interface IUserVipList {
   query: null
   body: null
-  res: withData<IVipList[]>
+  res: withData<{
+    list : IVipList[]
+  }>
 }
 
 export interface IUserKeyInfo {
