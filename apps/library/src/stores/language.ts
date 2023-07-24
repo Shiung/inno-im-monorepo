@@ -63,10 +63,11 @@ type GetUseLang = () => string
 export const getUseLang = writable<GetUseLang>(() => {
   const { langs, defaultLang } = get(adminLangInfo) || {}
   const useLangMap = get(langMap) || {}
-  const userLocale = get(locale)
+  const userLocale = get(locale)?.toLocaleLowerCase()
+  const userLocaleInThird = useLangMap[userLocale]
 
   if (langs && defaultLang) {
-    return langs[useLangMap[userLocale]] ? useLangMap[userLocale] : defaultLang
+    return langs[userLocaleInThird] ? userLocaleInThird : defaultLang
   }
 
   return NO_LANG
