@@ -27,9 +27,17 @@
   let vipGiftItem: VipGiftItem[] = []
   $: vipGiftItemLength = vipGiftItem.length
 
+  const matchLuxuryGift = (type: number, money: number) => {
+    return {
+      0: $t('expert.statistics.none'),
+      1: $t('user.gift'),
+      2: $t('user.integral', { integral: money })
+    }[type]
+  }
+
   $: {
     const vipList = $userVipList.find(({ level }) => level === $userInfo.userVip + 1)
-    const { expertKey, levelUpgradeGift, monthlyGift, birthdayGift, luxuryGiftType } = vipList || {}
+    const { expertKey, levelUpgradeGift, monthlyGift, birthdayGift, luxuryGiftType, luxuryMoney } = vipList || {}
 
     if (vipList) {
       vipGiftItem = [
@@ -56,7 +64,7 @@
         {
           img: diamond,
           title: $t('user.exclusiveGift'),
-          content: luxuryGiftType
+          content: matchLuxuryGift(luxuryGiftType, luxuryMoney)
         }
       ]
     }
@@ -79,7 +87,7 @@
   time = timer.currentTime
   timer.start()
 
-  $: if (isFinish) fetchUserKeyInfo();
+  $: if (isFinish) fetchUserKeyInfo()
 
   onDestroy(() => {
     timer.stop()
