@@ -40,7 +40,7 @@ const onAnchorClick = (anchor: IWebAnchor) => {
   {:else if !list.length}
     <Empty class='h-[320px]' />
   {:else}
-    <div class='grid grid-cols-2 gap-[12px] p-[16px]'>
+    <div class='grid grid-cols-2 grid-rows-[1fr_1fr] gap-[12px] p-[16px]'>
       {#each list || [] as anchor}
         <Anchor anchor={anchor} on:click={() => onAnchorClick(anchor)} />
       {/each}
