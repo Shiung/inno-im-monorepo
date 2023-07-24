@@ -44,7 +44,11 @@ $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.deposit`
 <div>
   <Ripple class='w-full flex flex-col h-[139px] im-shadow rounded-[10px] p-2 space-y-1' on:click>
     <div class='flex w-full justify-center'>
-      <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+      <AnchorUserImage
+        isLive={anchor.liveStatus === 2}
+        user={anchor.userImage}
+        type={isMatchType ? 'match' : 'deposit'}
+      />
     </div>
 
     <div class='flex w-full items-center justify-between'>

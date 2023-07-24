@@ -147,8 +147,9 @@
   <div class="flex im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2">
     <div class="flex flex-none items-center relative">
       {#if !isPreviewing || streamingLoading}
-        <div out:fade={{ duration: 250 }} class='absolute'>
+        <div out:fade|local={{ duration: 250 }} class='absolute'>
           <AnchorUserImage
+            isLive={anchor.liveStatus === 2}
             user={anchor.userImage}
             type={isMatchType ? 'match' : 'deposit'}
           />
