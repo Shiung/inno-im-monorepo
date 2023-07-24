@@ -3,8 +3,7 @@
   import { twMerge } from 'tailwind-merge'
   import { createEventDispatcher } from 'svelte'
 
-  import { t } from '$stores'
-  import { userInfo } from '$containers/Chatroom/controller'
+  import { t, userInfo } from '$stores'
   import { CurrencyMap } from '../constant'
 
   export let selected: boolean

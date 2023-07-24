@@ -1,5 +1,5 @@
 <script lang='ts' context='module'>
-import { anchor } from '../store'
+import * as anchor from '../store'
 
 export {
   onError,

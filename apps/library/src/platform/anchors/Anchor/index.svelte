@@ -6,7 +6,7 @@ import FrontCoverImage from '$components/FrontCoverImage'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 
 import Announcement from '../images/announcement.svg'
-import { list, streaming } from '../store'
+import { list, streaming } from '../../store'
 const dispatch = createEventDispatcher()
 
 export let houseId: string

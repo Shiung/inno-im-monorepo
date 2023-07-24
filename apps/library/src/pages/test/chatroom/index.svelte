@@ -2,7 +2,7 @@
   import { im } from 'api'
   import { twMerge } from 'tailwind-merge'
   import { onDestroy, onMount } from 'svelte'
-  import { locale } from '$stores'
+  import { locale, setUserAuth, setUserInfo } from '$stores'
   import Chatroom, {
     controller,
     setChatInfo,
@@ -39,9 +39,12 @@
       subscribeBindingChatroom: true
     })
 
-    controller.setChatUserInfo({
+    setUserAuth({
       userAccount: user.account,
       userToken: user.token,
+    })
+
+    setUserInfo({
       userVip: 10,
       userCurrency: 'CNY'
     })
