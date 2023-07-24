@@ -3,7 +3,6 @@
   import { dismiss } from './directive'
 
   export let minimizeSideLen: number = 52
-  export let right: number = 9
   export let mask: boolean = false
 
   let dom: HTMLDivElement
@@ -23,15 +22,21 @@
     })
   }
 
-  $: width = expand ? `${window.innerWidth - right * 2}px` : `${minimizeSideLen}px`
+  const expandWidth = (el: HTMLDivElement) => {
+    const windowWidth = window.innerWidth
+    const { left, right } = el.getBoundingClientRect()
+    const offsetX = left < windowWidth / 2 ? left : windowWidth - right
+    return `${windowWidth - offsetX * 2}px`
+  }
+
+  $: width = expand ? expandWidth(dom) : `${minimizeSideLen}px`
 </script>
 
 <div>
   <div
-    class={twMerge(`fixed bottom-[107px] right-[${right}px] duration-[300ms] ease-linear z-50`, $$props.class)}
+    class={twMerge(`fixed bottom-[107px] right-[9px] duration-[300ms] ease-linear z-50`, $$props.class)}
     style:width
     style:height
-    use:dismiss
     on:dismiss={() => (expand = false)}
     on:click={handleClick}
     on:keypress
