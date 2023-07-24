@@ -93,7 +93,7 @@
     on:click={() => (show = true)}
   >
     <p>
-      {$t('user.unlockedKeyCount')}:
+      {$t('expert.unlockTime')}:
       <span class="w-[60px] inline-block">{time.hour}:{time.minute}:{time.second}</span>
     </p>
     {#if vipGiftItemLength}
