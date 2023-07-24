@@ -13,6 +13,8 @@
   import Search from './Search/index.svelte'
   import debounce from '$src/utils/debounce'
 
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './config'
+
   let keyWord = ''
 
   let pageIdx = 1
@@ -74,7 +76,7 @@
   let activeId: string
   const setActiveId = debounce((id: string) => {
     activeId = id
-  }, 800)
+  }, 250)
 
   let isInit = false
   const onScroll = () => {
@@ -89,8 +91,8 @@
     }
   }
 
-  let marginTop = window.innerHeight * 0.3
-  let marginBottom = window.innerHeight - marginTop - 10
+  let marginTop = PREVIEW_BAR_TOP_RATIO * 100
+
 </script>
 
 <svelte:window on:scroll={onScroll} />
@@ -111,7 +113,5 @@
     {/if}
   </div>
 
-  <div class='w-full' style:height={`${marginBottom - 75.5}px`}></div>
-
-  <div class='bg-red-500 fixed left-0 right-0' style:top={`30%`} style:height={`${10}px`} ></div>
+  <div class='bg-red-500 fixed left-0 right-0' style:top={`${marginTop}%`} style:height={`${PREVIEW_BAR_WIDTH}px`} ></div>
 </div>
