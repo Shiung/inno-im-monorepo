@@ -15,14 +15,16 @@ export let value: string
 const changeDict = async (_locale: typeof $locale) => {
   switch (_locale) {
     case 'zh_CN':
-    case 'zh_HK':
+    case 'zh_HK': {
       let _dict = await cn()
       dict = _dict.default
       return
-    default:
-      _dict = await en()
+    }
+    default: {
+      let _dict = await en()
       dict = _dict.default
       return
+    }
   }
 }
 
