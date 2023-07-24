@@ -161,7 +161,7 @@
         </div>
       {/if}
 
-      <div class="w-[143px] h-[80px]">
+      <div class="w-[143px] h-[80px] rounded-[10px] overflow-hidden">
         {#if isPreviewing}
           <StreamingPlayer streaming={anchor} />
         {/if}
@@ -169,7 +169,7 @@
     </div>
 
     <div class="flex-1 flex flex-col justify-between py-[10px] overflow-hidden">
-      <div class="flex flex-1 flex-col items-start overflow-hidden">
+      <div class="flex flex-1 flex-col items-start overflow-hidden space-y-1">
         <div class="flex items-center space-x-1">
           <AnchorImage src={anchor.userImage} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]" />
           <span class="text-imprimary leading-[18px] text-[18px]"> {anchor.houseName} </span>
