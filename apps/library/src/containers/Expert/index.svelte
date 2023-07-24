@@ -3,6 +3,7 @@ import { Button, Ripple } from 'ui'
 import { convertTimeDiffToPast } from 'utils/convertDateAndTimestamp'
 import { push } from 'svelte-spa-router'
 import { t } from '$stores'
+import { userAuth } from '$stores/user'
 import type { IExpertPrediction } from 'api/im/types'
 
 import Strack from '$containers/Streak'
@@ -65,8 +66,7 @@ const goToPlanDetail = () => {
     </div>
 
     <div class='flex flex-col justify-between pl-[6px]'>
-      <!-- 後續需補上未登入都是解鎖預測狀態 prediction.articleStatus === 1 && !token -->
-      {#if prediction.articleStatus === 1}
+      {#if prediction.articleStatus === 1 && $userAuth.userToken}
         <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.plan.prediction')} </Button>
         {:else}
         <UnlockButton class="rounded-[8px] self-end" />
