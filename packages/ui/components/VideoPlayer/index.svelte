@@ -43,6 +43,7 @@ interface HTMLVideoElementIOS extends HTMLVideoElement {
   webkitEnterFullScreen?: () => void,
 }
 export let urlm3u8: string = ''
+export let controls: boolean = false
 
 let video: HTMLVideoElementIOS
 let paused: boolean = false
@@ -127,7 +128,7 @@ $: playVideo(urlm3u8)
 
 </script>
 
-<video class={twMerge('w-full h-full', !urlm3u8 && 'h-0', $$props.class)} bind:this={video} autoplay playsinline bind:muted bind:paused>
+<video class={twMerge('w-full h-full', !urlm3u8 && 'h-0', $$props.class)} bind:this={video} autoplay playsinline bind:muted bind:paused {controls}>
   <track kind='captions' />
   Your browser is too old which doesn't support HTML5 video.
 </video>

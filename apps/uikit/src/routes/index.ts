@@ -9,7 +9,9 @@ import FlvPlayer from '../components/FlvPlayer/index.svelte'
 import Empty from '../components/Empty.svelte'
 import Tween from '../components/Tween.svelte'
 import Slider from '../components/Slider.svelte'
+import Timer from '../components/Timer.svelte'
 import Marquee from '../components/Marquee.svelte'
+import Modal from '../components/Modal/index.svelte'
 
 const routes = {
   '/': Entry,
@@ -23,7 +25,9 @@ const routes = {
   '/Tween': Tween,
   '/empty': Empty,
   '/slider': Slider,
-  '/Marquee': Marquee
+  '/timer': Timer,
+  '/Marquee': Marquee,
+  '/Modal': Modal
 }
 
 export default routes

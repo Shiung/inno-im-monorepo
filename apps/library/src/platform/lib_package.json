@@ -28,6 +28,10 @@
       "import": "./expert.js",
       "require": "./expert.cjs"
     },
+    "./store": {
+      "import": "./store.js",
+      "require": "./store.cjs"
+    },
     "./style.css": "./style.css"
   }
 }

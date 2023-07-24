@@ -9,3 +9,9 @@ declare module '*.svg' {
 
   export default content
 }
+
+declare namespace svelteHTML {
+  interface HTMLAttributes {
+    'on:dismiss'?: (node: Element) => void
+  }
+}
