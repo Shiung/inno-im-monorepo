@@ -12,6 +12,8 @@
   import AnchorBlock from './AnchorBlock'
   import ExpertBlock from './ExpertBlock'
 
+  import FloatingKey from '$src/containers/FloatKey'
+
   import { convertSid, type SidType } from 'utils'
 
   let streaming: IWebAnchor
@@ -51,7 +53,7 @@
     })
     loading = false
 
-    if(response?.data?.list.length) {
+    if (response?.data?.list.length) {
       list = response.data.list
 
       streaming = list[0]
@@ -73,4 +75,5 @@
       <ExpertBlock />
     {/if}
   </div>
+  <FloatingKey  />
 </div>
