@@ -14,7 +14,7 @@
   import Timer, { type TimeInfo } from 'utils/timer'
   import type { VipGiftItem } from './type'
 
-  import Close from '$assets/close.svg'
+  import PopClose from '$assets/modal/pop_close_dark.svg'
   import vip from './images/vip.png'
   import diamond from './images/diamond.png'
   import envelope from './images/envelope.png'
@@ -80,7 +80,7 @@
   timer.start()
 
   $: if (isFinish) fetchUserKeyInfo();
-  
+
   onDestroy(() => {
     timer.stop()
   })
@@ -103,7 +103,7 @@
 
   <Modal bind:show class="relative px-6 pb-5">
     <div on:click={() => (show = false)} on:keypress>
-      <Close class="absolute right-0 -top-1 z-[1]" width={30} height={30} fill="#BBBBBB" />
+      <PopClose class="absolute right-0 -top-1 z-[1]" width={30} height={30} />
     </div>
     <img class="absolute right-0 -top-7 w-[168px] h-[84px]" src={vip} alt="" />
     <Header variant="mark" class="text-2xl text-left w-full mb-2">{$t('common.prompt')}</Header>
