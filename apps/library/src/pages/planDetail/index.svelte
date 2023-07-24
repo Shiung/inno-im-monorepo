@@ -40,7 +40,7 @@
     loading = false
     const { past, articleStatus } = response?.data
     if (past) isPast = true
-    if (articleStatus === 2) isLocked = true
+    isLocked = articleStatus === 2
   }
 
   const onUnlockClick = () => {
