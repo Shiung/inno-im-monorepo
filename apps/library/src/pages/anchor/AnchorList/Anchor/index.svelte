@@ -112,63 +112,62 @@ onDestroy(() => {
 </script>
 
 <div data-id={anchor.houseId} bind:this={dom}>
-  {#if loading}
-    <Loading />
-  {:else}
-    <div class='flex im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2'>
-      <div class='flex flex-none items-center'>
-        {#if preview && anchor.liveStatus === 2}
-          <div class='w-[143px] h-[80px]'>
-            <StreamingPlayer streaming={anchor} />
-          </div>
-        {:else}
-          <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
-        {/if}
-      </div>
+  <div class='flex im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2'>
+    <div class='flex flex-none items-center'>
+      {#if preview && anchor.liveStatus === 2}
+        <div class='w-[143px] h-[80px]'>
+          <StreamingPlayer streaming={anchor} />
+        </div>
+      {:else}
+        <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+      {/if}
+    </div>
 
-      <div class='flex-1 flex flex-col justify-between py-[10px] overflow-hidden'>
-        <div class='flex flex-1 flex-col items-start overflow-hidden'>
-          <div class='flex items-center space-x-1'>
-            <AnchorImage src={anchor.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]' />
-            <span class='text-imprimary leading-[18px] text-[18px]'> {anchor.houseName} </span>
-          </div>
-
-          <div class='w-full leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
-            {#if firstMatch}
-              {firstMatch.homeName} VS {firstMatch.awayName}
-            {:else}
-              {anchor.houseIntroduction}
-            {/if}
-          </div>
-
-          <Badget
-            class='rounded-[6px] leading-3 h-3 text-[9px]'
-            background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
-          >
-            {$t(badgeStr)}
-          </Badget>
+    <div class='flex-1 flex flex-col justify-between py-[10px] overflow-hidden'>
+      <div class='flex flex-1 flex-col items-start overflow-hidden'>
+        <div class='flex items-center space-x-1'>
+          <AnchorImage src={anchor.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]' />
+          <span class='text-imprimary leading-[18px] text-[18px]'> {anchor.houseName} </span>
         </div>
 
-        {#if restMatchList.length}
-          <div class='flex items-center justify-end'>
-            <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
-              <Ripple class='flex items-center h-[18px] px-1 space-x-1'
-                ripple='#eeeeee'
-                on:click={() => showMatchList = !showMatchList}
-              > 
-                <MatchHistory width={10} height={10} />
-                <span class='leading-[18px] text-[10px] text-imprimary'>{restMatchList.length}</span>
-                <div class='duration-300' style:transform={showMatchList ? 'rotate(180deg)' : ''}>
-                  <Arrow width={13} height={14} fill='rgb(var(--im-monorepo-primary))' />
-                </div>
-              </Ripple>
-            </div>
-          </div>
-        {/if}
+        <div class='w-full leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
+          {#if loading}
+            <div class='bg-[#eee] animate-pulse h-[17px] rounded-md'></div>
+          {:else if !isMatchType}
+            {anchor.houseIntroduction}
+          {:else if firstMatch}
+            {firstMatch.homeName} VS {firstMatch.awayName}
+          {/if}
+        </div>
+
+        <Badget
+          class='rounded-[6px] leading-3 h-3 text-[9px]'
+          background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
+        >
+          {$t(badgeStr)}
+        </Badget>
       </div>
-    
+
+      {#if restMatchList.length}
+        <div class='flex items-center justify-end'>
+          <div class='rounded-[5px] overflow-hidden' style:background-color='rgb(var(--im-monorepo-primary) / 0.1)'>
+            <Ripple class='flex items-center h-[18px] px-1 space-x-1'
+              ripple='#eeeeee'
+              on:click={() => showMatchList = !showMatchList}
+            > 
+              <MatchHistory width={10} height={10} />
+              <span class='leading-[18px] text-[10px] text-imprimary'>{restMatchList.length}</span>
+              <div class='duration-300' style:transform={showMatchList ? 'rotate(180deg)' : ''}>
+                <Arrow width={13} height={14} fill='rgb(var(--im-monorepo-primary))' />
+              </div>
+            </Ripple>
+          </div>
+        </div>
+      {/if}
     </div>
-  {/if}
+  
+  </div>
+
   {#if showMatchList}
     <AnchorMatches data={restMatchList} />
   {/if}
