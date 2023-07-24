@@ -57,12 +57,6 @@
         const { matchCount, houseId } = anchor
         if (isFetched) return
 
-        if (!matchCount) {
-          loading = false
-          isFetched = true
-          return
-        }
-
         for (const entry of entries) {
           if (entry.isIntersecting) {
             loading = true
@@ -102,7 +96,7 @@
   }
 
   const init = (dom: HTMLDivElement, isMatchType: boolean) => {
-    if (!isMatchType) return (loading = false)
+    if (!isMatchType || !anchor.matchCount) return (loading = false)
 
     createMatchObserver(dom)
   }
@@ -195,19 +189,21 @@
         </Badget>
       </div>
 
-      {#if restMatchList.length}
         <div class="flex items-center justify-end">
-          <div class="rounded-[5px] overflow-hidden" style:background-color="rgb(var(--im-monorepo-primary) / 0.1)">
-            <Ripple class="flex items-center h-[18px] px-1 space-x-1" ripple="#eeeeee" on:click={() => (showMatchList = !showMatchList)}>
-              <MatchHistory width={10} height={10} />
-              <span class="leading-[18px] text-[10px] text-imprimary">{restMatchList.length}</span>
-              <div class="duration-300" style:transform={showMatchList ? 'rotate(180deg)' : ''}>
-                <Arrow width={13} height={14} fill="rgb(var(--im-monorepo-primary))" />
-              </div>
-            </Ripple>
-          </div>
+          {#if loading}
+            <div class='w-[45px] h-[18px] bg-[#eee] animate-pulse rounded-md'></div>
+          {:else if restMatchList.length}
+            <div class="rounded-[5px] overflow-hidden" style:background-color="rgb(var(--im-monorepo-primary) / 0.1)">
+              <Ripple class="flex items-center h-[18px] px-1 space-x-1" ripple="#eeeeee" on:click={() => (showMatchList = !showMatchList)}>
+                <MatchHistory width={10} height={10} />
+                <span class="leading-[18px] text-[10px] text-imprimary">{restMatchList.length}</span>
+                <div class="duration-300" style:transform={showMatchList ? 'rotate(180deg)' : ''}>
+                  <Arrow width={13} height={14} fill="rgb(var(--im-monorepo-primary))" />
+                </div>
+              </Ripple>
+            </div>
+          {/if}
         </div>
-      {/if}
     </div>
   </div>
 
