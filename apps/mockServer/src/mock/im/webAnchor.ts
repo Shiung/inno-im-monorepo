@@ -355,7 +355,7 @@ const webAnchors: IMockData[] = [
   },
   {
     url: `${prefix}/v1/anchor/web-anchors/recommend`,
-    response: () => mock(withData<Types.IWebAnchorsRecommend>({
+    response: ({ query }) => mock(withData<Types.IWebAnchorsRecommend>({
       list: Array.from({ length: Random.integer(0, 5) }, (_, idx) => ({
         houseId: genHouseId(),
         houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
@@ -374,7 +374,8 @@ const webAnchors: IMockData[] = [
         fansCount: Random.natural(0, 10000000),
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10),
-        houseIntroduction: "@csentence"
+        houseIntroduction: "@csentence",
+        languageType: query.lang
       })),
     }))
   },
