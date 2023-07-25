@@ -118,7 +118,9 @@ export interface IWebAnchorInfo {
 }
 
 export interface IWebAnchorsRecommend {
-  query: null
+  query: {
+    lang: string
+  }
   body: null
   res: withData<{
     list: IWebAnchor[]

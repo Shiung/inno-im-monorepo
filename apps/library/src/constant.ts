@@ -51,3 +51,5 @@ export enum Currency {
   AAVE_ERC20 = 'AAVE_ERC20',
   TRX = 'TRX'
 }
+
+export const NO_LANG = 'NO-LANG'

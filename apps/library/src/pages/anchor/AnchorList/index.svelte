@@ -15,6 +15,8 @@
 
   import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './config'
 
+  import { NO_LANG } from '$src/constant'
+
   let keyWord = ''
 
   let pageIdx = 1
@@ -100,8 +102,8 @@
     }
   }
 
-  const init = async (sid, ...rest) => {
-    if (sid != null) {
+  const init = async (sid, lang) => {
+    if (sid != null && lang !== NO_LANG) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
 
@@ -140,7 +142,7 @@
 
 <svelte:window on:scroll={onScroll} />
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
-  <Search bind:value={keyWord} on:searchEvent={() => init({ sid })} />
+  <Search bind:value={keyWord} on:searchEvent={() => init(sid, useLang)} />
 
   <div class="space-y-[12px]">
     {#if initLoading}
