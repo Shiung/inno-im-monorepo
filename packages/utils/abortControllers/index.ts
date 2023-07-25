@@ -11,7 +11,7 @@ class AbortControllers {
     if (!this.#controllers.has(key)) return
 
     const controllers = this.#controllers.get(key)
-    controllers.forEach((controller) => {
+    controllers?.forEach((controller) => {
       controller.ctl.abort()
       controller.isAborted = true
     })
@@ -21,9 +21,9 @@ class AbortControllers {
     if (!this.#controllers.has(controller.key)) return
 
     const controllers = this.#controllers.get(controller.key)
-    const currentIndex = controllers.indexOf(controller)
+    const currentIndex = controllers?.indexOf(controller) || -1
 
-    if (~currentIndex) controllers.splice(currentIndex, 1)
+    if (currentIndex !== -1) controllers?.splice(currentIndex, 1)
     if (!controllers.length) this.#controllers.delete(controller.key)
   }
 
