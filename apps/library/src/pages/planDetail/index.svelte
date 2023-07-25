@@ -27,7 +27,8 @@
 
   import { setIsPast } from './context'
 
-  let response, loading: boolean
+  let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
+  let loading: boolean
   let coin: number = 1500
   let bonus: number = 100000
   let isPast = false
