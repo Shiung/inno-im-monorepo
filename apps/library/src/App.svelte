@@ -11,8 +11,8 @@
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api/index'
   import { userAuth, userVipList } from '$stores/user'
-  import { goHomeCallback } from '$stores'
   import { diffTime } from '$stores/common'
+  import { goHomeCallback, fetchLangInfo } from '$stores'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
@@ -45,6 +45,7 @@
 
   onMount(() => {
     setVh()
+    fetchLangInfo()
     window.addEventListener('resize', handleResize)
   })
 

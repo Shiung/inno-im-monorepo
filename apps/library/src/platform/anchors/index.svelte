@@ -3,6 +3,8 @@ import { list } from '../store'
 
 import type { IPlatformAnchor } from './types'
 
+import { filterListByLang } from '$stores'
+
 export const setList = list.set
 export const updateList = list.update
 let onChangeCallback = (_anchor: IPlatformAnchor) => {}
@@ -11,6 +13,7 @@ export let onChange = (callback: typeof onChangeCallback) => {
   onChangeCallback = callback  
 }
 
+export const getFilterAnchorsByLang = filterListByLang.subscribe
 </script>
 
 <script lang='ts'>
