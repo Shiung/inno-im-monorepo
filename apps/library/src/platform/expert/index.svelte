@@ -1,7 +1,5 @@
 <script lang="ts" context="module">
   import { writable } from 'svelte/store'
-  import { goLoginCallback } from '$stores'
-
   import type { GoToExpertDetail, GoToPlanDetail } from '$containers/Expert/type'
 
   let matchInfo = writable(null)
@@ -18,11 +16,6 @@
   let goToPlanDetail = writable<GoToPlanDetail>(null)
   export const setGoToPlanDetail = (callback: GoToPlanDetail) =>
     goToPlanDetail.update((_) => callback)
-
-  export let setGoToLogin = (callback?: () => void) => {
-    if (callback) goLoginCallback.set(callback)
-  }
-
 </script>
 
 <script lang="ts">

@@ -1,33 +1,13 @@
-<script lang='ts' context='module'>
-import { locale, goHomeCallback, goLoginCallback, goVipCenterCallback } from '$stores'
-
-export const setGoHome = (callback: () => void) => {
-  if (typeof callback !== 'function') return console.warn('setGoHome parameter callback MUST be function')
-  goHomeCallback.set(callback)
-}
-
-export const setGoLogin = (callback: () => void) => {
-  if (typeof callback !== 'function') return console.warn('setGoLogin parameter callback MUST be function')
-  goLoginCallback.set(callback)
-}
-
-export const setGoVipCenter = (callback: () => void) => {
-  if (typeof callback !== 'function') return console.warn('setGoVipCenter parameter callback MUST be function')
-  goVipCenterCallback.set(callback)
-}
-
-</script>
-
 <script lang="ts">
 import { onDestroy, onMount } from 'svelte'
 import Router, { location } from 'svelte-spa-router'
 import BottomNavigation from '$containers/BottomNavigation'
-import { bottomNav, showBottomNav } from '$stores/layout'
+import { bottomNav, showBottomNav, appHeight } from '$stores/layout'
 import { throttle } from 'utils'
 import routes from './routes'
 import BigNumber from 'bignumber.js'
-import { appHeight } from '$stores/layout'
 import versionInfo from './utils/versionInfo'
+import { goHomeCallback } from '$stores'
 
 versionInfo()
 $: console.log('=========[im-library] location==========', $location)
