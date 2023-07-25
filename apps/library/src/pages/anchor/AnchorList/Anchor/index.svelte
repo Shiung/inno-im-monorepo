@@ -14,8 +14,6 @@
   import { Badget } from 'ui'
   import { t } from '$stores'
   import { locale } from '$stores'
-  import { im } from 'api'
-  import type { ILanguages } from 'env-config'
   import type { IWebAnchorMatch } from 'api/im/types'
   import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../config'
 
@@ -24,6 +22,7 @@
   import type { IWebAnchor } from 'api/im/types'
   import { SIDi18nKey, SID } from '$src/constant'
 
+  import { fetchAnchorMatches } from '../utils'
   export let anchor: IWebAnchor
   export let preview: boolean = false
 
@@ -38,29 +37,18 @@
 
   const dispatch = createEventDispatcher()
 
-  const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
-    const matchesPromise = await im.webAnchorMatchList({ query: { houseId }, headers: { 'Accept-Language': lang } })
-
-    if (matchesPromise?.data?.matchList?.length > 0) {
-      return { first: matchesPromise?.data?.matchList[0], rest: matchesPromise?.data?.matchList.slice(1) }
-    }
-
-    return { first: null, rest: [] }
-  }
-
   const createMatchObserver = (dom: HTMLDivElement) => {
     if (!dom) return
 
     let isFetched: boolean = false
     matchObserver = new IntersectionObserver(
       async (entries) => {
-        const { matchCount, houseId } = anchor
         if (isFetched) return
 
         for (const entry of entries) {
           if (entry.isIntersecting) {
             loading = true
-            const { first, rest } = await fetchAnchorMatches(houseId, $locale)
+            const [first, ...rest] = await fetchAnchorMatches(anchor.houseId, $locale)
             loading = false
 
             firstMatch = first
@@ -165,12 +153,12 @@
 
     <div class="flex-1 flex flex-col justify-between py-[10px] overflow-hidden">
       <div class="flex flex-1 flex-col items-start overflow-hidden space-y-1">
-        <div class="flex items-center space-x-1">
+        <div class="flex w-full items-center space-x-1">
           <AnchorImage src={anchor.userImage} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]" />
-          <span class="text-imprimary leading-[18px] text-[18px]"> {anchor.houseName} </span>
+          <span class="text-imprimary leading-[18px] text-[18px] truncate"> {anchor.houseName} </span>
         </div>
 
-        <div class="w-full leading-[17px] text-[12px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden">
+        <div class="w-full leading-[17px] text-[12px] text-[#999] truncate">
           {#if loading}
             <div class="bg-[#eee] animate-pulse h-[17px] rounded-md" />
           {:else if !isMatchType}
@@ -190,21 +178,21 @@
         </Badget>
       </div>
 
-        <div class="flex items-center justify-end">
-          {#if loading}
-            <div class='w-[45px] h-[18px] bg-[#eee] animate-pulse rounded-md'></div>
-          {:else if restMatchList.length}
-            <div class="rounded-[5px] overflow-hidden" style:background-color="rgb(var(--im-monorepo-primary) / 0.1)">
-              <Ripple class="flex items-center h-[18px] px-1 space-x-1" ripple="#eeeeee" on:click={() => (showMatchList = !showMatchList)}>
-                <MatchHistory width={10} height={10} />
-                <span class="leading-[18px] text-[10px] text-imprimary">{restMatchList.length}</span>
-                <div class="duration-300" style:transform={showMatchList ? 'rotate(180deg)' : ''}>
-                  <Arrow width={13} height={14} fill="rgb(var(--im-monorepo-primary))" />
-                </div>
-              </Ripple>
-            </div>
-          {/if}
-        </div>
+      <div class="flex items-center justify-end">
+        {#if loading}
+          <div class='w-[45px] h-[18px] bg-[#eee] animate-pulse rounded-md'></div>
+        {:else if restMatchList.length}
+          <div class="rounded-[5px] overflow-hidden" style:background-color="rgb(var(--im-monorepo-primary) / 0.1)">
+            <Ripple class="flex items-center h-[18px] px-1 space-x-1" ripple="#eeeeee" on:click={() => (showMatchList = !showMatchList)}>
+              <MatchHistory width={10} height={10} />
+              <span class="leading-[18px] text-[10px] text-imprimary">{restMatchList.length}</span>
+              <div class="duration-300" style:transform={showMatchList ? 'rotate(180deg)' : ''}>
+                <Arrow width={13} height={14} fill="rgb(var(--im-monorepo-primary))" />
+              </div>
+            </Ripple>
+          </div>
+        {/if}
+      </div>
     </div>
   </div>
 

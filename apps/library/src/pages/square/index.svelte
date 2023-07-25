@@ -12,6 +12,7 @@
   import { NO_LANG } from '$src/constant'
 
   import { AbortControllers } from 'utils'
+  import type { ILanguages } from 'env-config'
 
   let streaming: IWebAnchor
 
@@ -23,7 +24,7 @@
     streaming = e.detail
   }
 
-  const fetchAnchors = async () => {
+  const fetchAnchors = async (lang: ILanguages) => {
     streaming = undefined
     data = []
 
@@ -40,7 +41,7 @@
       const response = await im.webAnchorsRecommend(
         {
           query: { lang: useLang },
-          headers: { 'Accept-Language': $locale }
+          headers: { 'Accept-Language': lang }
         },
         { signal: controller.ctl.signal }
       )
@@ -61,7 +62,7 @@
 
   $: useLang = $getUseLang()
 
-  $: if (useLang !== NO_LANG) fetchAnchors()
+  $: if (useLang !== NO_LANG) fetchAnchors($locale)
 
 </script>
 
