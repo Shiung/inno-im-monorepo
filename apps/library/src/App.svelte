@@ -4,6 +4,7 @@
   import BottomNavigation from '$containers/BottomNavigation'
   import { bottomNav, showBottomNav, appHeight } from '$stores/layout'
   import { throttle } from 'utils'
+  import { getTimeDifference } from 'utils/convertDateAndTimestamp'
   import routes from './routes'
   import BigNumber from 'bignumber.js'
   import versionInfo from './utils/versionInfo'
@@ -11,6 +12,7 @@
   import { fetchUserKeyInfo } from '$api/index'
   import { userAuth, userVipList } from '$stores/user'
   import { goHomeCallback } from '$stores'
+  import { diffTime } from '$stores/common'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
@@ -33,6 +35,7 @@
   const fetchUserVipList = async () => {
     const res = await im.userVipList()
     userVipList.set(res.data.list)
+    diffTime.set(getTimeDifference(res.serverTime))
   }
 
   $: if($userAuth.userToken) {
