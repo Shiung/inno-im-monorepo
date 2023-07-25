@@ -24,14 +24,14 @@ class AbortControllers {
     const currentIndex = controllers?.indexOf(controller) || -1
 
     if (currentIndex !== -1) controllers?.splice(currentIndex, 1)
-    if (!controllers.length) this.#controllers.delete(controller.key)
+    if (!controllers?.length) this.#controllers.delete(controller.key)
   }
 
   addController(controller: Controller) {
     if (!this.#controllers.has(controller.key)) {
       this.#controllers.set(controller.key, [])
     }
-    this.#controllers.get(controller.key).push(controller)
+    this.#controllers.get(controller.key)?.push(controller)
   }
 }
 
