@@ -7,7 +7,7 @@
   import routes from './routes'
   import BigNumber from 'bignumber.js'
   import versionInfo from './utils/versionInfo'
-  import { goHomeCallback } from '$stores'
+  import { goHomeCallback, fetchLangInfo } from '$stores'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
@@ -29,6 +29,7 @@
 
   onMount(() => {
     setVh()
+    fetchLangInfo()
     window.addEventListener('resize', handleResize)
   })
 
