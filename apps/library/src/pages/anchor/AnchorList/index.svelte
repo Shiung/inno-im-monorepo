@@ -1,7 +1,7 @@
 <script lang="ts">
   import { im } from 'api'
-  import convertSid from 'utils/convertSid'
-  import { locale } from '$stores'
+  import { convertSid, AbortControllers } from 'utils'
+  import { locale, getUseLang } from '$stores'
   import { params } from 'svelte-spa-router'
 
   import InfiniteScroll from 'ui/components/InfiniteScroll'
@@ -28,7 +28,9 @@
 
   const anchorBgs = [bg0, bg1, bg2, bg3]
 
-  const fetchAnchors = async (props: { keyWord: string; sid: ReturnType<typeof convertSid> }) => {
+  const abortControllers = new AbortControllers()
+
+  const loadAnchors = async (props: { keyWord: string; sid: ReturnType<typeof convertSid> }) => {
     const { keyWord, sid } = props
 
     try {
@@ -37,11 +39,11 @@
           ...(sid && { sid }),
           ...(keyWord && { keyWord }),
           pageIdx,
-          pageSize
+          pageSize,
+          lang: useLang
         },
         headers: { 'Accept-Language': $locale }
       })
-
       const { list, pager } = response?.data || {}
 
       if (list?.length) data = [...data, ...list]
@@ -50,33 +52,71 @@
       hasMoreData = totalPage > pageIdx
       if (hasMoreData) pageIdx++
     } catch (error) {
+      console.error(error)
       hasMoreData = false
     }
   }
 
-  const init = async ({ sid }: { sid: ReturnType<typeof convertSid> }) => {
+  const fetchInit = async ({ sid }: { sid: ReturnType<typeof convertSid> }) => {
     pageIdx = 1
     data = []
 
+    abortControllers.abortControllers('fetch-im.webAnchors')
+    const controller = {
+      ctl: new AbortController(),
+      isAborted: false,
+      key: 'fetch-im.webAnchors'
+    }
+    abortControllers.addController(controller)
+
     try {
       initLoading = true
-      await fetchAnchors({ keyWord, sid })
+      const response = await im.webAnchors(
+        {
+          query: {
+            ...(sid && { sid }),
+            ...(keyWord && { keyWord }),
+            pageIdx,
+            pageSize,
+            lang: useLang
+          },
+          headers: { 'Accept-Language': $locale }
+        },
+        {
+          signal: controller.ctl.signal
+        }
+      )
+      const { list, pager } = response?.data || {}
+
+      if (list?.length) data = list
+
+      const { totalPage } = pager || {}
+      hasMoreData = totalPage > pageIdx
+      if (hasMoreData) pageIdx++
     } catch (error) {
-      data = []
+      console.error(error)
+      hasMoreData = false
     } finally {
-      initLoading = false
+      if (!controller.isAborted) initLoading = false
+
+      abortControllers.spliceController(controller)
+    }
+  }
+
+  const init = async (sid, ...rest) => {
+    if (sid != null) {
+      document.body.scrollTo(0, 0)
+      window.scrollTo(0, 0)
+
+      fetchInit({ sid })
     }
   }
 
   $: sid = convertSid($params?.anchorSid)
 
-  $: {
-    if (sid != null) {
-      document.body.scrollTo(0, 0)
-      window.scrollTo(0, 0)
-      init({ sid })
-    }
-  }
+  $: useLang = $getUseLang()
+
+  $: init(sid, useLang)
 </script>
 
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
@@ -88,7 +128,7 @@
     {:else if !data?.length}
       <Empty class="h-[calc(100vh_-_170px)]" />
     {:else}
-      <InfiniteScroll hasMore={hasMoreData} load={() => fetchAnchors({ keyWord, sid})}>
+      <InfiniteScroll hasMore={hasMoreData} load={() => loadAnchors({ keyWord, sid })}>
         {#each data || [] as anchor, idx}
           <Anchor {anchor} bg={anchorBgs[idx % anchorBgs.length]} />
         {/each}

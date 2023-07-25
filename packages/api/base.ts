@@ -9,6 +9,7 @@ const MOCK_SERVER = `http://${window.location.hostname}:5174`
 export default class Base {
   private baseUrl: string | number
   private apiPrefix: string
+  private headers: { [key: string]: string } = {}
 
 
   constructor({ API_KEY, API_PREFIX }: { API_KEY: keyof WindowEnv, API_PREFIX?: string }) {
@@ -37,9 +38,14 @@ export default class Base {
     return `?${urlParams}`
   }
 
-  protected apiGenerator<T extends ApiType<T['res']>>({ url, method }: IApiInit): (req?: Request<T['query'], T['body']>) => Promise<T['res']> {
+  setHeaders(callback: (headers: typeof this.headers) => typeof this.headers) {
+    const headers = callback(this.headers)
+    this.headers = headers
+  }
 
-    return async (request?: Request<T['query'], T['body']>) => {
+  protected apiGenerator<T extends ApiType<T['res']>>({ url, method }: IApiInit): (req?: Request<T['query'], T['body']>, options?: any) => Promise<T['res']> {
+
+    return async (request?: Request<T['query'], T['body']>, options?: any) => {
       const _method = request?.method || method || 'get'
       const _request = { ...request, body: null }
 
@@ -55,8 +61,10 @@ export default class Base {
         method: _method,
         headers: {
           'Content-type': 'application/json',
+          ...this.headers,
           ...request?.headers
         },
+        ...options,
         ...(getBody() && { body: JSON.stringify(getBody()) })
       })
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TimeInfo } from 'utils'
   import { t } from '$stores'
-  import { time } from '../../store'
+  import { time } from '../store'
 
   const format = (timeInfo: TimeInfo) => {
     if(!timeInfo) return
