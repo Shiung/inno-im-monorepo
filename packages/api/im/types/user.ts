@@ -22,14 +22,16 @@ export interface IUserVipList {
   }>
 }
 
+export interface IKeyInfo {
+  remainCount: number
+  totalCount: number
+  keyCdList: number[]
+}
+
 export interface IUserKeyInfo {
   query: {
     account: string
   }
   body: null
-  res: withData<{
-    remainCount: number
-    totalCount: number
-    keyCdList: number[]
-  }>
+  res: withData<IKeyInfo>
 }
