@@ -22,7 +22,7 @@
   import Arrow from '../images/arrow_down_small.svg'
   import MatchHistory from '../images/matchHistory.svg'
   import type { IWebAnchor } from 'api/im/types'
-  import { SIDi18nKey } from '$src/constant'
+  import { SIDi18nKey, SID } from '$src/constant'
 
   export let anchor: IWebAnchor
   export let preview: boolean = false
@@ -122,13 +122,13 @@
     })
   }
 
-  $: isMatchType = anchor.sid !== 100
+  $: isMatchType = anchor.sid !== SID.deposit
 
   $: init(dom, isMatchType)
 
   $: createPreviewObserver(dom)
 
-  $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.deposit`
+  $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
 
   let streamingLoading: boolean = false
   let streamingError: boolean = false

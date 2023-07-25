@@ -8,7 +8,7 @@ import type { ILanguages } from 'env-config'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 import AnchorImage from '$src/components/AnchorImage'
 import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
-import { SIDi18nKey } from '$src/constant'
+import { SIDi18nKey, SID } from '$src/constant'
 import type { IWebAnchorMatch } from 'api/im/types'
 
 export let anchor: IWebAnchor
@@ -29,7 +29,7 @@ const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
   match = null
 }
 
-$: isMatchType = anchor.sid !== 100
+$: isMatchType = anchor.sid !== SID.deposit
 
 $: if(isMatchType) {
   fetchAnchorMatches(anchor.houseId, $locale)
@@ -37,7 +37,7 @@ $: if(isMatchType) {
   loading = false
 }
 
-$: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.deposit`
+$: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
 </script>
 
 <div>
