@@ -14,6 +14,11 @@
       message.contentType === im.enum.contentType.ANCHOR_HOST ||
       message.contentType === im.enum.contentType.ANCHOR_MEMBER
     ) {
+      if (!message.avatar) {
+        const promise = await import('$src/assets/avatar/defaultAvatar.png')
+        avatarImg = promise.default
+        return
+      }
       avatarImg = message.avatar
       return
     }

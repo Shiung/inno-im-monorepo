@@ -15,6 +15,7 @@ export interface IWebAnchor {
   attentionStatus: 0 | 1 | 2 // 0:未关注 1:已关注 2:无需出现关注按钮(主播自己)
   matchCount: number
   houseIntroduction: string
+  languageType: string
 }
 
 export interface IWebAnchors {
@@ -23,6 +24,7 @@ export interface IWebAnchors {
     keyWord?: string
     pageIdx: number
     pageSize: number
+    lang?: string
   }
   body: null
   res: withData<{
@@ -120,5 +122,29 @@ export interface IWebAnchorsRecommend {
   body: null
   res: withData<{
     list: IWebAnchor[]
+  }>
+}
+
+export interface IWebAnchorLanguage {
+  query: null
+  body: null
+  res: withData<{
+    lang: Array<{
+      code: string
+      name: string
+      describe: string
+    }>
+    defaultLang: string
+  }>
+}
+
+export interface IWebAnchorLanguageConstants {
+  query: null
+  body: null
+  res: withData<{
+    lang: Array<{
+      code: string
+      thirdCode: string
+    }>
   }>
 }

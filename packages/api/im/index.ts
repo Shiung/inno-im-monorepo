@@ -14,6 +14,8 @@ class IM extends Base {
   webAnchorPhotos = this.apiGenerator<Types.IWebAnchorPhotos>({ url: `${prefix}/v1/anchor/web-anchor/photos` })
   webAnchorInfo = this.apiGenerator<Types.IWebAnchorInfo>({ url: `${prefix}/v1/anchor/web-anchor/info` })
   webAnchorsRecommend = this.apiGenerator<Types.IWebAnchorsRecommend>({ url: `${prefix}/v1/anchor/web-anchors/recommend` })
+  webAnchorLanguage = this.apiGenerator<Types.IWebAnchorLanguage>({ url: `${prefix}/v1/anchor/web-anchor/language` })
+  webAnchorLanguageConstants = this.apiGenerator<Types.IWebAnchorLanguageConstants>({ url: `${prefix}/v1/anchor/web-anchor/language/constants` })
 
   expertPredictions = this.apiGenerator<Types.IExpertPredictions>({ url: `${prefix}/v1/expert/predictions` })
   expertRecommend = this.apiGenerator<Types.IExpertRecommand>({ url: `${prefix}/v1/expert/recommend` })

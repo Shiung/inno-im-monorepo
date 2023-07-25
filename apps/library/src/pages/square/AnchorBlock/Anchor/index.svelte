@@ -8,7 +8,6 @@ import type { ILanguages } from 'env-config'
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
 import AnchorImage from '$src/components/AnchorImage'
 import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
-import Loading from './Loading.svelte'
 import { SIDi18nKey } from '$src/constant'
 import type { IWebAnchorMatch } from 'api/im/types'
 
