@@ -1,6 +1,7 @@
 import { writable, get } from 'svelte/store'
 import { locale } from '$stores'
 import { im } from 'api'
+import { NO_LANG } from '$src/constant'
 
 type AdminLangInfo = {
   defaultLang: string
@@ -58,7 +59,6 @@ export const fetchLangInfo = () => {
   fetchPlatformLangMap()
 }
 
-const NO_LANG = 'NO-LANG'
 type GetUseLang = () => string
 export const getUseLang = writable<GetUseLang>(() => {
   const { langs, defaultLang } = get(adminLangInfo) || {}

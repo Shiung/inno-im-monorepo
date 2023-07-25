@@ -11,6 +11,8 @@
   import AnchorBlock from './AnchorBlock'
   import ExpertBlock from './ExpertBlock'
 
+  import { NO_LANG } from '$src/constant'
+
   import { convertSid, type SidType, AbortControllers } from 'utils'
 
   let streaming: IWebAnchor
@@ -75,8 +77,8 @@
     }
   }
 
-  const init = (sid: number, ...rest) => {
-    if (sid && sid !== 0) fetchAnchors(sid)
+  const init = (sid: number, lang: string) => {
+    if (sid && sid !== 0 && lang !== NO_LANG) fetchAnchors(sid)
   }
 
   $: useLang = $getUseLang()

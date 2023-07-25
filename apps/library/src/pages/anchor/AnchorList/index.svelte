@@ -17,6 +17,8 @@
   import bg2 from '../images/bg_style2_2.webp'
   import bg3 from '../images/bg_style2_3.webp'
 
+  import { NO_LANG } from '$src/constant'
+
   let keyWord = ''
 
   let pageIdx = 1
@@ -103,8 +105,8 @@
     }
   }
 
-  const init = async (sid, ...rest) => {
-    if (sid != null) {
+  const init = async (sid, lang) => {
+    if (sid != null && lang !== NO_LANG) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
 
@@ -120,7 +122,7 @@
 </script>
 
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
-  <Search bind:value={keyWord} on:searchEvent={() => init({ sid })} />
+  <Search bind:value={keyWord} on:searchEvent={() => init(sid, useLang)} />
 
   <div class="space-y-[12px]">
     {#if initLoading}
