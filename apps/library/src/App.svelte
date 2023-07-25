@@ -1,26 +1,16 @@
-<script lang='ts' context='module'>
-import { push } from 'svelte-spa-router'
-let goHomeCallback: () => void = () => push('/')
-
-export let setGoHome = (callback?: () => void) => {
-  if (callback) goHomeCallback = callback
-}
-
-</script>
-
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
   import Router, { location } from 'svelte-spa-router'
   import BottomNavigation from '$containers/BottomNavigation'
-  import { bottomNav, showBottomNav } from '$stores/layout'
+  import { bottomNav, showBottomNav, appHeight } from '$stores/layout'
   import { throttle } from 'utils'
   import routes from './routes'
   import BigNumber from 'bignumber.js'
-  import { appHeight } from '$stores/layout'
   import versionInfo from './utils/versionInfo'
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api/index'
   import { userAuth, userVipList } from '$stores/user'
+  import { goHomeCallback } from '$stores'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
@@ -63,6 +53,6 @@ export let setGoHome = (callback?: () => void) => {
 <main class="im-library">
   <Router {routes} on:routeLoading={routeLoading} />
   {#if $showBottomNav}
-    <BottomNavigation goHome={() => goHomeCallback()} />
+    <BottomNavigation goHome={() => $goHomeCallback()} />
   {/if}
 </main>
