@@ -2,6 +2,7 @@
   import { t } from '$stores'
   import { userKeyInfo, userVipList, userInfo } from '$stores/user'
   import { diffTime } from '$stores/common'
+  import { goVipCenterCallback } from '$stores'
   import { onDestroy } from 'svelte'
   import { twMerge } from 'tailwind-merge'
 
@@ -131,6 +132,9 @@
         </li>
       {/each}
     </ul>
-    <Button class="h-[44px] w-full text-base rounded-xl" on:click={() => (show = false)}>{$t('user.goUpgradeVIP')}</Button>
+    <Button class="h-[44px] w-full text-base rounded-xl" on:click={() => {
+      show = false
+      $goVipCenterCallback()
+    }}>{$t('user.goUpgradeVIP')}</Button>
   </Modal>
 </div>
