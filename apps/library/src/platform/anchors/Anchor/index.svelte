@@ -23,7 +23,6 @@ $: isSteaming = $streaming?.houseId === houseId
 >
   <Ripple class='flex w-full px-[8px] py-[10px] bg-white rounded-[10px] h-full' ripple={false}
     on:click={() => {
-      $streaming = $store
       dispatch('change', $store)
     }}
   >
