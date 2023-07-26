@@ -14,6 +14,7 @@
   } from '$containers/StreamingPlayer'
   import AnchorImage from '$containers/AnchorImage'
   import AnchorUserImage from '$containers/AnchorUserImage'
+  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
   import { t, locale, goDetailCallback } from '$stores'
   import { SIDi18nKey, SID } from '$src/constant'
@@ -142,13 +143,15 @@
 <div data-id={anchor.houseId} bind:this={dom}>
   <Ripple class="flex w-full im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2" on:click={onAnchorClick}>
     <div class="flex flex-none items-center relative">
+      {#if isLive}
+        <div class="absolute top-0 left-0 z-10">
+          <AnchorLiveBadge />
+        </div>
+      {/if}
+
       {#if !isPreviewing || streamingLoading}
         <div out:fade|local={{ duration: 250 }} class='absolute'>
-          <AnchorUserImage
-            {isLive}
-            user={anchor.userImage}
-            type={isMatchType ? 'match' : 'deposit'}
-          />
+          <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
         </div>
       {/if}
 

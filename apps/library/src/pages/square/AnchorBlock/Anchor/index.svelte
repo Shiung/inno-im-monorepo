@@ -5,6 +5,8 @@
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
   import AnchorImage from '$containers/AnchorImage'
   import AnchorUserImage from '$containers/AnchorUserImage'
+  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
+
   import { SIDi18nKey, SID } from '$src/constant'
   import { t } from '$stores'
 
@@ -16,6 +18,8 @@
 
   const { anchorMatches, anchorMatchLoadings } = getSquareStore()
 
+  $: isLive = anchor?.liveStatus === 2
+
   $: isMatchType = anchor.sid !== SID.deposit
 
   $: loading = $anchorMatchLoadings[anchor.houseId]
@@ -26,9 +30,15 @@
 </script>
 
 <div>
-  <Ripple class="w-full flex flex-col h-[139px] im-shadow rounded-[10px] p-2 space-y-1" on:click>
-    <div class="flex w-full justify-center">
-      <AnchorUserImage isLive={anchor.liveStatus === 2} user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+  <Ripple class="w-full flex flex-col items-center h-[139px] im-shadow rounded-[10px] p-2 space-y-1" on:click>
+    <div class="relative">
+      {#if isLive}
+        <div class="absolute top-0 left-0 z-10">
+          <AnchorLiveBadge />
+        </div>
+      {/if}
+
+      <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
     </div>
 
     <div class="flex w-full items-center justify-between">
