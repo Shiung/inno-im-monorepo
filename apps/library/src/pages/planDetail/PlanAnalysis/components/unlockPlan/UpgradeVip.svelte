@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$stores'
-  import { userKeyInfo, userVipList, userInfo } from '$stores/user'
+  import { userKeyInfo, userVipList, userInfo, userAuth } from '$stores/user'
   import { diffTime } from '$stores/common'
   import { goVipCenterCallback } from '$stores'
   import { onDestroy } from 'svelte'
@@ -88,7 +88,7 @@
   time = timer.currentTime
   timer.start()
 
-  $: if (isFinish) fetchUserKeyInfo()
+  $: if (isFinish) fetchUserKeyInfo($userAuth.userToken)
 
   onDestroy(() => {
     timer.stop()
@@ -133,8 +133,8 @@
       {/each}
     </ul>
     <Button class="h-[44px] w-full text-base rounded-xl" on:click={() => {
-      show = false
-      $goVipCenterCallback()
+        show = false
+        $goVipCenterCallback()
     }}>{$t('user.goUpgradeVIP')}</Button>
   </Modal>
 </div>

@@ -32,15 +32,23 @@
 
   const handleResize = throttle(setVh, 250)
 
-  const fetchUserVipList = async () => {
-    const res = await im.userVipList()
-    userVipList.set(res.data.list)
-    diffTime.set(getTimeDifference(res.serverTime))
+  const fetchUserVipList = async (token: string) => {
+    if (!token) return
+
+    try {
+      const res = await im.userVipList()
+      const { data, serverTime } = res || {}
+      userVipList.set(data?.list || [])
+
+      if (serverTime) diffTime.set(getTimeDifference(serverTime))
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  $: if($userAuth.userToken) {
-    fetchUserVipList()
-    fetchUserKeyInfo()
+  $: {
+    fetchUserVipList($userAuth.userToken)
+    fetchUserKeyInfo($userAuth.userToken)
   }
 
   onMount(() => {

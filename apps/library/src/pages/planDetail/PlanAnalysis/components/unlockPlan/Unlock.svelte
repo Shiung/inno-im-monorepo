@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$stores'
-  import { userKeyInfo } from '$stores/user'
+  import { userKeyInfo, userAuth } from '$stores/user'
 
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
@@ -14,13 +14,20 @@
   let show = false
   let isUnlockingInProgress = false
   
-  const handleUnclock = async () => {
+  const handleUnlock = async (token: string) => {
     show = false
 
-    const res = await im.expertArticleUnlock({ body: { articleId: $params.articleId } })
-    if (res.data.articleStatus === 1) isUnlockingInProgress = true
+    if (!token) return
 
-    fetchUserKeyInfo()
+    try {
+      const res = await im.expertArticleUnlock({ body: { articleId: $params.articleId } })
+      if (res?.data?.articleStatus === 1) {
+        isUnlockingInProgress = true
+        fetchUserKeyInfo(token)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   $: setIsUnlockingInProgress ({ isUnlockingInProgress })
@@ -35,7 +42,7 @@
     <p class="text-[rgb(var(--im-monorepo-primary))]">{$t('expert.keyDeduct')}</p>
     <p class="text-[rgb(var(--im-monorepo-primary))] mb-3">({`${$userKeyInfo.remainCount}/${$userKeyInfo.totalCount}`})</p>
     <div class="flex flex-col w-full">
-      <Button class="h-[56px] mb-3" on:click={handleUnclock}>{$t('common.confirm')}</Button>
+      <Button class="h-[56px] mb-3" on:click={() => handleUnlock($userAuth.userToken)}>{$t('common.confirm')}</Button>
       <Button class="h-[56px]" variant="outline" on:click={() => (show = false)}>{$t('common.cancel')}</Button>
     </div>
   </Modal>
