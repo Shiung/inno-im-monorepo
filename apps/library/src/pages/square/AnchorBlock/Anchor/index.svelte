@@ -2,7 +2,6 @@
 import type { IWebAnchor } from 'api/im/types'
 import { Ripple, Badget } from 'ui'
 import { t, locale } from '$stores'
-import { im } from 'api'
 import type { ILanguages } from 'env-config'
 
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
@@ -10,6 +9,7 @@ import AnchorImage from '$containers/AnchorImage'
 import AnchorUserImage from '$containers/AnchorUserImage'
 import { SIDi18nKey, SID } from '$src/constant'
 import type { IWebAnchorMatch } from 'api/im/types'
+import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
 
 export let anchor: IWebAnchor
 
@@ -17,27 +17,22 @@ let openDetailSheet: boolean = false
 let match: IWebAnchorMatch = null
 let loading: boolean = true
 
-const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
-  loading = true
-  const matchesPromise = await im.webAnchorMatchList({ query: { houseId }, headers: { 'Accept-Language': lang }})
-  loading = false
-  if(matchesPromise?.data?.matchList?.length > 0) {
-    match = matchesPromise?.data?.matchList[0]
-    return
-  }
+const fetchMatchesIfIsMatchType = async (houseId: string, isMatch: boolean, lang: ILanguages) => {
+  if (!houseId || !isMatch) return (loading = false)
 
+  loading = true
+  const [firstMatch] = await fetchAnchorMatches(houseId, lang)
+  loading = false
+  
+  if(firstMatch) return (match = firstMatch)
   match = null
 }
 
 $: isMatchType = anchor.sid !== SID.deposit
 
-$: if(isMatchType) {
-  fetchAnchorMatches(anchor.houseId, $locale)
-} else {
-  loading = false
-}
-
 $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
+
+$: fetchMatchesIfIsMatchType(anchor?.houseId, isMatchType, $locale)
 </script>
 
 <div>
@@ -51,9 +46,9 @@ $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
     </div>
 
     <div class='flex w-full items-center justify-between'>
-      <div class='flex items-center space-x-1'>
+      <div class='flex-1 flex items-center space-x-1 overflow-hidden'>
         <AnchorImage src={anchor.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]' />
-        <span class='text-imprimary leading-[18px] text-[18px]'> {anchor.houseName} </span>
+        <span class='text-imprimary leading-[18px] text-[18px] truncate'> {anchor.houseName} </span>
       </div>
 
       <Badget
@@ -64,7 +59,7 @@ $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
       </Badget>
     </div>
 
-    <div class='w-full text-left leading-[15px] text-[10px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
+    <div class='w-full text-left leading-[15px] text-[10px] text-[#999] truncate'>
       {#if loading}
         <div class='bg-[#eee] animate-pulse h-[17px] rounded-md'></div>
       {:else if !isMatchType}

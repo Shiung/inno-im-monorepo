@@ -91,7 +91,7 @@
 
     <StreamingPlayer {streaming} useDefControls />
 
-    <div class='bg-white px-3 py-2 space-y-2 rounded-b-[20px]'>
+    <div class='bg-white px-3 py-2 space-y-2 rounded-b-[20px] min-h-[35px]'>
       {#if streaming}
         <div class='flex items-center justify-between space-x-1'>
           <div class='flex-1 flex items-center space-x-1 overflow-hidden'>
