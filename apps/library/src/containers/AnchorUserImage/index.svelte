@@ -1,6 +1,6 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge'
-  import AnchorImage from '$components/AnchorImage'
+  import AnchorImage from '$containers/AnchorImage'
   import { Badget } from 'ui'
 
   export let user: string

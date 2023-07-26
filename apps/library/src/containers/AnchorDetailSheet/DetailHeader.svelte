@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import { Ripple } from 'ui'
 import { Header } from 'ui/components/BottomSheet'
 import { t } from '$stores'
-import AnchorImage from '$src/components/AnchorImage'
+import AnchorImage from '$containers/AnchorImage'
 
 import anchorBg from './images/anchorBg.webp'
 import mask from './images/mask.webp'

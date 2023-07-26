@@ -36,7 +36,7 @@
 <script lang="ts">
   import FlvPlayer from 'ui/components/FlvPlayer'
   import VideoPlayer from 'ui/components/VideoPlayer'
-  import HouseImage from '$src/components/HouseImage/index.svelte'
+  import HouseImage from '$containers/AnchorHouseImage'
 
   export let streaming: {
     playStreamAddress: string;

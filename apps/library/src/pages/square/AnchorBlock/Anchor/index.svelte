@@ -6,8 +6,8 @@ import { im } from 'api'
 import type { ILanguages } from 'env-config'
 
 import AnchorDetailSheet from '$containers/AnchorDetailSheet'
-import AnchorImage from '$src/components/AnchorImage'
-import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
+import AnchorImage from '$containers/AnchorImage'
+import AnchorUserImage from '$containers/AnchorUserImage'
 import { SIDi18nKey, SID } from '$src/constant'
 import type { IWebAnchorMatch } from 'api/im/types'
 

@@ -4,7 +4,7 @@
   import Circle from 'ui/core/button/loading.svelte'
   import type { IWebAnchor } from 'api/im/types'
   import { t, locale } from '$stores'
-  import AnchorImage from '$src/components/AnchorImage'
+  import AnchorImage from '$containers/AnchorImage'
   import type { IWebAnchorMatch } from 'api/im/types'
   import type { ILanguages } from 'env-config'
 

@@ -2,28 +2,27 @@
   import { onDestroy, createEventDispatcher } from 'svelte'
   import { fade } from 'svelte/transition'
   import { push } from 'svelte-spa-router'
-  import { Ripple } from 'ui'
-  import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
-  import AnchorMatches from '$containers/AnchorMatches/index.svelte'
+  import { Ripple, Badget } from 'ui'
+  import type { IWebAnchor, IWebAnchorMatch } from 'api/im/types'
+
+  import AnchorMatches from '$containers/AnchorMatches'
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
   import StreamingPlayer, {
     onError,
     onReady,
     onLostData
   } from '$containers/StreamingPlayer'
-  import AnchorImage from '$components/AnchorImage'
-  import { Badget } from 'ui'
-  import { t, goDetailCallback } from '$stores'
-  import { locale } from '$stores'
-  import type { IWebAnchorMatch } from 'api/im/types'
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../config'
+  import AnchorImage from '$containers/AnchorImage'
+  import AnchorUserImage from '$containers/AnchorUserImage'
 
+  import { t, locale, goDetailCallback } from '$stores'
+  import { SIDi18nKey, SID } from '$src/constant'
+  
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../config'
   import Arrow from '../images/arrow_down_small.svg'
   import MatchHistory from '../images/matchHistory.svg'
-  import type { IWebAnchor } from 'api/im/types'
-  import { SIDi18nKey, SID } from '$src/constant'
-
   import { fetchAnchorMatches } from '../utils'
+
   export let anchor: IWebAnchor
   export let preview: boolean = false
 

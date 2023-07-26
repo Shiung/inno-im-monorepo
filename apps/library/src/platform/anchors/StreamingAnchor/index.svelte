@@ -3,7 +3,7 @@
   import { Tween } from 'ui'
   import { amountSymbolTransformer } from 'utils/amount'
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
-  import AnchorImage from '$src/components/AnchorImage'
+  import AnchorImage from '$containers/AnchorImage'
   import { twMerge } from 'tailwind-merge'
 
   import ArrowUp from './images/arrow_up.svg'
