@@ -36,6 +36,18 @@ const routes = {
       }
     ]
   }),
+  '/anchorChat/:anchorHouseId?': wrap({
+    asyncComponent: () => import('$pages/anchorChat/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+    conditions: [
+      (detail) => {
+        if (!detail?.params?.anchorHouseId) replace('/anchor/0')
+        return true
+      }
+    ]
+  }),
   // '/expert/:expertSid?': wrap({
   //   asyncComponent: () => import('$pages/expert/index.svelte'),
   //   userData: {

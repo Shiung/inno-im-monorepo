@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, createEventDispatcher } from 'svelte'
   import { fade } from 'svelte/transition'
+  import { push } from 'svelte-spa-router'
   import { Ripple } from 'ui'
   import AnchorUserImage from '$components/AnchorUserImage/index.svelte'
   import AnchorMatches from '$containers/AnchorMatches/index.svelte'
@@ -12,7 +13,7 @@
   } from '$containers/StreamingPlayer'
   import AnchorImage from '$components/AnchorImage'
   import { Badget } from 'ui'
-  import { t } from '$stores'
+  import { t, goDetailCallback } from '$stores'
   import { locale } from '$stores'
   import type { IWebAnchorMatch } from 'api/im/types'
   import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../config'
@@ -121,10 +122,18 @@
   let streamingLoading: boolean = false
   let streamingError: boolean = false
 
-  $: isPreviewing = preview && anchor.liveStatus === 2
+  $: isLive = anchor.liveStatus === 2
+  $: isPreviewing = preview && isLive
 
   $: regStreamingCallbacks(isPreviewing)
 
+  const onAnchorClick = () => {
+    if(isMatchType) {
+      $goDetailCallback(firstMatch.mid)
+    } else {
+      push(`/anchorChat/${anchor.houseId}`)
+    }
+  }
   onDestroy(() => {
     matchObserver && matchObserver.disconnect()
     previewObserver && previewObserver.disconnect()
@@ -132,12 +141,12 @@
 </script>
 
 <div data-id={anchor.houseId} bind:this={dom}>
-  <div class="flex im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2">
+  <Ripple class="flex w-full im-shadow h-[97px] rounded-[10px] px-[8px] space-x-2" on:click={onAnchorClick}>
     <div class="flex flex-none items-center relative">
       {#if !isPreviewing || streamingLoading}
         <div out:fade|local={{ duration: 250 }} class='absolute'>
           <AnchorUserImage
-            isLive={anchor.liveStatus === 2}
+            {isLive}
             user={anchor.userImage}
             type={isMatchType ? 'match' : 'deposit'}
           />
@@ -158,7 +167,7 @@
           <span class="text-imprimary leading-[18px] text-[18px] truncate"> {anchor.houseName} </span>
         </div>
 
-        <div class="w-full leading-[17px] text-[12px] text-[#999] truncate">
+        <div class="w-full text-left leading-[17px] text-[12px] text-[#999] truncate">
           {#if loading}
             <div class="bg-[#eee] animate-pulse h-[17px] rounded-md" />
           {:else if !isMatchType}
@@ -194,7 +203,7 @@
         {/if}
       </div>
     </div>
-  </div>
+  </Ripple>
 
   {#if showMatchList}
     <AnchorMatches data={restMatchList} />

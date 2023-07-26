@@ -119,7 +119,7 @@
   }, 250)
 
   let isInit = false
-  const onScroll = () => {
+  const onWindowScroll = () => {
     if (isInit && window.scrollY > 10) return
 
     if (window.scrollY > 10) {
@@ -140,7 +140,8 @@
   $: init(sid, useLang)
 </script>
 
-<svelte:window on:scroll={onScroll} />
+<svelte:window on:scroll={onWindowScroll} />
+
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
   <Search bind:value={keyWord} on:searchEvent={() => init(sid, useLang)} />
 
