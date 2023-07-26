@@ -1,5 +1,7 @@
 import { replace } from 'svelte-spa-router'
 import { wrap } from 'svelte-spa-router/wrap'
+import { userAuth } from '$stores'
+import { get } from 'svelte/store'
 // import Entry from '$pages/entry.svelte'
 
 const routes = {
@@ -55,6 +57,11 @@ const routes = {
     },
     conditions: [
       (detail) => {
+        if (!get(userAuth).userToken) {
+          replace('/expert/0')
+          return
+        }
+
         const { expertId, method } = detail?.params || {}
         if (!method) replace(`/expertDetail/${expertId}/plan`)
         return true
@@ -68,6 +75,11 @@ const routes = {
     },
     conditions: [
       () => {
+        if (!get(userAuth).userToken) {
+          replace('/expert/0')
+          return
+        }
+
         window.scrollTo(0, 0)
         return true
       }
