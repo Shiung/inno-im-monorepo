@@ -1,16 +1,17 @@
 <script lang="ts">
-  import StreamingPlayer, { onError, onLostData, onReady, isFlvUse } from '$containers/StreamingPlayer'
   import { Badget } from 'ui'
-  import Circle from 'ui/core/button/loading.svelte'
   import type { IWebAnchor } from 'api/im/types'
-  import { t, locale } from '$stores'
-  import AnchorImage from '$containers/AnchorImage'
-  import type { IWebAnchorMatch } from 'api/im/types'
-  import type { ILanguages } from 'env-config'
+  import Circle from 'ui/core/button/loading.svelte'
 
-  import Loading from './Loading.svelte'
+  import StreamingPlayer, { onError, onLostData, onReady, isFlvUse } from '$containers/StreamingPlayer'
+  import AnchorImage from '$containers/AnchorImage'
+  import { t } from '$stores'
   import { SIDi18nKey, SID } from '$src/constant'
-  import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
+  
+  import Loading from './Loading.svelte'
+  import { getSquareStore } from '../store'
+
+  const { anchorMatches, anchorMatchLoadings } = getSquareStore()
 
   export let streaming: IWebAnchor
   export let loading: boolean
@@ -57,21 +58,11 @@
 
   $: resetStatus(streaming)
 
-  let match: IWebAnchorMatch = null
-  let matchLoading: boolean = false
-  const fetchMatchesIfIsMatchType = async (houseId: string, isMatch: boolean, lang: ILanguages) => {
-    if(!houseId || !isMatch) return (matchLoading = false)
+  $: match = $anchorMatches[streaming?.houseId]
 
-    matchLoading = true
-    const [firstMatch] = await fetchAnchorMatches(houseId, lang)
-    matchLoading = false
-
-    match = firstMatch || null
-  }
+  $: matchLoading = $anchorMatchLoadings[streaming?.houseId]
 
   $: isMatchType = streaming?.sid !== SID.deposit
-
-  $: fetchMatchesIfIsMatchType(streaming?.houseId, isMatchType, $locale)
 
   $: badgeStr = isMatchType ? SIDi18nKey[streaming?.sid] : `common.depositWithdraw`
 </script>
