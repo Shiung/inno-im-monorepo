@@ -129,7 +129,11 @@
 
   const onAnchorClick = () => {
     if(isMatchType) {
-      $goDetailCallback(firstMatch.mid)
+      $goDetailCallback({
+        matchId: firstMatch.mid,
+        matchTime: firstMatch.matchTime,
+        vd: firstMatch.vd
+      })
     } else {
       push(`/anchorChat/${anchor.houseId}`)
     }

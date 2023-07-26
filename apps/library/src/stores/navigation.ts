@@ -1,6 +1,11 @@
 import { writable } from 'svelte/store'
 
-type GoDetailCallback = (matchId: number) => void
+type Options = {
+  matchId: number
+  matchTime: number
+  vd: string
+}
+type GoDetailCallback = (options: Options) => void
 
 const initGoDetailCallback: GoDetailCallback = () => {}
 export const goDetailCallback = writable<GoDetailCallback>(initGoDetailCallback)
