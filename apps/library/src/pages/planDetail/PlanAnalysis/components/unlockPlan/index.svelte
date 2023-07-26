@@ -19,7 +19,7 @@
     if (remainCount === 0 && unredeemedQuantity > 0) return (promise = GetKey())
 
     // 使用者身上沒鑰匙，VIP中心沒鑰匙可領取
-    if (remainCount === 0 && unredeemedQuantity === 0) return (promise = UpgradeVip())
+    return (promise = UpgradeVip())
   }
 
   $: if ($userKeyInfo) fetchComponent($userKeyInfo)
