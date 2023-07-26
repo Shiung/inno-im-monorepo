@@ -91,33 +91,33 @@
 
     <StreamingPlayer {streaming} useDefControls />
 
-    {#if streaming}
-      <div class='bg-white px-2 py-3 space-y-2'>
-        <div class='flex items-center justify-between'>
-          <div class='flex items-center space-x-1'>
-            <AnchorImage src={streaming?.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]' />
-            <span class='text-imprimary leading-[18px] text-[18px]'> {streaming?.houseName} </span>
+    <div class='bg-white px-3 py-2 space-y-2 rounded-b-[20px]'>
+      {#if streaming}
+        <div class='flex items-center justify-between space-x-1'>
+          <div class='flex-1 flex items-center space-x-1 overflow-hidden'>
+            <AnchorImage src={streaming?.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] ml-2' />
+            <span class='flex-initial max-w-[50%] text-imprimary leading-[18px] text-[18px] truncate'> {streaming?.houseName} </span>
+
+            <div class='flex-1 leading-[15px] text-[10px] text-[#999] truncate'>
+              {#if matchLoading}
+                <div class='bg-[#eee] animate-pulse h-[15px] rounded-md'></div>
+              {:else if !isMatchType}
+                {streaming?.houseIntroduction}
+              {:else if match}
+                {match.homeName} VS {match.awayName}
+              {/if}
+            </div>
           </div>
 
           <Badget
-            class='rounded-[6px] leading-5 h-5 text-sm'
+            class='rounded-[6px] leading-3 h-3 text-[9px]'
             background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
           >
             {$t(badgeStr)}
           </Badget>
         </div>
-
-        <div class='w-full text-left leading-[15px] text-[10px] text-[#999] whitespace-nowrap text-ellipsis overflow-hidden'>
-          {#if matchLoading}
-            <div class='bg-[#eee] animate-pulse h-[17px] rounded-md'></div>
-          {:else if !isMatchType}
-            {streaming?.houseIntroduction}
-          {:else if match}
-            {match.homeName} VS {match.awayName}
-          {/if}
-        </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
   <!-- {/if} -->
 {/if}
