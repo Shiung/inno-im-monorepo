@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { t } from '$stores'
-  import { userKeyInfo, userAuth } from '$stores/user'
+  import { t, userKeyInfo, userAuth } from '$stores'
 
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { userKeyInfo } from '$stores/user'
+  import { userKeyInfo } from '$stores'
   import type { IUserKeyInfo } from 'api/im/types'
 
   const Unlock = () => import('./Unlock.svelte')

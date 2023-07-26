@@ -10,9 +10,7 @@
   import versionInfo from './utils/versionInfo'
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api/index'
-  import { userAuth, userVipList } from '$stores/user'
-  import { diffTime } from '$stores/common'
-  import { goHomeCallback, fetchLangInfo } from '$stores'
+  import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime } from '$stores'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)

@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { t } from '$stores'
-  import { userKeyInfo, userVipList, userInfo, userAuth } from '$stores/user'
-  import { diffTime } from '$stores/common'
-  import { goVipCenterCallback } from '$stores'
+  import { t, userKeyInfo, userVipList, userInfo, userAuth, diffTime, goVipCenterCallback } from '$stores'
   import { onDestroy } from 'svelte'
   import { twMerge } from 'tailwind-merge'
 
