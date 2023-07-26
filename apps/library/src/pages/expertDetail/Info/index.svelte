@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { params } from 'svelte-spa-router'
 import { im } from 'api'
-import { locale } from '$stores'
+import { locale, userAuth } from '$stores'
 
 import Streak from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
@@ -14,7 +14,7 @@ let curExpertID: string = ''
 
 $: curExpertID = $params?.expertId
 
-$: if (curExpertID) {
+$: if (curExpertID && $userAuth.userToken) {
   infoPromise = im.expertInfo({ query: {  expertId: curExpertID }, headers: { 'Accept-Language': $locale } })
 }
 

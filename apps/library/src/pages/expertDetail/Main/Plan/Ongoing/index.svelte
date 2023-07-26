@@ -1,7 +1,8 @@
 <script lang='ts'>
 import { im } from 'api'
-import { t, locale } from '$stores'
+import { t, locale, userAuth } from '$stores'
 import { params } from 'svelte-spa-router'
+import  { onMount } from 'svelte'
 
 import Empty from '$src/containers/Empty'
 import Title from '$src/components/Title/index.svelte'
@@ -9,9 +10,15 @@ import Title from '$src/components/Title/index.svelte'
 import Loading from './components/Loading.svelte'
 import List from './components/List.svelte'
 
-const promise = im.expertArticleNow({
-  query: { expertId: $params.expertId },
-  headers: { 'Accept-Language': $locale }
+let promise: ReturnType<typeof im.expertArticleNow>
+
+onMount(() => {
+  if ($userAuth.userToken) {
+    promise = im.expertArticleNow({
+      query: { expertId: $params.expertId },
+      headers: { 'Accept-Language': $locale }
+    })
+  }
 })
 </script>
 

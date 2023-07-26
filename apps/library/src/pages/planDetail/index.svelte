@@ -1,7 +1,7 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
-  import { t, locale } from '$stores'
+  import { t, locale, userAuth } from '$stores'
   import type { ILanguages } from 'env-config'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
@@ -34,7 +34,9 @@
   let isPast = false
   let isLocked = false
 
-  const fetchArticleDetail = async (articleId: string, lang: ILanguages) => {
+  const fetchArticleDetail = async (articleId: string, lang: ILanguages, token: string) => {
+    if (!token) return
+
     loading = true
     response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
     loading = false
@@ -53,11 +55,11 @@
 
   $: setIsPast({ isPast })
 
-  $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale)
+  $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale, $userAuth.userToken)
   
   setIsUnlockingInProgress({ isUnlockingInProgress: false })
   const { isUnlockingInProgress } = getIsUnlockingInProgress()
-  $: $isUnlockingInProgress && fetchArticleDetail($params?.articleId, $locale)
+  $: $isUnlockingInProgress && fetchArticleDetail($params?.articleId, $locale, $userAuth.userToken)
 </script>
 
 <div data-cid='planDetail'>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { im } from 'api'
   import { Ripple } from 'ui'
-  import { t, locale } from '$stores'
+  import { t, locale, userAuth } from '$stores'
   import { params } from 'svelte-spa-router'
   import { onMount } from 'svelte'
 
@@ -22,7 +22,9 @@
   let hasMoreData: boolean = false
   let initLoading: boolean = false
 
-  const fetchHistory = async () => {
+  const fetchHistory = async (token) => {
+    if (!token) return
+
     try {
       const response = await im.expertArticleHistory({
         query: { expertId: $params.expertId, pageIdx, pageSize },
@@ -43,7 +45,7 @@
   const init = async () => {
     try {
       initLoading = true
-      await fetchHistory()
+      await fetchHistory($userAuth.userToken)
     } catch (error) {
       data = []
     } finally {
