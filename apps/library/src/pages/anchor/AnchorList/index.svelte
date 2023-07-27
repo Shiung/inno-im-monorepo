@@ -89,7 +89,7 @@
       if (list?.length) data = list
 
       const { totalPage } = pager || {}
-      hasMoreData = totalPage > pageIdx
+      hasMoreData = false && totalPage > pageIdx
       if (hasMoreData) pageIdx++
       setActiveId(data[0].houseId)
     } catch (error) {
@@ -124,10 +124,10 @@
 
     if (window.scrollY > 10) {
       isInit = true
-      setActiveId(data?.[1]?.houseId)
+      if(data?.[1]?.liveStatus === 2) setActiveId(data?.[1]?.houseId)
     } else {
       isInit = false
-      setActiveId(data?.[0]?.houseId)
+      if(data?.[0]?.liveStatus === 2) setActiveId(data?.[0]?.houseId)
     }
   }
 
