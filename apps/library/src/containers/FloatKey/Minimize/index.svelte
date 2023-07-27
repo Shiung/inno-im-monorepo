@@ -7,7 +7,7 @@
 </script>
 
 <div>
-  <div class="w-full h-full rounded-[16px] shadow-[0_2px_2px_0_rgba(51,51,51,0.4)] bg-gradient-to-b from-[#4C9EEA] to-[#50BDFF]">
+  <div class="w-full h-full rounded-[16px] shadow-[0_2px_2px_0_rgba(51,51,51,0.4)] bg-imprimary">
     <Key width={52} height={52} />
   </div>
   <Number {remainCount} {totalCount} />
