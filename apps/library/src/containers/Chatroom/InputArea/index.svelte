@@ -18,7 +18,7 @@
 
   export let fixed: boolean = false
 
-  const { chatId, iid } = getInfo()
+  const { chatId, iid, showBetEnable } = getInfo()
   let placeHolder: string = ''
   let disabled: boolean = true
   let lastSend: number = 0
@@ -192,9 +192,12 @@
         </Ripple>
       </div>
 
-      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
-        <ShowS width={28} height={28} fill="#999999" />
-      </Ripple>
+      {#if $showBetEnable}
+        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
+          <ShowS width={28} height={28} fill="#999999" />
+        </Ripple>
+      {/if}
+
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
         <Plus width={28} height={28} fill="#999999" />
       </Ripple> -->

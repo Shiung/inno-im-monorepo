@@ -2,7 +2,7 @@
   import { writable } from 'svelte/store'
   import { initInfo, initOrdersInfo } from './context'
   import type { IChatroomInfo, IOrdersInfo } from './context'
-  import type { SizeChangedCallback, ToggledCallback } from './type'
+  import type { SizeChangedCallback } from './type'
 
   let info = writable(initInfo)
   export const setChatInfo = (_info: Partial<IChatroomInfo>) => {
@@ -18,17 +18,11 @@
   let ordersInfo = writable(initOrdersInfo)
   export const setChatOrdersInfo = (_platformInfo: Partial<IOrdersInfo>) => ordersInfo.update((e) => ({ ...e, ..._platformInfo }))
 
-  let toggledCallback: ToggledCallback = () => {}
-  export const onToggledCallback = (callback: ToggledCallback) => {
-    if (typeof callback !== 'function') return console.warn('onToggledCallback parameter callback MUST be function')
-    toggledCallback = callback
-  }
-
   let previous: { chatId: string; iid: number } = { chatId: '', iid: 0 }
 </script>
 
 <script lang="ts">
-  import { onMount, onDestroy, tick } from 'svelte'
+  import { onDestroy, tick } from 'svelte'
   import { fly } from 'svelte/transition'
   import { twMerge } from 'tailwind-merge'
   import { t } from '$stores'
@@ -48,23 +42,24 @@
   import { EChatroomSize } from './constant'
   import { showBetList } from './store'
 
-  const { displayType, useScrollCollapse, height, isOpen, chatId, iid } = setInfo($info)
+  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
     const infoUnsubscribe = info.subscribe((e) => {
-      displayType.set(e.displayType)
-      useScrollCollapse.set(e.useScrollCollapse)
-      height.set(e.height)
-      isOpen.set(e.isOpen)
+      if (get(displayType) !== e.displayType) displayType.set(e.displayType)
+      if (get(useScrollCollapse) !== e.useScrollCollapse) useScrollCollapse.set(e.useScrollCollapse)
+      if (get(height) !== e.height) height.set(e.height)
+      if (get(showBetEnable) !== e.showBetEnable) showBetEnable.set(e.showBetEnable)
+      if (get(size) !== e.size) size.set(e.size)
       if (get(chatId) !== e.chatId) chatId.set(e.chatId)
       if (get(iid) !== e.iid) iid.set(e.iid)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
-      sportMarketSummary.set(e.sportMarketSummary)
-      selfOrdersCallback.set(e.selfOrdersCallback)
-      followOrdersCallback.set(e.followOrdersCallback)
+      if (get(sportMarketSummary) !== e.sportMarketSummary) sportMarketSummary.set(e.sportMarketSummary)
+      if (get(selfOrdersCallback) !== e.selfOrdersCallback) selfOrdersCallback.set(e.selfOrdersCallback)
+      if (get(followOrdersCallback) !== e.followOrdersCallback) followOrdersCallback.set(e.followOrdersCallback)
     })
 
     return () => {
@@ -93,14 +88,12 @@
 
   const expandChatroom = () => {
     isTransition = true
-    toggledCallback && toggledCallback(true)
     sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
   }
 
   const foldChatroom = async () => {
     isTransition = true
     await tick() // for chatroom content chang to <Loading>
-    toggledCallback && toggledCallback(false)
     touchMoveOffset = 0
     isWindow && window.scrollTo({ top: 0 })
     sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.DEFAULT, transition: !isExpand })
@@ -134,6 +127,7 @@
 
   const resetStoreModule = () => {
     setChatInfo({ ...initInfo })
+    setChatOrdersInfo({ ...initOrdersInfo })
   }
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
@@ -164,7 +158,7 @@
   })
 </script>
 
-{#if !$isOpen}
+{#if $size === EChatroomSize.DEFAULT}
   <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
 {:else}
   <div

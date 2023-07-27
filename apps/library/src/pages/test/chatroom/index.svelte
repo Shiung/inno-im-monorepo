@@ -8,7 +8,6 @@
     setChatInfo,
     setChatOrdersInfo,
     onSizeChangedCallback,
-    onToggledCallback,
     type SizeChangedOption
   } from '$src/containers/Chatroom'
 
@@ -16,7 +15,7 @@
 
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
-  const isWindow: boolean = true
+  const isWindow: boolean = false
   let expandType: string = 'default'
   let dom: HTMLDivElement
   let changedHeight: number
@@ -54,7 +53,7 @@
       chatId: '9434287',
       height: initHeight,
       // iid: 9433737,
-      isOpen: false
+      showBetEnable: true
     })
   }
 
@@ -80,9 +79,6 @@
     }
   })
 
-  onToggledCallback((open) => {
-    setChatInfo({ isOpen: open })
-  })
 
   setGoDeposit(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoDeposit called') })
   setGoVipCenter(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoVipCenter called') })

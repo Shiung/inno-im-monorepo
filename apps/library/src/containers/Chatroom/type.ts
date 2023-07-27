@@ -6,5 +6,3 @@ export type SizeChangedOption = {
 }
 
 export type SizeChangedCallback = (option: SizeChangedOption) => void
-
-export type ToggledCallback = (open: boolean) => void
