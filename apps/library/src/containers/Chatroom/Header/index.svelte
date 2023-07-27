@@ -59,7 +59,7 @@
       </Ripple>
     </div>
 
-    <div style:height={fixed && `${$headerRect?.height}px`} />
+    <div style:height={fixed ? `${$headerRect?.height}px` : 0} />
   {:else}
     <div bind:this={dom} class="flex justify-center items-center w-full min-h-[30px] text-[#bbb] text-xs">{$t('chat.remind')}</div>
   {/if}

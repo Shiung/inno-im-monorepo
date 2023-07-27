@@ -204,5 +204,5 @@
     </div>
   </div>
 
-  <div style:height={fixed && `${$inputRect?.height}px`} />
+  <div style:height={fixed ? `${$inputRect?.height}px` : 0} />
 </div>
