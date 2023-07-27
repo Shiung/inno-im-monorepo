@@ -73,7 +73,7 @@
     previewObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting && window.scrollY !== 0) {
+          if (entry.isIntersecting && window.scrollY !== 0 && isLive) {
             dispatch('preview', anchor.houseId)
           }
         }
