@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { locale } from '$stores'
+  import { locale, showErrorMsgModal } from '$stores'
 
   import InfiniteScroll from 'ui/components/InfiniteScroll'
 
@@ -10,6 +10,8 @@
 
   import type { SidType } from 'utils'
   import type { IExpertMenu } from '$components/SubMenu/type'
+
+  import { CODE_STATUS_OK } from '$src/constant'
 
   export let sid: SidType
 
@@ -53,6 +55,8 @@
         },
         headers: { 'Accept-Language': $locale }
       })
+
+      if (response?.code !== CODE_STATUS_OK) return showErrorMsgModal.set(true)
 
       const { list, pager } = response?.data || {}
 

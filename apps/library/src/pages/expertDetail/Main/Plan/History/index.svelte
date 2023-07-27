@@ -1,7 +1,7 @@
 <script lang="ts">
   import { im } from 'api'
   import { Ripple } from 'ui'
-  import { t, locale, userAuth } from '$stores'
+  import { t, locale, userAuth, showErrorMsgModal } from '$stores'
   import { params } from 'svelte-spa-router'
   import { onMount } from 'svelte'
 
@@ -14,6 +14,8 @@
   import Loading from './components/Loading.svelte'
 
   import Filter from '../../images/filter.svg'
+
+  import { CODE_STATUS_OK } from '$src/constant'
 
   let pageIdx: number = 1
   const pageSize: number = 10
@@ -30,6 +32,9 @@
         query: { expertId: $params.expertId, pageIdx, pageSize },
         headers: { 'Accept-Language': $locale }
       })
+
+      if (response.code !== CODE_STATUS_OK) return showErrorMsgModal.set(true)
+
       const { list, pager } = response?.data || {}
   
       if (list?.length) data = [...data, ...list]

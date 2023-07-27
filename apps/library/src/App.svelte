@@ -2,6 +2,7 @@
   import { onDestroy, onMount } from 'svelte'
   import Router, { location } from 'svelte-spa-router'
   import BottomNavigation from '$containers/BottomNavigation'
+  import ErrorMsgModal from '$src/containers/ErrorMsgModal'
   import { bottomNav, showBottomNav, appHeight } from '$stores/layout'
   import { throttle } from 'utils'
   import { getTimeDifference } from 'utils/convertDateAndTimestamp'
@@ -10,7 +11,8 @@
   import versionInfo from './utils/versionInfo'
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api/index'
-  import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime } from '$stores'
+  import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime, showErrorMsgModal } from '$stores'
+  import { CODE_STATUS_OK } from '$src/constant'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
@@ -35,8 +37,10 @@
 
     try {
       const res = await im.userVipList()
-      const { data, serverTime } = res || {}
-      userVipList.set(data?.list || [])
+      const { code, data, serverTime } = res || {}
+
+      if (code === CODE_STATUS_OK) userVipList.set(data?.list || [])
+      else showErrorMsgModal.set(true)
 
       if (serverTime) diffTime.set(getTimeDifference(serverTime))
     } catch (error) {
@@ -65,4 +69,6 @@
   {#if $showBottomNav}
     <BottomNavigation goHome={() => $goHomeCallback()} />
   {/if}
+
+  <ErrorMsgModal />
 </main>
