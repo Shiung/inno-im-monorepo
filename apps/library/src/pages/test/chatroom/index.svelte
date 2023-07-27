@@ -2,14 +2,13 @@
   import { im } from 'api'
   import { twMerge } from 'tailwind-merge'
   import { onDestroy, onMount } from 'svelte'
-  import { locale, setUserAuth, setUserInfo } from '$stores'
+  import { locale, setUserAuth, setUserInfo, setGoDeposit, setGoVipCenter, setGoLogin } from '$stores'
   import Chatroom, {
     controller,
     setChatInfo,
     setChatOrdersInfo,
     onSizeChangedCallback,
     onToggledCallback,
-    onRouterRedirectCallback,
     type SizeChangedOption
   } from '$src/containers/Chatroom'
 
@@ -86,19 +85,9 @@
     setChatInfo({ isOpen: open })
   })
 
-  onRouterRedirectCallback((option) => {
-    switch (option.location) {
-      case 'login':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to login')
-        break
-      case 'vipCenter':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to vipCenter')
-        break
-      case 'deposit':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to deposit')
-        break
-    }
-  })
+  setGoDeposit(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoDeposit called') })
+  setGoVipCenter(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoVipCenter called') })
+  setGoLogin(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoLogin called') })
 
   const fetchMarket = async () => {
     const lang = $locale.toLowerCase().replace(/_/g, '-')

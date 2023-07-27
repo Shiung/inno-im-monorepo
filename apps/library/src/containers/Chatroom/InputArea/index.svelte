@@ -1,12 +1,3 @@
-<script lang="ts" context="module">
-  import type { RouterRedirectCallback } from '../type'
-  let routerRedirectCallback: RouterRedirectCallback = () => {}
-  export const onRouterRedirectCallback = (callback: RouterRedirectCallback) => {
-    if (typeof callback !== 'function') return console.warn('onRouterRedirect parameter callback MUST be function')
-    routerRedirectCallback = callback
-  }
-</script>
-
 <script lang="ts">
   import { fly } from 'svelte/transition'
   import { twMerge } from 'tailwind-merge'
@@ -21,7 +12,7 @@
 
   import { EErrorCode, errorCodeMsgMap } from '../constant'
   import { getInfo } from '../context'
-  import { userInfo, userAuth, type IUserInfo, type IUserAuth } from '$stores'
+  import { userInfo, userAuth, type IUserInfo, type IUserAuth, goLoginCallback, goVipCenterCallback, goDepositCallback } from '$stores'
   import { chatroomSetting, type IChatroomSetting } from '../controller/localEnv'
   import { inputRect, inputAreaOffset } from '../store'
 
@@ -56,7 +47,7 @@
 
   const setWithoutLogin = (_t: ITransStore) => {
     placeHolder = _t('chat.needLogin')
-    routerCallback = () => routerRedirectCallback({ location: 'login' })
+    routerCallback = $goLoginCallback
     message = ''
   }
 
@@ -65,12 +56,12 @@
     const _onCurrencyLimit = (depositLimit: IChatroomSetting['depositLimit'], userCurrency: string, _t: ITransStore) => {
       const limitRule = depositLimit.find(item => item.currency === userCurrency)
       placeHolder = _t(errorCodeMsgMap[EErrorCode.CURRENCY_LIMIT], { currency: limitRule?.currency, amount: limitRule?.amount})
-      routerCallback = () => routerRedirectCallback({ location: 'deposit' })
+      routerCallback = $goDepositCallback
       message = ''
     }
     const _onVipLimit = (vip: IChatroomSetting['vip'], _t) => {
       placeHolder = _t(errorCodeMsgMap[EErrorCode.VIP_LIMIT], { vip })
-      routerCallback = () => routerRedirectCallback({ location: 'vipCenter' })
+      routerCallback = $goVipCenterCallback
       message = ''
     }
 
