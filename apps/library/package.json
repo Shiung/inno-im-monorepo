@@ -22,6 +22,7 @@
     "dts-generate": "node ./env_scripts/generateDts.mjs"
   },
   "dependencies": {
+    "@lottiefiles/svelte-lottie-player": "^0.3.0",
     "api": "workspace:*",
     "assets": "workspace:*",
     "bignumber.js": "^9.1.1",
