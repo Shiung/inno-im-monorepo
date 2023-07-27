@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import Router, { location } from 'svelte-spa-router'
+  import Router, { location, replace } from 'svelte-spa-router'
   import BottomNavigation from '$containers/BottomNavigation'
   import ErrorMsgModal from '$src/containers/ErrorMsgModal'
   import { bottomNav, showBottomNav, appHeight } from '$stores/layout'
@@ -22,6 +22,10 @@
 
     if (event?.detail?.userData?.showBottomNav === false) showBottomNav.set(false)
     else showBottomNav.set(true)
+  }
+
+  const conditionsFailed = (event: CustomEvent) => {
+    if (event?.detail?.userData?.isExpertRelevant) replace('/expert/0')
   }
 
   const setVh = () => {
@@ -65,7 +69,7 @@
 </script>
 
 <main class="im-library">
-  <Router {routes} on:routeLoading={routeLoading} />
+  <Router {routes} on:conditionsFailed={conditionsFailed} on:routeLoading={routeLoading} />
   {#if $showBottomNav}
     <BottomNavigation goHome={() => $goHomeCallback()} />
   {/if}
