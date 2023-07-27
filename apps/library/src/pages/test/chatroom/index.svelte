@@ -17,7 +17,7 @@
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
   const isWindow: boolean = true
-  let expandType: `${EChatroomSize}` = 'normal'
+  let expandType: `${EChatroomSize}` = 'default'
   let dom: HTMLDivElement
   let changedHeight: number
   let videoPlay: boolean = false
@@ -56,7 +56,7 @@
       // iid: 9433737,
       showBetEnable: true,
       expandAnimation: true,
-      size: 'normal'
+      size: 'default'
     })
   }
 
