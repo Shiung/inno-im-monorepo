@@ -5,7 +5,7 @@ import themeMap from './map'
 const genVendorColorTemplate = (repoName: string, vd: VENDERID): string => {
   const vdThemeMap = themeMap[vd] || {}
 
-  if (typeof vdThemeMap !== 'object' || Array.isArray(vdThemeMap) || vdThemeMap === null) return
+  if (typeof vdThemeMap !== 'object' || Array.isArray(vdThemeMap) || vdThemeMap === null) return ''
 
   let mergedString = ''
   for (const [key, value] of Object.entries(vdThemeMap)) {
