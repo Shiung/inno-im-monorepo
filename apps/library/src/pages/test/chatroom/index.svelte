@@ -8,15 +8,16 @@
     setChatInfo,
     setChatOrdersInfo,
     onSizeChangedCallback,
-    type SizeChangedOption
+    type SizeChangedOption,
+    type EChatroomSize
   } from '$src/containers/Chatroom'
 
   import { getUser, type IUser } from './utils'
 
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
-  const isWindow: boolean = false
-  let expandType: string = 'default'
+  const isWindow: boolean = true
+  let expandType: `${EChatroomSize}` = 'normal'
   let dom: HTMLDivElement
   let changedHeight: number
   let videoPlay: boolean = false
@@ -53,11 +54,13 @@
       chatId: '9434287',
       height: initHeight,
       // iid: 9433737,
-      showBetEnable: true
+      showBetEnable: true,
+      expandAnimation: true,
+      size: 'normal'
     })
   }
 
-  $: setChatInfo({ height: changedHeight, size: expandType as any })
+  $: setChatInfo({ height: changedHeight, size: expandType })
   $: setChatOrdersInfo({ sportMarketSummary, selfOrdersCallback, followOrdersCallback })
 
   onSizeChangedCallback((option: SizeChangedOption) => {
@@ -78,7 +81,6 @@
         break
     }
   })
-
 
   setGoDeposit(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoDeposit called') })
   setGoVipCenter(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoVipCenter called') })
