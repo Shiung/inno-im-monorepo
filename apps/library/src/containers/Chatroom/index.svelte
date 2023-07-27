@@ -42,7 +42,7 @@
   import { EChatroomSize } from './constant'
   import { showBetList } from './store'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable } = setInfo($info)
+  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -54,6 +54,7 @@
       if (get(size) !== e.size) size.set(e.size)
       if (get(chatId) !== e.chatId) chatId.set(e.chatId)
       if (get(iid) !== e.iid) iid.set(e.iid)
+      if (get(expandAnimation) !== e.expandAnimation) expandAnimation.set(e.expandAnimation)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -146,7 +147,6 @@
   }
 
   $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
-  $: isPC = $chatEnv.device === 'pc'
 
   onDestroy(() => {
     resetStoreModule()
@@ -165,7 +165,7 @@
     class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
     style:min-height={isWindow ? boxContainerHeight : '100%'}
     style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-    transition:fly|local={!isPC && { y: isWindow ? window.innerHeight - $height : '100%', duration: 500 }}
+    transition:fly|local={$expandAnimation && { y: isWindow ? window.innerHeight - $height : '100%', duration: 500 }}
     on:introend={() => {
       isTransition = false
     }}
