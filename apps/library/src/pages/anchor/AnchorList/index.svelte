@@ -133,8 +133,9 @@
 
   // debug
   // let marginTop = PREVIEW_BAR_TOP_RATIO * 100
+
   // 44 = header, 75.5 = bottomNavigation
-  let whiteBlockHeight = window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - 44 - 75.5
+  let whiteBlockHeight = window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - PREVIEW_BAR_WIDTH - 44 - 75.5
   $: useLang = $getUseLang()
 
   $: init(sid, useLang)
@@ -159,7 +160,10 @@
     {/if}
   </div>
 
-  <div class='flex justify-center items-center' style:height={`${whiteBlockHeight}px`}></div>
+  <!-- for able to preview last anchor streaming-->
+  {#if !hasMoreData}
+    <div class='flex justify-center items-center' style:height={`${whiteBlockHeight}px`}></div>
+  {/if}
 
   <!-- debug -->
   <!-- <div class='bg-red-500 fixed left-0 right-0' style:top={`${marginTop}%`} style:height={`${PREVIEW_BAR_WIDTH}px`} ></div> -->
