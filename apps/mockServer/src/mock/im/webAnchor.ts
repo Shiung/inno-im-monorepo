@@ -287,9 +287,33 @@ const webAnchors: IMockData[] = [
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10),
         houseIntroduction: "@csentence",
-        languageType: query.lang
+        lang: query.lang
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
+    }))
+  },
+  {
+    url: `${prefix}/v1/anchor/web-anchor/house-detail`,
+    timeout: 500,
+    response: ({ query }) => mock(withData<Types.IWebAnchorsHouseDetail>({
+      houseId: genHouseId(),
+      houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
+      userImage: getRandomItemFromArray([
+        "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+        "https://oss-",
+        "",
+      ]),
+      visitHistory: Random.natural(0, 999999999999),
+      houseName: "@ANCHORHOUSENAME",
+      nickName: "@ANCHORNICKNAME",
+      playStreamAddress: "https://live5.haoksoft.com/live/52292.flv?auth_key=1690367115-0-2292-73e7c969549829c4a56100f2045c5a02",
+      playStreamAddress2: "https://live5.haoksoft.com/live/52292.flv?auth_key=1690367115-0-2292-73e7c969549829c4a56100f2045c5a02",
+      liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
+      sid: 100 as Types.IWebAnchor['sid'],
+      fansCount: Random.natural(0, 10000000),
+      attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
+      houseIntroduction: "@csentence",
+      lang: Random.pick(['zh_CN', 'en_US', 'th_TH', 'ja_JP', 'ko_KR'])
     }))
   },
   {
@@ -375,7 +399,7 @@ const webAnchors: IMockData[] = [
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10),
         houseIntroduction: "@csentence",
-        languageType: query.lang
+        lang: query.lang
       })),
     }))
   },
