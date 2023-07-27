@@ -29,9 +29,7 @@ export interface IKeyInfo {
 }
 
 export interface IUserKeyInfo {
-  query: {
-    account: string
-  }
+  query: null
   body: null
   res: withData<IKeyInfo>
 }
