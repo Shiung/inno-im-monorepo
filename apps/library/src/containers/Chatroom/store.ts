@@ -9,3 +9,5 @@ export const messageBoxRect = writable<DOMRect>(null)
 export const inputRect = writable<DOMRect>(null)
 
 export const inputAreaOffset = writable<number>(0)
+
+export const showBetList = writable<boolean>(false)
