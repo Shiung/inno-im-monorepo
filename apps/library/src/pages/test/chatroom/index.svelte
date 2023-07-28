@@ -56,7 +56,8 @@
       // iid: 9433737,
       showBetEnable: true,
       expandAnimation: true,
-      size: 'default'
+      size: 'default',
+      header: 'deposit'
     })
   }
 

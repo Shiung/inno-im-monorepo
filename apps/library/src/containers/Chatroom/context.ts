@@ -11,6 +11,7 @@ export interface IChatroomInfo {
   iid: number
   showBetEnable: boolean
   expandAnimation: boolean
+  header: 'normal' | 'text' | 'deposit'
 }
 
 export const initInfo: IChatroomInfo = {
@@ -21,7 +22,8 @@ export const initInfo: IChatroomInfo = {
   chatId: '',
   iid: 0,
   showBetEnable: true,
-  expandAnimation: true
+  expandAnimation: true,
+  header: 'normal'
 }
 
 export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)

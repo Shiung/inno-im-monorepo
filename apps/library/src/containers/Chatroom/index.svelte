@@ -41,7 +41,7 @@
   import { EChatroomSize } from './constant'
   import { showBetList } from './store'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation } = setInfo($info)
+  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -54,6 +54,7 @@
       if (get(chatId) !== e.chatId) chatId.set(e.chatId)
       if (get(iid) !== e.iid) iid.set(e.iid)
       if (get(expandAnimation) !== e.expandAnimation) expandAnimation.set(e.expandAnimation)
+      if (get(header) !== e.header) header.set(e.header)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -139,7 +140,7 @@
 
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
-    
+
     if (genId(previous) !== id) {
       unsubscribeRoom(previous)
       subscribeRoom({ chatId: $chatId, iid: $iid })
@@ -150,8 +151,8 @@
   $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
 
   onDestroy(() => {
-    resetStoreModule()
     unsubscribeStoreModule()
+    resetStoreModule()
     if($chatEnv.subscribeBindingChatroom) {
       unsubscribeRoom(previous)
     }
