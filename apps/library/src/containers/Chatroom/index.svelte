@@ -18,7 +18,6 @@
   let ordersInfo = writable(initOrdersInfo)
   export const setChatOrdersInfo = (_platformInfo: Partial<IOrdersInfo>) => ordersInfo.update((e) => ({ ...e, ..._platformInfo }))
 
-  let previous: { chatId: string; iid: number } = { chatId: '', iid: 0 }
 </script>
 
 <script lang="ts">
@@ -86,6 +85,8 @@
   let touchMoveOffset: number
   let isExpand: boolean = false
   const EXPAND_OFFSET = 100
+
+  let previous: { chatId: string; iid: number } = { chatId: '', iid: 0 }
 
   const expandChatroom = () => {
     isTransition = true
