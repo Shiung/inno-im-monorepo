@@ -43,7 +43,11 @@ $: info = [
   {#each info as item }
     <div class='flex items-center justify-between text-[14px] h-[44px]'>
       <span> {$t(item.i18n)} </span>
-      <span class='text-[#999999]'> {item.value} </span>
+      {#if personal.loading}
+        <div class='rounded-md w-[80px] h-[21px] bg-[#ddd] animate-pulse'></div>
+      {:else}
+        <span class='text-[#999999]'> {item.value} </span>
+      {/if}
     </div>
   {/each}
 
