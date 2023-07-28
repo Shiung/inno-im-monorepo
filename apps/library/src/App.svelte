@@ -17,7 +17,7 @@
   import BigNumber from 'bignumber.js'
   import { appHeight } from '$stores/layout'
   import versionInfo from './utils/versionInfo'
-  import { fetchLangInfo } from '$stores'
+  import { fetchLangInfo, setGoDetail } from '$stores'
 
   versionInfo()
   $: console.log('=========[im-library] location==========', $location)
