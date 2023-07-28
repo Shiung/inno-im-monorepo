@@ -1,7 +1,7 @@
 {
   "name": "im-library",
   "private": true,
-  "version": "0.0.46",
+  "version": "0.0.47",
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
@@ -22,6 +22,7 @@
     "dts-generate": "node ./env_scripts/generateDts.mjs"
   },
   "dependencies": {
+    "@lottiefiles/svelte-lottie-player": "^0.3.0",
     "api": "workspace:*",
     "assets": "workspace:*",
     "bignumber.js": "^9.1.1",

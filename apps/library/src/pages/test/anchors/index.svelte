@@ -1,9 +1,13 @@
 <script lang="ts">
-  import Streaming from '$src/platform/streaming'
-  import Anchors from '$src/platform/anchors'
+  import Streaming, { setStreaming } from '$src/platform/streaming'
+  import Anchors, { onChange } from '$src/platform/anchors'
   import { setAnchors } from './utils'
 
   setAnchors()
+
+  onChange((e) => {
+    setStreaming(e)
+  })
 </script>
 
 <Streaming />

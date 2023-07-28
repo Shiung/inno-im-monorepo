@@ -2,10 +2,12 @@
 import { Ripple } from 'ui'
 import TeamLogo from '$src/components/TeamLogo'
 import { beImgUrlParse, ImageType } from 'utils/imgUrlParse'
-
+import { goDetailCallback } from '$stores'
 import Status from './Status.svelte'
 
 import type { IWebAnchorMatch } from 'api/im/types'
+
+import { goSportDetailHOF } from '$src/utils/match'
 
 export let match: IWebAnchorMatch
 </script>
@@ -14,7 +16,7 @@ export let match: IWebAnchorMatch
   style:background-color={'rgb(var(--im-monorepo-primary) / 0.1)'}
 >
   <Ripple class='w-full py-[12px] rounded-[16px] border border-imprimary'
-    on:click={() => console.log(match.mid)}
+    on:click={() => goSportDetailHOF(match, $goDetailCallback)}
   >
     <div class='text-[12px] text-center font-semibold mb-[10px]'> {match.tnName} </div>
 
