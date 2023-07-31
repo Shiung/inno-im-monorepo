@@ -46,8 +46,9 @@
   import InputArea from './InputArea/index.svelte'
   import BetListSheet from '../BetListSheet/index.svelte'
   import { EChatroomSize } from './constant'
+  import { showBetList } from './store'
 
-  const { displayType, useScrollCollapse, height, isOpen, showBetList, chatId, iid } = setInfo($info)
+  const { displayType, useScrollCollapse, height, isOpen, chatId, iid } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -56,7 +57,6 @@
       useScrollCollapse.set(e.useScrollCollapse)
       height.set(e.height)
       isOpen.set(e.isOpen)
-      showBetList.set(e.showBetList)
       if (get(chatId) !== e.chatId) chatId.set(e.chatId)
       if (get(iid) !== e.iid) iid.set(e.iid)
     })

@@ -24,10 +24,14 @@ const fetchedName = writable(new Set())
 export const localeData = writable({})
 export const locale = writableSyncLocalStorage<ILanguages>('locale', 'zh_CN')
 
+const replaceBreakLine = (str: string) => str.replace(/\\n/g, '\n')
+
 export const t = writable<ITransStore>((key, replace) => {
   fetchLocaleData(key)
   const _key = `${get(locale)}_${key}`
   let _str = get(localeData)[_key] || '\u2003'
+
+  _str = replaceBreakLine(_str)
 
   if (!replace) return _str
   for (const [key, val] of Object.entries(replace)) {
@@ -39,7 +43,7 @@ export const t = writable<ITransStore>((key, replace) => {
 
 const triggerT = () => t.update(func => func)
 
-const putLocaleBeforeName = (data: { [key:string]: string }) => {
+const putLocaleBeforeName = (data: { [key: string]: string }) => {
   const renamed = {}
   for (const [key, text] of Object.entries(data)) {
     const _key = `${get(locale)}_${key}`
@@ -61,7 +65,7 @@ const fetchLocaleData = async (name: string) => {
   const data = await fetcher()
   const renamed = putLocaleBeforeName(data.default)
 
-  localeData.update((_data) => ({ ..._data, ... renamed }))
+  localeData.update((_data) => ({ ..._data, ...renamed }))
   triggerT()
 }
 

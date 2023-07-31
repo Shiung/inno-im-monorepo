@@ -55,8 +55,7 @@
       chatId: '9434287',
       height: initHeight,
       // iid: 9433737,
-      isOpen: false,
-      showBetList: false
+      isOpen: false
     })
   }
 
