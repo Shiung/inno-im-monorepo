@@ -20,6 +20,7 @@ export const setGoLogin = (callback: () => void) => {
 export const setGoVipCenter = (callback: () => void) => {
   if (typeof callback !== 'function') return console.warn('setGoVipCenter parameter callback MUST be function')
   goVipCenterCallback.set(callback)
+}
 
 export type GoDetailCallback = (path: string) => void
 
