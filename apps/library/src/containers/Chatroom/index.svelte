@@ -136,6 +136,9 @@
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
 
+  let hasMsgs = false
+  $: if(!hasMsgs) hasMsgs = hasVisibleMsg($chatMessages)
+
   // use window.innerHeight for compatibility between ios and android
   $: boxContainerHeight = `${window.innerHeight - $height}px`
 
@@ -182,7 +185,7 @@
 
     {#if initFetchLoading || isTransition}
       <Loading />
-    {:else if !hasVisibleMsg($chatMessages)}
+    {:else if !hasMsgs}
       <Empty class="flex-1" title={$t('chat.empty')} />
     {:else}
       <Messages
