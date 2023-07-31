@@ -43,7 +43,7 @@
     if (!dom) return
 
     let isFetched: boolean = false
-    matchObserver = new IntersectionObserver(
+    const matchObserver = new IntersectionObserver(
       async (entries) => {
         if (isFetched) return
 
@@ -63,6 +63,8 @@
     )
 
     matchObserver.observe(dom)
+
+    return matchObserver
   }
 
   const createPreviewObserver = (dom: HTMLDivElement) => {
@@ -71,7 +73,7 @@
     let marginTop = PREVIEW_BAR_TOP_RATIO * 100
     let marginBottom = Math.floor(((window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - PREVIEW_BAR_WIDTH) / window.innerHeight) * 100)
 
-    previewObserver = new IntersectionObserver(
+    const previewObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting && window.scrollY !== 0 && isLive) {
@@ -83,12 +85,14 @@
     )
 
     previewObserver.observe(dom)
+
+    return previewObserver
   }
 
   const init = (dom: HTMLDivElement, isMatchType: boolean) => {
     if (!isMatchType || !anchor.matchCount) return (loading = false)
 
-    createMatchObserver(dom)
+    matchObserver = createMatchObserver(dom)
   }
 
   const regStreamingCallbacks = (active: boolean) => {
@@ -116,7 +120,7 @@
 
   $: init(dom, isMatchType)
 
-  $: createPreviewObserver(dom)
+  $: previewObserver = createPreviewObserver(dom)
 
   $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
 
