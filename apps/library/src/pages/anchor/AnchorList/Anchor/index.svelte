@@ -166,7 +166,12 @@
     <div class="flex-1 flex flex-col justify-between py-[10px] overflow-hidden">
       <div class="flex flex-1 flex-col items-start overflow-hidden space-y-1">
         <div class="flex w-full items-center space-x-1">
-          <AnchorImage src={anchor.userImage} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]" />
+          <Ripple on:click={() => openDetailSheet = true} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] flex-none">
+            <AnchorImage
+              src={anchor.userImage}
+              class='block w-full h-auto'
+            />
+          </Ripple>
           <span class="text-imprimary leading-[18px] text-[18px] truncate"> {anchor.houseName} </span>
         </div>
 
