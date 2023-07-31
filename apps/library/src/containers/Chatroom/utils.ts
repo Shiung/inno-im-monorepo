@@ -16,6 +16,6 @@ export const filterDuplicatesByMsgId = (messages: IChatMessage[], newMessages: I
 export const getOldestMsg = (messages: IChatMessage[]) => (messages?.[0] || {}) as IPushMessageEntity
 
 //@ts-ignore findLast 會噴錯，不知原因
-export const getLatestVisibleMsg = (messages: IChatMessage[]) => (messages.findLast((msg) => isMsgVisible(msg)) || {}) as IPushMessageEntity
+export const getLatestVisibleMsg = (messages: IChatMessage[]) => (messages.findLast(isMsgVisible) || {}) as IPushMessageEntity
 
 export const hasVisibleMsg = (messages: IChatMessage[]) => messages.findIndex(isMsgVisible) !== -1
