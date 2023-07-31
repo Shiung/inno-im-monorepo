@@ -12,17 +12,11 @@ const routes = {
       }
     ]
   }),
-  '/square/:sid?': wrap({
+  '/square': wrap({
     asyncComponent: () => import('$pages/square/index.svelte'),
     userData: {
       bottomNav: 'square'
-    },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.sid) replace('/square/1')
-        return true
-      }
-    ]
+    }
   }),
   '/anchor/:anchorSid?': wrap({
     asyncComponent: () => import('$pages/anchor/index.svelte'),
