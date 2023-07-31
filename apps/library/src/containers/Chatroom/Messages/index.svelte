@@ -18,7 +18,8 @@
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
-  import { chatEnv, filterDuplicatesByMsgId } from '../controller'
+  import { chatEnv } from '../controller'
+  import { filterDuplicatesByMsgId } from '../utils'
   import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'

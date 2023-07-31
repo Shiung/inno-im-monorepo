@@ -8,6 +8,7 @@
 
   import { getInfo } from '../context'
   import Chat from '../images/chat.svg'
+  import { filterVisibleMsgs } from '../utils'
 
   const { useScrollCollapse } = getInfo()
 
@@ -20,12 +21,10 @@
   let collapseStyles = { transform: '' }
   let isFold = false
 
-  const getVisibleMsgs = (msgs: IChatMessage[], idx?: number) => msgs.slice(idx).filter((msg) => msg.visible === impb.enum.visible.ALL)
-
   const calculateUnread = (msgs: IChatMessage[], _lastReadId: number) => {
     const lastIdx = msgs.findIndex((msg) => msg.msgId === _lastReadId)
 
-    const unreadLength = getVisibleMsgs(msgs, lastIdx + 1).length
+    const unreadLength = filterVisibleMsgs(msgs, lastIdx + 1).length
 
     if (unreadLength > 99) return '99+'
 
@@ -34,7 +33,7 @@
 
   const getLatestMsgContent = (msgs: IChatMessage[], t: ITransStore) => {
     let content = ''
-    const visibleMsgs = getVisibleMsgs(msgs)
+    const visibleMsgs = filterVisibleMsgs(msgs)
     const latestMsg = visibleMsgs[visibleMsgs.length - 1]
     if (latestMsg) {
       if (latestMsg?.contentType === impb.enum.contentType.ORDER) {
