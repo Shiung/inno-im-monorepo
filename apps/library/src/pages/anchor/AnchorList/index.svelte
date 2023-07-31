@@ -89,7 +89,7 @@
       if (list?.length) data = list
 
       const { totalPage } = pager || {}
-      hasMoreData = false && totalPage > pageIdx
+      hasMoreData = totalPage > pageIdx
       if (hasMoreData) pageIdx++
       setActiveId(data[0].houseId)
     } catch (error) {
