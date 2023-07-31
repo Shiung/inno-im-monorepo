@@ -1,4 +1,7 @@
-import type { MarketTypeMap, MarketType } from 'api/im/types/common'
+import type { MarketTypeMap, MarketType, MatchStatus } from 'api/im/types/common'
+import type { IWebAnchorMatch } from 'api/im/types'
+import { SidString } from '$src/constant'
+import type { GoDetailCallback } from '$stores'
 
 type MarketTypeNum = typeof MarketTypeMap[keyof typeof MarketTypeMap]
 
@@ -20,4 +23,34 @@ export const marketTypeDispatcher = (marketType: MarketType) => {
         return undefined
     }
   }
+}
+
+const getMatchType = (matchStatus: MatchStatus) => {
+  switch (matchStatus) {
+    case 2:
+      return 'inplay'
+    case 1:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    default:
+      return 'early'
+  }
+}
+
+const getSportDetailPath = (match: IWebAnchorMatch) => {
+  const { matchStatus, iid, vd, sid } = match || {}
+
+  const sport = SidString[sid]
+  const matchType = getMatchType(matchStatus)
+
+  return `/${matchType}/${sport}/match/${iid}/${vd}`
+}
+
+export const goSportDetailHOF = (match: IWebAnchorMatch, goFunc: GoDetailCallback) => {
+  const sportDetailPath = getSportDetailPath(match)
+  return goFunc(sportDetailPath)
 }
