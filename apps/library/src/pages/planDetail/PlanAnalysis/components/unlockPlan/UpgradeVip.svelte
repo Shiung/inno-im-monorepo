@@ -3,7 +3,7 @@
   import { onDestroy } from 'svelte'
   import { twMerge } from 'tailwind-merge'
 
-  import { fetchUserKeyInfo } from '$api/index'
+  import { fetchUserKeyInfo } from '$api'
 
   import { Button } from 'ui'
   import Modal, { Header } from 'ui/components/Modal'

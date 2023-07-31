@@ -9,7 +9,7 @@
   import BigNumber from 'bignumber.js'
   import versionInfo from './utils/versionInfo'
   import { im } from 'api'
-  import { fetchUserKeyInfo } from '$api/index'
+  import { fetchUserKeyInfo } from '$api'
   import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime } from '$stores'
   import { CODE_STATUS_OK } from '$src/constant'
 

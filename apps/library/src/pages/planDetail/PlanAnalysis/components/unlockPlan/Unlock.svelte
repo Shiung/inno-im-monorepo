@@ -6,7 +6,7 @@
 
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
-  import { fetchUserKeyInfo } from '$api/index'
+  import { fetchUserKeyInfo } from '$api'
 
   import { setIsUnlockingInProgress } from '$pages/planDetail/context'
 
