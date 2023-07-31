@@ -22,23 +22,22 @@
 
 <script lang="ts">
   import { onDestroy, tick } from 'svelte'
-  import { fly } from 'svelte/transition'
-  import { twMerge } from 'tailwind-merge'
   import { t } from '$stores'
   import { get } from 'svelte/store'
 
   import Empty from '$src/containers/Empty'
 
-  import { genId, subscribeRoom, unsubscribeRoom, getMessages, chatEnv } from './controller'
-  import { setInfo, setOrdersInfo } from './context'
-
+  import Container from './Container/index.svelte'
   import Minimize from './Minimize/index.svelte'
   import Header from './Header/index.svelte'
   import Loading from './Loading.svelte'
   import Messages from './Messages/index.svelte'
   import InputArea from './InputArea/index.svelte'
   import BetListSheet from '../BetListSheet/index.svelte'
-  import { EChatroomSize } from './constant'
+
+  import { genId, subscribeRoom, unsubscribeRoom, getMessages, chatEnv } from './controller'
+  import { setInfo, setOrdersInfo } from './context'
+  import { EChatroomSize, CHATROOM_EXPAND_TRIGGER_DISTANCE } from './constant'
   import { showBetList } from './store'
   import { hasVisibleMsg } from './utils'
 
@@ -72,23 +71,17 @@
 
   const unsubscribeStoreModule = subscribeStoreModule()
 
-  $: isWindow = $displayType === 'window'
-
   let lastReadId: number
-
-  $: chatMessages = getMessages({ chatId: $chatId, iid: $iid })
-
   let initFetchLoading: boolean = false
-
   let isTransition = false
   let boxContainerDom: HTMLDivElement
-
-  let startY: number
   let touchMoveOffset: number
   let isExpand: boolean = false
-  const EXPAND_OFFSET = 100
 
   let previous: { chatId: string; iid: number } = { chatId: '', iid: 0 }
+
+  $: isWindow = $displayType === 'window'
+  $: chatMessages = getMessages({ chatId: $chatId, iid: $iid })
 
   const expandChatroom = () => {
     isTransition = true
@@ -97,33 +90,20 @@
 
   const foldChatroom = async () => {
     isTransition = true
-    await tick() // for chatroom content chang to <Loading>
+    await tick() // for chatroom content change to <Loading>
     touchMoveOffset = 0
     isWindow && window.scrollTo({ top: 0 })
     sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.DEFAULT, transition: !isExpand })
     isExpand = false
   }
 
-  const onTouchStart = (e: TouchEvent) => {
-    if (!('touches' in e)) return
-
-    startY = e.touches[0].clientY
-  }
-
-  const onTouchMove = (e: TouchEvent) => {
-    if (!('touches' in e)) return
-
-    const moveY = e.touches[0].clientY
-    touchMoveOffset = startY - moveY
-  }
-
   const changeRoomSizeByTouchMove = (moveOffset: number) => {
     const scrollY = isWindow ? window.scrollY : boxContainerDom?.scrollTop
 
-    if (!isExpand && moveOffset >= EXPAND_OFFSET) {
+    if (!isExpand && moveOffset >= CHATROOM_EXPAND_TRIGGER_DISTANCE) {
       isExpand = true
       sizeChangedCallback({ size: EChatroomSize.EXPAND, transition: true })
-    } else if (isExpand && moveOffset <= -EXPAND_OFFSET && scrollY === 0) {
+    } else if (isExpand && moveOffset <= -CHATROOM_EXPAND_TRIGGER_DISTANCE && scrollY === 0) {
       isExpand = false
       sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
     }
@@ -138,9 +118,6 @@
 
   let hasMsgs = false
   $: if(!hasMsgs) hasMsgs = hasVisibleMsg($chatMessages)
-
-  // use window.innerHeight for compatibility between ios and android
-  $: boxContainerHeight = `${window.innerHeight - $height}px`
 
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
@@ -157,50 +134,43 @@
   onDestroy(() => {
     unsubscribeStoreModule()
     resetStoreModule()
-    if($chatEnv.subscribeBindingChatroom) {
-      unsubscribeRoom(previous)
-    }
-    previous = { chatId: '', iid: 0 }
+
+    if($chatEnv.subscribeBindingChatroom) unsubscribeRoom(previous)
   })
 </script>
 
 {#if $size === EChatroomSize.DEFAULT}
   <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
 {:else}
-  <div
-    class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
-    style:min-height={isWindow ? boxContainerHeight : '100%'}
-    style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-    transition:fly|local={$expandAnimation && { y: isWindow ? window.innerHeight - $height : '100%', duration: 500 }}
-    on:introend={() => {
-      isTransition = false
-    }}
-    on:outroend={() => {
-      isTransition = false
-    }}
-    on:touchstart={onTouchStart}
-    on:touchmove={onTouchMove}
+  <Container
+    {isTransition}
+    on:isTransitionChange={(e) => isTransition = e.detail }
+    on:onTouchMoveChange={(e) => touchMoveOffset = e.detail }
   >
-    <Header {isTransition} fixed={isWindow} on:close={foldChatroom} />
+    <svelte:fragment slot='header'>
+      <Header {isTransition} fixed={isWindow} on:close={foldChatroom} />
+    </svelte:fragment>
 
-    {#if initFetchLoading || isTransition}
-      <Loading />
-    {:else if !hasMsgs}
-      <Empty class="flex-1" title={$t('chat.empty')} />
-    {:else}
-      <Messages
-        bind:lastReadId
-        {chatMessages}
-        on:domBound={(e) => {
-          boxContainerDom = e.detail
-        }}
-      />
-    {/if}
+    <svelte:fragment slot='messages'>
+      {#if initFetchLoading || isTransition}
+        <Loading />
+      {:else if !hasMsgs}
+        <Empty class="flex-1" title={$t('chat.empty')} />
+      {:else}
+        <Messages
+          bind:lastReadId
+          {chatMessages}
+          on:domBound={(e) => {
+            boxContainerDom = e.detail
+          }}
+        />
+      {/if}
+    </svelte:fragment>
 
-    <InputArea fixed={isWindow} />
+    <svelte:fragment slot='input'>
+      <InputArea fixed={isWindow} />
+    </svelte:fragment>
 
     <BetListSheet bind:open={$showBetList} />
-
-    <div class="absolute inset-0 bg-white z-[-1]" />
-  </div>
+  </Container>
 {/if}
