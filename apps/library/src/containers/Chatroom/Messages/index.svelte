@@ -9,7 +9,6 @@
 
   import { t } from '$stores'
   import { im as imWs } from 'api/wsMaster'
-  import type { IPushMessageEntity } from 'protobuf/im/types'
 
   import { messageBoxRect } from '../store'
   import Message from './Message'
@@ -19,7 +18,7 @@
 
   import { getInfo } from '../context'
   import { chatEnv } from '../controller'
-  import { filterDuplicatesByMsgId } from '../utils'
+  import { filterDuplicatesByMsgId, getLatestVisibleMsg, getOldestMsg } from '../utils'
   import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
@@ -35,16 +34,12 @@
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
 
-  const getOldestMessage = () => ($chatMessages?.[0] || {}) as IPushMessageEntity
-  //@ts-ignore findLast 會噴錯，不知原因
-  const getNewestMessage = () => ($chatMessages.findLast((msg) => msg.isSelf || msg.visible === impb.enum.visible.ALL) || {}) as IPushMessageEntity
-
   const dispatch = createEventDispatcher()
 
   const onScroll = (scrollTop: number, clientHeight: number, scrollHeight: number) => {
     if (scrollTop + clientHeight >= scrollHeight - 50) {
       scrollToNewest = true
-      lastReadId = getNewestMessage().msgId
+      lastReadId = getLatestVisibleMsg($chatMessages).msgId
     } else scrollToNewest = false
   }
 
@@ -71,7 +66,7 @@
     const target = isWindow ? window : (mutation.target as HTMLDivElement)
     const _scrollH = isWindow ? document.documentElement.scrollHeight : (mutation.target as HTMLDivElement).scrollHeight
 
-    const { msgId } = getNewestMessage()
+    const { msgId } = getLatestVisibleMsg($chatMessages)
     if (scrollToNewest) {
       rmvPrevMsgsWhenOverLimit()
       lastReadId = msgId
@@ -113,7 +108,7 @@
   $: isPC = $chatEnv.device === 'pc'
 
   const checkWatched = () => {
-    if (lastReadId === getNewestMessage().msgId) allWatched = true
+    if (lastReadId === getLatestVisibleMsg($chatMessages).msgId) allWatched = true
     else allWatched = false
   }
 
@@ -130,7 +125,7 @@
 
   let fetchMoreLoading: boolean = false
   const fetchMore = async () => {
-    const oldest = getOldestMessage()
+    const oldest = getOldestMsg($chatMessages)
     const targetDom = document.querySelector(`div[data-id='${oldest?.msgId}']`)
 
     fetchMoreLoading = true

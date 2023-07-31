@@ -40,6 +40,7 @@
   import BetListSheet from '../BetListSheet/index.svelte'
   import { EChatroomSize } from './constant'
   import { showBetList } from './store'
+  import { hasVisibleMsg } from './utils'
 
   const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
@@ -181,7 +182,7 @@
 
     {#if initFetchLoading || isTransition}
       <Loading />
-    {:else if $chatMessages.length === 0}
+    {:else if !hasVisibleMsg($chatMessages)}
       <Empty class="flex-1" title={$t('chat.empty')} />
     {:else}
       <Messages

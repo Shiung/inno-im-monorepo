@@ -8,7 +8,7 @@
 
   import { getInfo } from '../context'
   import Chat from '../images/chat.svg'
-  import { filterVisibleMsgs } from '../utils'
+  import { filterVisibleMsgs, getLatestVisibleMsg } from '../utils'
 
   const { useScrollCollapse } = getInfo()
 
@@ -22,7 +22,7 @@
   let isFold = false
 
   const calculateUnread = (msgs: IChatMessage[], _lastReadId: number) => {
-    const lastIdx = msgs.findIndex((msg) => msg.msgId === _lastReadId)
+    const lastIdx = msgs.findLastIndex((msg) => msg.msgId === _lastReadId)
 
     const unreadLength = filterVisibleMsgs(msgs, lastIdx + 1).length
 
@@ -33,8 +33,8 @@
 
   const getLatestMsgContent = (msgs: IChatMessage[], t: ITransStore) => {
     let content = ''
-    const visibleMsgs = filterVisibleMsgs(msgs)
-    const latestMsg = visibleMsgs[visibleMsgs.length - 1]
+    const latestMsg = getLatestVisibleMsg(msgs)
+
     if (latestMsg) {
       if (latestMsg?.contentType === impb.enum.contentType.ORDER) {
         content = `${latestMsg?.senderName} ${t('chat.showBet')}`
