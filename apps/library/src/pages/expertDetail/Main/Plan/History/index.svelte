@@ -1,7 +1,7 @@
 <script lang="ts">
   import { im } from 'api'
   import { Ripple } from 'ui'
-  import { t, locale, userAuth, showErrorMsgModal } from '$stores'
+  import { t, locale, userAuth } from '$stores'
   import { params } from 'svelte-spa-router'
   import { onMount } from 'svelte'
 
@@ -33,7 +33,7 @@
         headers: { 'Accept-Language': $locale }
       })
 
-      if (response.code !== CODE_STATUS_OK) return showErrorMsgModal.set(true)
+      if (response.code !== CODE_STATUS_OK) return
 
       const { list, pager } = response?.data || {}
   

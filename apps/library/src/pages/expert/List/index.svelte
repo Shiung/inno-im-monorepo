@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { locale, showErrorMsgModal } from '$stores'
+  import { locale } from '$stores'
 
   import InfiniteScroll from 'ui/components/InfiniteScroll'
 
@@ -56,7 +56,7 @@
         headers: { 'Accept-Language': $locale }
       })
 
-      if (response?.code !== CODE_STATUS_OK) return showErrorMsgModal.set(true)
+      if (response?.code !== CODE_STATUS_OK) return
 
       const { list, pager } = response?.data || {}
 

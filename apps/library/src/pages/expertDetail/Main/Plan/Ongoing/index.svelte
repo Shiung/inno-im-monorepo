@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { im } from 'api'
-import { t, locale, userAuth, showErrorMsgModal } from '$stores'
+import { t, locale, userAuth } from '$stores'
 import { params } from 'svelte-spa-router'
 import  { onMount } from 'svelte'
 
@@ -19,10 +19,6 @@ onMount(() => {
     promise = im.expertArticleNow({
       query: { expertId: $params.expertId },
       headers: { 'Accept-Language': $locale }
-    })
-
-    promise.then((res) => {
-      if (res?.code !== CODE_STATUS_OK) showErrorMsgModal.set(true)
     })
   }
 })

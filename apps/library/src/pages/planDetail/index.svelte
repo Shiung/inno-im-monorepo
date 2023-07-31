@@ -1,7 +1,7 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
-  import { t, locale, userAuth, showErrorMsgModal } from '$stores'
+  import { t, locale, userAuth } from '$stores'
   import type { ILanguages } from 'env-config'
   import { CODE_STATUS_OK } from '$src/constant'
 
@@ -42,7 +42,7 @@
     response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
     loading = false
 
-    if (response.code !== CODE_STATUS_OK) return showErrorMsgModal.set(true)
+    if (response.code !== CODE_STATUS_OK) return
 
     const { past, articleStatus } = response?.data
     if (past) isPast = true
