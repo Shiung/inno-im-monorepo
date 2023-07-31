@@ -18,6 +18,7 @@
 
   import { t, locale, goDetailCallback } from '$stores'
   import { SIDi18nKey, SID } from '$src/constant'
+  import { goSportDetailHOF } from '$src/utils/match'
   
   import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../config'
   import Arrow from '../images/arrow_down_small.svg'
@@ -129,11 +130,7 @@
 
   const onAnchorClick = () => {
     if(isMatchType) {
-      $goDetailCallback({
-        matchId: firstMatch.mid,
-        matchTime: firstMatch.matchTime,
-        vd: firstMatch.vd
-      })
+      goSportDetailHOF(firstMatch, $goDetailCallback)
     } else {
       push(`/anchorChat/${anchor.houseId}`)
     }
