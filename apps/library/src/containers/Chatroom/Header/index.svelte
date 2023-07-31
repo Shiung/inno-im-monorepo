@@ -38,7 +38,7 @@
     {:else if $header === 'text'}
       <svelte:component this={comp} bind:dom />
     {:else if $header === 'deposit'}
-      <svelte:component this={comp} bind:dom />
+      <svelte:component this={comp} bind:dom {fixed} {isTransition} />
     {/if}
   {/await}
 </div>
