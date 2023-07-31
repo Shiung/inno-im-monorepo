@@ -66,9 +66,10 @@
 
       <div class="flex items-end mt-[15px]">
         <img class="w-[30px] mr-[10px]" src={fans} alt="" />
-        {#key $streaming.houseId}
+        {$streaming.fansCount}
+        <!-- {#key $streaming.houseId}
           <Tween value={amountSymbolTransformer($streaming.fansCount)} />
-        {/key}
+        {/key} -->
       </div>
     </div>
   </div>

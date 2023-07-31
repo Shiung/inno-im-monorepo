@@ -23,11 +23,11 @@
   import { getInfo } from '../context'
   import { userInfo, userAuth, type IUserInfo, type IUserAuth } from '$stores'
   import { chatroomSetting, type IChatroomSetting } from '../controller/localEnv'
-  import { inputRect, inputAreaOffset } from '../store'
+  import { inputRect, inputAreaOffset, showBetList } from '../store'
 
   export let fixed: boolean = false
 
-  const { chatId, iid, showBetList } = getInfo()
+  const { chatId, iid } = getInfo()
   let placeHolder: string = ''
   let disabled: boolean = true
   let lastSend: number = 0

@@ -28,8 +28,8 @@ const stateDefault = $t('anchor.state.secret')
 
 $: info = [
   { i18n: 'anchor.country', value: personal?.data?.country || stateDefault },
-  { i18n: 'anchor.height', value: personal?.data?.height || stateDefault },
-  { i18n: 'anchor.weight', value: personal?.data?.weight || stateDefault },
+  { i18n: 'anchor.height', value: personal?.data?.height ? `${personal?.data?.height}${$t('common.cm')}` : stateDefault },
+  { i18n: 'anchor.weight', value: personal?.data?.weight ? `${personal?.data?.weight}${$t('common.kg')}` : stateDefault },
   { i18n: 'anchor.birthday', value: personal?.data?.birthday || stateDefault },
   { i18n: 'anchor.favorite', value: personal?.data?.favorite || stateDefault },
   { i18n: 'anchor.state', value: $t(stateTrans(personal?.data?.state)) || stateDefault }
@@ -43,7 +43,11 @@ $: info = [
   {#each info as item }
     <div class='flex items-center justify-between text-[14px] h-[44px]'>
       <span> {$t(item.i18n)} </span>
-      <span class='text-[#999999]'> {item.value} </span>
+      {#if personal.loading}
+        <div class='rounded-md w-[80px] h-[21px] bg-[#ddd] animate-pulse'></div>
+      {:else}
+        <span class='text-[#999999]'> {item.value} </span>
+      {/if}
     </div>
   {/each}
 

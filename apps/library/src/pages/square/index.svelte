@@ -4,7 +4,9 @@
   import { AbortControllers } from 'utils'
   import type { ILanguages } from 'env-config'
 
-  import Header from '$components/Header'
+  import Header from '$components/Header'  
+  import VIPNotification from '$containers/VIPNotification'
+
   import { locale, getUseLang } from '$stores'
   import { NO_LANG, SID } from '$src/constant'
   import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
@@ -86,6 +88,7 @@
 
 </script>
 
+<VIPNotification />
 <div>
   <Header />
 
@@ -93,8 +96,7 @@
     <StreamBlock {streaming} {loading} />
 
     <AnchorBlock {data} {loading} on:change={onChange} />
-    <!-- {#if sid === 1 || sid === 2}
-      <ExpertBlock />
-    {/if} -->
+
+    <ExpertBlock />
   </div>
 </div>
