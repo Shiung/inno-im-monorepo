@@ -12,7 +12,7 @@
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
 
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '$containers/AnchorPreviewer/config'
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './previewConfig'
 
   import { NO_LANG } from '$src/constant'
 

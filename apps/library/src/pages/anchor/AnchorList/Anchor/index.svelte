@@ -16,6 +16,7 @@
   import Arrow from '../images/arrow_down_small.svg'
   import MatchHistory from '../images/matchHistory.svg'
   import { fetchAnchorMatches } from '../utils'
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../previewConfig'
 
   export let anchor: IWebAnchor
   export let preview: boolean = false
@@ -83,7 +84,15 @@
 
 <div data-id={anchor.houseId} bind:this={dom}>
   <Ripple class='flex w-full im-shadow h-[97px] rounded-[10px] px-[8px]' on:click={onAnchorClick}>
-    <AnchorPreviewer {anchor} {preview} {isMatchType} previewClass='flex items-center' on:preview>
+    <AnchorPreviewer
+      {anchor}
+      {preview}
+      {isMatchType}
+      previewableTopRatio={PREVIEW_BAR_TOP_RATIO}
+      previewableWidth={PREVIEW_BAR_WIDTH}
+      previewClass='flex items-center'
+      on:preview
+    >
       <div class="flex flex-col justify-between py-[10px]">
         <div class="flex flex-1 flex-col items-start overflow-hidden space-y-1">
           <div class="flex w-full items-center space-x-1">

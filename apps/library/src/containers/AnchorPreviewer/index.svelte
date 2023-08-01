@@ -2,6 +2,7 @@
   import { onDestroy, createEventDispatcher } from 'svelte'
   import { fade } from 'svelte/transition'
   import type { IWebAnchor } from 'api/im/types'
+  import { twMerge } from 'tailwind-merge'
 
   import AnchorUserImage from '$containers/AnchorUserImage'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
@@ -11,9 +12,6 @@
     onReady,
     onLostData
   } from '$containers/StreamingPlayer'
-  
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './config'
-  import { twMerge } from 'tailwind-merge'
 
   export let anchor: Pick<
     IWebAnchor,
@@ -26,6 +24,8 @@
   >
   export let preview: boolean = false
   export let isMatchType: boolean = false
+  export let previewableTopRatio: number
+  export let previewableWidth: number
 
   let dom: HTMLDivElement
   let previewObserver: IntersectionObserver
@@ -35,8 +35,8 @@
   const createPreviewObserver = (dom: HTMLDivElement) => {
     if (!dom) return
 
-    let marginTop = PREVIEW_BAR_TOP_RATIO * 100
-    let marginBottom = Math.floor(((window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - PREVIEW_BAR_WIDTH) / window.innerHeight) * 100)
+    const marginTop = previewableTopRatio * 100
+    const marginBottom = Math.floor(((window.innerHeight * (1 - previewableTopRatio) - previewableWidth) / window.innerHeight) * 100)
 
     const previewObserver = new IntersectionObserver(
       (entries) => {

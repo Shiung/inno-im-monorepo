@@ -7,6 +7,8 @@
 
   import Announcement from '../images/announcement.svg'
   import { list, streaming } from '../../store'
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../previewConfig'
+
   const dispatch = createEventDispatcher()
 
   export let houseId: string
@@ -30,7 +32,15 @@
       dispatch('change', $store)
     }}
   >
-    <AnchorPreviewer anchor={$store} {preview} isMatchType previewClass='flex items-center' on:preview>
+    <AnchorPreviewer
+      anchor={$store}
+      {preview}
+      previewableTopRatio={PREVIEW_BAR_TOP_RATIO}
+      previewableWidth={PREVIEW_BAR_WIDTH}
+      isMatchType
+      previewClass='flex items-center'
+      on:preview
+    >
       <div class="flex flex-col overflow-hidden space-y-[8px] ml-[8px]">
         <div class="flex items-center">
           <img class="max-h-[20px] max-w-[20px] rounded-full" src={$store.userImage} alt="" />

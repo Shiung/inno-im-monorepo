@@ -21,7 +21,7 @@
 
   import StreamingAnchor from './StreamingAnchor/index.svelte'
   import Anchor from './Anchor/index.svelte'
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '$containers/AnchorPreviewer/config'
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './previewConfig'
   import { debounce } from 'utils'
 
   let activeId: string
@@ -36,7 +36,7 @@
     if(value.length > 0) setActiveId(value[0])
   })
 
-  let whiteBlockHeight = () => window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - PREVIEW_BAR_WIDTH
+  let whiteBlockHeight = window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - PREVIEW_BAR_WIDTH
 
   let isInit = false
   const first = list.get(_list[0])
@@ -52,6 +52,9 @@
       if($first.liveStatus === 2) setActiveId(_list[0])
     }
   }
+
+  // debug
+  let marginTop = PREVIEW_BAR_TOP_RATIO * 100
 </script>
 
 <svelte:window on:scroll={onWindowScroll} />
@@ -73,6 +76,9 @@
       {/each}
     </div>
 
-    <div style:height={`${whiteBlockHeight()}px`}></div>
+    <div style:height={`${whiteBlockHeight}px`}></div>
+    
+    <!-- debug -->
+    <div class='bg-red-500 fixed left-0 right-0' style:top={`${marginTop}%`} style:height={`${PREVIEW_BAR_WIDTH}px`} ></div>
   </div>
 {/if}
