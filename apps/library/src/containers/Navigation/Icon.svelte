@@ -3,21 +3,17 @@
   import { twMerge } from 'tailwind-merge'
 
   import { getNavi } from './context'
+  import { getShapeClassName } from './shape'
 
   export let id: string | number
   export let src: string
 
-  const { active } = getNavi()
+  const { active, shape } = getNavi()
   $: actived = $active === id
+
+  $: _shape = getShapeClassName($shape)
 </script>
 
-<Ripple
-  class={twMerge(
-    'w-[35px] h-[35px] flex rounded-[10px] justify-center items-center transition will-change-auto',
-    actived && 'bg-imprimary',
-    $$props.class
-  )}
-  on:click
->
+<Ripple class={twMerge('flex justify-center items-center transition', _shape.className, actived && _shape.active, $$props.class)} on:click>
   <img class="w-[20px] h-[20px]" {src} alt="" />
 </Ripple>

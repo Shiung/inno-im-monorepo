@@ -4,13 +4,16 @@
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player'
 
   import { getNavi } from './context'
+  import { getShapeClassName } from './shape'
 
   export let id: string | number
   export let src: string
+  export let infinity: boolean
 
-  const { active } = getNavi()
+  const { active, shape } = getNavi()
 
   $: actived = $active === id
+  $: _shape = getShapeClassName($shape)
 
   let lottie: LottiePlayer
   const lottieAnimation = (animate: boolean) => {
@@ -18,9 +21,17 @@
     else lottie.stop()
   }
 
-  $: if (lottie) lottieAnimation($active === id)
+  $: if (!infinity && lottie) lottieAnimation($active === id)
 </script>
 
-<Ripple class={twMerge('flex items-center justify-center', actived && 'bg-imprimary rounded-[10px]', $$props.class)} on:click>
-  <LottiePlayer {src} bind:this={lottie} loop />
+<Ripple
+  class={twMerge(
+    'flex items-center justify-center w-[35px] h-[35px] transition',
+    _shape.className,
+    actived && _shape.active,
+    $$props.class
+  )}
+  on:click
+>
+  <LottiePlayer {src} bind:this={lottie} loop autoplay={infinity} />
 </Ripple>

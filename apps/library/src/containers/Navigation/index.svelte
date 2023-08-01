@@ -1,11 +1,12 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge'
-  import { setNavi } from './context'
+  import { setNavi, type INavigation } from './context'
 
-  export let active: string | number
+  export let active: INavigation['active']
+  export let shape: INavigation['shape'] = 'rounded'
   let container: HTMLDivElement
 
-  $: setNavi({ active })
+  $: setNavi({ active, shape })
 
   $: containerHeight = container && container.getBoundingClientRect().height
 </script>
