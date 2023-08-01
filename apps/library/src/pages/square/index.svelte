@@ -3,11 +3,13 @@
   import { params } from 'svelte-spa-router'
   import type { IWebAnchor } from 'api/im/types'
 
+  import VIPNotification from '$containers/VIPNotification'
+
   import { locale, getUseLang } from '$stores'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
-  // import ExpertBlock from './ExpertBlock'
+  import ExpertBlock from './ExpertBlock'
 
   import { NO_LANG } from '$src/constant'
 
@@ -70,11 +72,15 @@
   $: init(sid, useLang)
 </script>
 
-<div class="space-y-[10px]">
-  <StreamBlock {streaming} {loading} />
+<VIPNotification />
+<div>
+  <div class="space-y-[10px]">
+    <StreamBlock {streaming} {loading} />
 
-  <AnchorBlock {data} {loading} on:change={onChange} />
-  <!-- {#if sid === 1 || sid === 2}
+    <AnchorBlock {data} {loading} on:change={onChange} />
+
+    {#if sid === 1 || sid === 2}
       <ExpertBlock />
-    {/if} -->
+    {/if}
+  </div>
 </div>
