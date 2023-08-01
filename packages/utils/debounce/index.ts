@@ -1,7 +1,7 @@
-function debounce<T extends (...args) => any>(fn: T, timeout) {
-  let timer
+function debounce<T extends (...args: any[]) => any>(fn: T, timeout: number) {
+  let timer: ReturnType<typeof setTimeout>
 
-  return function (...args) {
+  return function (...args: any[]) {
     const context = this as any
     clearTimeout(timer)
 
