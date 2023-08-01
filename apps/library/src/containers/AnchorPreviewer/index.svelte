@@ -2,6 +2,7 @@
   import { onDestroy, createEventDispatcher } from 'svelte'
   import { fade } from 'svelte/transition'
   import type { IWebAnchor } from 'api/im/types'
+  import AnchorUserImage from '$containers/AnchorUserImage'
 
   import StreamingPlayer, {
     onError,
@@ -14,9 +15,9 @@
 
   export let anchor: IWebAnchor
   export let preview: boolean = false
+  export let isMatchType: boolean = false
 
   let dom: HTMLDivElement
-  let matchObserver: IntersectionObserver
   let previewObserver: IntersectionObserver
 
   const dispatch = createEventDispatcher()
@@ -75,26 +76,34 @@
   $: regStreamingCallbacks(isPreviewing)
 
   onDestroy(() => {
-    matchObserver && matchObserver.disconnect()
     previewObserver && previewObserver.disconnect()
   })
 </script>
 
-<div class={twMerge($$props.class)} bind:this={dom}>
-  {#if isLive}
-    <slot name='badge'></slot>
-  {/if}
+<div data-cid='AnchorPreviewer' class={twMerge('flex w-full h-full space-x-2', $$props.class)} bind:this={dom}>
+  <div class={twMerge("flex-none", $$props.previewClass)}>
+    <div class='relative'>
+      {#if isLive}
+        <slot name='badge'></slot>
+      {/if}
 
-  {#if !isPreviewing || streamingLoading}
-    <div out:fade|local={{ duration: 250 }} class='absolute'>
-      <slot name='image'></slot>
-      <!-- <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} /> -->
+      {#if !isPreviewing || streamingLoading}
+        <div out:fade|local={{ duration: 250 }} class='absolute'>
+          <slot name='image'>
+            <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+          </slot>
+        </div>
+      {/if}
+
+      <div class="w-[143px] h-[80px] rounded-[10px] overflow-hidden">
+        {#if isPreviewing}
+          <StreamingPlayer streaming={anchor} />
+        {/if}
+      </div>
     </div>
-  {/if}
+  </div>
 
-  <div class="w-[143px] h-[80px] rounded-[10px] overflow-hidden">
-    {#if isPreviewing}
-      <StreamingPlayer streaming={anchor} />
-    {/if}
+  <div class={twMerge("flex-1 overflow-hidden", $$props.contentClass)}>
+    <slot></slot>
   </div>
 </div>

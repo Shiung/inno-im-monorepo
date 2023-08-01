@@ -13,7 +13,7 @@
   import Search from './Search/index.svelte'
   import debounce from '$src/utils/debounce'
 
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './config'
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '$containers/AnchorPreviewer/config'
 
   import { NO_LANG } from '$src/constant'
 
