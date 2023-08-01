@@ -66,7 +66,7 @@
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (entry.isIntersecting) init({ mid, vd })
+        if (entry.isIntersecting && !initLoading) init({ mid, vd })
       }
     }
   )
