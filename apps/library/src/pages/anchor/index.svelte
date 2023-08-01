@@ -1,37 +1,29 @@
-<script lang='ts'>
-import { params, replace } from 'svelte-spa-router'
-import HeaderNavigation from '$containers/HeaderNavigation'
-import { locale } from '$stores'
+<script lang="ts">
+  import { params, replace } from 'svelte-spa-router'
+  import Navigation, { Icon, LottieIcon } from '$containers/Navigation'
 
-import AnchorList from './AnchorList'
+  import { soccer, basketball, tennis, baseball } from '$assets/sid'
 
-import { convertSid, type SidType } from 'utils'
+  import { locale } from '$stores'
 
-$: sid = convertSid($params?.anchorSid)
+  import AnchorList from './AnchorList'
+  import fireData from './lottie/fire_normal.json'
 
-const headNavIcons: {sid: SidType, onClick: () => void}[] = [
-  {
-    sid: 0,
-    onClick: () => replace('/anchor/0')
-  },
-  {
-    sid: 1,
-    onClick: () => replace('/anchor/1')
-  },
-  {
-    sid: 2,
-    onClick: () => replace('/anchor/2')
-  },
-  {
-    sid: 3,
-    onClick: () => replace('/anchor/3')
-  }
-]
+  import { convertSid } from 'utils'
+
+  $: sid = convertSid($params?.anchorSid)
 </script>
 
 <div>
-  <HeaderNavigation active={sid} icons={headNavIcons} />
+  <Navigation bind:active={sid} class="space-x-[10px]">
+    <LottieIcon id={0} on:click={() => replace('/anchor/0')} src={JSON.stringify(fireData)} />
+    <Icon id={1} class="!ml-1" on:click={() => replace('/anchor/1')} src={soccer} />
+    <Icon id={2} on:click={() => replace('/anchor/2')} src={basketball} />
+    <Icon id={3} on:click={() => replace('/anchor/3')} src={tennis} />
+    <Icon id={4} on:click={() => replace('/anchor/4')} src={baseball} />
+  </Navigation>
+
   {#key $locale}
     <AnchorList />
-  {/key}  
+  {/key}
 </div>
