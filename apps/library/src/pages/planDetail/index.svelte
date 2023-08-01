@@ -2,8 +2,8 @@
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
   import { t, locale, userAuth } from '$stores'
-  import type { ILanguages } from 'env-config'
   import { CODE_STATUS_OK } from '$src/constant'
+  import type { IFetchArticleDetailQuery } from './type'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
@@ -26,7 +26,7 @@
   import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
   import BetButton from './BottomPanel/components/BetButton.svelte'
 
-  import { setIsPast, getIsUnlockingInProgress, setIsUnlockingInProgress } from './context'
+  import { setIsPast, setFetchArticleDetail } from './context'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
@@ -35,7 +35,9 @@
   let isPast = false
   let isLocked = false
 
-  const fetchArticleDetail = async (articleId: string, lang: ILanguages, token: string) => {
+  const fetchArticleDetail = async (query: IFetchArticleDetailQuery) => {
+    const { articleId, lang, token } = query || {}
+
     if (!token) return
 
     loading = true
@@ -59,11 +61,13 @@
 
   $: setIsPast({ isPast })
 
-  $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale, $userAuth.userToken)
+  $: $params?.articleId && fetchArticleDetail({
+    articleId: $params?.articleId,
+    lang: $locale,
+    token: $userAuth.userToken
+  })
   
-  setIsUnlockingInProgress({ isUnlockingInProgress: false })
-  const { isUnlockingInProgress } = getIsUnlockingInProgress()
-  $: $isUnlockingInProgress && fetchArticleDetail($params?.articleId, $locale, $userAuth.userToken)
+  setFetchArticleDetail({ fetchArticleDetail })
 </script>
 
 <div data-cid='planDetail'>

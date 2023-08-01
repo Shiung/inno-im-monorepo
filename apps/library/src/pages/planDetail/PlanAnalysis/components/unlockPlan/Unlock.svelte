@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { t, userKeyInfo, userAuth } from '$stores'
+  import { t, locale, userKeyInfo, userAuth } from '$stores'
 
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
@@ -8,10 +8,11 @@
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api'
 
-  import { setIsUnlockingInProgress } from '$pages/planDetail/context'
+  import { getFetchArticleDetail } from '$pages/planDetail/context'
 
   let show = false
-  let isUnlockingInProgress = false
+
+  const { fetchArticleDetail } = getFetchArticleDetail()
   
   const handleUnlock = async (token: string) => {
     show = false
@@ -21,15 +22,17 @@
     try {
       const res = await im.expertArticleUnlock({ body: { articleId: $params.articleId } })
       if (res?.data?.articleStatus === 1) {
-        isUnlockingInProgress = true
+        $fetchArticleDetail({
+          articleId: $params?.articleId,
+          lang: $locale,
+          token: $userAuth.userToken
+        })
         fetchUserKeyInfo(token)
       }
     } catch (error) {
       console.error(error)
     }
   }
-
-  $: setIsUnlockingInProgress({ isUnlockingInProgress })
 </script>
 <div>
   <Button class="w-full min-h-[56px] rounded-[12px] text-sm" on:click={() => (show = true)}>
