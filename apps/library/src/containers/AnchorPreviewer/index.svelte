@@ -13,7 +13,15 @@
   import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './config'
   import { twMerge } from 'tailwind-merge'
 
-  export let anchor: IWebAnchor
+  export let anchor: Pick<
+    IWebAnchor,
+    'houseId'
+    | 'playStreamAddress'
+    | 'playStreamAddress2'
+    | 'userImage'
+    | 'liveStatus'
+    | 'houseImage'
+  >
   export let preview: boolean = false
   export let isMatchType: boolean = false
 
