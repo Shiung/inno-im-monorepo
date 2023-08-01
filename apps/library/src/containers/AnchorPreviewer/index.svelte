@@ -2,7 +2,9 @@
   import { onDestroy, createEventDispatcher } from 'svelte'
   import { fade } from 'svelte/transition'
   import type { IWebAnchor } from 'api/im/types'
+
   import AnchorUserImage from '$containers/AnchorUserImage'
+  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
   import StreamingPlayer, {
     onError,
@@ -92,7 +94,11 @@
   <div class={twMerge("flex-none", $$props.previewClass)}>
     <div class='relative'>
       {#if isLive}
-        <slot name='badge'></slot>
+        <slot name='badge'>
+          <div class="absolute top-0 left-0 z-10">
+            <AnchorLiveBadge />
+          </div>
+        </slot>
       {/if}
 
       {#if !isPreviewing || streamingLoading}

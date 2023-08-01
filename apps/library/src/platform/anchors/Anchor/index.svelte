@@ -15,13 +15,13 @@
   let openSheet: boolean = false
 
   $: store = list.get(houseId)
-  $: isSteaming = $streaming?.houseId === houseId
+  $: isStreaming = $streaming?.houseId === houseId
 </script>
 
 <div
   class="relative ease-out duration-300 overflow-hidden"
-  style:height={isSteaming ? '0px' : '85px'}
-  style:margin-top={isSteaming ? '0px' : '8px'}
+  style:height={isStreaming ? '0px' : '85px'}
+  style:margin-top={isStreaming ? '0px' : '8px'}
 >
   <Ripple
     class="flex w-full px-[8px] py-[10px] bg-white rounded-[10px] h-full"

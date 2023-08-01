@@ -8,7 +8,6 @@
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
   import AnchorImage from '$containers/AnchorImage'
   import AnchorPreviewer from '$containers/AnchorPreviewer'
-  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
   import { t, locale, goDetailCallback } from '$stores'
   import { SIDi18nKey, SID } from '$src/constant'
@@ -85,12 +84,6 @@
 <div data-id={anchor.houseId} bind:this={dom}>
   <Ripple class='flex w-full im-shadow h-[97px] rounded-[10px] px-[8px]' on:click={onAnchorClick}>
     <AnchorPreviewer {anchor} {preview} {isMatchType} previewClass='flex items-center' on:preview>
-      <svelte:fragment slot='badge'>
-        <div class="absolute top-0 left-0 z-10">
-          <AnchorLiveBadge />
-        </div>
-      </svelte:fragment>
-
       <div class="flex flex-col justify-between py-[10px]">
         <div class="flex flex-1 flex-col items-start overflow-hidden space-y-1">
           <div class="flex w-full items-center space-x-1">
