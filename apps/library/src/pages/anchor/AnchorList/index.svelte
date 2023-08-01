@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { convertSid, AbortControllers } from 'utils'
+  import { convertSid, AbortControllers, debounce } from 'utils'
   import { locale, getUseLang } from '$stores'
   import { params } from 'svelte-spa-router'
 
@@ -11,7 +11,6 @@
   import Loading from './Loading.svelte'
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
-  import debounce from '$src/utils/debounce'
 
   import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '$containers/AnchorPreviewer/config'
 

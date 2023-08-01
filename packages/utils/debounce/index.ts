@@ -1,12 +1,12 @@
-function debounce<T>(fn: T, timeout) {
+function debounce<T extends (...args) => any>(fn: T, timeout) {
   let timer
 
   return function (...args) {
-    const context = this
+    const context = this as any
     clearTimeout(timer)
 
     timer = setTimeout(() => {
-      typeof fn === 'function' && fn.apply(context, args)
+      fn.apply(context, args)
     }, timeout)
   } as T
 }
