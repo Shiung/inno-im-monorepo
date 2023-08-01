@@ -8,7 +8,6 @@
   import Title from '$src/components/Title/index.svelte'
 
   import BackBar from '$containers/BackBar'
-  import BonusPoint from '$containers/HeaderNavigation/BonusPoint/index.svelte'
 
   import ArticleStoryLoading from './ArticleStory/components/Loading.svelte'
   import ArticleStory from './ArticleStory/index.svelte'
@@ -21,47 +20,47 @@
 
   import OtherPredictions from './OtherPredictions/index.svelte'
 
-  import BottomPanel from './BottomPanel/index.svelte'
-  import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
-  import BetButton from './BottomPanel/components/BetButton.svelte'
+  // import BottomPanel from './BottomPanel/index.svelte'
+  // import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
+  // import BetButton from './BottomPanel/components/BetButton.svelte'
 
   import { setIsPast } from './context'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
-  let coin: number = 1500
-  let bonus: number = 100000
+  // let coin: number = 1500
+  // let bonus: number = 100000
   let isPast = false
   let isLocked = false
 
   const fetchArticleDetail = async (articleId: string, lang: ILanguages) => {
     loading = true
-    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
+    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang } })
     loading = false
     const { past, articleStatus } = response?.data
     if (past) isPast = true
     if (articleStatus === 2) isLocked = true
   }
 
-  const onUnlockClick = () => {
-    console.log('onUnlockClick')
-  }
-
-  const onFollowBetClick = () => {
-    console.log('onFollowBetClick')
-  }
+  // const onUnlockClick = () => {
+  //   console.log('onUnlockClick')
+  // }
+  //
+  // const onFollowBetClick = () => {
+  //   console.log('onFollowBetClick')
+  // }
 
   $: setIsPast({ isPast })
 
   $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale)
 </script>
 
-<div data-cid='planDetail'>
+<div data-cid="planDetail">
   <BackBar>
     <!-- <BonusPoint slot='right' {bonus} /> -->
   </BackBar>
 
-  <div class='space-y-3'>
+  <div class="space-y-3">
     <div>
       {#if loading}
         <ArticleStoryLoading />
@@ -71,16 +70,16 @@
       <Info />
     </div>
 
-    <div class='rounded-[20px] bg-white'>
+    <div class="rounded-[20px] bg-white">
       <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
-      
+
       {#if loading}
         <MatchPanelLoading />
       {:else}
         <MatchPanel data={response?.data} />
       {/if}
 
-      <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
+      <div class="px-4"><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
 
       {#if loading}
         <PlanAnalysisLoading />
@@ -89,7 +88,6 @@
       {/if}
     </div>
 
-    
     {#if !loading && !isPast}
       {#key $locale}
         <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
