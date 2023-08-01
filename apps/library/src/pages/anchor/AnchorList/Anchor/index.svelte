@@ -83,14 +83,15 @@
 </script>
 
 <div data-id={anchor.houseId} bind:this={dom}>
-  <Ripple class='flex w-full im-shadow h-[97px] rounded-[10px] px-[8px]' on:click={onAnchorClick}>
+  <Ripple class='flex w-full im-shadow h-[97px] rounded-[10px] p-0' on:click={onAnchorClick}>
     <AnchorPreviewer
       {anchor}
       {preview}
       {isMatchType}
       previewableTopRatio={PREVIEW_BAR_TOP_RATIO}
       previewableWidth={PREVIEW_BAR_WIDTH}
-      previewClass='flex items-center'
+      previewClass='flex items-center w-[144px]'
+      class='p-2'
       on:preview
     >
       <div class="flex flex-col justify-between py-[10px]">

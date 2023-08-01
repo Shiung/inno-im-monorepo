@@ -3,7 +3,7 @@
   import type { IWebAnchor } from 'api/im/types'
   import Circle from 'ui/core/button/loading.svelte'
 
-  import StreamingPlayer, { onError, onLostData, onReady, isFlvUse } from '$containers/StreamingPlayer'
+  import InStreamingPlayer, { isFlvUse } from '$containers/InStreamingPlayer'
   import AnchorImage from '$containers/AnchorImage'
   import { t } from '$stores'
   import { SIDi18nKey, SID } from '$src/constant'
@@ -19,20 +19,25 @@
   let streamLoading = false
   let streamError = false
   let prevStreamUrl: string
+  let streamOnReadyCb
+  let streamOnErrorCb
+  let streamOnLostDataCb
 
   const regStreamingCallbacks = () => {
-    const errorCallback = () => {
+    streamOnReadyCb = () => {
+      streamLoading = false
+      streamError = false
+    }
+
+    streamOnErrorCb = () => {
       streamLoading = false
       streamError = true
     }
 
-    onError(errorCallback)
-
-    onLostData(errorCallback)
-
-    onReady(() => {
+    streamOnLostDataCb = () => {
       streamLoading = false
-    })
+      streamError = true
+    }
   }
 
   regStreamingCallbacks()
@@ -80,7 +85,13 @@
       </div>
     {/if}
 
-    <StreamingPlayer {streaming} useDefControls />
+    <InStreamingPlayer
+      {streaming}
+      useDefControls
+      onReadyCallback={streamOnReadyCb}
+      onErrorCallback={streamOnErrorCb}
+      onLostDataCallback={streamOnLostDataCb}
+    />
 
     <div class='bg-white px-3 py-2 space-y-2 rounded-b-[20px] min-h-[35px]'>
       {#if streaming}

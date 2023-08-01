@@ -26,7 +26,7 @@
   style:margin-top={isStreaming ? '0px' : '8px'}
 >
   <Ripple
-    class="flex w-full px-[8px] py-[10px] bg-white rounded-[10px] h-full"
+    class="flex w-full py-[10px] bg-white rounded-[10px] h-full p-0"
     ripple={false}
     on:click={() => {
       dispatch('change', $store)
@@ -38,7 +38,8 @@
       previewableTopRatio={PREVIEW_BAR_TOP_RATIO}
       previewableWidth={PREVIEW_BAR_WIDTH}
       isMatchType
-      previewClass='flex items-center'
+      previewClass='flex items-center w-[108px]'
+      class='px-2 py-2.5'
       on:preview
     >
       <div class="flex flex-col overflow-hidden space-y-[8px] ml-[8px]">

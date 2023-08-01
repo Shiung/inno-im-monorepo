@@ -7,11 +7,7 @@
   import AnchorUserImage from '$containers/AnchorUserImage'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
-  import StreamingPlayer, {
-    onError,
-    onReady,
-    onLostData
-  } from '$containers/StreamingPlayer'
+  import InStreamingPlayer from '$src/containers/InStreamingPlayer'
 
   export let anchor: Pick<
     IWebAnchor,
@@ -29,6 +25,11 @@
 
   let dom: HTMLDivElement
   let previewObserver: IntersectionObserver
+  let streamOnReadyCb
+  let streamOnErrorCb
+  let streamOnLostDataCb
+  let streamingLoading: boolean = false
+  let streamingError: boolean = false
 
   const dispatch = createEventDispatcher()
 
@@ -36,7 +37,7 @@
     if (!dom) return
 
     const marginTop = previewableTopRatio * 100
-    const marginBottom = Math.floor(((window.innerHeight * (1 - previewableTopRatio) - previewableWidth) / window.innerHeight) * 100)
+    const marginBottom = ((window.innerHeight * (1 - previewableTopRatio) - previewableWidth) / window.innerHeight) * 100
 
     const previewObserver = new IntersectionObserver(
       (entries) => {
@@ -59,26 +60,23 @@
 
     streamingLoading = true
 
-    onReady(() => {
+    streamOnReadyCb = (() => {
       streamingLoading = false
       streamingError = false
     })
 
-    onError(() => {
+    streamOnErrorCb = (() => {
       streamingLoading = false
       streamingError = true
     })
 
-    onLostData(() => {
+    streamOnLostDataCb = (() => {
       streamingLoading = false
       streamingError = true
     })
   }
 
   $: previewObserver = createPreviewObserver(dom)
-
-  let streamingLoading: boolean = false
-  let streamingError: boolean = false
 
   $: isLive = anchor.liveStatus === 2
   $: isPreviewing = preview && isLive
@@ -91,8 +89,8 @@
 </script>
 
 <div data-cid='AnchorPreviewer' class={twMerge('flex w-full h-full space-x-2', $$props.class)} bind:this={dom}>
-  <div class={twMerge("flex-none", $$props.previewClass)}>
-    <div class='relative'>
+  <div class={twMerge("flex-none h-full flex items-center", $$props.previewClass)}>
+    <div class='w-full h-full relative'>
       {#if isLive}
         <slot name='badge'>
           <div class="absolute top-0 left-0 z-10">
@@ -109,9 +107,14 @@
         </div>
       {/if}
 
-      <div class="w-[143px] h-[80px] rounded-[10px] overflow-hidden">
+      <div class="rounded-[10px] overflow-hidden">
         {#if isPreviewing}
-          <StreamingPlayer streaming={anchor} />
+          <InStreamingPlayer
+            onReadyCallback={streamOnReadyCb}
+            onErrorCallback={streamOnErrorCb}
+            onLostDataCallback={streamOnLostDataCb}
+            streaming={anchor}
+          />
         {/if}
       </div>
     </div>
