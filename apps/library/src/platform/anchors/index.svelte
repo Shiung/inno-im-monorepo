@@ -27,6 +27,7 @@
 
   import { streaming } from '../store'
   import { PREVIEW_BAR_WIDTH } from './previewConfig'
+    import { StreamLiveStatus } from '$src/constant'
 
   let activeId: string
   let first: Writable<IPlatformAnchor>
@@ -57,10 +58,10 @@
     if (isInit && window.scrollY > 10) return
     if (window.scrollY > 10) {
       isInit = true
-      if ($second && $second?.liveStatus === 2) setActiveId($second.houseId)
+      if ($second && $second?.liveStatus === StreamLiveStatus.LIVE) setActiveId($second.houseId)
     } else {
       isInit = false
-      if ($first && $first?.liveStatus === 2) setActiveId($first.houseId)
+      if ($first && $first?.liveStatus === StreamLiveStatus.LIVE) setActiveId($first.houseId)
     }
   }
 

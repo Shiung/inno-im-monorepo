@@ -7,7 +7,7 @@
   import AnchorUserImage from '$containers/AnchorUserImage'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
-  import { SIDi18nKey, SID } from '$src/constant'
+  import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
   import { t } from '$stores'
 
   import { getSquareStore } from '../../store'
@@ -18,7 +18,7 @@
 
   const { anchorMatches, anchorMatchLoadings } = getSquareStore()
 
-  $: isLive = anchor?.liveStatus === 2
+  $: isLive = anchor?.liveStatus === StreamLiveStatus.LIVE
 
   $: isMatchType = anchor.sid !== SID.deposit
 

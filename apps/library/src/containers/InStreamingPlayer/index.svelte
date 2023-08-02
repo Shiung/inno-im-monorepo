@@ -9,6 +9,8 @@
   import VideoPlayer from 'ui/components/VideoPlayer'
   import HouseImage from '$containers/AnchorHouseImage'
 
+  import { StreamLiveStatus } from '$src/constant'
+
   export let onReadyCallback = () => {}
   export let onLostDataCallback = () => {}
   export let onErrorCallback = () => {}
@@ -24,7 +26,7 @@
 
 </script>
 
-{#if streaming?.liveStatus === 2}
+{#if streaming?.liveStatus === StreamLiveStatus.LIVE}
   {#if isFlvUse}
     <FlvPlayer
       url={streaming?.playStreamAddress}

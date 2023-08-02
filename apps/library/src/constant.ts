@@ -60,3 +60,10 @@ export const SidString = {
   3: 'tennis',
   4: 'baseball'
 } as const
+
+export enum StreamLiveStatus {
+  OFFLINE = 1,
+  LIVE = 2,
+  TEMPORARY_RESTRICTED = 3,
+  PERMANENTLY_RESTRICTED = 4
+}

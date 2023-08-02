@@ -8,6 +8,7 @@
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
   import InStreamingPlayer from '$src/containers/InStreamingPlayer'
+  import { StreamLiveStatus } from '$src/constant'
 
   export let anchor: Pick<
     IWebAnchor,
@@ -80,7 +81,7 @@
 
   $: previewObserver = createPreviewObserver(dom, previewableTopRatio, previewableWidth)
 
-  $: isLive = anchor.liveStatus === 2
+  $: isLive = anchor.liveStatus === StreamLiveStatus.LIVE
   $: isPreviewing = preview && isLive
 
   $: regStreamingCallbacks(isPreviewing)

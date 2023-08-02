@@ -6,7 +6,7 @@
   import InStreamingPlayer, { isFlvUse } from '$containers/InStreamingPlayer'
   import AnchorImage from '$containers/AnchorImage'
   import { t } from '$stores'
-  import { SIDi18nKey, SID } from '$src/constant'
+  import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
   
   import Loading from './Loading.svelte'
   import { getSquareStore } from '../store'
@@ -46,7 +46,7 @@
     streamError = false
     streamLoading = false
 
-    if (!streaming || streaming?.liveStatus !== 2) {
+    if (!streaming || streaming?.liveStatus !== StreamLiveStatus.LIVE) {
       prevStreamUrl = ''
       return
     }
@@ -77,7 +77,7 @@
 {:else}
   <!-- {#if !streamError} -->
   <div class="relative min-h-[200px]">
-    {#if streaming?.liveStatus === 2 && streamLoading}
+    {#if streaming?.liveStatus === StreamLiveStatus.LIVE && streamLoading}
       <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
         <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
           <Circle stroke="rgb(var(--im-monorepo-primary))" />
