@@ -9,7 +9,6 @@
   import Title from '$src/components/Title/index.svelte'
 
   import BackBar from '$containers/BackBar'
-  import BonusPoint from '$containers/HeaderNavigation/BonusPoint/index.svelte'
 
   import ArticleStoryLoading from './ArticleStory/components/Loading.svelte'
   import ArticleStory from './ArticleStory/index.svelte'
@@ -22,16 +21,10 @@
 
   import OtherPredictions from './OtherPredictions/index.svelte'
 
-  import BottomPanel from './BottomPanel/index.svelte'
-  import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
-  import BetButton from './BottomPanel/components/BetButton.svelte'
-
   import { setIsPast, setFetchArticleDetail } from './context'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
-  let coin: number = 1500
-  let bonus: number = 100000
   let isPast = false
   let isLocked = false
 
@@ -51,14 +44,6 @@
     isLocked = articleStatus === 2
   }
 
-  const onUnlockClick = () => {
-    console.log('onUnlockClick')
-  }
-
-  const onFollowBetClick = () => {
-    console.log('onFollowBetClick')
-  }
-
   $: setIsPast({ isPast })
 
   $: $params?.articleId && fetchArticleDetail({
@@ -71,9 +56,7 @@
 </script>
 
 <div data-cid='planDetail'>
-  <BackBar>
-    <!-- <BonusPoint slot='right' {bonus} /> -->
-  </BackBar>
+  <BackBar />
 
   <div class='space-y-3'>
     <div>
@@ -110,14 +93,4 @@
       {/key}
     {/if}
   </div>
-
-  <!-- {#if !loading && !isPast}
-    <BottomPanel>
-      {#if isLocked}
-        <UnlockButton {coin} onButtonClick={onUnlockClick} />
-      {:else}
-        <BetButton onButtonClick={onFollowBetClick} />
-      {/if}
-    </BottomPanel>
-  {/if} -->
 </div>
