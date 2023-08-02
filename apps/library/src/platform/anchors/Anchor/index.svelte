@@ -7,12 +7,13 @@
 
   import Announcement from '../images/announcement.svg'
   import { list, streaming } from '../../store'
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from '../previewConfig'
+  import { PREVIEW_BAR_WIDTH } from '../previewConfig'
 
   const dispatch = createEventDispatcher()
 
   export let houseId: string
   export let preview: boolean = false
+  export let previewTopRatio: number
 
   let openSheet: boolean = false
 
@@ -35,7 +36,7 @@
     <AnchorPreviewer
       anchor={$store}
       {preview}
-      previewableTopRatio={PREVIEW_BAR_TOP_RATIO}
+      previewableTopRatio={previewTopRatio}
       previewableWidth={PREVIEW_BAR_WIDTH}
       isMatchType
       previewClass='flex items-center w-[108px]'

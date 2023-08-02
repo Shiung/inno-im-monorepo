@@ -33,13 +33,15 @@
 
   const dispatch = createEventDispatcher()
 
-  const createPreviewObserver = (dom: HTMLDivElement) => {
+  const createPreviewObserver = (dom: HTMLDivElement, topRatio: number, width: number) => {
     if (!dom) return
 
-    const marginTop = previewableTopRatio * 100
-    const marginBottom = ((window.innerHeight * (1 - previewableTopRatio) - previewableWidth) / window.innerHeight) * 100
+    previewObserver && previewObserver.disconnect()
 
-    const previewObserver = new IntersectionObserver(
+    const marginTop = topRatio * 100
+    const marginBottom = ((window.innerHeight * (1 - topRatio) - width) / window.innerHeight) * 100
+
+    const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting && window.scrollY !== 0 && isLive) {
@@ -50,9 +52,9 @@
       { root: null, rootMargin: `${-marginTop}% 0% ${-marginBottom}% 0%` }
     )
 
-    previewObserver.observe(dom)
+    observer.observe(dom)
 
-    return previewObserver
+    return observer
   }
 
   const regStreamingCallbacks = (active: boolean) => {
@@ -76,7 +78,7 @@
     })
   }
 
-  $: previewObserver = createPreviewObserver(dom)
+  $: previewObserver = createPreviewObserver(dom, previewableTopRatio, previewableWidth)
 
   $: isLive = anchor.liveStatus === 2
   $: isPreviewing = preview && isLive
