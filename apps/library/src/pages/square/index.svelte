@@ -12,6 +12,8 @@
   import AnchorBlock from './AnchorBlock'
   import ExpertBlock from './ExpertBlock'
 
+  import FloatingKey from '$src/containers/FloatKey'
+    
   import { NO_LANG } from '$src/constant'
 
   import { convertSid, type SidType, AbortControllers } from 'utils'
@@ -99,4 +101,5 @@
 
     <ExpertBlock />
   </div>
+  <FloatingKey  />
 </div>

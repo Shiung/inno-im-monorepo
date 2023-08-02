@@ -22,6 +22,7 @@
   import OtherPredictions from './OtherPredictions/index.svelte'
 
   import { setIsPast, setFetchArticleDetail } from './context'
+  import FloatingKey from '$src/containers/FloatKey'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
@@ -93,4 +94,6 @@
       {/key}
     {/if}
   </div>
+
+  <FloatingKey />
 </div>
