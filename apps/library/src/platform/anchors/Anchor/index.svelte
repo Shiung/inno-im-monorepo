@@ -4,8 +4,7 @@
 
   import AnchorDetailSheet from '$containers/AnchorDetailSheet'
   import AnchorPreviewer from '$containers/AnchorPreviewer'
-
-  import Announcement from '../images/announcement.svg'
+  import AnchorImage from '$containers/AnchorImage'
   import { list, streaming } from '../../store'
   import { PREVIEW_BAR_WIDTH } from '../previewConfig'
 
@@ -43,9 +42,15 @@
       class='px-2 py-2.5'
       on:preview
     >
-      <div class="flex flex-col overflow-hidden space-y-[8px] ml-[8px]">
-        <div class="flex items-center">
-          <img class="max-h-[20px] max-w-[20px] rounded-full" src={$store.userImage} alt="" />
+      <div class="flex flex-col overflow-hidden space-y-[8px]">
+        <div class="flex items-center space-x-1">
+          <Ripple on:click={() => openSheet = true} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] flex-none">
+            <AnchorImage
+              src={$store.userImage}
+              class='block w-full h-auto rounded-full'
+            />
+          </Ripple>
+
           <span class="text-imprimary text-[16px]"> {$store.houseName} </span>
         </div>
   
@@ -57,13 +62,6 @@
         </div>
       </div>
     </AnchorPreviewer>
-  </Ripple>
-
-  <Ripple
-    class="absolute top-[10px] right-[8px] im-shadow flex items-center justify-center w-[20px] h-[20px] rounded-[5px]"
-    on:click={() => (openSheet = true)}
-  >
-    <Announcement width={14} height={14} fill="rgb(var(--im-monorepo-primary))" />
   </Ripple>
 
   <AnchorDetailSheet bind:open={openSheet} {houseId} />

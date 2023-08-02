@@ -100,7 +100,7 @@
             <Ripple on:click={() => openDetailSheet = true} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] flex-none">
               <AnchorImage
                 src={anchor.userImage}
-                class='block w-full h-auto'
+                class='block w-full h-auto rounded-full'
               />
             </Ripple>
 
