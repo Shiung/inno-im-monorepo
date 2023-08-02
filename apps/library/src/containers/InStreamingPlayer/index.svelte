@@ -10,6 +10,7 @@
   import HouseImage from '$containers/AnchorHouseImage'
 
   import { StreamLiveStatus } from '$src/constant'
+  import type { TStreamLiveStatus } from '$src/types'
 
   export let onReadyCallback = () => {}
   export let onLostDataCallback = () => {}
@@ -19,7 +20,7 @@
   export let streaming: {
     playStreamAddress: string;
     playStreamAddress2: string;
-    liveStatus: number;
+    liveStatus: TStreamLiveStatus;
     houseImage: string
   }
   export let useDefControls: boolean = false
