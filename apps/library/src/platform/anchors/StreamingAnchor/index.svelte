@@ -10,15 +10,15 @@
   import fans from './images/fans_on.webp'
   import { streaming } from '../../store'
 
-  let folder: boolean = false
+  export let folder: boolean
   let openDetailSheet: boolean
 </script>
 
 {#if $streaming}
   <div
-    class="flex py-[12px] px-[16px] bg-white im-shadow rounded-b-[18px] ease-out duration-300"
+    class="flex py-[12px] px-[16px] bg-white im-shadow rounded-b-[18px] transition-[height] ease-out duration-300"
     on:click={() => (folder = !folder)}
-    on:keypress={() => (folder = !folder)}
+    on:keypress
     style:height={folder ? '50px' : '130px'}
     transition:slide|local
   >
@@ -36,7 +36,7 @@
       </div>
       <AnchorImage
         class={twMerge(
-          "w-[90px] h-[90px] rounded-full border border-imprimary ease-out duration-300",
+          "w-[90px] h-[90px] rounded-full border border-imprimary transition-opacity ease-out duration-300",
           folder ? "opacity-0" : "opacity-100"
         )}
         src={$streaming.userImage}

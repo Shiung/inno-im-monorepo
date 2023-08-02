@@ -36,7 +36,7 @@
   let _list: string[] = []
   let isInit = false
   let previewTopRatio: number = 0
-  let whiteBlockHeight = window.innerHeight * (1 - previewTopRatio) - PREVIEW_BAR_WIDTH
+  let folder: boolean = false
   
   const setActiveId = debounce((id: string) => {
     activeId = id
@@ -79,21 +79,21 @@
     firstTwo[1] && (second = list.get(firstTwo[1]))
   }
 
-  function getListDomTopRatio() {
+  function getListDomTopRatio(...listens: any[]) {
     const listOffsetTop = listDom?.offsetTop || 0
     const twoAnchorHeight = 1.5 * 85 + 8 - PREVIEW_BAR_WIDTH // 85 = block height, 8 = margin-top
     return Math.round(listOffsetTop + twoAnchorHeight) / window.innerHeight
   }
 
+  $: whiteBlockHeight = window.innerHeight * (1 - previewTopRatio) - PREVIEW_BAR_WIDTH
+
   $: changeFirstTwoWhenStreamingChanged($streaming)
 
   $: if (listDom) previewTopRatio = getListDomTopRatio()
 
-  streaming.subscribe(() => {
-    setTimeout(() => {
-      previewTopRatio = getListDomTopRatio()
-    }, 500)
-  })
+  $: setTimeout(() => {
+    previewTopRatio = getListDomTopRatio($streaming, folder)
+  }, 500)
 
   // debug
   // $: marginTop = previewTopRatio * 100
@@ -106,7 +106,7 @@
   <Empty class="h-[300px]" />
 {:else}
   <div data-cid='Platform_anchors'>
-    <StreamingAnchor />
+    <StreamingAnchor bind:folder />
 
     <div class="px-[12px] mt-[12px]" bind:this={listDom}>
       {#each _list || [] as houseId}
