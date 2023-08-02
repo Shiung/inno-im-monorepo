@@ -37,13 +37,8 @@
     {
       id: 'expert',
       icon: () => import('./images/expert.svg'),
-      // 因GDIM-173 先硬寫
-      component: {
-        item: SunGlass,
-        className: 'absolute top-1 translate-x-[12px]'
-      },
       text: _t('common.expert'),
-      onClick: () => (showExpertModal = true)
+      onClick: () => push('/expert')
     }
   ]
 

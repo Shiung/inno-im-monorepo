@@ -99,9 +99,7 @@
 
     <AnchorBlock {data} {loading} on:change={onChange} />
 
-    {#if sid === 1 || sid === 2}
-      <ExpertBlock />
-    {/if}
+    <ExpertBlock />
   </div>
   <FloatingKey  />
 </div>
