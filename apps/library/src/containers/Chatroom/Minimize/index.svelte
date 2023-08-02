@@ -22,6 +22,7 @@
   let isFold = false
 
   const calculateUnread = (msgs: IChatMessage[], _lastReadId: number) => {
+    //@ts-ignore findLastIndex 屬於 stage-3 的新功能，ts 檢查會噴錯
     const lastIdx = msgs.findLastIndex((msg) => msg.msgId === _lastReadId)
 
     const unreadLength = filterVisibleMsgs(msgs, lastIdx + 1).length
