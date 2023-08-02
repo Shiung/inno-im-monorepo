@@ -5,6 +5,8 @@
   
   import ExpertList from './List/index.svelte'
 
+  import FloatingKey from '$src/containers/FloatKey'
+
   import { locale } from '$stores'
   import { convertSid, type SidType } from 'utils'
 
@@ -32,4 +34,7 @@
   {#key $locale}
     <ExpertList sid={sid} />
   {/key}
+
+  <FloatingKey />
+
 </div>

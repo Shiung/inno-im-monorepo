@@ -21,6 +21,8 @@
 
   import OtherPredictions from './OtherPredictions/index.svelte'
 
+  import FloatingKey from '$src/containers/FloatKey'
+
   import BottomPanel from './BottomPanel/index.svelte'
   import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
   import BetButton from './BottomPanel/components/BetButton.svelte'
@@ -96,6 +98,8 @@
       {/key}
     {/if}
   </div>
+
+  <FloatingKey />
 
   <!-- {#if !loading && !isPast}
     <BottomPanel>
