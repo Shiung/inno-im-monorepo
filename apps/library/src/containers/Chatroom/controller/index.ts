@@ -20,6 +20,14 @@ const subscribeSet = new Set<string>()
 let pollingChatSettingTimer: ReturnType<typeof setInterval>
 const pollingChatSettingInterval = 10 * 1000
 
+let unSubUserInfo: ReturnType<typeof userAuth.subscribe>
+
+let pushMessageSub: ReturnType<typeof imWs.subscribe>
+
+let chatSettingSub: ReturnType<typeof imWs.subscribe>
+
+let isActive = false
+
 export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
 
 const getStore = (props: { chatId: string, iid: number }) => {
@@ -154,13 +162,10 @@ const subscribeRooms = () => {
   checkAllStoreIfNeedFetchHistory()
 }
 
-let unSubUserInfo: ReturnType<typeof userAuth.subscribe>
-
-let pushMessageSub: ReturnType<typeof imWs.subscribe>
-
-let chatSettingSub: ReturnType<typeof imWs.subscribe>
-
 export const active = () => {
+  if (isActive) return
+
+  isActive = true
   unSubUserInfo = userAuth.subscribe(imWsConnect)
   pushMessageSub = subscribePushMessage()
   chatSettingSub = subscribeChatSetting()
@@ -179,4 +184,6 @@ export const destroy = () => {
   clearAllStores()
   subscribeSet.clear()
   imWs.deactivate()
+
+  isActive = false
 }
