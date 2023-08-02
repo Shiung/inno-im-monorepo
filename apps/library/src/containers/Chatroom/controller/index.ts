@@ -18,7 +18,7 @@ const messageMap = new Map<string, Writable<IChatMessage[]>>()
 const subscribeSet = new Set<string>()
 
 let pollingChatSettingTimer: ReturnType<typeof setInterval>
-let pollingChatSettingInterval = 10 * 1000
+const pollingChatSettingInterval = 10 * 1000
 
 export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
 
