@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Ripple } from 'ui'
   import { twMerge } from 'tailwind-merge'
-  import { push, params } from 'svelte-spa-router'
+  import { push } from 'svelte-spa-router'
   import { createEventDispatcher } from 'svelte'
   import type { IWebAnchor } from 'api/im/types'
 
@@ -26,7 +26,7 @@
   <div class="px-[16px] flex items-center justify-between">
     <div class="text-[18px] font-semibold">{$t('anchor.finding')}</div>
 
-    <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => push(`/anchor/${$params.sid}`)}>
+    <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => push(`/anchor/0`)}>
       <span> {$t('anchor.all')} </span>
       <Arrow width={12} height={12} fill="#333333" />
     </Ripple>
