@@ -82,6 +82,7 @@
 
   $: isWindow = $displayType === 'window'
   $: chatMessages = getMessages({ chatId: $chatId, iid: $iid })
+  $: hasMsgs = getHasVisibleMsgs({ chatId: $chatId, iid: $iid })
 
   const expandChatroom = () => {
     isTransition = true
@@ -116,8 +117,7 @@
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)
 
-  let hasMsgs = false
-  $: if(!hasMsgs) hasMsgs = hasVisibleMsg($chatMessages)
+  $: if (!$hasMsgs) $hasMsgs = hasVisibleMsg($chatMessages)
 
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
@@ -154,7 +154,7 @@
     <svelte:fragment slot='messages'>
       {#if initFetchLoading || isTransition}
         <Loading />
-      {:else if !hasMsgs}
+      {:else if !$hasMsgs}
         <Empty class="flex-1" title={$t('chat.empty')} />
       {:else}
         <Messages
