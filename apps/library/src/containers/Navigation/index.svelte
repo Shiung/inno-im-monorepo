@@ -11,7 +11,7 @@
   $: containerHeight = container && container.getBoundingClientRect().height
 </script>
 
-<div>
+<div data-cid="Navigation">
   <div bind:this={container} class={twMerge('flex w-full h-[44px] bg-white z-10 im-shadow fixed items-center px-[10px]', $$props.class)}>
     <slot />
   </div>

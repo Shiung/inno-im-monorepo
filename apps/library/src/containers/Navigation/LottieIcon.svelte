@@ -8,7 +8,7 @@
 
   export let id: string | number
   export let src: string
-  export let infinity: boolean
+  export let infinity: boolean = false
 
   const { active, shape } = getNavi()
 
@@ -25,6 +25,7 @@
 </script>
 
 <Ripple
+  data-id="Navigation__LottieIcon"
   class={twMerge(
     'flex items-center justify-center w-[35px] h-[35px] transition',
     _shape.className,

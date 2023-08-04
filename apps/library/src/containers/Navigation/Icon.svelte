@@ -14,6 +14,10 @@
   $: _shape = getShapeClassName($shape)
 </script>
 
-<Ripple class={twMerge('flex justify-center items-center transition', _shape.className, actived && _shape.active, $$props.class)} on:click>
+<Ripple
+  data-cid="Navigation__Icon"
+  class={twMerge('flex justify-center items-center transition', _shape.className, actived && _shape.active, $$props.class)}
+  on:click
+>
   <img class="w-[20px] h-[20px]" {src} alt="" />
 </Ripple>

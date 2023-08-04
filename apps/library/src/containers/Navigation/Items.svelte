@@ -3,6 +3,6 @@
   import { twMerge } from 'tailwind-merge'
 </script>
 
-<Ripple class={twMerge($$props.class)} on:click>
+<Ripple data-id="Navigation__Items" class={twMerge($$props.class)} on:click>
   <slot />
 </Ripple>
