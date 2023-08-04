@@ -35,7 +35,7 @@
   import InputArea from './InputArea/index.svelte'
   import BetListSheet from '../BetListSheet/index.svelte'
 
-  import { genId, subscribeRoom, unsubscribeRoom, getMessages, chatEnv } from './controller'
+  import { genId, subscribeRoom, unsubscribeRoom, getMessages, getHasVisibleMsgs, chatEnv } from './controller'
   import { setInfo, setOrdersInfo } from './context'
   import { EChatroomSize, CHATROOM_EXPAND_TRIGGER_DISTANCE } from './constant'
   import { showBetList } from './store'
