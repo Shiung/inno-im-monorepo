@@ -2,7 +2,7 @@
   export let remainCount: number
   export let totalCount: number
 
-  const showCount = remainCount ? `${remainCount}/${totalCount}` : 0
+  $: showCount = remainCount ? `${remainCount}/${totalCount}` : 0
 </script>
 
 <div
