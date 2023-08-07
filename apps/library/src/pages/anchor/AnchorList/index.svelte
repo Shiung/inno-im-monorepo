@@ -90,7 +90,7 @@
       const { totalPage } = pager || {}
       hasMoreData = totalPage > pageIdx
       if (hasMoreData) pageIdx++
-      setActiveId(data[0].houseId)
+      setActiveId(data?.[0]?.houseId)
     } catch (error) {
       console.error(error)
       hasMoreData = false
