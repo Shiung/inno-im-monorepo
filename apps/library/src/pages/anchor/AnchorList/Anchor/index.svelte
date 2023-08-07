@@ -114,10 +114,10 @@
           <div class="w-full text-left leading-[17px] text-[12px] text-[#999] truncate">
             {#if loading}
               <div class="bg-[#eee] animate-pulse h-[17px] rounded-md" />
-            {:else if !isMatchType}
-              {anchor.houseIntroduction}
             {:else if firstMatch}
               {firstMatch.homeName} VS {firstMatch.awayName}
+            {:else}
+              {anchor.nickName}
             {/if}
           </div>
   
