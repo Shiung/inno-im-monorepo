@@ -1,66 +1,44 @@
 <script lang="ts">
-  import { slide } from 'svelte/transition'
-  import { createEventDispatcher } from 'svelte'
-  import { Ripple } from 'ui'
-  import { t } from '$stores'
-  import { twMerge } from 'tailwind-merge'
-
-  import { Marquee } from 'ui'
-
-  import Info from '../images/info.svg'
-  import Close from '../images/close.svg'
+  const NormalHeader = () => import('./NormalHeader.svelte')
+  const TextHeader = () => import('./TextHeader.svelte')
 
   import { getInfo } from '../context'
-  import { chatEnv } from '../controller'
   import { headerRect } from '../store'
 
   export let isTransition: boolean
   export let fixed: boolean = false
 
-  const dispatch = createEventDispatcher()
-  const { height } = getInfo()
+  const { header } = getInfo()
 
-  let showRemind: boolean = false
+  const loadComponent = async (header) => {
+    let comp
+    switch (header) {
+      case 'normal':
+      case 'deposit':
+        comp = await NormalHeader()
+        break
+      case 'text':
+        comp = await TextHeader()
+        break
+    }
+
+    return comp.default
+  }
+
+  $: promise = loadComponent($header)
 
   let dom: HTMLDivElement
   $: if (dom) headerRect.set(dom?.getBoundingClientRect())
-
-  $: marqueeInfo = [$t('chat.remind')]
 </script>
 
 <div>
-  {#if $chatEnv.device === 'wap'}
-    <div
-      class={twMerge(
-        'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30 transition-[top] duration-300 ease-in-out',
-        fixed ? 'fixed left-0' : 'sticky'
-      )}
-      style:top={fixed ? (!isTransition ? `${$height}px` : '') : '0'}
-      bind:this={dom}
-    >
-      <div class="flex items-center">
-        <div class="text-[18px] font-semibold">{$t('chat.title')}</div>
-        <Ripple class="rounded-full flex items-center justify-center w-[25px] h-[25px]" on:click={() => (showRemind = !showRemind)}>
-          <Info width={20} height={20} fill={showRemind ? 'rgb(var(--im-monorepo-primary))' : '#999999'} />
-        </Ripple>
-
-        {#if showRemind}
-          <div transition:slide={{ axis: 'x' }}>
-            <Marquee
-              infos={marqueeInfo}
-              class="text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden"
-            />
-          </div>
-        {/if}
-      </div>
-
-      <Ripple class="rounded-full" on:click={() => dispatch('close')}>
-        <Close width={20} height={20} fill="#333333" />
-      </Ripple>
-    </div>
-
-    <div style:height={fixed && `${$headerRect?.height}px`} />
-  {:else}
-    <div bind:this={dom} class="flex justify-center items-center w-full min-h-[30px] text-[#bbb] text-xs">{$t('chat.remind')}</div>
-  {/if}
+  {#await promise then comp}
+    {#if $header === 'normal'}
+      <svelte:component this={comp} bind:dom {fixed} {isTransition} showClose on:close />
+    {:else if $header === 'text'}
+      <svelte:component this={comp} bind:dom />
+    {:else if $header === 'deposit'}
+      <svelte:component this={comp} bind:dom {fixed} {isTransition} />
+    {/if}
+  {/await}
 </div>

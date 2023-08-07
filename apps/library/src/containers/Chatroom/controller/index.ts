@@ -11,13 +11,23 @@ import { userAuth, type IUserAuth} from '$stores'
 import type { IChatMessage } from 'api/im/types'
 import type { Writable } from 'svelte/store'
 import { setChatroomSetting } from './localEnv'
+import { filterDuplicatesByMsgId } from '../utils'
 export * from './env'
 
+const hasVisibleMsgMap = new Map<string, Writable<boolean>>()
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
 const subscribeSet = new Set<string>()
 
 let pollingChatSettingTimer: ReturnType<typeof setInterval>
-let pollingChatSettingInterval = 10 * 1000
+const pollingChatSettingInterval = 10 * 1000
+
+let unSubUserInfo: ReturnType<typeof userAuth.subscribe>
+
+let pushMessageSub: ReturnType<typeof imWs.subscribe>
+
+let chatSettingSub: ReturnType<typeof imWs.subscribe>
+
+let isActive = false
 
 export const genId = ({ chatId, iid }: { chatId: string, iid: number }) => chatId || String(iid)
 
@@ -33,7 +43,21 @@ const getStore = (props: { chatId: string, iid: number }) => {
   return _store
 }
 
+const getHasVisibleMsgsStore = (props: { chatId: string, iid: number }) => {
+  const id = genId(props)
+  if (id === '0') return writable(false) // 0 用來當空聊天室
+
+  const store = hasVisibleMsgMap.get(id)
+  if (store) return store
+
+  const _store = writable(false)
+  hasVisibleMsgMap.set(id, _store)
+  return _store
+}
+
 export const getMessages = (props: { chatId: string, iid: number }) => getStore(props)
+
+export const getHasVisibleMsgs = (props: { chatId: string, iid: number }) => getHasVisibleMsgsStore(props)
 
 const subscribePushMessage = () => imWs.subscribe({ eventkey: impb.enum.command.PUSH_MESSAGE }, ({ data }) => {
   const store = getStore({ chatId: data.chatId, iid: data.iid })
@@ -73,13 +97,6 @@ const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
   store.update((messages) => filterDuplicatesByMsgId(messages, res.data.pushMessageEntity))
 }
 
-export const filterDuplicatesByMsgId = (messages: IChatMessage[], newMessages: IChatMessage[]) => {
-  const set = new Set()
-  // 去除重複msgId避免掛掉
-  const result = [...newMessages, ...messages].filter(item => !set.has(item.msgId) ? set.add(item.msgId) : false)
-  return result
-}
-
 const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {
   const store = getStore(props)
   const id = genId(props)
@@ -115,12 +132,16 @@ export const unsubscribeRoom = async (props: { chatId: string, iid: number }) =>
 
   subscribeSet.delete(id)
   const store = getStore(props)
+  const hasVisibleStore = getHasVisibleMsgsStore(props)
   store.set([])
+  hasVisibleStore.set(false)
   messageMap.delete(id)
+  hasVisibleMsgMap.delete(id)
 }
 
 const clearAllStores = () => {
   messageMap.forEach((store) => store.set([]))
+  hasVisibleMsgMap.forEach(store => store.set(false))
 }
 
 const imWsConnect = (e: IUserAuth) => {
@@ -160,13 +181,10 @@ const subscribeRooms = () => {
   checkAllStoreIfNeedFetchHistory()
 }
 
-let unSubUserInfo: ReturnType<typeof userAuth.subscribe>
-
-let pushMessageSub: ReturnType<typeof imWs.subscribe>
-
-let chatSettingSub: ReturnType<typeof imWs.subscribe>
-
 export const active = () => {
+  if (isActive) return
+
+  isActive = true
   unSubUserInfo = userAuth.subscribe(imWsConnect)
   pushMessageSub = subscribePushMessage()
   chatSettingSub = subscribeChatSetting()
@@ -184,5 +202,9 @@ export const destroy = () => {
 
   clearAllStores()
   subscribeSet.clear()
+  messageMap.clear()
+  hasVisibleMsgMap.clear()
   imWs.deactivate()
+
+  isActive = false
 }

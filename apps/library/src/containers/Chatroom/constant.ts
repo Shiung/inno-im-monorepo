@@ -20,3 +20,5 @@ export enum EChatroomSize {
   EXPAND = 'expand',
   FULLSCREEN = 'fullscreen'
 }
+
+export const CHATROOM_EXPAND_TRIGGER_DISTANCE = 100
