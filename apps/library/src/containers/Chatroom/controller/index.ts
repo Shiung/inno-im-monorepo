@@ -11,7 +11,7 @@ import { userAuth, type IUserAuth} from '$stores'
 import type { IChatMessage } from 'api/im/types'
 import type { Writable } from 'svelte/store'
 import { setChatroomSetting } from './localEnv'
-import { filterDuplicatesByMsgId } from '../utils'
+import { filterDuplicatesByMsgId, sortMsgsByMsgIdAsc } from '../utils'
 export * from './env'
 
 const hasVisibleMsgMap = new Map<string, Writable<boolean>>()
@@ -94,7 +94,10 @@ const fetchHistory = async (id: string, store: Writable<IChatMessage[]>) => {
 
   // sort msgId ascending order
   res.data.pushMessageEntity.sort((a: any, b: any) => a.msgId - b.msgId)
-  store.update((messages) => filterDuplicatesByMsgId(messages, res.data.pushMessageEntity))
+  store.update((messages) => filterDuplicatesByMsgId(
+    messages,
+    sortMsgsByMsgIdAsc(res.data.pushMessageEntity)
+  ))
 }
 
 const checkIfNeedFetchHistory = async (props: { chatId: string, iid: number }) => {

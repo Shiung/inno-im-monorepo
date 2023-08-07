@@ -18,7 +18,7 @@
 
   import { getInfo } from '../context'
   import { chatEnv } from '../controller'
-  import { filterDuplicatesByMsgId, getLatestVisibleMsg, getOldestMsg } from '../utils'
+  import { filterDuplicatesByMsgId, getLatestVisibleMsg, getOldestMsg, sortMsgsByMsgIdAsc } from '../utils'
   import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
@@ -133,7 +133,10 @@
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: oldest?.msgId || 0, chatId: $chatId || String($iid) }
     })
-    chatMessages.update((messages) => filterDuplicatesByMsgId(messages, res.data.pushMessageEntity))
+    chatMessages.update((messages) => filterDuplicatesByMsgId(
+      messages,
+      sortMsgsByMsgIdAsc(res.data.pushMessageEntity)
+    ))
     fetchMoreLoading = false
 
     await tick()

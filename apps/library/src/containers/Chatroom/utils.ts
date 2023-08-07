@@ -13,6 +13,11 @@ export const filterDuplicatesByMsgId = (messages: IChatMessage[], newMessages: I
   return result
 }
 
+export const sortMsgsByMsgIdAsc = (data: IChatMessage[]) => {
+  // sort msgId ascending order
+  return data.sort((a, b) => a.msgId - b.msgId)
+}
+
 export const getOldestMsg = (messages: IChatMessage[]) => (messages?.[0] || {}) as IPushMessageEntity
 
 //@ts-ignore findLast 屬於 stage-3 的新功能，ts 檢查會噴錯
