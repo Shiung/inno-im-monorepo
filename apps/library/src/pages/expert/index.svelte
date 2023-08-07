@@ -12,6 +12,7 @@
   import ExpertList from './List/index.svelte'
 
   import allSquare from './lottie/all_square_app.json'
+  import FloatingKey from '$src/containers/FloatKey'
 
   import { locale } from '$stores'
   import { convertSid } from 'utils'
@@ -29,4 +30,7 @@
   {#key $locale}
     <ExpertList {sid} />
   {/key}
+
+  <FloatingKey />
+
 </div>

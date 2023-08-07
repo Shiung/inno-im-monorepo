@@ -84,24 +84,28 @@
 
 {#if loading}
   <Loading />
-{:else if streaming?.liveStatus === 2}
+{:else if streaming}
   <!-- {#if !streamError} -->
-  <div class="relative min-h-[200px]">
-    {#if streamLoading}
-      <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
-        <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
-          <Circle stroke="rgb(var(--im-monorepo-primary))" />
+  {#if streaming?.liveStatus === 2}
+    <div class="relative min-h-[200px]">
+      {#if streamLoading}
+        <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
+          <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
+            <Circle stroke="rgb(var(--im-monorepo-primary))" />
+          </div>
         </div>
-      </div>
-    {/if}
+      {/if}
 
-    {#if isFlvUse}
-      <FlvPlayer url={streaming?.playStreamAddress} controls />
-    {:else}
-      <VideoPlayer urlm3u8={streaming?.playStreamAddress2} controls />
-    {/if}
-  </div>
+      {#if isFlvUse}
+        <FlvPlayer url={streaming?.playStreamAddress} controls />
+      {:else}
+        <VideoPlayer urlm3u8={streaming?.playStreamAddress2} controls />
+      {/if}
+    </div>
+  {:else}
+    <HouseImage src={streaming?.houseImage} />
+  {/if}
   <!-- {/if} -->
 {:else}
-  <HouseImage src={streaming?.houseImage} />
+  <div></div>
 {/if}

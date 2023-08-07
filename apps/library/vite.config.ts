@@ -74,6 +74,7 @@ export default defineConfig(({ mode }) => {
         $pages: resolve('./src/pages'),
         $stores: resolve('./src/stores'),
         $types: resolve('./src/types'),
+        $api: resolve('./src/api'),
       }
     },
     ...(process.env.APP_ENV === 'library' && buildAsLibrary())

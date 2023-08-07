@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { imgHeight } from './config'
+  export let imgHeight: number = 200
 </script>
 
-<div class='bg-[#eee] animate-pulse' style:height={imgHeight}></div>
+<div class='bg-[#eee] animate-pulse' style:height={`${imgHeight}px`}></div>

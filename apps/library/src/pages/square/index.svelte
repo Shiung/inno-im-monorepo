@@ -11,6 +11,8 @@
   import AnchorBlock from './AnchorBlock'
   import ExpertBlock from './ExpertBlock'
 
+  import FloatingKey from '$src/containers/FloatKey'
+    
   import { NO_LANG } from '$src/constant'
 
   import { convertSid, AbortControllers } from 'utils'
@@ -79,8 +81,7 @@
 
     <AnchorBlock {data} {loading} on:change={onChange} />
 
-    {#if sid === 1 || sid === 2}
-      <ExpertBlock />
-    {/if}
+    <ExpertBlock />
   </div>
+  <FloatingKey  />
 </div>

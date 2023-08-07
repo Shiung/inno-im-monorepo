@@ -1,5 +1,7 @@
 import { replace } from 'svelte-spa-router'
 import { wrap } from 'svelte-spa-router/wrap'
+import { userAuth } from '$stores'
+import { get } from 'svelte/store'
 // import Entry from '$pages/entry.svelte'
 
 const routes = {
@@ -51,10 +53,13 @@ const routes = {
   '/expertDetail/:expertId/:method?': wrap({
     asyncComponent: () => import('$pages/expertDetail/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      isExpertRelevant: true
     },
     conditions: [
       (detail) => {
+        if (!get(userAuth).userToken) return false
+
         const { expertId, method } = detail?.params || {}
         if (!method) replace(`/expertDetail/${expertId}/plan`)
         return true
@@ -64,10 +69,13 @@ const routes = {
   '/planDetail/:expertId/:articleId': wrap({
     asyncComponent: () => import('$pages/planDetail/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      isExpertRelevant: true
     },
     conditions: [
       () => {
+        if (!get(userAuth).userToken) return false
+
         window.scrollTo(0, 0)
         return true
       }

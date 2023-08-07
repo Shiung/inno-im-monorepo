@@ -82,6 +82,7 @@ export interface IExpertInfo {
 
 export interface IArticle extends IPredictionMarket {
   articleId: string
+  articleStatus?: ArticleStatus,
   releaseTime: number
   closeTime: number
   title: string
@@ -179,4 +180,14 @@ export interface IExpertArticleDetail {
   }
   body: null
   res: withData<IArticleDetail>
+}
+
+export interface IExpertArticleUnlock {
+  query: null
+  body: {
+    articleId: string
+  }
+  res: withData<{
+    articleStatus: number
+  }>
 }

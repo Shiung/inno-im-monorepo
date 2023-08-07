@@ -5,6 +5,9 @@ module.exports = {
         imprimary: {
           DEFAULT: 'rgb(var(--im-monorepo-primary))'
         },
+        imsecondary: {
+          DEFAULT: 'rgba(var(--im-monorepo-secondary))'
+        }
       },
     }
   }

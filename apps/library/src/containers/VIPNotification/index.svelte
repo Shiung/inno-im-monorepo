@@ -1,16 +1,7 @@
-<script lang='ts' context='module'>
-  import { writable } from 'svelte/store'
-
-
-  // TODO fake
-  const vipLevel = writable<{ vip: number, expertKey: number }[]>([{ vip: 100, expertKey: 100}])
-</script>
-
-
 <script lang='ts'>
   import { convertDateAndTimestamp } from 'utils'
   import Modal from 'ui/components/Modal'
-  import { t, userInfo, userAuth } from '$stores'
+  import { t, userInfo, userAuth, userVipList, diffTime } from '$stores'
   import { push } from 'svelte-spa-router'
 
   import unlock_idle from './images/unlock_idle.png'
@@ -20,16 +11,14 @@
 
   let open: boolean = false
 
-  const diffTime: number = 0
-
   $: userVIP = $userInfo.userVip
-  $: matchLevel = $vipLevel.find(({ vip: vipL }) => vipL === userVIP)
+  $: matchLevel = $userVipList.find(({ level }) => level === userVIP)
 
   const setExpiredStore = (ts: number) => localStorage.setItem(keyOfLocalStorage, JSON.stringify(ts))
 
-  const checkExpired = () => {
+  const checkExpired = (diff: number) => {
     const expiredStorage = localStorage.getItem(keyOfLocalStorage)
-    const currentTime = convertDateAndTimestamp.getLocalAlignTimestamp(diffTime)
+    const currentTime = convertDateAndTimestamp.getLocalAlignTimestamp(diff)
     if (!expiredStorage || Number(expiredStorage) < currentTime) {
       const endTimets = convertDateAndTimestamp.getEndDate(convertDateAndTimestamp.transformUTCTime(currentTime)).valueOf()
       setExpiredStore(endTimets)
@@ -44,7 +33,7 @@
     push('/expert')
   }
 
-  $: if ($userAuth.userToken && matchLevel) checkExpired()
+  $: if ($userAuth.userToken && matchLevel) checkExpired($diffTime)
 </script>
 
 

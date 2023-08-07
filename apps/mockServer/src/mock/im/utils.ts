@@ -160,3 +160,5 @@ export const genOtherOrder = (iid: number) => {
     betOrder: { ...genSelfOrder(iid) },
   })
 }
+
+export const genMultiply = (val: number) => (num: number) => val * num
