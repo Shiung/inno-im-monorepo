@@ -107,7 +107,7 @@
         class='p-2'
         on:preview
       >
-        <div class="flex flex-col justify-between py-[10px]">
+        <div class="flex flex-col justify-between h-full">
           <div class="flex flex-1 flex-col items-start overflow-hidden space-y-1">
             <div class="flex w-full items-center space-x-1">
               <Ripple on:click={() => openDetailSheet = true} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] flex-none">

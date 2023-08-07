@@ -123,7 +123,7 @@
     </div>
   </div>
 
-  <div class={twMerge("flex-1 overflow-hidden", $$props.contentClass)}>
+  <div class={twMerge("flex-1 h-full overflow-hidden", $$props.contentClass)}>
     <slot></slot>
   </div>
 </div>
