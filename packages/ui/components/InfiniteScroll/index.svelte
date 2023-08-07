@@ -16,6 +16,8 @@
         try {
           moreLoading = true
           await load()
+        } catch(error) {
+          console.error(error)
         } finally {
           moreLoading = false
         }
@@ -34,7 +36,7 @@
 <slot></slot>
 
 {#if hasMore}
-  <div bind:this={dom}>
+  <div data-cid='InfiniteScrollLoad' bind:this={dom}>
     {#if moreLoading}
       <div class='relative h-[30px] overflow-hidden'>
         <Circle stroke="rgba(var(--im-monorepo-primary))" />
