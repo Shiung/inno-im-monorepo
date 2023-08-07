@@ -42,7 +42,7 @@
 </script>
 
 {#if loading}
-  <Loading {...{ imgHeight }} />
+  <Loading {imgHeight } />
 {:else if src}
   <div
     data-cid='HouseImage'
