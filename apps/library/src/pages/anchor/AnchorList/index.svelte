@@ -1,6 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
-  import { convertSid, AbortControllers } from 'utils'
+  import { convertSid, AbortControllers, debounce } from 'utils'
   import { locale, getUseLang } from '$stores'
   import { params } from 'svelte-spa-router'
 
@@ -11,11 +11,10 @@
   import Loading from './Loading.svelte'
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
-  import debounce from '$src/utils/debounce'
 
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './config'
+  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './previewConfig'
 
-  import { NO_LANG } from '$src/constant'
+  import { NO_LANG, StreamLiveStatus } from '$src/constant'
 
   let keyWord = ''
 
@@ -89,7 +88,7 @@
       if (list?.length) data = list
 
       const { totalPage } = pager || {}
-      hasMoreData = false && totalPage > pageIdx
+      hasMoreData = totalPage > pageIdx
       if (hasMoreData) pageIdx++
       setActiveId(data[0].houseId)
     } catch (error) {
@@ -124,10 +123,10 @@
 
     if (window.scrollY > 10) {
       isInit = true
-      if(data?.[1]?.liveStatus === 2) setActiveId(data?.[1]?.houseId)
+      if(data?.[1]?.liveStatus === StreamLiveStatus.LIVE) setActiveId(data?.[1]?.houseId)
     } else {
       isInit = false
-      if(data?.[0]?.liveStatus === 2) setActiveId(data?.[0]?.houseId)
+      if(data?.[0]?.liveStatus === StreamLiveStatus.LIVE) setActiveId(data?.[0]?.houseId)
     }
   }
 

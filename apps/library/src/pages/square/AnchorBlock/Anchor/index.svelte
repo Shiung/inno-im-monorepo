@@ -7,7 +7,7 @@
   import AnchorUserImage from '$containers/AnchorUserImage'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
-  import { SIDi18nKey, SID } from '$src/constant'
+  import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
   import { t } from '$stores'
 
   import { getSquareStore } from '../../store'
@@ -18,7 +18,7 @@
 
   const { anchorMatches, anchorMatchLoadings } = getSquareStore()
 
-  $: isLive = anchor?.liveStatus === 2
+  $: isLive = anchor?.liveStatus === StreamLiveStatus.LIVE
 
   $: isMatchType = anchor.sid !== SID.deposit
 
@@ -43,7 +43,9 @@
 
     <div class="flex w-full items-center justify-between">
       <div class="flex-1 flex items-center space-x-1 overflow-hidden">
-        <AnchorImage src={anchor.userImage} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px]" />
+        <Ripple on:click={() => openDetailSheet = true} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] flex-none">
+          <AnchorImage src={anchor.userImage} class="block w-full h-auto" />
+        </Ripple>
         <span class="text-imprimary leading-[18px] text-[18px] truncate"> {anchor.houseName} </span>
       </div>
 
@@ -60,10 +62,10 @@
     <div class="w-full text-left leading-[15px] text-[10px] text-[#999] truncate">
       {#if loading}
         <div class="bg-[#eee] animate-pulse h-[17px] rounded-md" />
-      {:else if !isMatchType}
-        {anchor.houseIntroduction}
       {:else if match}
         {match.homeName} VS {match.awayName}
+      {:else}
+        {anchor.nickName}
       {/if}
     </div>
   </Ripple>

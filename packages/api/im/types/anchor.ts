@@ -42,10 +42,11 @@ export interface IWebAnchorsHouseDetail {
 }
 
 export interface IWebAnchorMatch extends IMatch {
-  sportId: SportId,
+  sid: SportId,
   matchTime: number
   matchStatus: MatchStatus,
   mid: number,
+  iid: number,
   vd: string,
   score: string
 }

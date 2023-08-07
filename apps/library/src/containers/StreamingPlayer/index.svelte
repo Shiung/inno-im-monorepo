@@ -38,17 +38,20 @@
   import VideoPlayer from 'ui/components/VideoPlayer'
   import HouseImage from '$containers/AnchorHouseImage'
 
+  import { StreamLiveStatus } from '$src/constant'
+  import type { TStreamLiveStatus } from '$src/types'
+
   export let streaming: {
     playStreamAddress: string;
     playStreamAddress2: string;
-    liveStatus: number;
+    liveStatus: TStreamLiveStatus;
     houseImage: string
   }
 
   export let useDefControls: boolean = false
 </script>
 
-{#if streaming?.liveStatus === 2}
+{#if streaming?.liveStatus === StreamLiveStatus.LIVE}
   {#if isFlvUse}
     <FlvPlayer url={streaming?.playStreamAddress} controls={useDefControls} />
   {:else}
