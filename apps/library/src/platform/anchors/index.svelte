@@ -19,7 +19,7 @@
 <script lang="ts">
   import { debounce } from 'utils'
   import { get, type Writable } from 'svelte/store'
-  
+
   import Empty from '$containers/Empty'
 
   import StreamingAnchor from './StreamingAnchor/index.svelte'
@@ -27,7 +27,7 @@
 
   import { streaming } from '../store'
   import { PREVIEW_BAR_WIDTH } from './previewConfig'
-    import { StreamLiveStatus } from '$src/constant'
+  import { StreamLiveStatus } from '$src/constant'
 
   let activeId: string
   let first: Writable<IPlatformAnchor>
@@ -38,7 +38,7 @@
   let isInit = false
   let previewTopRatio: number = 0
   let folder: boolean = false
-  
+
   const setActiveId = debounce((id: string) => {
     activeId = id
   }, 250)
@@ -98,7 +98,6 @@
 
   // debug
   // $: marginTop = previewTopRatio * 100
-
 </script>
 
 <svelte:window on:scroll={onWindowScroll} />
@@ -106,7 +105,7 @@
 {#if !_list || _list?.length === 0}
   <Empty class="h-[300px]" />
 {:else}
-  <div data-cid='Platform_anchors'>
+  <div data-cid="Platform_anchors">
     <StreamingAnchor bind:folder />
 
     <div class="px-[12px] mt-[12px]" bind:this={listDom}>
@@ -122,7 +121,6 @@
 
       <div style:height={`${whiteBlockHeight}px`} />
     </div>
-
 
     <!-- debug -->
     <!-- <div class="bg-red-500 fixed left-0 right-0" style:top={`${marginTop}%`} style:height={`${PREVIEW_BAR_WIDTH}px`} /> -->
