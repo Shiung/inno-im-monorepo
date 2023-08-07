@@ -1,25 +1,24 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
+  import { params, push } from 'svelte-spa-router'
   import { im } from 'api'
   import type { IWebAnchor } from 'api/im/types'
-  import { Button } from 'ui'
-  import { params, push } from 'svelte-spa-router'
-  import { onDestroy, onMount } from 'svelte'
   import { locale, getUseLang } from '$stores'
-
+  import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
 
-  import Loading from './loading.svelte'
+  import ChatRoomLoading from '$containers/Chatroom/Loading.svelte'
   import BackBar from '$containers/BackBar'
-  import StreamingPlayer from '$containers/StreamingPlayer'
+
+  import Loading from './loading.svelte'
+  import Streaming from './Streaming.svelte'
   import Chatroom, { controller, setChatInfo } from '$src/containers/Chatroom'
 
-  const isWindow: boolean = true
-
-  let dom: HTMLDivElement
   let title: string = ''
   let loading: boolean = false
   let showModal: boolean = false
   let streaming: Omit<IWebAnchor, 'matchCount'>
+  let height: number
 
   const fetchAnchorsHouseDetail = async (houseId: string) => {
     try {
@@ -37,10 +36,10 @@
 
       title = houseName
       streaming = data
-
-      loading = false
     } catch (error) {
       console.error(error)
+    } finally {
+      loading = false
     }
   }
 
@@ -49,32 +48,36 @@
     showModal = false
   }
 
-  onMount(async () => {
-    controller.active()
-  })
+  const onStreamingHeightChange = (videoHeight: number) => {
+    height = videoHeight + 44
+  }
 
-  onDestroy(() => {
-    controller.destroy()
+  controller.setChatEnv({
+    device: 'wap',
+    subscribeBindingChatroom: true
   })
 
   $: useLang = $getUseLang()
-  $: initHeight = dom?.getBoundingClientRect().height
-
+  
   $: houseId = $params?.anchorHouseId
-  $: if (houseId) fetchAnchorsHouseDetail(houseId)
 
-  $: if (dom) {
-    controller.setChatEnv({
-      device: 'wap',
-      subscribeBindingChatroom: true
-    })
+  $: houseId && fetchAnchorsHouseDetail(houseId)
+  
+  $: setChatInfo({
+    displayType: 'window',
+    size: 'normal',
+    useScrollCollapse: false,
+    height: height,
+    chatId: houseId,
+    iid: 0,
+    showBetEnable: false,
+    expandAnimation: false,
+    header: 'deposit'
+  })
 
-    setChatInfo({
-      displayType: isWindow ? 'window' : 'block',
-      chatId: houseId,
-      height: initHeight
-    })
-  }
+  onMount(() => {
+    controller.active()
+  })
 </script>
 
 {#if loading}
@@ -88,12 +91,16 @@
     </div>
   </Modal>
 {:else}
-  <div>
-    <div bind:this={dom} class={'sticky w-full top-0 z-30'}>
+  <div data-cid='AnchorChat'>
+    <div>
       <BackBar {title} />
-      <StreamingPlayer {streaming} />
+      <Streaming {streaming} on:heightChange={(e) => onStreamingHeightChange(e.detail)} />
     </div>
 
-    <Chatroom />
+    {#if !height}
+      <ChatRoomLoading />
+    {:else}
+      <Chatroom />
+    {/if}
   </div>
 {/if}
