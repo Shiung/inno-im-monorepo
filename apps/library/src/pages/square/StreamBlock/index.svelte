@@ -103,10 +103,10 @@
             <div class='flex-1 leading-[15px] text-[10px] text-[#999] truncate'>
               {#if matchLoading}
                 <div class='bg-[#eee] animate-pulse h-[15px] rounded-md'></div>
-              {:else if !isMatchType}
-                {streaming?.houseIntroduction}
               {:else if match}
                 {match.homeName} VS {match.awayName}
+              {:else}
+                {streaming?.nickName}
               {/if}
             </div>
           </div>
