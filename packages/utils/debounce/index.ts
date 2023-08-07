@@ -1,16 +1,15 @@
-const debounce = (callback: (...args: any[]) => void, wait: number) => {
+const debounce = <T extends (...args: any[]) => any>(callback: T, wait: number) => {
   let timer: ReturnType<typeof setTimeout>
   
-  return function () {
+  return function (...args: any[]) {
     const context = this as any
-    const args = arguments
 
     clearTimeout(timer)
 
     timer = setTimeout(() => {
       callback.apply(context, args)
     }, wait)
-  }
+  } as T
 }
 
 export default debounce
