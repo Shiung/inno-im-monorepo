@@ -1,4 +1,13 @@
-import { locale, setUserAuth, setUserInfo, setGoHome, setGoLogin, setGoVipCenter, setGoDetail } from '$stores'
+import {
+  locale,
+  setUserAuth,
+  setUserInfo,
+  setGoHome,
+  setGoLogin,
+  setGoVipCenter,
+  setGoDetail,
+  setGoDeposit
+} from '$stores'
 
 const setImStore = {
   // 三方 設定im語系
@@ -13,7 +22,8 @@ const setImStore = {
     goHome: setGoHome,
     goLogin: setGoLogin,
     goVipCenter: setGoVipCenter,
-    goSportDetail: setGoDetail
+    goSportDetail: setGoDetail,
+    goDeposit: setGoDeposit
   }
 }
 
