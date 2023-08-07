@@ -38,7 +38,7 @@
         </div>
       {/if}
 
-      <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+      <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} class='w-[144px]' />
     </div>
 
     <div class="flex w-full items-center justify-between">
