@@ -63,7 +63,7 @@
 
   const onAnchorClick = () => {
     if(isMatchType) {
-      goSportDetailHOF(firstMatch, $goDetailCallback)
+      if (firstMatch) goSportDetailHOF(firstMatch, $goDetailCallback)
     } else {
       push(`/anchorChat/${anchor.houseId}`)
     }
