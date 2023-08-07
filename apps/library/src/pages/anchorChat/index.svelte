@@ -1,5 +1,6 @@
 <script lang="ts">
   import { im } from 'api'
+  import type { IWebAnchor } from 'api/im/types'
   import { Button } from 'ui'
   import { params, push } from 'svelte-spa-router'
   import { onDestroy, onMount } from 'svelte'
@@ -9,8 +10,8 @@
 
   import Loading from './loading.svelte'
   import BackBar from '$containers/BackBar'
-  import StreamingPlayer, { type Streaming } from '$containers/StreamingPlayer'
-  import Chatroom, { controller, setChatInfo, onRouterRedirectCallback } from '$src/containers/Chatroom'
+  import StreamingPlayer from '$containers/StreamingPlayer'
+  import Chatroom, { controller, setChatInfo } from '$src/containers/Chatroom'
 
   const isWindow: boolean = true
 
@@ -18,21 +19,7 @@
   let title: string = ''
   let loading: boolean = false
   let showModal: boolean = false
-  let streaming: Streaming
-
-  onRouterRedirectCallback((option) => {
-    switch (option.location) {
-      case 'login':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to login')
-        break
-      case 'vipCenter':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to vipCenter')
-        break
-      case 'deposit':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to deposit')
-        break
-    }
-  })
+  let streaming: Omit<IWebAnchor, 'matchCount'>
 
   const fetchAnchorsHouseDetail = async (houseId: string) => {
     try {
@@ -44,12 +31,12 @@
       })
 
       const { data } = response || {}
-      const { lang, playStreamAddress, playStreamAddress2, liveStatus, houseImage } = data || {}
+      const { lang, houseName } = data || {}
 
       if (useLang !== lang) return (showModal = true)
 
-      title = data?.houseName
-      streaming = { playStreamAddress, playStreamAddress2, liveStatus, houseImage }
+      title = houseName
+      streaming = data
 
       loading = false
     } catch (error) {
@@ -85,8 +72,7 @@
     setChatInfo({
       displayType: isWindow ? 'window' : 'block',
       chatId: houseId,
-      height: initHeight,
-      isOpen: true
+      height: initHeight
     })
   }
 </script>
