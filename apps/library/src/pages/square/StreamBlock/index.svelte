@@ -74,7 +74,7 @@
 
 {#if loading}
   <Loading />
-{:else}
+{:else if streaming}
   <!-- {#if !streamError} -->
   <div class="relative min-h-[200px]">
     {#if streaming?.liveStatus === StreamLiveStatus.LIVE && streamLoading}
@@ -122,4 +122,6 @@
     </div>
   </div>
   <!-- {/if} -->
+{:else}
+  <div></div>
 {/if}
