@@ -96,7 +96,7 @@
     <div class='w-full h-full relative'>
       {#if isLive}
         <slot name='badge'>
-          <div class="absolute top-0 left-0 z-10">
+          <div class="absolute top-0 left-0 z-[1]">
             <AnchorLiveBadge />
           </div>
         </slot>

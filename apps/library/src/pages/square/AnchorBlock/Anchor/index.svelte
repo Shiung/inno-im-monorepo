@@ -33,7 +33,7 @@
   <Ripple class="w-full flex flex-col items-center h-[139px] im-shadow rounded-[10px] p-2 space-y-1" on:click>
     <div class="relative">
       {#if isLive}
-        <div class="absolute top-0 left-0 z-10">
+        <div class="absolute top-0 left-0 z-[1]">
           <AnchorLiveBadge />
         </div>
       {/if}
