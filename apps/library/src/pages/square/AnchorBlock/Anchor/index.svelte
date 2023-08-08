@@ -1,40 +1,73 @@
-<script lang='ts'>
-import type { IWebAnchor } from 'api/im/types'
-import { Ripple } from 'ui'
-import { t } from '$stores'
+<script lang="ts">
+  import type { IWebAnchor } from 'api/im/types'
+  import { Ripple, Badget } from 'ui'
 
-import AnchorStatus from '$containers/AnchorStatus'
-import AnchorDetailSheet from '$containers/AnchorDetailSheet'
-import AnchorImage from '$src/components/AnchorImage'
+  import AnchorDetailSheet from '$containers/AnchorDetailSheet'
+  import AnchorImage from '$containers/AnchorImage'
+  import AnchorUserImage from '$containers/AnchorUserImage'
+  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
-import Smile from '../images/smile.svg'
+  import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
+  import { t } from '$stores'
 
-export let anchor: IWebAnchor
-export let bg: string
+  import { getSquareStore } from '../../store'
 
-let openDetailSheet: boolean = false
+  export let anchor: IWebAnchor
 
-$: containerStyle = `background-image:url("${bg}")`
+  let openDetailSheet: boolean = false
+
+  const { anchorMatches, anchorMatchLoadings } = getSquareStore()
+
+  $: isLive = anchor?.liveStatus === StreamLiveStatus.LIVE
+
+  $: isMatchType = anchor.sid !== SID.deposit
+
+  $: loading = $anchorMatchLoadings[anchor.houseId]
+
+  $: match = $anchorMatches[anchor.houseId]
+
+  $: badgeStr = isMatchType ? SIDi18nKey[anchor.sid] : `common.depositWithdraw`
 </script>
 
 <div>
-  <Ripple class='w-full flex flex-col h-[154px] im-shadow rounded-[10px] bg-contain bg-no-repeat bg-bottom pt-[12px] pl-[12px]' style={containerStyle} on:click>
-    <div class='text-imprimary'> { anchor.houseName } </div>
-    <div class='text-[#999999] text-[12px]'> { anchor.nickName } </div>
-    <div class='flex items-center'>
-      <AnchorStatus liveStatus={anchor.liveStatus} />
+  <Ripple class="w-full flex flex-col items-center h-[139px] im-shadow rounded-[10px] p-2 space-y-1" on:click>
+    <div class="relative">
+      {#if isLive}
+        <div class="absolute top-0 left-0 z-10">
+          <AnchorLiveBadge />
+        </div>
+      {/if}
+
+      <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} class='w-[144px]' />
     </div>
 
-    <div class='flex flex-1 justify-between items-end overflow-hidden'>
-      <Ripple class='flex items-center space-x-[4px] h-[24px] im-shadow text-imprimary text-[10px] p-[7px] rounded-full bg-white mb-[12px]'
-        on:click={() => openDetailSheet = true}
+    <div class="flex w-full items-center justify-between">
+      <div class="flex-1 flex items-center space-x-1 overflow-hidden">
+        <Ripple on:click={() => openDetailSheet = true} class="w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] flex-none">
+          <AnchorImage src={anchor.userImage} class="block w-full h-auto" />
+        </Ripple>
+        <span class="text-imprimary leading-[18px] text-[18px] truncate"> {anchor.houseName} </span>
+      </div>
+
+      <Badget
+        class="rounded-[6px] leading-3 h-3 text-[9px]"
+        background={isMatchType
+          ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`
+          : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
       >
-        <Smile width={12} height={12} fill='rgb(var(--im-monorepo-primary))' />
-        <div>{$t('anchor.detail')}</div>
-      </Ripple>
-      <AnchorImage class='w-[75px]' src={anchor.userImage} />
+        {$t(badgeStr)}
+      </Badget>
     </div>
 
+    <div class="w-full text-left leading-[15px] text-[10px] text-[#999] truncate">
+      {#if loading}
+        <div class="bg-[#eee] animate-pulse h-[17px] rounded-md" />
+      {:else if match}
+        {match.homeName} VS {match.awayName}
+      {:else}
+        {anchor.nickName}
+      {/if}
+    </div>
   </Ripple>
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={anchor.houseId} />

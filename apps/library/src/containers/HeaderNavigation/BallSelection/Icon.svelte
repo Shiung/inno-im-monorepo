@@ -9,7 +9,7 @@ export let active: boolean
 
 <Ripple class={twMerge(
     'w-[30px] h-[30px] im-shadow flex rounded-full justify-center items-center border mr-[10px] last:mr-0',
-    active ? 'border-imprimary' : 'border-white'
+    active ? 'bg-imprimary' : 'bg-white'
   )}
   on:click={onClick}
 >

@@ -1,6 +1,7 @@
 <script lang='ts'>
+  import AnchorLoading from './Anchor/Loading.svelte'
 </script>
 
 {#each { length: 10 } as _}
-  <div class='im-shadow animate-pulse bg-[#eeeeee] h-[100px] rounded-[10px]' />
+  <AnchorLoading />
 {/each}

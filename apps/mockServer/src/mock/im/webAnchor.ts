@@ -268,7 +268,7 @@ const webAnchors: IMockData[] = [
     url: `${prefix}/v1/anchor/web-anchors`,
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IWebAnchors>({
-      list: Array.from({ length: Number(query.pageSize) || 20 }, () => ({
+      list: Array.from({ length: Number(query.pageSize) || 20 }, (_, idx) => ({
         houseId: genHouseId(),
         houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
         userImage: getRandomItemFromArray([
@@ -277,14 +277,16 @@ const webAnchors: IMockData[] = [
           "",
         ]),
         visitHistory: Random.natural(0, 999999999999),
-        houseName: "@ANCHORHOUSENAME",
-        nickName: "@ANCHORNICKNAME",
-        playStreamAddress: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
-        playStreamAddress2: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
+        houseName: Random.integer(0, 1) ? "@ANCHORHOUSENAME" : "@csentence",
+        nickName: Random.integer(0, 1) ? "@ANCHORHOUSENAME" : "@csentence",
+        playStreamAddress: "https://live5.haoksoft.com/live/52295.flv?auth_key=1690190714-0-2295-d919e4d3db0784389037cfd582826042",
+        playStreamAddress2: "https://live5.haoksoft.com/live/52295.m3u8?auth_key=1690190714-0-2295-d919e4d3db0784389037cfd582826042",
         liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
+        sid: idx % 3 === 0 ? 100 : Random.integer(1,3) as Types.IWebAnchor['sid'],
         fansCount: Random.natural(0, 10000000),
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10),
+        houseIntroduction: "@csentence",
         languageType: query.lang
       })),
       pager: genPager({ pageIdx: Number(query.pageIdx), pageSize: Number(query.pageSize) })
@@ -353,19 +355,29 @@ const webAnchors: IMockData[] = [
     }))
   },
   {
-    url: `${prefix}/v1/anchor/web-anchor/recommend`,
-    response: () => mock(withData<Types.IWebAnchorRecommend>({
-      houseId: genHouseId(),
-      liveStatus: Random.natural(1, 4) as Types.IWebAnchorRecommend['res']['data']['liveStatus'],
-      nickName: "@cname",
-      playStreamAddress: "https://live5.sxjgyc.com/live/12277.flv?auth_key=1681809903-0-2277-4ee153e0776ecf93107780201d10e10a",
-      personalIntroduction: "@cword",
-      anchorTitle: "@csentence",
-      houseIntroduction: "@csentence",
-      userImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/575/w-K5RvqqSqCmIrWD3p0xxA.png",
-      homeName: "@cname",
-      awayName: "@cname",
-      competitionName: "@cname"
+    url: `${prefix}/v1/anchor/web-anchors/recommend`,
+    response: ({ query }) => mock(withData<Types.IWebAnchorsRecommend>({
+      list: Array.from({ length: Random.integer(0, 5) }, (_, idx) => ({
+        houseId: genHouseId(),
+        houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
+        userImage: getRandomItemFromArray([
+          "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/4Hl7wS2hSoOb-brzYS1yLw.jpg",
+          "https://oss-",
+          "",
+        ]),
+        visitHistory: Random.natural(0, 999999999999),
+        houseName: Random.integer(0, 1) ? "@ANCHORHOUSENAME" : "@csentence",
+        nickName: Random.integer(0, 1) ? "@ANCHORHOUSENAME" : "@csentence",
+        playStreamAddress: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
+        playStreamAddress2: "https://live5.hqzhuce.com/live/10596.flv?auth_key=1681107440-0-596-0c34337853d9ae4d8bd536ab2ea083da",
+        liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
+        sid: idx % 3 === 0 ? 100 : Random.integer(1,3) as Types.IWebAnchor['sid'],
+        fansCount: Random.natural(0, 10000000),
+        attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
+        matchCount: Random.natural(0, 10),
+        houseIntroduction: "@csentence",
+        languageType: query.lang
+      })),
     }))
   },
   {

@@ -55,7 +55,7 @@
 </script>
 
 <div data-cid={dataCid}>
-  <div class="w-full fixed bottom-0" bind:this={container}>
+  <div class="w-full fixed bottom-0 z-10" bind:this={container}>
     <img
       class={twMerge('relative duration-300 ease-out will-change-[left] will-change-[top]', showHill && 'z-[11]')}
       src={hill}

@@ -9,10 +9,12 @@ export interface IWebAnchor {
   nickName: string
   playStreamAddress: string
   playStreamAddress2: string
+  sid: 1 | 2 | 3 | 100 // 1: 足球 2: 籃球 3: 網球 100: 充提
   liveStatus: 1 | 2 | 3 | 4 // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
   fansCount: number
   attentionStatus: 0 | 1 | 2 // 0:未关注 1:已关注 2:无需出现关注按钮(主播自己)
   matchCount: number
+  houseIntroduction: string
   languageType: string
 }
 
@@ -116,23 +118,13 @@ export interface IWebAnchorInfo {
   }>
 }
 
-export interface IWebAnchorRecommend {
+export interface IWebAnchorsRecommend {
   query: {
-    sid?: number
+    lang: string
   }
   body: null
   res: withData<{
-    houseId: string
-    liveStatus: number // 1:未开播 2:正在直播 3:暂时禁播 4:永久禁播
-    nickName: string
-    personalIntroduction: string
-    playStreamAddress: string
-    anchorTitle: string
-    houseIntroduction: string
-    userImage: string
-    homeName: string
-    awayName: string
-    competitionName: string
+    list: IWebAnchor[]
   }>
 }
 

@@ -13,7 +13,7 @@ class IM extends Base {
   webAnchorLife = this.apiGenerator<Types.IWebAnchorLife>({ url: `${prefix}/v1/anchor/web-anchor/life` })
   webAnchorPhotos = this.apiGenerator<Types.IWebAnchorPhotos>({ url: `${prefix}/v1/anchor/web-anchor/photos` })
   webAnchorInfo = this.apiGenerator<Types.IWebAnchorInfo>({ url: `${prefix}/v1/anchor/web-anchor/info` })
-  webAnchorRecommend = this.apiGenerator<Types.IWebAnchorRecommend>({ url: `${prefix}/v1/anchor/web-anchor/recommend` })
+  webAnchorsRecommend = this.apiGenerator<Types.IWebAnchorsRecommend>({ url: `${prefix}/v1/anchor/web-anchors/recommend` })
   webAnchorLanguage = this.apiGenerator<Types.IWebAnchorLanguage>({ url: `${prefix}/v1/anchor/web-anchor/language` })
   webAnchorLanguageConstants = this.apiGenerator<Types.IWebAnchorLanguageConstants>({ url: `${prefix}/v1/anchor/web-anchor/language/constants` })
 
