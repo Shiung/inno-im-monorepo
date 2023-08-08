@@ -137,7 +137,7 @@
   })
 
   $: internal ? internalOnPausedCallback(paused) : onPausedCallback(paused)
-  $: internal ? internalOnMutedCallback(paused) : onMutedCallback(muted)
+  $: internal ? internalOnMutedCallback(muted) : onMutedCallback(muted)
   $: playVideo(urlm3u8)
 </script>
 

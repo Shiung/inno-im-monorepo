@@ -122,7 +122,7 @@
 
   $: internal ? internalOnPausedCallback(paused) : onPausedCallback(paused)
 
-  $: internal ? internalOnMutedCallback(paused) : onMutedCallback(muted)
+  $: internal ? internalOnMutedCallback(muted) : onMutedCallback(muted)
 
   $: playFlv(url)
 
