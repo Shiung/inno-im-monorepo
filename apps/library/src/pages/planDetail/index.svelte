@@ -22,6 +22,7 @@
   import OtherPredictions from './OtherPredictions/index.svelte'
 
   import { setIsPast, setFetchArticleDetail } from './context'
+
   import FloatingKey from '$src/containers/FloatKey'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
@@ -35,7 +36,7 @@
     if (!token) return
 
     loading = true
-    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
+    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang } })
     loading = false
 
     if (response.code !== CODE_STATUS_OK) return
@@ -59,7 +60,7 @@
 <div data-cid='planDetail'>
   <BackBar />
 
-  <div class='space-y-3'>
+  <div class="space-y-3">
     <div>
       {#if loading}
         <ArticleStoryLoading />
@@ -69,16 +70,16 @@
       <Info />
     </div>
 
-    <div class='rounded-[20px] bg-white'>
+    <div class="rounded-[20px] bg-white">
       <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
-      
+
       {#if loading}
         <MatchPanelLoading />
       {:else}
         <MatchPanel data={response?.data} />
       {/if}
 
-      <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
+      <div class="px-4"><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
 
       {#if loading}
         <PlanAnalysisLoading />
@@ -87,7 +88,6 @@
       {/if}
     </div>
 
-    
     {#if !loading && !isPast}
       {#key $locale}
         <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
