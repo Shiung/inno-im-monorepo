@@ -22,7 +22,8 @@ export default defineConfig({
       $components: resolve('./src/components'),
       $pages: resolve('./src/pages'),
       $stores: resolve('./src/stores'),
-      $types: resolve('./src/types')
+      $types: resolve('./src/types'),
+      $api: resolve('./src/api'),
     }
   },
 })

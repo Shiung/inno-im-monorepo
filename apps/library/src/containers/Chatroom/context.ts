@@ -8,7 +8,6 @@ export interface IChatroomInfo {
   useScrollCollapse: boolean
   height: number
   isOpen: boolean
-  showBetList: boolean
   chatId: string
   iid: number
 }
@@ -19,7 +18,6 @@ export const initInfo: IChatroomInfo = {
   useScrollCollapse: false,
   height: 0,
   isOpen: false,
-  showBetList: false,
   chatId: '',
   iid: 0,
 }

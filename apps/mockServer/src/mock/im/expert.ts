@@ -69,6 +69,7 @@ const expert: IMockData[] = [
       list: Array.from({ length: Number(query.pageSize) || 4 }, () => ({
         ...genMarket(),
         articleId: "@word",
+        articleStatus: Random.integer(1, 2) as Types.IArticle['articleStatus'],
         releaseTime: randomPostTime(),
         closeTime: randomPostTime(),
         title: "@cparagraph",
@@ -175,6 +176,15 @@ const expert: IMockData[] = [
         past: Random.boolean(),
         ...(genTeamInfo() as Pick<Types.IArticleDetail, 'homeName' | 'homeId' | 'awayName' | 'awayId'>),
         ...genMarket(),
+      }
+    ))
+  },
+  {
+    url: `${prefix}/v1/expert/article/unlock`,
+    method: 'post',
+    response: () => mock(withData<Types.IExpertArticleUnlock>(
+      {
+        articleStatus: 1,
       }
     ))
   },

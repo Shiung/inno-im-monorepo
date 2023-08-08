@@ -2,12 +2,14 @@
 import { Button, Ripple } from 'ui'
 import { convertTimeDiffToPast } from 'utils/convertDateAndTimestamp'
 import { push } from 'svelte-spa-router'
-import { t } from '$stores'
+import { t, userAuth, goLoginCallback } from '$stores'
+
 import type { IExpertPrediction } from 'api/im/types'
 
 import Strack from '$containers/Streak'
 import ExpertImage from '$src/components/ExpertImage'
 import MarketBadget from '$src/components/MarketBadget'
+import UnlockButton from '$components/UnlockButton/index.svelte'
 
 import type { GoToExpertDetail, GoToPlanDetail } from './type'
 
@@ -28,12 +30,16 @@ const convertReleaseTime = (releaseTime: number) => {
 }
 
 const goToExpertDetail = () => {
+  if (!$userAuth.userToken) return $goLoginCallback()
+
   if (typeof goToExpertDetailCallback !== 'function') return push(`/expertDetail/${prediction.expertId}/plan`)
 
   goToExpertDetailCallback(`/expertDetail/${prediction.expertId}/plan`)
 }
 
 const goToPlanDetail = () => {
+  if (!$userAuth.userToken) return $goLoginCallback()
+
   if (typeof goToPlanDetailCallback !== 'function') return push(`/planDetail/${prediction.expertId}/${prediction.articleId}`)
 
   goToPlanDetailCallback(`/planDetail/${prediction.expertId}/${prediction.articleId}`)
@@ -64,7 +70,11 @@ const goToPlanDetail = () => {
     </div>
 
     <div class='flex flex-col justify-between pl-[6px]'>
-      <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.limitFree')} </Button>
+      {#if prediction.articleStatus === 1 && $userAuth.userToken}
+        <Button class='row-span-1 h-[28px] rounded-[8px] self-end'> {$t('expert.plan.prediction')} </Button>
+        {:else}
+        <UnlockButton class="rounded-[8px] self-end" />
+      {/if}
 
       <div class='flex text-[10px] items-end self-end'>
         <span class='text-[#666666]'> {$t('expert.hitRate')} </span>

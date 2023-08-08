@@ -9,12 +9,13 @@ export type TimerOptions = {
   offset?: number
   tickCallback?: (timeInfo: TimeInfo) => void
   stopCallback?: () => void
+  paddedNum?: boolean
 }
 
 export type TimeInfo = {
-  second: number
-  minute: number
-  hour: number
+  second: number | string
+  minute: number | string
+  hour: number | string
   day: number
   month: number
   year: number
@@ -28,15 +29,17 @@ class Timer {
   #count: number
   #status: 'started' | 'stopped' | 'default' = 'default'
   #fakeStartTime: number
+  #paddedNum: boolean
 
   tickCallback: (timeInfo: TimeInfo) => void
   stopCallback: () => void
   type: 'countDown' | 'countUp'
 
   constructor(options: TimerOptions) {
-    const { start = '' , end = '', type = 'countDown', tickCallback, stopCallback } = options || {}
+    const { start = '' , end = '', type = 'countDown', tickCallback, stopCallback, paddedNum = false } = options || {}
 
     this.type = type
+    this.#paddedNum = paddedNum
     this.#startTime = isNaN(new Date(start).valueOf()) ? Date.now() : new Date(start).getTime()
     this.#fakeStartTime = this.#startTime
     this.#endTime = isNaN(new Date(end).valueOf()) ? Date.now() : new Date(end).getTime()
@@ -93,6 +96,10 @@ class Timer {
     }
   }
 
+  #formatTime(time: number) {
+    return time.toString().padStart(2, '0')
+  }
+
   #getTimeDiffInfo (diff: number) {
     const timeDiffSec = Math.round(diff / 1000)
   
@@ -102,11 +109,11 @@ class Timer {
     const day = Math.floor(timeDiffSec / 60 / 60 / 24) % 30
     const month = Math.floor(timeDiffSec / 60 / 60 / 24 / 30) % 12
     const year = Math.floor(timeDiffSec / 60 / 60 / 24 / 30 / 12)
-  
+
     return {
-      second,
-      minute,
-      hour,
+      second: this.#paddedNum ? this.#formatTime(second) : second,
+      minute: this.#paddedNum ? this.#formatTime(minute) : minute,
+      hour: this.#paddedNum ? this.#formatTime(hour) : hour,
       day,
       month,
       year
