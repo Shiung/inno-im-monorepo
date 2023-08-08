@@ -12,7 +12,10 @@ const routes = {
         replace('/square')
         return true
       }
-    ]
+    ],
+    userData: {
+      bottomNav: 'square'
+    }
   }),
   '/square': wrap({
     asyncComponent: () => import('$pages/square/index.svelte'),

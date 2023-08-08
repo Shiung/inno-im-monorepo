@@ -37,10 +37,12 @@
   let blockHeight: number = 0
 
   const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const height = entry?.contentRect?.height
-      if (height) blockHeight = height
-    }
+    requestAnimationFrame(() => {
+      for (const entry of entries) {
+        const height = entry?.contentRect?.height
+        if (height) blockHeight = height
+      }
+    })
   })
 
   $: calculateHill(active, items)
