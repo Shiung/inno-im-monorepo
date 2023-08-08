@@ -20,7 +20,6 @@
     <Icon id={1} class="!ml-1" on:click={() => replace('/anchor/1')} src={soccer} />
     <Icon id={2} on:click={() => replace('/anchor/2')} src={basketball} />
     <Icon id={3} on:click={() => replace('/anchor/3')} src={tennis} />
-    <Icon id={4} on:click={() => replace('/anchor/4')} src={baseball} />
   </Navigation>
 
   {#key $locale}
