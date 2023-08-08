@@ -91,6 +91,18 @@ const routes = {
       showBottomNav: false
     }
   }),
+  '/test/anchorChat/:anchorHouseId?': wrap({
+    asyncComponent: () => import('../pages/test/anchorChat/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+    conditions: [
+      (detail) => {
+        if (!detail?.params?.anchorHouseId) replace('/test/anchors')
+        return true
+      }
+    ]
+  }),
   '/test/expert': wrap({
     asyncComponent: () => import('../pages/test/expert/index.svelte'),
     userData: {

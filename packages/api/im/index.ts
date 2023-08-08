@@ -9,6 +9,7 @@ class IM extends Base {
 
   webAnchors = this.apiGenerator<Types.IWebAnchors>({ url: `${prefix}/v1/anchor/web-anchors` })
   webAnchorDetail = this.apiGenerator<Types.IWebAnchorDetail>({ url: `${prefix}/v1/anchor/web-anchor/detail` })
+  webAnchorHouseDetail = this.apiGenerator<Types.IWebAnchorsHouseDetail>({ url: `${prefix}/v1/anchor/web-anchor/house-detail` })
   webAnchorMatchList = this.apiGenerator<Types.IWebAnchorMatches>({ url: `${prefix}/v1/anchor/web-anchor/match-list` })
   webAnchorLife = this.apiGenerator<Types.IWebAnchorLife>({ url: `${prefix}/v1/anchor/web-anchor/life` })
   webAnchorPhotos = this.apiGenerator<Types.IWebAnchorPhotos>({ url: `${prefix}/v1/anchor/web-anchor/photos` })

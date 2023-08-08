@@ -15,7 +15,7 @@ export interface IWebAnchor {
   attentionStatus: 0 | 1 | 2 // 0:未关注 1:已关注 2:无需出现关注按钮(主播自己)
   matchCount: number
   houseIntroduction: string
-  languageType: string
+  lang: string
 }
 
 export interface IWebAnchors {
@@ -31,6 +31,14 @@ export interface IWebAnchors {
     list: IWebAnchor[]
     pager: IPager
   }>
+}
+
+export interface IWebAnchorsHouseDetail {
+  query: {
+    houseId: string
+  }
+  body: null
+  res: withData<Omit<IWebAnchor, 'matchCount'>>
 }
 
 export interface IWebAnchorMatch extends IMatch {

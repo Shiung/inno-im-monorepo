@@ -32,7 +32,7 @@
           canLoadmore = entry.isIntersecting
         }
       },
-      { root: !isWindow ? root : null, rootMargin: `${!isWindow ? 0 : -($height + ($headerRect?.height || 0))}px 0px 0px 0px` }
+      { root: !isWindow ? root : null, rootMargin: `${!isWindow ? 0 : -(($height || 0) + ($headerRect?.height || 0))}px 0px 0px 0px` }
     )
 
     if (dom) intersectionObserver.observe(dom)
