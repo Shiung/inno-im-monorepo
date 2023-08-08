@@ -3,7 +3,7 @@
   import { params, push } from 'svelte-spa-router'
   import { im } from 'api'
   import type { IWebAnchor } from 'api/im/types'
-  import { locale, getUseLang } from '$stores'
+  import { locale, getUseLang, t } from '$stores'
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
 
@@ -34,12 +34,13 @@
 
       if (useLang !== lang) return (showModal = true)
 
+      loading = false
+      
       title = houseName
       streaming = data
     } catch (error) {
       console.error(error)
-    } finally {
-      loading = false
+      showModal = true
     }
   }
 
@@ -85,9 +86,9 @@
 
   <Modal bind:show={showModal}>
     <Mark variant="info" />
-    <Header variant="mark">{'⛔️⛔️⛔️⛔️⛔️ 不支此援語系'}</Header>
+    <Header variant="mark">{$t('anchor.notSouport')}</Header>
     <div class="mt-[20px]">
-      <Button on:click={handleClick}>ok</Button>
+      <Button on:click={handleClick}>{$t('common.confirm')}</Button>
     </div>
   </Modal>
 {:else}
