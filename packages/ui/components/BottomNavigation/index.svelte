@@ -37,10 +37,12 @@
   let blockHeight: number = 0
 
   const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const height = entry?.contentRect?.height
-      if (height) blockHeight = height
-    }
+    requestAnimationFrame(() => {
+      for (const entry of entries) {
+        const height = entry?.contentRect?.height
+        if (height) blockHeight = height
+      }
+    })
   })
 
   $: calculateHill(active, items)
@@ -55,7 +57,7 @@
 </script>
 
 <div data-cid={dataCid}>
-  <div class="w-full fixed bottom-0" bind:this={container}>
+  <div class="w-full fixed bottom-0 z-10" bind:this={container}>
     <img
       class={twMerge('relative duration-300 ease-out will-change-[left] will-change-[top]', showHill && 'z-[11]')}
       src={hill}

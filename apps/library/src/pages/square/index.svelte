@@ -1,35 +1,50 @@
 <script lang="ts">
   import { im } from 'api'
-  import { params } from 'svelte-spa-router'
   import type { IWebAnchor } from 'api/im/types'
+  import { AbortControllers } from 'utils'
+  import type { ILanguages } from 'env-config'
 
+  import Header from '$components/Header'  
   import VIPNotification from '$containers/VIPNotification'
 
   import { locale, getUseLang } from '$stores'
+  import { NO_LANG, SID } from '$src/constant'
+  import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
+  import FloatingKey from '$src/containers/FloatKey'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
   import ExpertBlock from './ExpertBlock'
-
-  import FloatingKey from '$src/containers/FloatKey'
-    
-  import { NO_LANG } from '$src/constant'
-
-  import { convertSid, AbortControllers } from 'utils'
+  import { setSquareStore, initSquareStore } from './store'
 
   let streaming: IWebAnchor
 
-  $: sid = convertSid($params?.sid)
-
-  let data: Awaited<ReturnType<typeof im.webAnchors>>['data']['list'] = []
+  let originData: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
+  let data: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
   let loading: boolean = false
+
+  const { anchorMatches, anchorMatchLoadings } = setSquareStore(initSquareStore)
   const abortControllers = new AbortControllers()
 
   const onChange = (e: CustomEvent<IWebAnchor>) => {
     streaming = e.detail
+    data = originData.filter(anchor => anchor !== e.detail)
   }
 
-  const fetchAnchors = async (sid: number) => {
+  const fetchMatchesFromAnchors = async (data: typeof originData, lang: ILanguages) => {
+    data.forEach(async (anchor) => {
+      if (!anchor?.houseId || anchor?.sid === SID.deposit) {
+        anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: false }))
+        return
+      }
+      anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: true }))
+      const [firstMatch] = await fetchAnchorMatches(anchor.houseId, lang)
+      anchorMatches.update((prev) => ({ ...prev, [anchor.houseId]: firstMatch }))
+      anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: false }))
+    })
+  }
+
+  const fetchAnchors = async (lang: ILanguages) => {
     streaming = undefined
     data = []
 
@@ -43,18 +58,21 @@
 
     try {
       loading = true
-      const response = await im.webAnchors(
+      const response = await im.webAnchorsRecommend(
         {
-          query: { sid, lang: useLang, pageIdx: 1, pageSize: 4 },
-          headers: { 'Accept-Language': $locale }
+          query: { lang: useLang },
+          headers: { 'Accept-Language': lang }
         },
         { signal: controller.ctl.signal }
       )
 
       const { list } = response?.data || {}
       if (list?.length) {
-        data = list
+        originData = list
         streaming = list[0]
+        data = list.slice(1)
+
+        fetchMatchesFromAnchors(originData, $locale)
       }
     } catch (error) {
       console.error(error)
@@ -65,17 +83,16 @@
     }
   }
 
-  const init = (sid: number, lang: string) => {
-    if (sid && sid !== 0 && lang !== NO_LANG) fetchAnchors(sid)
-  }
-
   $: useLang = $getUseLang()
 
-  $: init(sid, useLang)
+  $: if (useLang !== NO_LANG) fetchAnchors($locale)
+
 </script>
 
 <VIPNotification />
 <div>
+  <Header />
+
   <div class="space-y-[10px]">
     <StreamBlock {streaming} {loading} />
 

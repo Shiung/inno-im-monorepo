@@ -1,6 +1,5 @@
 <script lang='ts'>
 import { slide } from 'svelte/transition'
-import { params } from 'svelte-spa-router'
 import { im } from 'api'
 import { t } from '$stores'
 
@@ -13,7 +12,6 @@ import Expert, { Loading as ExpertLoading } from '$containers/Expert'
 import { locale } from '$stores'
 import type { ILanguages } from 'env-config'
 
-import { convertSid, type SidType } from 'utils'
 import type { IExpertMenu } from '$src/components/SubMenu/type'
 
 let active: IExpertMenu['type'] = 0
@@ -37,11 +35,9 @@ const menu: IExpertMenu[] = [
 ]
 
 let predictionsPromise: ReturnType<typeof im.expertPredictions>
-const fetchPredictions = (sid: SidType, type: typeof active, lang: ILanguages) => {
-  if (sid === null) return
+const fetchPredictions = (type: typeof active, lang: ILanguages) => {
   predictionsPromise = im.expertPredictions({
     query: {
-      ...(sid && { sid }),
       ...(type && { type }),
       pageIdx: 1,
       pageSize: 10
@@ -52,8 +48,7 @@ const fetchPredictions = (sid: SidType, type: typeof active, lang: ILanguages) =
 
 let showMore: boolean = false
 
-$: sid = convertSid($params?.sid)
-$: fetchPredictions(sid, active, $locale)
+$: fetchPredictions(active, $locale)
 
 </script>
 

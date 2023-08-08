@@ -148,6 +148,8 @@ class WsMaster {
     this.enabled = false
     if (this.timer) clearTimeout(this.timer)
     this.watchdog.stop()
+    this.clearAllRegisters()
+
     if (this.socket.current) this.socket.current.close()
   }
 
@@ -253,6 +255,9 @@ class WsMaster {
     this.registrations.push(callback)
   }
 
+  clearAllRegisters() {
+    this.registrations = []
+  }
 }
 
 export default WsMaster

@@ -2,15 +2,14 @@
   import { im } from 'api'
   import { twMerge } from 'tailwind-merge'
   import { onDestroy, onMount } from 'svelte'
-  import { locale, setUserAuth, setUserInfo } from '$stores'
+  import { locale, setUserAuth, setUserInfo, setGoDeposit, setGoVipCenter, setGoLogin } from '$stores'
   import Chatroom, {
     controller,
     setChatInfo,
     setChatOrdersInfo,
     onSizeChangedCallback,
-    onToggledCallback,
-    onRouterRedirectCallback,
-    type SizeChangedOption
+    type SizeChangedOption,
+    type EChatroomSize
   } from '$src/containers/Chatroom'
 
   import { getUser, type IUser } from './utils'
@@ -18,7 +17,7 @@
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
   const isWindow: boolean = true
-  let expandType: string = 'default'
+  let expandType: `${EChatroomSize}` = 'default'
   let dom: HTMLDivElement
   let changedHeight: number
   let videoPlay: boolean = false
@@ -55,11 +54,14 @@
       chatId: '9434287',
       height: initHeight,
       // iid: 9433737,
-      isOpen: false
+      showBetEnable: true,
+      expandAnimation: true,
+      size: 'default',
+      header: 'deposit'
     })
   }
 
-  $: setChatInfo({ height: changedHeight, size: expandType as any })
+  $: setChatInfo({ height: changedHeight, size: expandType })
   $: setChatOrdersInfo({ sportMarketSummary, selfOrdersCallback, followOrdersCallback })
 
   onSizeChangedCallback((option: SizeChangedOption) => {
@@ -81,23 +83,9 @@
     }
   })
 
-  onToggledCallback((open) => {
-    setChatInfo({ isOpen: open })
-  })
-
-  onRouterRedirectCallback((option) => {
-    switch (option.location) {
-      case 'login':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to login')
-        break
-      case 'vipCenter':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to vipCenter')
-        break
-      case 'deposit':
-        console.log('⛔️⛔️⛔️⛔️⛔️ router redirect to deposit')
-        break
-    }
-  })
+  setGoDeposit(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoDeposit called') })
+  setGoVipCenter(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoVipCenter called') })
+  setGoLogin(() => { console.log('⛔️⛔️⛔️⛔️⛔️ GoLogin called') })
 
   const fetchMarket = async () => {
     const lang = $locale.toLowerCase().replace(/_/g, '-')

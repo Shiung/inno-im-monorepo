@@ -12,19 +12,16 @@ const routes = {
         replace('/square')
         return true
       }
-    ]
+    ],
+    userData: {
+      bottomNav: 'square'
+    }
   }),
-  '/square/:sid?': wrap({
+  '/square': wrap({
     asyncComponent: () => import('$pages/square/index.svelte'),
     userData: {
       bottomNav: 'square'
-    },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.sid) replace('/square/1')
-        return true
-      }
-    ]
+    }
   }),
   '/anchor/:anchorSid?': wrap({
     asyncComponent: () => import('$pages/anchor/index.svelte'),
@@ -34,6 +31,18 @@ const routes = {
     conditions: [
       (detail) => {
         if (!detail?.params?.anchorSid) replace('/anchor/0')
+        return true
+      }
+    ]
+  }),
+  '/anchorChat/:anchorHouseId?': wrap({
+    asyncComponent: () => import('$pages/anchorChat/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+    conditions: [
+      (detail) => {
+        if (!detail?.params?.anchorHouseId) replace('/anchor/0')
         return true
       }
     ]
@@ -85,13 +94,25 @@ const routes = {
     asyncComponent: () => import('../pages/test/chatroom/index.svelte'),
     userData: {
       showBottomNav: false
-    },
+    }
   }),
   '/test/anchors': wrap({
     asyncComponent: () => import('../pages/test/anchors/index.svelte'),
     userData: {
       showBottomNav: false
     }
+  }),
+  '/test/anchorChat/:anchorHouseId?': wrap({
+    asyncComponent: () => import('../pages/test/anchorChat/index.svelte'),
+    userData: {
+      showBottomNav: false
+    },
+    conditions: [
+      (detail) => {
+        if (!detail?.params?.anchorHouseId) replace('/test/anchors')
+        return true
+      }
+    ]
   }),
   '/test/expert': wrap({
     asyncComponent: () => import('../pages/test/expert/index.svelte'),
