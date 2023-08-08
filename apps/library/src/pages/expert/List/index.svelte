@@ -11,6 +11,8 @@
   import type { SidType } from 'utils'
   import type { IExpertMenu } from '$components/SubMenu/type'
 
+  import { CODE_STATUS_OK } from '$src/constant'
+
   export let sid: SidType
 
   type MenuType = IExpertMenu['type']
@@ -53,6 +55,8 @@
         },
         headers: { 'Accept-Language': $locale }
       })
+
+      if (response?.code !== CODE_STATUS_OK) return
 
       const { list, pager } = response?.data || {}
 

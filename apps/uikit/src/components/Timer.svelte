@@ -7,7 +7,7 @@
 
   const timer1 = new Timer({ start: Date.now(), type: 'countUp', tickCallback: (timeInfo) => (time1 = timeInfo) })
   const timer2 = new Timer({ start: '2022-12-31 00:00:00', end: '2022-12-31 00:00:10', type: 'countDown', tickCallback: (timeInfo) => (time2 = timeInfo) })
-  const timer3 = new Timer({ start: Date.now(), end: Date.now() + 7 * 1000, type: 'countDown', tickCallback: (timeInfo) => (time3 = timeInfo) })
+  const timer3 = new Timer({ start: Date.now(), end: Date.now() + 7 * 1000, type: 'countDown', tickCallback: (timeInfo) => (time3 = timeInfo), paddedNum: true })
   // setTimeout(() => {
   //   console.time('long settimeout')
   //   for(let i = 0; i < 2000000000; i++) {}
@@ -76,7 +76,7 @@
 </div>
 
 <div class='border rounded-xl px-5 py-4 mt-3 ml-4 w-fit'>
-  <strong class='text-[30px]'>countDown timer</strong>
+  <strong class='text-[30px]'>countDown timer paddedNum</strong>
 
   <div class='space-x-3'>
     <span>{time3.year}y</span>

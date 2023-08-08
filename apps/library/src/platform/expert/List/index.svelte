@@ -22,6 +22,8 @@
   let data: Awaited<ReturnType<typeof im.expertMatchArticle>>['data']['list'] = []
   let hasMoreData: boolean = false
 
+  let dom: HTMLDivElement
+
   const fetchPredictions = async ({ mid, vd }: { mid: number, vd: string }) => {
     try {
       const response = await im.expertMatchArticle({
@@ -61,13 +63,23 @@
     }
   }
 
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && !initLoading) init({ mid, vd })
+      }
+    }
+  )
+
+  $: if (dom) observer.observe(dom)
+
   $: {
     window.scrollTo(0, 0)
     init({ mid, vd })
   }
 </script>
 
-<div data-cid='PlatformExpertList' class="bg-white">
+<div data-cid='PlatformExpertList' class="bg-white" bind:this={dom}>
   {#if initLoading}
     <ExpertLoading length={5} />
   {:else}

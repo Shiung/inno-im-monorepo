@@ -33,6 +33,12 @@
       ],
       "$types": [
         "./src/types"
+      ],
+      "$api": [
+        "./src/api"
+      ],
+      "$api/*": [
+        "./src/api/*"
       ]
     },
     /**

@@ -10,6 +10,7 @@
   import { locale, getUseLang } from '$stores'
   import { NO_LANG, SID } from '$src/constant'
   import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
+  import FloatingKey from '$src/containers/FloatKey'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
@@ -99,4 +100,5 @@
 
     <ExpertBlock />
   </div>
+  <FloatingKey  />
 </div>

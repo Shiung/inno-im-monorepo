@@ -1,7 +1,7 @@
 <script lang="ts">
   import { im } from 'api'
   import { Ripple } from 'ui'
-  import { t, locale } from '$stores'
+  import { t, locale, userAuth } from '$stores'
   import { params } from 'svelte-spa-router'
   import { onMount } from 'svelte'
 
@@ -15,6 +15,8 @@
 
   import Filter from '../../images/filter.svg'
 
+  import { CODE_STATUS_OK } from '$src/constant'
+
   let pageIdx: number = 1
   const pageSize: number = 10
 
@@ -22,12 +24,17 @@
   let hasMoreData: boolean = false
   let initLoading: boolean = false
 
-  const fetchHistory = async () => {
+  const fetchHistory = async (token) => {
+    if (!token) return
+
     try {
       const response = await im.expertArticleHistory({
         query: { expertId: $params.expertId, pageIdx, pageSize },
         headers: { 'Accept-Language': $locale }
       })
+
+      if (response.code !== CODE_STATUS_OK) return
+
       const { list, pager } = response?.data || {}
   
       if (list?.length) data = [...data, ...list]
@@ -43,7 +50,7 @@
   const init = async () => {
     try {
       initLoading = true
-      await fetchHistory()
+      await fetchHistory($userAuth.userToken)
     } catch (error) {
       data = []
     } finally {

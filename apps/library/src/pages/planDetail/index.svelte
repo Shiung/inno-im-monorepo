@@ -1,14 +1,14 @@
 <script lang="ts">
   import { params } from 'svelte-spa-router'
   import { im } from 'api'
-  import { t, locale } from '$stores'
-  import type { ILanguages } from 'env-config'
+  import { t, locale, userAuth } from '$stores'
+  import { CODE_STATUS_OK } from '$src/constant'
+  import type { IFetchArticleDetailQuery } from './type'
 
   import Info from '$src/pages/expertDetail/Info/index.svelte'
   import Title from '$src/components/Title/index.svelte'
 
   import BackBar from '$containers/BackBar'
-  import BonusPoint from '$containers/HeaderNavigation/BonusPoint/index.svelte'
 
   import ArticleStoryLoading from './ArticleStory/components/Loading.svelte'
   import ArticleStory from './ArticleStory/index.svelte'
@@ -21,47 +21,46 @@
 
   import OtherPredictions from './OtherPredictions/index.svelte'
 
-  import BottomPanel from './BottomPanel/index.svelte'
-  import UnlockButton from './BottomPanel/components/UnlockButton.svelte'
-  import BetButton from './BottomPanel/components/BetButton.svelte'
+  import { setIsPast, setFetchArticleDetail } from './context'
 
-  import { setIsPast } from './context'
+  import FloatingKey from '$src/containers/FloatKey'
 
   let response: Awaited<ReturnType<typeof im.expertArticleDetail>>
   let loading: boolean
-  let coin: number = 1500
-  let bonus: number = 100000
   let isPast = false
   let isLocked = false
 
-  const fetchArticleDetail = async (articleId: string, lang: ILanguages) => {
+  const fetchArticleDetail = async (query: IFetchArticleDetailQuery) => {
+    const { articleId, lang, token } = query || {}
+
+    if (!token) return
+
     loading = true
-    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang }})
+    response = await im.expertArticleDetail({ query: { articleId }, headers: { 'Accept-Language': lang } })
     loading = false
+
+    if (response.code !== CODE_STATUS_OK) return
+
     const { past, articleStatus } = response?.data
     if (past) isPast = true
-    if (articleStatus === 2) isLocked = true
-  }
-
-  const onUnlockClick = () => {
-    console.log('onUnlockClick')
-  }
-
-  const onFollowBetClick = () => {
-    console.log('onFollowBetClick')
+    isLocked = articleStatus === 2
   }
 
   $: setIsPast({ isPast })
 
-  $: $params?.articleId && fetchArticleDetail($params?.articleId, $locale)
+  $: $params?.articleId && fetchArticleDetail({
+    articleId: $params?.articleId,
+    lang: $locale,
+    token: $userAuth.userToken
+  })
+  
+  setFetchArticleDetail({ fetchArticleDetail })
 </script>
 
 <div data-cid='planDetail'>
-  <BackBar>
-    <!-- <BonusPoint slot='right' {bonus} /> -->
-  </BackBar>
+  <BackBar />
 
-  <div class='space-y-3'>
+  <div class="space-y-3">
     <div>
       {#if loading}
         <ArticleStoryLoading />
@@ -71,16 +70,16 @@
       <Info />
     </div>
 
-    <div class='rounded-[20px] bg-white'>
+    <div class="rounded-[20px] bg-white">
       <div class="px-4"><Title>{$t('expert.planDetail.recommendMatches')}</Title></div>
-      
+
       {#if loading}
         <MatchPanelLoading />
       {:else}
         <MatchPanel data={response?.data} />
       {/if}
 
-      <div class='px-4'><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
+      <div class="px-4"><Title>{$t('expert.planDetail.planAnalysis')}</Title></div>
 
       {#if loading}
         <PlanAnalysisLoading />
@@ -89,7 +88,6 @@
       {/if}
     </div>
 
-    
     {#if !loading && !isPast}
       {#key $locale}
         <OtherPredictions mid={response?.data?.mid} vd={response?.data?.vd} />
@@ -97,13 +95,5 @@
     {/if}
   </div>
 
-  <!-- {#if !loading && !isPast}
-    <BottomPanel>
-      {#if isLocked}
-        <UnlockButton {coin} onButtonClick={onUnlockClick} />
-      {:else}
-        <BetButton onButtonClick={onFollowBetClick} />
-      {/if}
-    </BottomPanel>
-  {/if} -->
+  <FloatingKey />
 </div>
