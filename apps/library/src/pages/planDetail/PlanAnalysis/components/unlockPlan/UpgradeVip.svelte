@@ -83,7 +83,9 @@
   })
 
   time = timer.currentTime
-  timer.start()
+
+  $: hasKeyCdList = $userKeyInfo.keyCdList.length > 0
+  $: if (hasKeyCdList) timer.start()
 
   $: if (isFinish) fetchUserKeyInfo($userAuth.userToken)
 
@@ -98,10 +100,13 @@
     class={twMerge('w-full min-h-[56px] rounded-[12px] text-sm', !vipGiftItemLength && '!bg-[#BBBBBB]')}
     on:click={() => (show = true)}
   >
-    <p>
-      {$t('expert.unlockTime')}:
-      <span class="w-[60px] inline-block">{time.hour}:{time.minute}:{time.second}</span>
-    </p>
+    {#if hasKeyCdList}
+      <p>
+        {$t('expert.unlockTime')}:
+        <span class="w-[60px] inline-block">{time.hour}:{time.minute}:{time.second}</span>
+      </p>
+    {/if}
+
     {#if vipGiftItemLength}
       <p>{$t('user.upgradeVipGetKey')}</p>
     {/if}
