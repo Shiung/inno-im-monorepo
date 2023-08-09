@@ -18,7 +18,7 @@
 
 <script lang="ts">
   import { debounce } from 'utils'
-  import { get, type Writable } from 'svelte/store'
+  import type { Writable } from 'svelte/store'
 
   import Empty from '$containers/Empty'
 
@@ -45,7 +45,7 @@
 
   houseIdList.subscribe((value) => {
     _list = value
-    if (value?.length > 0) {
+    if (_list?.length > 0) {
       setActiveId(value[0])
       first = list.get(value?.[0])
       second = list.get(value?.[1])
@@ -65,13 +65,13 @@
     }
   }
 
-  const changeFirstTwoWhenStreamingChanged = (streaming: IPlatformAnchor) => {
+  const changeFirstTwoWhenStreamingChanged = (streaming: IPlatformAnchor, anchorIdList: typeof _list) => {
     if (!streaming) return
+    if (!anchorIdList || !anchorIdList.length) return
 
-    const idList = get(houseIdList)
     const firstTwo = []
-    for (let i = 0; i < idList.length; i++) {
-      const currentHouseId = idList[i]
+    for (let i = 0; i < anchorIdList.length; i++) {
+      const currentHouseId = anchorIdList[i]
       if (currentHouseId !== streaming.houseId) firstTwo.push(currentHouseId)
       if (firstTwo.length === 2) break
     }
@@ -82,13 +82,13 @@
 
   function getListDomTopRatio(...listens: any[]) {
     const listOffsetTop = listDom?.offsetTop || 0
-    const twoAnchorHeight = 1.5 * 85 + 8 - PREVIEW_BAR_WIDTH // 85 = block height, 8 = margin-top
-    return Math.round(listOffsetTop + twoAnchorHeight) / window.innerHeight
+    const secondAnchorMidPos = 1.5 * 85 + 8 - PREVIEW_BAR_WIDTH // 85 = block height, 8 = margin-top
+    return Math.round(listOffsetTop + secondAnchorMidPos) / window.innerHeight
   }
 
   $: whiteBlockHeight = window.innerHeight * (1 - previewTopRatio) - PREVIEW_BAR_WIDTH
 
-  $: changeFirstTwoWhenStreamingChanged($streaming)
+  $: changeFirstTwoWhenStreamingChanged($streaming, _list)
 
   $: if (listDom) previewTopRatio = getListDomTopRatio()
 
