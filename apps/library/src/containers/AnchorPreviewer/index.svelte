@@ -94,20 +94,20 @@
 <div data-cid='AnchorPreviewer' class={twMerge('flex w-full h-full space-x-2', $$props.class)} bind:this={dom}>
   <div class={twMerge("flex-none h-full flex items-center", $$props.previewClass)}>
     <div class='w-full h-full relative'>
+      {#if !isPreviewing || streamingLoading}
+        <div out:fade|local={{ duration: 250 }} class='absolute z-[1]'>
+          <slot name='image'>
+            <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
+          </slot>
+        </div>
+      {/if}
+
       {#if isLive}
         <slot name='badge'>
           <div class="absolute top-0 left-0 z-[1]">
             <AnchorLiveBadge />
           </div>
         </slot>
-      {/if}
-
-      {#if !isPreviewing || streamingLoading}
-        <div out:fade|local={{ duration: 250 }} class='absolute'>
-          <slot name='image'>
-            <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
-          </slot>
-        </div>
       {/if}
 
       <div class="rounded-[10px] overflow-hidden">
