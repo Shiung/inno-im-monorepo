@@ -2,15 +2,22 @@
   import { onDestroy, onMount } from 'svelte'
   import Router, { location, replace } from 'svelte-spa-router'
   import BottomNavigation from '$containers/BottomNavigation'
-  import { bottomNav, showBottomNav, appHeight } from '$stores/layout'
-  import { throttle } from 'utils'
   import { getTimeDifference } from 'utils/convertDateAndTimestamp'
   import routes from './routes'
-  import BigNumber from 'bignumber.js'
   import versionInfo from './utils/versionInfo'
+  import { regWindowSizeListener } from './utils/listener'
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api'
-  import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime } from '$stores'
+  import {
+    goHomeCallback,
+    fetchLangInfo,
+    userAuth,
+    userVipList,
+    diffTime,
+    bottomNav,
+    showBottomNav,
+    setImVh
+  } from '$stores'
   import { CODE_STATUS_OK } from '$src/constant'
 
   versionInfo()
@@ -26,14 +33,6 @@
   const conditionsFailed = (event: CustomEvent) => {
     if (event?.detail?.userData?.isExpertRelevant) replace('/expert/0')
   }
-
-  const setVh = () => {
-    const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
-    document.body.style.setProperty('--vh', `${vh}px`)
-    appHeight.set(Number(vh))
-  }
-
-  const handleResize = throttle(setVh, 250)
 
   const fetchUserVipList = async (token: string) => {
     if (!token) return
@@ -55,14 +54,15 @@
     fetchUserKeyInfo($userAuth.userToken)
   }
 
+  const unRegListener = regWindowSizeListener([setImVh])
+
   onMount(() => {
-    setVh()
+    setImVh()
     fetchLangInfo()
-    window.addEventListener('resize', handleResize)
   })
 
   onDestroy(() => {
-    window.removeEventListener('resize', handleResize)
+    unRegListener && unRegListener()
   })
 </script>
 
