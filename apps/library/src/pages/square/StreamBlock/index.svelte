@@ -10,6 +10,7 @@
   
   import Loading from './Loading.svelte'
   import { getSquareStore } from '../store'
+  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
   const { anchorMatches, anchorMatchLoadings } = getSquareStore()
 
@@ -92,6 +93,10 @@
       onErrorCallback={streamOnErrorCb}
       onLostDataCallback={streamOnLostDataCb}
     />
+
+    <div class="absolute top-0 left-0 z-[1]">
+      <AnchorLiveBadge class="rounded-none rounded-br-lg"/>
+    </div>
 
     <div class='bg-white px-3 py-2 space-y-2 rounded-b-[20px] min-h-[35px]'>
       {#if streaming}
