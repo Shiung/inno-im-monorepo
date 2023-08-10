@@ -1,12 +1,10 @@
 import { writable } from 'svelte/store'
 
 export interface IChatroomEnv {
-  device: 'pc' | 'wap'
   subscribeBindingChatroom: boolean
 }
 
 export const initEnv: IChatroomEnv = {
-  device: 'wap',
   subscribeBindingChatroom: true
 }
 
