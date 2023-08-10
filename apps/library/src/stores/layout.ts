@@ -43,14 +43,12 @@ deviceSize.subscribe(({ width }) => {
 })
 
 export const setImVh = () => {
-  console.log('⛔️⛔️⛔️⛔️⛔️ setImVh')
   const vh = new BigNumber(window.innerHeight * 0.01).toFixed(2)
   document.body.style.setProperty('--im-monorepo-vh', `${vh}px`)
   appHeight.set(Number(vh))
 }
 
 export const setDeviceSize = () => {
-  console.log('⛔️⛔️⛔️⛔️⛔️ setDeviceSize')
   deviceSize.set({
     width: window.innerWidth,
     height: window.innerHeight,
