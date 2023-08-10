@@ -3,6 +3,7 @@ import { defineConfig, loadEnv } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import svelteSVG from 'vite-plugin-svelte-svg'
 import { execSync } from 'child_process'
+import tailwindPreset from 'tailwind-config/tailwind.present.cjs'
 
 const packageJson = require('./package.json')
 
@@ -20,6 +21,18 @@ const buildToPlatformNodeModules = () => {
     outDir: process.env.PLATFORM_OUT_DIR || 'dist',
     emptyOutDir: true
   }
+}
+
+const genScreens = () => {
+  const _screens: { md: string; lg: string; xl: string } = tailwindPreset?.theme?.screens
+  if (!_screens) return undefined
+
+  const screens = {}
+  for (let [key, val] of Object.entries(_screens)) {
+    screens[key] = val.replace(/px/, '')
+  }
+
+  return screens
 }
 
 const buildAsLibrary = () => {
@@ -58,7 +71,8 @@ export default defineConfig(({ mode }) => {
       'process.env.name': JSON.stringify(packageJson.name),
       'process.env.version': JSON.stringify(packageJson.version),
       'process.env.commitHEAD': JSON.stringify(execSync('git rev-parse HEAD').toString()),
-      'process.env.login': process.env.LOGIN
+      'process.env.login': process.env.LOGIN,
+      'process.env.SCREENS': genScreens()
     },
     plugins: [
       svelte(),
