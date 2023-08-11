@@ -28,7 +28,7 @@
 
 <div data-cid="AnchorList" class={twMerge('bg-white rounded-[20px] pt-[16px]', $$props.class)}>
   <div class="px-[16px] flex items-center justify-between">
-    <div class="text-[18px] font-semibold">{$t('anchor.finding')}</div>
+    <div class="text-[18px] font-semibold">{$t('anchor.recommendation')}</div>
 
     <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => push(`/anchor/0`)}>
       <span> {$t('anchor.all')} </span>

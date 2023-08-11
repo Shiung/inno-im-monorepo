@@ -10,6 +10,7 @@
 
   import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
   import { t } from '$stores'
+  import { navigationAnchor } from '$src/utils/anchor'
 
   export let anchor: IWebAnchor
   export let match: IWebAnchorMatch
@@ -27,7 +28,7 @@
 
 <div>
   <Ripple class="w-full flex flex-col items-center im-shadow rounded-[10px] p-2 space-y-1" on:click>
-    <div class="relative w-full">
+    <div class="relative w-full" on:click={() => navigationAnchor(isMatchType, match, anchor.houseId)} on:keypress>
       {#if isLive}
         <div class="absolute top-0 left-0 z-[1]">
           <AnchorLiveBadge />

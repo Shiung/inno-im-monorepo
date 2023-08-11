@@ -11,6 +11,7 @@
   import Loading from './Loading.svelte'
   import { getSquareStore } from '../store'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
+  import { navigationAnchor } from '$src/utils/anchor'
 
   const { anchorMatches, anchorMatchLoadings } = getSquareStore()
 
@@ -86,10 +87,9 @@
       </div>
     {/if}
 
-    <div class="relative">
+    <div class="relative" on:click={() => navigationAnchor(isMatchType, match, streaming.houseId)} on:keypress>
       <InStreamingPlayer
         {streaming}
-        useDefControls
         onReadyCallback={streamOnReadyCb}
         onErrorCallback={streamOnErrorCb}
         onLostDataCallback={streamOnLostDataCb}
