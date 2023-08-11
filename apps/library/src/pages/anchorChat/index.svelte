@@ -54,7 +54,6 @@
   }
 
   controller.setChatEnv({
-    device: 'wap',
     subscribeBindingChatroom: true
   })
 

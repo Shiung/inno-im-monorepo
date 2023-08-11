@@ -1,1 +1,1 @@
-<div class='im-shadow animate-pulse bg-[#eeeeee] h-[97px] rounded-[10px]' />
+<div class='im-shadow animate-pulse bg-[#eeeeee] h-[180px] rounded-[10px]' />
