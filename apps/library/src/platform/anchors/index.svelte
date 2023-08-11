@@ -42,7 +42,7 @@
   <div data-cid="Platform_anchors">
     <div class="mt-[12px] bg-white">
       <div class='px-[12px] pt-[12px]'>
-        <h1>本场主播</h1>
+        <h1 class='text-[16px] text-[#333]'>本场主播</h1>
       </div>
       <AnchorGroup.Container class='p-[12px]'>
         {#each _list || [] as houseId}
