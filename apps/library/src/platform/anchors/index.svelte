@@ -17,112 +17,52 @@
 </script>
 
 <script lang="ts">
-  import { debounce } from 'utils'
-  import type { Writable } from 'svelte/store'
-
   import Empty from '$containers/Empty'
 
-  import StreamingAnchor from './StreamingAnchor/index.svelte'
-  import Anchor from './Anchor/index.svelte'
+  import * as AnchorGroup from '$src/containers/AnchorGroup'
+  import GroupContainer from './GroupContainer.svelte'
+  import AnchorImage from '$containers/AnchorImage'
+  import AnchorLiveBadge from '$containers/AnchorLiveBadge'
 
   import { streaming } from '../store'
-  import { PREVIEW_BAR_WIDTH } from './previewConfig'
   import { StreamLiveStatus } from '$src/constant'
 
-  let activeId: string
-  let first: Writable<IPlatformAnchor>
-  let second: Writable<IPlatformAnchor>
-  let listDom: HTMLDivElement
   const houseIdList = list.list
   let _list: string[] = []
-  let isInit = false
-  let previewTopRatio: number = 0
-  let folder: boolean = false
-
-  const setActiveId = debounce((id: string) => {
-    activeId = id
-  }, 250)
 
   houseIdList.subscribe((value) => {
     _list = value
-    if (_list?.length > 0) {
-      setActiveId(value[0])
-      first = list.get(value?.[0])
-      second = list.get(value?.[1])
-    }
-
-    previewTopRatio = getListDomTopRatio()
   })
 
-  const onWindowScroll = () => {
-    if (isInit && window.scrollY > 10) return
-    if (window.scrollY > 10) {
-      isInit = true
-      if ($second && $second?.liveStatus === StreamLiveStatus.LIVE) setActiveId($second.houseId)
-    } else {
-      isInit = false
-      if ($first && $first?.liveStatus === StreamLiveStatus.LIVE) setActiveId($first.houseId)
-    }
-  }
-
-  const changeFirstTwoWhenStreamingChanged = (streaming: IPlatformAnchor, anchorIdList: typeof _list) => {
-    if (!streaming) return
-    if (!anchorIdList || !anchorIdList.length) return
-
-    const firstTwo = []
-    for (let i = 0; i < anchorIdList.length; i++) {
-      const currentHouseId = anchorIdList[i]
-      if (currentHouseId !== streaming.houseId) firstTwo.push(currentHouseId)
-      if (firstTwo.length === 2) break
-    }
-
-    firstTwo[0] && (first = list.get(firstTwo[0]))
-    firstTwo[1] && (second = list.get(firstTwo[1]))
-  }
-
-  function getListDomTopRatio(...listens: any[]) {
-    const listOffsetTop = listDom?.offsetTop || 0
-    const secondAnchorMidPos = 1.5 * 85 + 8 - PREVIEW_BAR_WIDTH // 85 = block height, 8 = margin-top
-    return Math.round(listOffsetTop + secondAnchorMidPos) / window.innerHeight
-  }
-
-  $: whiteBlockHeight = window.innerHeight * (1 - previewTopRatio) - PREVIEW_BAR_WIDTH
-
-  $: changeFirstTwoWhenStreamingChanged($streaming, _list)
-
-  $: if (listDom) previewTopRatio = getListDomTopRatio()
-
-  $: setTimeout(() => {
-    previewTopRatio = getListDomTopRatio($streaming, folder)
-  }, 500)
-
-  // debug
-  // $: marginTop = previewTopRatio * 100
 </script>
-
-<svelte:window on:scroll={onWindowScroll} />
 
 {#if !_list || _list?.length === 0}
   <Empty class="h-[300px]" />
 {:else}
   <div data-cid="Platform_anchors">
-    <StreamingAnchor bind:folder />
-
-    <div class="px-[12px] mt-[12px]" bind:this={listDom}>
-      {#each _list || [] as houseId}
-        <Anchor
-          {houseId}
-          preview={activeId === houseId}
-          {previewTopRatio}
-          on:preview={(e) => setActiveId(e.detail)}
-          on:change={(e) => onChangeCallback(e.detail)}
-        />
-      {/each}
-
-      <div style:height={`${whiteBlockHeight}px`} />
+    <div class="mt-[12px] bg-white">
+      <div class='px-[12px] pt-[12px]'>
+        <h1>本场主播</h1>
+      </div>
+      <AnchorGroup.Container class='p-[12px]'>
+        {#each _list || [] as houseId}
+          <GroupContainer {houseId} let:store={item} >
+            <AnchorGroup.Unit active={houseId === $streaming?.houseId} on:click={() => onChangeCallback(item)}>
+              <AnchorImage
+                slot='image'
+                src={item?.userImage}
+                class='block w-[46px] h-auto rounded-full border-transparent bg-gradient-to-b from-[rgb(var(--im-monorepo-primary))] to-[rgb(var(--im-monorepo-secondary))]' />
+              <svelte:fragment slot='username'>{item.nickName}</svelte:fragment>
+              <svelte:fragment slot='flag'>
+                {#if item?.liveStatus === StreamLiveStatus.LIVE}
+                  <AnchorLiveBadge slot='flag' class='rounded-[4px]' />
+                {/if}
+              </svelte:fragment>
+            </AnchorGroup.Unit>
+          </GroupContainer>
+        {/each}
+      </AnchorGroup.Container>
     </div>
 
-    <!-- debug -->
-    <!-- <div class="bg-red-500 fixed left-0 right-0" style:top={`${marginTop}%`} style:height={`${PREVIEW_BAR_WIDTH}px`} /> -->
   </div>
 {/if}
