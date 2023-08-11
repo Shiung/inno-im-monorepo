@@ -37,11 +37,13 @@
       <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
     </div>
 
-    <p class="w-full text-left text-[14px]">
+    <p class="w-full text-left text-[14px] truncate">
       {#if match}
         {match.homeName} VS {match.awayName}
-      {:else}
+      {:else if anchor.houseName}
         {anchor.houseName}
+      {:else}
+        <span class="opacity-0">.</span>
       {/if}
     </p>
 
