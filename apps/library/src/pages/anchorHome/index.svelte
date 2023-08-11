@@ -9,7 +9,7 @@
 
   import { locale, getUseLang } from '$stores'
   import { NO_LANG, SID } from '$src/constant'
-  import { fetchAnchorMatches } from '$src/pages/anchorList/AnchorList/utils'
+  import { fetchAnchorMatches } from '$pages/anchor/AnchorList/utils'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'

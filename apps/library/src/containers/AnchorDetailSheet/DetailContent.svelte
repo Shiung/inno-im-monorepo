@@ -4,7 +4,7 @@ import { locale } from '$stores'
 
 import type { IWebAnchorLife, IWebAnchorInfo, IWebAnchorMatch } from 'api/im/types'
 import type { ITabs } from './types'
-import { fetchAnchorMatches } from '$src/pages/anchorList/AnchorList/utils'
+import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
 
 export let tabs: ITabs
 export let activedTab: keyof typeof tabs
