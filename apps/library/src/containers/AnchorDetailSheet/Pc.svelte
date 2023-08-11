@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Pc from './Pc.svelte'
-  import Wap from './Wap.svelte'
   import Modal from 'ui/components/Modal'
 
   import { im } from 'api'
@@ -36,8 +34,8 @@
   const closeModal = () => (open = false)
 </script>
 
-<Modal class="relative px-[15px] py-[20px] w-[517px] h-[682px]" on:dismiss={closeModal} bind:show={open}>
-  <div class="w-full flex justify-between">
+<Modal class="px-0 py-[20px] w-[517px] h-[682px]" on:dismiss={closeModal} bind:show={open}>
+  <div class="w-full flex justify-between px-[15px]">
     <div />
     <Ripple on:click={closeModal}>
       <Close width={20} height={20} fill="#666666" />
@@ -47,11 +45,9 @@
   {#await detailPromise}
     <Loading />
   {:then detail}
-    <div class="w-full relative left-0">
-      <DetailHeader detail={detail.data} bind:activedTab tabs={Object.keys(tabs)} />
-    </div>
+    <DetailHeader detail={detail.data} bind:activedTab tabs={Object.keys(tabs)} />
 
-    <div class="flex-1 relative overflow-y-scroll flex flex-col w-full">
+    <div class="overflow-y-scroll w-full px-2">
       <DetailContent {activedTab} {tabs} {houseId} />
     </div>
   {/await}
