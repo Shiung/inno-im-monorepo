@@ -23,7 +23,7 @@
   import GroupContainer from './GroupContainer.svelte'
   import AnchorImage from '$containers/AnchorImage'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
-
+  import Title from './Title.svelte'
   import { streaming } from '../store'
   import { StreamLiveStatus } from '$src/constant'
 
@@ -39,11 +39,10 @@
 {#if !_list || _list?.length === 0}
   <Empty class="h-[300px]" />
 {:else}
-  <div data-cid="Platform_anchors">
-    <div class="mt-[12px] bg-white">
-      <div class='px-[12px] pt-[12px]'>
-        <h1 class='text-[16px] text-[#333]'>本场主播</h1>
-      </div>
+  <div data-cid="Platform_anchors" class='space-y-3'>
+    <div class="bg-white">
+      <Title titleKey={'anchor.currentMatchAnchors'} />
+      
       <AnchorGroup.Container class='p-[12px]'>
         {#each _list || [] as houseId}
           <GroupContainer {houseId} let:store={item} >
