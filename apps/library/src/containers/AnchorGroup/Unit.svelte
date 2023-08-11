@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { twMerge } from 'tailwind-merge';
   import { Ripple } from 'ui'
   export let active: boolean = true
 
@@ -6,7 +7,7 @@
 
 <div class='shadow-[0_0_20px_0_rgba(0,0,0,.1)] my-[5px] rounded-[12px]'>
   <Ripple
-    class='w-[146px] h-[70px] rounded-[12px] shrink-0 cursor-point'
+    class={twMerge('w-[146px] h-[70px] rounded-[12px] shrink-0 cursor-point', active && 'pointer-events-none')}
     on:click>
     <div
       class='w-full h-full p-[3px]'
