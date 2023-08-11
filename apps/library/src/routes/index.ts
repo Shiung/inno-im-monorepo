@@ -18,11 +18,18 @@ const routes = {
     }
   }),
   '/anchor': wrap({
-    asyncComponent: () => import('$src/pages/anchorHome/index.svelte'),
+    asyncComponent: () => import('$pages/anchorHome/index.svelte'),
     userData: {
       bottomNav: 'anchor'
     }
   }),
+  '/anchorList': wrap({
+    asyncComponent: () => import('$pages/anchor/index.svelte'),
+    userData: {
+      bottomNav: 'anchor'
+    },
+  }),
+
   '/anchorChat/:anchorHouseId?': wrap({
     asyncComponent: () => import('$pages/anchorChat/index.svelte'),
     userData: {

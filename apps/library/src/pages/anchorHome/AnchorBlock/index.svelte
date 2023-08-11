@@ -30,7 +30,7 @@
   <div class="px-[16px] flex items-center justify-between">
     <div class="text-[18px] font-semibold">{$t('anchor.recommendation')}</div>
 
-    <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => push(`/anchor/0`)}>
+    <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => push(`/anchorList`)}>
       <span> {$t('anchor.all')} </span>
       <Arrow width={12} height={12} fill="#333333" />
     </Ripple>
