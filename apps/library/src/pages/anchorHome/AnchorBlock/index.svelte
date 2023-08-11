@@ -26,7 +26,7 @@
   }
 </script>
 
-<div data-cid="AnchorList" class={twMerge('bg-white rounded-[20px] pt-[16px]', $$props.class)}>
+<div data-cid="AnchorList" class={twMerge('bg-white rounded-[20px] lg:rounded-[10px] pt-[16px]', $$props.class)}>
   <div class="px-[16px] flex items-center justify-between">
     <div class="text-[18px] font-semibold">{$t('anchor.recommendation')}</div>
 

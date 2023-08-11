@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <div class="bg-white px-3 py-2 space-y-2 rounded-b-[20px]">
+    <div class="bg-white px-3 py-2 space-y-2 rounded-b-[20px] lg:rounded-b-[10px]">
       {#if streaming}
         <div class="flex items-center">
           <AnchorImage src={streaming?.userImage} class={twMerge('flex-none block w-[38px] h-[38px]', borderStyle)} borderWidth={2} />
