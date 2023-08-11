@@ -7,7 +7,8 @@
   import AnchorImage from '$containers/AnchorImage'
   import { t } from '$stores'
   import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
-  
+  import { twMerge } from 'tailwind-merge'
+
   import Loading from './Loading.svelte'
   import { getSquareStore } from '../store'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
@@ -69,9 +70,13 @@
 
   $: matchLoading = $anchorMatchLoadings[streaming?.houseId]
 
+  $: isLive = streaming?.liveStatus === StreamLiveStatus.LIVE
+
   $: isMatchType = streaming?.sid !== SID.deposit
 
   $: badgeStr = isMatchType ? SIDi18nKey[streaming?.sid] : `common.depositWithdraw`
+
+  $: borderStyle = isLive ? 'border-imprimary' : 'border-transparent'
 </script>
 
 {#if loading}
@@ -96,39 +101,46 @@
       />
 
       <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
-        <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded"/>
+        <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded" />
       </div>
     </div>
 
-    <div class='bg-white px-3 py-2 space-y-2 rounded-b-[20px] min-h-[35px]'>
+    <div class="bg-white px-3 py-2 space-y-2 rounded-b-[20px]">
       {#if streaming}
-        <div class='flex items-center justify-between space-x-1'>
-          <div class='flex-1 flex items-center space-x-1 overflow-hidden'>
-            <AnchorImage src={streaming?.userImage} class='w-[19px] h-[19px] border border-imprimary rounded-full p-[1px] ml-2' />
-            <span class='flex-initial max-w-[50%] text-imprimary leading-[18px] text-[18px] truncate'> {streaming?.houseName} </span>
+        <div class="flex items-center">
+          <AnchorImage src={streaming?.userImage} class={twMerge('flex-none block w-[38px] h-[38px]', borderStyle)} borderWidth={2} />
 
-            <div class='flex-1 leading-[15px] text-[10px] text-[#999] truncate'>
+          <div class="ml-3 max-w-[calc(100%_-_76px)]" on:click={() => navigationAnchor(isMatchType, match, streaming.houseId)} on:keypress>
+            <div class="leading-[18px] truncate">
               {#if matchLoading}
-                <div class='bg-[#eee] animate-pulse h-[15px] rounded-md'></div>
+                <div class="bg-[#eee] animate-pulse h-[15px] rounded-md" />
               {:else if match}
                 {match.homeName} VS {match.awayName}
               {:else}
-                {streaming?.nickName}
+                {streaming?.houseName}
               {/if}
+            </div>
+
+            <div class="leading-[15px] text-[14px] text-[#999] truncate">
+              {streaming?.nickName}
             </div>
           </div>
 
-          <Badget
-            class='rounded-[6px] leading-3 h-3 text-[9px]'
-            background={isMatchType ? `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)` : `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`}
-          >
-            {$t(badgeStr)}
-          </Badget>
+          <div class="flex-auto text-right min-w-[36px]">
+            <Badget
+              class="rounded-[12px] leading-3 h-[20px] text-[14px] flex-auto text-right px-2"
+              background={isMatchType
+                ? `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`
+                : `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`}
+            >
+              {$t(badgeStr)}
+            </Badget>
+          </div>
         </div>
       {/if}
     </div>
   </div>
   <!-- {/if} -->
 {:else}
-  <div></div>
+  <div />
 {/if}

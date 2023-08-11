@@ -5,9 +5,9 @@
 
   export let borderWidth = 3
 
-  $: border = `border-[${borderWidth}px]`
+  $: _borderWidth = `border-width: ${borderWidth}px`
 </script>
 
-<div class={twMerge($$props.class, border, 'rounded-full im-shadow')}>
-  <img class={twMerge(border, 'border-white rounded-full')} {src} on:error={() => (src = defaultImage)} alt="" />
+<div class={twMerge($$props.class, 'rounded-full im-shadow')} style={_borderWidth}>
+  <img class="border-white rounded-full w-full h-full" style={_borderWidth} {src} on:error={() => (src = defaultImage)} alt="" />
 </div>
