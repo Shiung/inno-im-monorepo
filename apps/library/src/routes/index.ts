@@ -18,7 +18,7 @@ const routes = {
     }
   }),
   '/anchor': wrap({
-    asyncComponent: () => import('$src/pages/anchor/index.svelte'),
+    asyncComponent: () => import('$src/pages/anchorHome/index.svelte'),
     userData: {
       bottomNav: 'anchor'
     }
