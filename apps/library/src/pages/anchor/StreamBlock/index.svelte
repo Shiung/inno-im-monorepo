@@ -95,8 +95,8 @@
         onLostDataCallback={streamOnLostDataCb}
       />
 
-      <div class="absolute top-0 left-0 z-[1] lg:bottom-0 lg:top-auto">
-        <AnchorLiveBadge class="rounded-none rounded-br-lg"/>
+      <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
+        <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded"/>
       </div>
     </div>
 
