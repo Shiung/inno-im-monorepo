@@ -3,14 +3,18 @@
   import { twMerge } from 'tailwind-merge'
   import { push } from 'svelte-spa-router'
   import { createEventDispatcher } from 'svelte'
-  import type { IWebAnchor } from 'api/im/types'
+  import type { IWebAnchor, IWebAnchorMatch } from 'api/im/types'
 
   import { t } from '$stores'
   import Empty from '$containers/Empty'
+  import AnchorCard from '$containers/AnchorCard'
 
-  import Anchor from './Anchor'
   import Loading from './Loading.svelte'
   import Arrow from './images/arrow_right_small.svg'
+
+  import { getSquareStore } from '../store'
+
+  const { anchorMatches } = getSquareStore()
 
   export let data: IWebAnchor[] = []
   export let loading: boolean = false
@@ -37,9 +41,11 @@
   {:else if data.length === 0}
     <Empty class="h-[320px]" />
   {:else}
-    <div class='grid grid-cols-2 grid-rows-[1fr_1fr] gap-[12px] p-[16px]'>
+    <div class='grid grid-cols-2 gap-[12px] p-[16px] xl:grid-cols-4'>
       {#each data || [] as anchor}
-        <Anchor {anchor} on:click={() => onAnchorClick(anchor)} />
+        {@const match = $anchorMatches[anchor.houseId]}
+
+        <AnchorCard {anchor} {match} on:click={() => onAnchorClick(anchor)}/>
       {/each}
     </div>
   {/if}

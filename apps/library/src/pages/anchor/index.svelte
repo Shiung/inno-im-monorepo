@@ -1,28 +1,102 @@
 <script lang="ts">
-  import { params, replace } from 'svelte-spa-router'
-  import Navigation, { Icon, LottieIcon } from '$containers/Navigation'
+  import { im } from 'api'
+  import type { IWebAnchor } from 'api/im/types'
+  import { AbortControllers } from 'utils'
+  import type { ILanguages } from 'env-config'
 
-  import { soccer, basketball, tennis, baseball } from '$assets/sid'
+  import Header from '$components/Header'  
+  import VIPNotification from '$containers/VIPNotification'
 
-  import { locale } from '$stores'
+  import { locale, getUseLang } from '$stores'
+  import { NO_LANG, SID } from '$src/constant'
+  import { fetchAnchorMatches } from '$src/pages/anchorList/AnchorList/utils'
 
-  import AnchorList from './AnchorList'
-  import fireData from './lottie/fire_normal.json'
+  import StreamBlock from './StreamBlock'
+  import AnchorBlock from './AnchorBlock'
+  import { setSquareStore, initSquareStore } from './store'
+  import { isLg } from '$stores'
 
-  import { convertSid } from 'utils'
+  let streaming: IWebAnchor
 
-  $: sid = convertSid($params?.anchorSid)
+  let originData: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
+  let data: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
+  let loading: boolean = false
+
+  const { anchorMatches, anchorMatchLoadings } = setSquareStore(initSquareStore)
+  const abortControllers = new AbortControllers()
+
+  const onChange = (e: CustomEvent<IWebAnchor>) => {
+    streaming = e.detail
+    data = originData.filter(anchor => anchor !== e.detail)
+  }
+
+  const fetchMatchesFromAnchors = async (data: typeof originData, lang: ILanguages) => {
+    data.forEach(async (anchor) => {
+      if (!anchor?.houseId || anchor?.sid === SID.deposit) {
+        anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: false }))
+        return
+      }
+      anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: true }))
+      const [firstMatch] = await fetchAnchorMatches(anchor.houseId, lang)
+      anchorMatches.update((prev) => ({ ...prev, [anchor.houseId]: firstMatch }))
+      anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: false }))
+    })
+  }
+
+  const fetchAnchors = async (lang: ILanguages) => {
+    streaming = undefined
+    data = []
+
+    abortControllers.abortControllers('fetch-anchors')
+    const controller = {
+      ctl: new AbortController(),
+      isAborted: false,
+      key: 'fetch-anchors'
+    }
+    abortControllers.addController(controller)
+
+    try {
+      loading = true
+      const response = await im.webAnchorsRecommend(
+        {
+          query: { lang: useLang },
+          headers: { 'Accept-Language': lang }
+        },
+        { signal: controller.ctl.signal }
+      )
+
+      const { list } = response?.data || {}
+      if (list?.length) {
+        originData = list
+        streaming = list[0]
+        data = list.slice(1)
+
+        fetchMatchesFromAnchors(originData, $locale)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      if (!controller.isAborted) loading = false
+
+      abortControllers.spliceController(controller)
+    }
+  }
+
+  $: useLang = $getUseLang()
+
+  $: if (useLang !== NO_LANG) fetchAnchors($locale)
+
 </script>
 
+<VIPNotification />
 <div>
-  <Navigation bind:active={sid} shape="circle" class="space-x-[10px]">
-    <LottieIcon id={0} on:click={() => replace('/anchor/0')} src={JSON.stringify(fireData)} infinity />
-    <Icon id={1} class="!ml-1" on:click={() => replace('/anchor/1')} src={soccer} />
-    <Icon id={2} on:click={() => replace('/anchor/2')} src={basketball} />
-    <Icon id={3} on:click={() => replace('/anchor/3')} src={tennis} />
-  </Navigation>
+  {#if !$isLg}
+    <Header />
+  {/if}
 
-  {#key $locale}
-    <AnchorList />
-  {/key}
+  <div class="space-y-[10px] lg:px-[20px]">
+    <StreamBlock {streaming} {loading} />
+
+    <AnchorBlock {data} {loading} on:change={onChange} />
+  </div>
 </div>

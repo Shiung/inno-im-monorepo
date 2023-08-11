@@ -44,7 +44,7 @@
   if (useDefControls) showControls = true
   }} 
   on:keypress
-  class="relative"
+  class="relative h-full"
 >
   {#if streaming?.liveStatus === StreamLiveStatus.LIVE}
     {#if isFlvUse}

@@ -23,12 +23,6 @@
       onClick: goHome
     },
     {
-      id: 'square',
-      icon: () => import('./images/square.svg'),
-      text: _t('common.square'),
-      onClick: () => push('/square')
-    },
-    {
       id: 'anchor',
       icon: () => import('./images/anchor.svg'),
       text: _t('common.anchor'),
