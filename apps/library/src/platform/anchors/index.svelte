@@ -63,5 +63,10 @@
       </AnchorGroup.Container>
     </div>
 
+    <div class='bg-white'>
+      <Title titleKey={'anchor.otherAnchors'} />
+
+      
+    </div>
   </div>
 {/if}
