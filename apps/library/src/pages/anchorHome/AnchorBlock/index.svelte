@@ -2,8 +2,7 @@
   import { Ripple } from 'ui'
   import { twMerge } from 'tailwind-merge'
   import { push } from 'svelte-spa-router'
-  import { createEventDispatcher } from 'svelte'
-  import type { IWebAnchor, IWebAnchorMatch } from 'api/im/types'
+  import type { IWebAnchor } from 'api/im/types'
 
   import { t } from '$stores'
   import Empty from '$containers/Empty'
@@ -18,12 +17,6 @@
 
   export let data: IWebAnchor[] = []
   export let loading: boolean = false
-
-  const dispatch = createEventDispatcher()
-
-  const onAnchorClick = (anchor: IWebAnchor) => {
-    dispatch('change', anchor)
-  }
 </script>
 
 <div data-cid="AnchorList" class={twMerge('bg-white rounded-[20px] pt-[16px]', $$props.class)}>
@@ -45,7 +38,7 @@
       {#each data || [] as anchor}
         {@const match = $anchorMatches[anchor.houseId]}
 
-        <AnchorCard {anchor} {match} on:click={() => onAnchorClick(anchor)}/>
+        <AnchorCard {anchor} {match} />
       {/each}
     </div>
   {/if}

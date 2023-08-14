@@ -25,11 +25,6 @@
   const { anchorMatches, anchorMatchLoadings } = setSquareStore(initSquareStore)
   const abortControllers = new AbortControllers()
 
-  const onChange = (e: CustomEvent<IWebAnchor>) => {
-    streaming = e.detail
-    data = originData.filter(anchor => anchor !== e.detail)
-  }
-
   const fetchMatchesFromAnchors = async (data: typeof originData, lang: ILanguages) => {
     data.forEach(async (anchor) => {
       if (!anchor?.houseId || anchor?.sid === SID.deposit) {
@@ -97,6 +92,6 @@
   <div class="space-y-[10px] lg:px-[20px]">
     <StreamBlock {streaming} {loading} />
 
-    <AnchorBlock {data} {loading} on:change={onChange} />
+    <AnchorBlock {data} {loading} />
   </div>
 </div>
