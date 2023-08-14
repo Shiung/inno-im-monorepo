@@ -24,6 +24,7 @@
   import { onDestroy, tick } from 'svelte'
   import { t } from '$stores'
   import { get } from 'svelte/store'
+  import Portal from 'svelte-portal'
 
   import Empty from '$src/containers/Empty'
 
@@ -41,7 +42,7 @@
   import { showBetList } from './store'
   import { hasVisibleMsg } from './utils'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header } = setInfo($info)
+  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header, betListSheetContainerId } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -55,6 +56,7 @@
       if (get(iid) !== e.iid) iid.set(e.iid)
       if (get(expandAnimation) !== e.expandAnimation) expandAnimation.set(e.expandAnimation)
       if (get(header) !== e.header) header.set(e.header)
+      if (get(betListSheetContainerId) !== e.betListSheetContainerId) betListSheetContainerId.set(e.betListSheetContainerId)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -131,6 +133,8 @@
 
   $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
 
+  $: portalDomEl = document.getElementById($betListSheetContainerId)
+
   onDestroy(() => {
     unsubscribeStoreModule()
     resetStoreModule()
@@ -171,6 +175,8 @@
       <InputArea fixed={isWindow} />
     </svelte:fragment>
 
-    <BetListSheet bind:open={$showBetList} />
+    <Portal target={portalDomEl ?? 'body'}>
+      <BetListSheet bind:open={$showBetList} />
+    </Portal>
   </Container>
 {/if}
