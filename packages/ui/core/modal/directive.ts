@@ -1,5 +1,4 @@
-import { createEventDispatcher } from 'svelte'
-import { GenOrGetModalRoot, removeModalRootIfEmpty } from './utils'
+import { GenOrGetModalRoot, removeModalRootIfEmpty, removePortalElementWhenDestroyed } from './utils'
 
 
 export const portal = (node: HTMLElement) => {
@@ -8,7 +7,8 @@ export const portal = (node: HTMLElement) => {
 
   return {
     destroy() {
-      removeModalRootIfEmpty()
+      removePortalElementWhenDestroyed({ node })
+      .then(() => removeModalRootIfEmpty())
     }
   }
 }
