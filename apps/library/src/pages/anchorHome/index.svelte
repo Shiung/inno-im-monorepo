@@ -1,86 +1,105 @@
 <script lang="ts">
   import { im } from 'api'
-  import type { IWebAnchor } from 'api/im/types'
-  import { AbortControllers } from 'utils'
+  import type { IWebAnchor, IPager } from 'api/im/types'
   import type { ILanguages } from 'env-config'
 
-  import Header from '$components/Header'  
+  import Header from '$components/Header'
   import VIPNotification from '$containers/VIPNotification'
 
   import { locale, getUseLang } from '$stores'
-  import { NO_LANG, SID } from '$src/constant'
+  import { NO_LANG } from '$src/constant'
   import { fetchAnchorMatches } from '$pages/anchor/AnchorList/utils'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
-  import { setSquareStore, initSquareStore } from './store'
+  import { setAnchorStore, initAnchorStore } from './store'
   import { isLg } from '$stores'
 
   let streaming: IWebAnchor
 
   let originData: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
   let data: Awaited<ReturnType<typeof im.webAnchorsRecommend>>['data']['list'] = []
-  let loading: boolean = false
 
-  const { anchorMatches, anchorMatchLoadings } = setSquareStore(initSquareStore)
-  const abortControllers = new AbortControllers()
+  let pageIdx = 1
+  let pageSize = 50
+  let hasMoreData = false
+  let loading = false
 
-  const fetchMatchesFromAnchors = async (data: typeof originData, lang: ILanguages) => {
-    data.forEach(async (anchor) => {
-      if (!anchor?.houseId || anchor?.sid === SID.deposit) {
-        anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: false }))
-        return
-      }
-      anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: true }))
-      const [firstMatch] = await fetchAnchorMatches(anchor.houseId, lang)
-      anchorMatches.update((prev) => ({ ...prev, [anchor.houseId]: firstMatch }))
-      anchorMatchLoadings.update((prev) => ({ ...prev, [anchor.houseId]: false }))
-    })
-  }
-
-  const fetchAnchors = async (lang: ILanguages) => {
-    streaming = undefined
-    data = []
-
-    abortControllers.abortControllers('fetch-anchors')
-    const controller = {
-      ctl: new AbortController(),
-      isAborted: false,
-      key: 'fetch-anchors'
-    }
-    abortControllers.addController(controller)
-
-    try {
-      loading = true
-      const response = await im.webAnchorsRecommend(
-        {
-          query: { lang: useLang },
-          headers: { 'Accept-Language': lang }
-        },
-        { signal: controller.ctl.signal }
-      )
-
-      const { list } = response?.data || {}
-      if (list?.length) {
-        originData = list
-        streaming = list[0]
-        data = list.slice(1)
-
-        fetchMatchesFromAnchors(originData, $locale)
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      if (!controller.isAborted) loading = false
-
-      abortControllers.spliceController(controller)
-    }
-  }
+  const { anchorMatches, anchorMatchLoadings } = setAnchorStore(initAnchorStore)
 
   $: useLang = $getUseLang()
 
-  $: if (useLang !== NO_LANG) fetchAnchors($locale)
+  const fetchMatchesFromAnchors = async (list: typeof originData, lang: ILanguages) => {
+    if (Object.keys($anchorMatches).length === 5) return (loading = false)
 
+    const { matchCount, houseId } = list[0] || {}
+    if (matchCount > 0) {
+      anchorMatchLoadings.update((prev) => ({ ...prev, [houseId]: true }))
+      const [firstMatch] = await fetchAnchorMatches(houseId, lang)
+
+      if (firstMatch) {
+        anchorMatches.update((prev) => ({ ...prev, [houseId]: firstMatch }))
+        anchorMatchLoadings.update((prev) => ({ ...prev, [houseId]: false }))
+
+        if (!streaming) {
+          streaming = list[0]
+        } else {
+          data.push(list[0])
+        }
+      }
+    }
+
+    list.shift()
+    if (list.length) {
+      fetchMatchesFromAnchors(list, lang)
+    } else if (hasMoreData) {
+      fetchAnchors(useLang)
+    } else {
+      loading = false
+    }
+  }
+
+  const setHasMoreData = (pager?: IPager) => {
+    if (!pager) return (hasMoreData = false)
+    const { totalPage } = pager || {}
+    hasMoreData = totalPage > pageIdx
+    if (hasMoreData) pageIdx++
+  }
+
+  const fetchAnchors = async (lang: string) => {
+    try {
+      loading = true
+
+      const response = await im.webAnchors({
+        query: {
+          pageIdx,
+          pageSize,
+          lang,
+          anchorType: 1
+        },
+        headers: { 'Accept-Language': lang }
+      })
+
+      const { list, pager } = response?.data || {}
+      setHasMoreData(pager)
+
+      if (list?.length) {
+        fetchMatchesFromAnchors(list, $locale)
+      } else {
+        loading = false
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  $: if (useLang !== NO_LANG) {
+    pageIdx = 1
+    streaming = undefined
+    data = []
+
+    fetchAnchors(useLang)
+  }
 </script>
 
 <VIPNotification />

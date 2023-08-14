@@ -1,14 +1,14 @@
 import { createStoreContext } from 'utils/storeContext'
 import type { IWebAnchorMatch } from 'api/im/types'
 
-type SquareStore = {
+type AnchorStore = {
   anchorMatches: { [key: string]: IWebAnchorMatch }
   anchorMatchLoadings: { [key: string]: boolean }
 }
 
-export const initSquareStore = {
+export const initAnchorStore = {
   anchorMatches: {},
   anchorMatchLoadings: {}
 }
 
-export const [setSquareStore, getSquareStore] = createStoreContext<SquareStore>('squareStore', initSquareStore)
+export const [setAnchorStore, getAnchorStore] = createStoreContext<AnchorStore>('anchorStore', initAnchorStore)
