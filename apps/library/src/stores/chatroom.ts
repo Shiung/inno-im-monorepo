@@ -40,12 +40,22 @@ interface ITranslationResponseData {
   translatedMessage: string
 }
 
+const requestedMessageMap: { [key: string]: boolean } = {}
+
+function getRequestKey(payload: ITranslationPayload) {
+  return `${payload.fromLang}-${payload.toLang}-${payload.message}`
+}
+
 async function batchTranslateMessage(messageList: ITranslationPayload[]) {
-  if (messageList.length > 0) {
-    const { data } = await im.chatroomTranslation({ body: { data: messageList } })
+  const notRequestedMessageList = messageList.filter(item => !requestedMessageMap[getRequestKey(item)])
+  if (notRequestedMessageList.length > 0) {
+    notRequestedMessageList.forEach(item => {
+      requestedMessageMap[getRequestKey(item)] = true
+    })
+    const { data } = await im.chatroomTranslation({ body: { data: notRequestedMessageList } })
     if (data?.length > 0) {
       // batch translation must be in the same language
-      const lang = messageList[0].toLang
+      const lang = notRequestedMessageList[0].toLang
       const translationMap: TranslationMap = get(chatroomTranslation)
       // TODO: too many translation may use too many memory, we may need to clear up the old translation
       data.forEach((item: ITranslationResponseData) => {
