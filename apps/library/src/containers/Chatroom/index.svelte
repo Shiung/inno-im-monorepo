@@ -175,8 +175,12 @@
       <InputArea fixed={isWindow} />
     </svelte:fragment>
 
-    <Portal target={portalDomEl ?? 'body'}>
+    {#if portalDomEl}
+      <Portal target={portalDomEl}>
+        <BetListSheet bind:open={$showBetList} />
+      </Portal>
+    {:else}
       <BetListSheet bind:open={$showBetList} />
-    </Portal>
+    {/if}
   </Container>
 {/if}
