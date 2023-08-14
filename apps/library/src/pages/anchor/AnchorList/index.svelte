@@ -1,49 +1,52 @@
 <script lang="ts">
-  import { im } from 'api'
   import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
   import { convertSid, AbortControllers } from 'utils'
-  import { locale, getUseLang } from '$stores'
+  import { locale, getUseLang, isLg, isXl } from '$stores'
   import { params } from 'svelte-spa-router'
 
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
 
   import Empty from '$src/containers/Empty'
-  import { NO_LANG, SID } from '$src/constant'
+  import { NO_LANG } from '$src/constant'
 
   import Loading from './Loading.svelte'
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
 
-  import { fetchAnchorMatches } from './utils'
+  import {
+    fetchAnchorsApi,
+    fetchAnchorMatches,
+    isDepositAnchor
+  } from './utils'
 
   let keyWord = ''
-
   let pageIdx = 1
-  let pageSize = 20
+  // TODO: changed by device
+  $: ANCHOR_MIN_COUNT = $isXl ? 15 : $isLg ? 12 : 8
+  $: pageSize = 50
 
   let initLoading: boolean = false
   let data: IWebAnchor[] = []
+  let isInit: boolean = true
   let hasMoreData: boolean = false
 
-  const matchesMap: { [k: string]: { data: IWebAnchorMatch, loading: boolean } } = {}
+  const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
 
   const abortControllers = new AbortControllers()
 
   const fetchAnchors = async ({ sid, keyWord, useLang }: { sid: ReturnType<typeof convertSid>, keyWord: string, useLang: string }) => {
-    let ret: Awaited<ReturnType<typeof im.webAnchors>>['data']['list']
+    let ret: IWebAnchor[]
 
-    const response = await im.webAnchors({
-      query: {
-        ...(sid && { sid }),
-        ...(keyWord && { keyWord }),
-        pageIdx,
-        pageSize,
-        lang: useLang
-      },
-      headers: { 'Accept-Language': $locale }
+    const { list, pager } = await fetchAnchorsApi({
+      sid,
+      keyWord,
+      lang: useLang,
+      pageIdx,
+      pageSize,
+      // TODO: 等充提上線時需拔掉
+      anchorType: 1
     })
 
-    const { list, pager } = response?.data || {}
     if (list?.length) ret = list
 
     setHasMoreData(pager)
@@ -53,23 +56,20 @@
 
   const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
     try {
-      if (!matchesMap[houseId]) matchesMap[houseId] = { loading: false, data: null }
-      
-      matchesMap[houseId].loading = true
+      if (!matchesMap[houseId]) matchesMap[houseId] = { data: null }
+
       const [first] = await fetchAnchorMatches(houseId, $locale)
       if (first) matchesMap[houseId].data = first
     } catch (error) {
       console.error(error)
       return Promise.reject(error)
-    } finally {
-      matchesMap[houseId].loading = false
     }
   }
 
   const fetchMatchesFromAnchors = async (data: IWebAnchor[]) => {
     return await Promise.allSettled(
       data.reduce((filtered, item) => {
-        if (item.sid === SID.deposit) return filtered
+        if (isDepositAnchor(item)) return filtered
         return [...filtered, fetchMatchesByAnchor(item.houseId)]
       }, [])
     ).then(() => filterAnchorsBySidAndHasMatch(data))
@@ -79,9 +79,10 @@
     try {
       const resData = await fetchAnchors({ sid, keyWord, useLang })
       if (resData?.length) {
-        const filteredResData = filterAnchorsBySidAndMatchCount(resData)
+        const filteredResData = await fetchMatchesFromAnchors(
+          filterAnchorsBySidAndMatchCount(resData)
+        )
         data = [...data, ...filteredResData]
-        await fetchMatchesFromAnchors(filteredResData)
       }
 
     } catch (error) {
@@ -89,13 +90,14 @@
       setHasMoreData()
     }
   }
-  // TODO: 待後端與三方 api 調整後移除，後端會只給 matchCount > 0 的賽事主播
-  const filterAnchorsBySidAndMatchCount = (data: IWebAnchor[]) => {
-    return data.filter(item => item.sid === SID.deposit || item.matchCount)
-  }
 
   const filterAnchorsBySidAndHasMatch = (data: IWebAnchor[]) => {
-    data.filter(item => item.sid === SID.deposit || matchesMap[item.houseId].data )
+    return data.filter(item => isDepositAnchor(item) || matchesMap[item.houseId].data )
+  }
+
+  // TODO: 待後端與三方 api 調整後移除，後端會只給 matchCount > 0 的賽事主播
+  export const filterAnchorsBySidAndMatchCount = (data: IWebAnchor[]) => {
+    return data.filter(item => isDepositAnchor(item) || item.matchCount)
   }
 
   const setHasMoreData = (pager?: IPager) => {
@@ -108,6 +110,7 @@
   const fetchInit = async () => {
     pageIdx = 1
     data = []
+    isInit = true
 
     abortControllers.abortControllers('fetch-im.webAnchors')
     const controller = {
@@ -121,8 +124,15 @@
       initLoading = true
       const resData = await fetchAnchors({ sid, keyWord, useLang })
       if (resData?.length) {
-        data = filterAnchorsBySidAndMatchCount(resData)
-        fetchMatchesFromAnchors(data)
+        data = await fetchMatchesFromAnchors(
+          filterAnchorsBySidAndMatchCount(resData)
+        )
+
+        while (data.length < ANCHOR_MIN_COUNT && hasMoreData) {
+          await loadAnchors()
+        }
+
+        isInit = false
       }
 
     } catch (error) {
@@ -151,16 +161,20 @@
   $: init(useLang)
 </script>
 
-<div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
+<div data-cid="Anchor_AnchorList" class="bg-white">
   <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
 
-  <div class="space-y-[12px]">
+  <div class="space-y-3 px-4 py-3">
     {#if initLoading}
-      <Loading />
+      <Loading size={ANCHOR_MIN_COUNT} />
     {:else if !data?.length}
       <Empty class="h-[calc(100vh_-_170px)]" />
     {:else}
-      <RetryInfiniteScroll hasMore={hasMoreData} load={() => loadAnchors()}>
+      <RetryInfiniteScroll
+        hasMore={hasMoreData}
+        isInit={isInit}
+        load={() => loadAnchors()}
+      >
         <div class='grid grid-cols-2 gap-3'>
           {#each data || [] as anchor}
             <Anchor

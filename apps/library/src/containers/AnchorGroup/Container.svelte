@@ -3,7 +3,7 @@
 </script>
 
 
-<div class={twMerge('flex overflow-x-auto [&>:not(:last-of-type)]:mr-[10px] scrollbox', $$props.class)} data-id='anchorGroup-container'>
+<div class={twMerge('flex overflow-x-auto space-x-3 scrollbox', $$props.class)} data-id='anchorGroup-container'>
   <slot />
 </div>
 
