@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { Badget } from 'ui'
+  import { Ripple, Badget } from 'ui'
   import type { IWebAnchor } from 'api/im/types'
   import Circle from 'ui/core/button/loading.svelte'
 
   import InStreamingPlayer, { isFlvUse } from '$containers/InStreamingPlayer'
   import AnchorImage from '$containers/AnchorImage'
+  import AnchorDetailSheet from '$containers/AnchorDetailSheet'
   import { t } from '$stores'
   import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
   import { twMerge } from 'tailwind-merge'
@@ -21,6 +22,7 @@
 
   let streamLoading = false
   let streamError = false
+  let openDetailSheet = false
   let prevStreamUrl: string
   let streamOnReadyCb
   let streamOnErrorCb
@@ -108,27 +110,29 @@
     <div class="bg-white px-3 py-2 space-y-2 rounded-b-[20px]">
       {#if streaming}
         <div class="flex items-center">
-          <AnchorImage src={streaming?.userImage} class={twMerge('flex-none block w-[38px] h-[38px]', borderStyle)} borderWidth={2} />
+          <Ripple on:click={() => (openDetailSheet = true)}>
+            <AnchorImage src={streaming?.userImage} class={twMerge('block w-[38px] h-[38px]', borderStyle)} borderWidth={2} />
+          </Ripple>
 
-          <div class="ml-3 max-w-[calc(100%_-_76px)]" on:click={() => navigationAnchor(isMatchType, match, streaming.houseId)} on:keypress>
-            <div class="leading-[18px] truncate">
-              {#if matchLoading}
-                <div class="bg-[#eee] animate-pulse h-[15px] rounded-md" />
-              {:else if match}
-                {match.homeName} VS {match.awayName}
-              {:else}
-                {streaming?.houseName}
-              {/if}
+          <div class="flex justify-between items-center flex-1 ml-3 overflow-hidden" on:click={() => navigationAnchor(isMatchType, match, streaming.houseId)} on:keypress>
+            <div class="flex-1 overflow-hidden">
+              <div class="leading-[18px] truncate">
+                {#if matchLoading}
+                  <div class="bg-[#eee] animate-pulse h-[15px] rounded-md" />
+                {:else if match}
+                  {match.homeName} VS {match.awayName}
+                {:else}
+                  {streaming?.houseName}
+                {/if}
+              </div>
+  
+              <div class="leading-[15px] text-[14px] text-[#999] truncate">
+                {streaming?.nickName}
+              </div>
             </div>
 
-            <div class="leading-[15px] text-[14px] text-[#999] truncate">
-              {streaming?.nickName}
-            </div>
-          </div>
-
-          <div class="flex-auto text-right min-w-[36px]">
             <Badget
-              class="rounded-[12px] leading-3 h-[20px] text-[14px] flex-auto text-right px-2"
+              class="rounded-[12px] leading-3 h-[20px] text-[14px] flex-none text-right px-2"
               background={isMatchType
                 ? `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`
                 : `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`}
@@ -141,6 +145,8 @@
     </div>
   </div>
   <!-- {/if} -->
+
+  <AnchorDetailSheet bind:open={openDetailSheet} houseId={streaming?.houseId} />
 {:else}
   <div />
 {/if}
