@@ -26,14 +26,17 @@ const routes = {
   '/anchorList': wrap({
     asyncComponent: () => import('$pages/anchor/index.svelte'),
     userData: {
-      bottomNav: 'anchor'
+      bottomNav: 'anchor',
+      showNavTab: false,
+      showBottomNav: false
     },
   }),
 
   '/anchorChat/:anchorHouseId?': wrap({
     asyncComponent: () => import('$pages/anchorChat/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     },
     conditions: [
       (detail) => {
@@ -58,6 +61,7 @@ const routes = {
     asyncComponent: () => import('$pages/expertDetail/index.svelte'),
     userData: {
       showBottomNav: false,
+      showNavTab: false,
       isExpertRelevant: true
     },
     conditions: [
@@ -74,6 +78,7 @@ const routes = {
     asyncComponent: () => import('$pages/planDetail/index.svelte'),
     userData: {
       showBottomNav: false,
+      showNavTab: false,
       isExpertRelevant: true
     },
     conditions: [
@@ -88,13 +93,15 @@ const routes = {
   '/test/chatroom': wrap({
     asyncComponent: () => import('../pages/test/chatroom/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     }
   }),
   '/test/anchors': wrap({
     asyncComponent: () => import('../pages/test/anchors/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     }
   }),
   '/test/anchorChat/:anchorHouseId?': wrap({
@@ -112,7 +119,8 @@ const routes = {
   '/test/expert': wrap({
     asyncComponent: () => import('../pages/test/expert/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     }
   }),
   '*': wrap({

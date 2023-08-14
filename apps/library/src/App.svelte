@@ -8,7 +8,7 @@
   import { regWindowSizeListener } from './utils/listener'
   import { im } from 'api'
   import { fetchUserKeyInfo } from '$api'
-  import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime, bottomNav, showBottomNav, setImVh, isLg } from '$stores'
+  import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime, bottomNav, showBottomNav, showNavTab, setImVh, isLg } from '$stores'
   import { CODE_STATUS_OK } from '$src/constant'
 
   import NavigationTab from '$containers/NavigationTab'
@@ -17,10 +17,12 @@
   $: console.log('=========[im-library] location==========', $location)
 
   const routeLoading = (event: CustomEvent) => {
-    bottomNav.set(event?.detail?.userData?.bottomNav)
+    const userData = event?.detail?.userData || {};
 
-    if (event?.detail?.userData?.showBottomNav === false) showBottomNav.set(false)
-    else showBottomNav.set(true)
+    bottomNav.set(userData.bottomNav);
+
+    showBottomNav.set(userData.showBottomNav !== false);
+    showNavTab.set(userData.showNavTab !== false);
   }
 
   const conditionsFailed = (event: CustomEvent) => {
@@ -60,8 +62,8 @@
 </script>
 
 <main class="im-library">
-  {#if $isLg}
-    <div class="px-[20px] mb-[12px]">
+  {#if $showNavTab && $isLg}
+    <div class="px-[20px] pt-[16px] mb-[12px]">
       <NavigationTab />
     </div>
   {/if}

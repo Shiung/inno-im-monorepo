@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 
 export const bottomNav = writable<string>()
 export const showBottomNav = writable<boolean>(true)
+export const showNavTab = writable<boolean>(true)
 export const appHeight = writable<number>(0)
 
 interface DeviceSize {
