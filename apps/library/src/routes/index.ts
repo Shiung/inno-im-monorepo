@@ -9,32 +9,27 @@ const routes = {
     asyncComponent: () => null,
     conditions: [
       () => {
-        replace('/square')
+        replace('/anchor')
         return true
       }
     ],
     userData: {
-      bottomNav: 'square'
+      bottomNav: 'anchor'
     }
   }),
-  '/square': wrap({
-    asyncComponent: () => import('$pages/square/index.svelte'),
+  '/anchor': wrap({
+    asyncComponent: () => import('$pages/anchorHome/index.svelte'),
     userData: {
-      bottomNav: 'square'
+      bottomNav: 'anchor'
     }
   }),
-  '/anchor/:anchorSid?': wrap({
+  '/anchorList': wrap({
     asyncComponent: () => import('$pages/anchor/index.svelte'),
     userData: {
       bottomNav: 'anchor'
     },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.anchorSid) replace('/anchor/0')
-        return true
-      }
-    ]
   }),
+
   '/anchorChat/:anchorHouseId?': wrap({
     asyncComponent: () => import('$pages/anchorChat/index.svelte'),
     userData: {

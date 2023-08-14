@@ -10,6 +10,7 @@
 
   import { SIDi18nKey, SID, StreamLiveStatus } from '$src/constant'
   import { t } from '$stores'
+  import { navigationAnchor } from '$src/utils/anchor'
 
   export let anchor: IWebAnchor
   export let match: IWebAnchorMatch
@@ -27,7 +28,7 @@
 
 <div>
   <Ripple class="w-full flex flex-col items-center im-shadow rounded-[10px] p-2 space-y-1" on:click>
-    <div class="relative w-full">
+    <div class="relative w-full" on:click={() => navigationAnchor(isMatchType, match, anchor.houseId)} on:keypress>
       {#if isLive}
         <div class="absolute top-0 left-0 z-[1]">
           <AnchorLiveBadge />
@@ -37,7 +38,7 @@
       <AnchorUserImage user={anchor.userImage} type={isMatchType ? 'match' : 'deposit'} />
     </div>
 
-    <p class="w-full text-left text-[14px]">
+    <p class="w-full text-left text-[14px] lg:text-[16px] truncate min-h-[20px]">
       {#if match}
         {match.homeName} VS {match.awayName}
       {:else}
@@ -47,15 +48,15 @@
 
     <div class="flex w-full items-center justify-between">
       <div class="flex-1 flex items-center space-x-1 overflow-hidden">
-        <Ripple on:click={() => (openDetailSheet = true)} class="w-[20%] rounded-full p-[1px] flex-none">
+        <Ripple on:click={() => (openDetailSheet = true)} class="w-[24px] lg:w-[32px] rounded-full p-[1px] flex-none">
           <AnchorImage 
           src={anchor.userImage} class={twMerge('block w-full h-auto', borderStyle)} borderWidth={1} />
         </Ripple>
-        <span class="text-[#666] text-[12px] truncate"> {anchor.nickName}</span>
+        <span class="text-[#666] text-[12px] lg:text-[14px] truncate"> {anchor.nickName}</span>
       </div>
 
       <Badget
-        class="rounded-[6px] leading-3 h-3 text-[9px]"
+        class="rounded-[12px] leading-3 text-[11px] lg:text-[14px] lg:h-[20px] lg:px-2 px-[6px]"
         background={isMatchType
           ? `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`
           : `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`}

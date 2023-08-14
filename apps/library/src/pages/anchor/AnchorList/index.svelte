@@ -135,8 +135,8 @@
     }
   }
 
-  const init = (sid, lang) => {
-    if (sid != null && lang !== NO_LANG) {
+  const init = (lang) => {
+    if (lang !== NO_LANG) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
 
@@ -148,11 +148,11 @@
 
   $: useLang = $getUseLang()
 
-  $: init(sid, useLang)
+  $: init(useLang)
 </script>
 
 <div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
-  <Search bind:value={keyWord} on:searchEvent={() => init(sid, useLang)} />
+  <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
 
   <div class="space-y-[12px]">
     {#if initLoading}

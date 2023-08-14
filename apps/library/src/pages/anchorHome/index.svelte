@@ -9,13 +9,12 @@
 
   import { locale, getUseLang } from '$stores'
   import { NO_LANG, SID } from '$src/constant'
-  import { fetchAnchorMatches } from '$src/pages/anchor/AnchorList/utils'
-  import FloatingKey from '$src/containers/FloatKey'
+  import { fetchAnchorMatches } from '$pages/anchor/AnchorList/utils'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
-  import ExpertBlock from './ExpertBlock'
   import { setSquareStore, initSquareStore } from './store'
+  import { isLg } from '$stores'
 
   let streaming: IWebAnchor
 
@@ -91,14 +90,13 @@
 
 <VIPNotification />
 <div>
-  <Header />
+  {#if !$isLg}
+    <Header />
+  {/if}
 
-  <div class="space-y-[10px]">
+  <div class="space-y-[10px] lg:px-[20px]">
     <StreamBlock {streaming} {loading} />
 
     <AnchorBlock {data} {loading} on:change={onChange} />
-
-    <ExpertBlock />
   </div>
-  <FloatingKey  />
 </div>
