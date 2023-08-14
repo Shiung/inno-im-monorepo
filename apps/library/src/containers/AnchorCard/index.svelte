@@ -48,9 +48,9 @@
 
     <div class="flex w-full items-center justify-between">
       <div class="flex-1 flex items-center space-x-1 overflow-hidden">
-        <Ripple on:click={() => (openDetailSheet = true)} class="w-[24px] lg:w-[32px] rounded-full p-[1px] flex-none">
+        <Ripple on:click={() => (openDetailSheet = true)} class="w-[24px] h-[24px] lg:h-[32px] lg:w-[32px] rounded-full p-[1px] flex-none">
           <AnchorImage 
-          src={anchor.userImage} class={twMerge('block w-full h-auto', borderStyle)} borderWidth={1} />
+          src={anchor.userImage} class={twMerge('block w-full h-full', borderStyle)} borderWidth={1} />
         </Ripple>
         <span class="text-[#666] text-[12px] lg:text-[14px] truncate"> {anchor.nickName}</span>
       </div>

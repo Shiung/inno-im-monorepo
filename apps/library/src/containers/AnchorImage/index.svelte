@@ -9,5 +9,5 @@
 </script>
 
 <div class={twMerge($$props.class, 'rounded-full im-shadow')} style={_borderWidth}>
-  <img class="border-white rounded-full w-full h-full" style={_borderWidth} {src} on:error={() => (src = defaultImage)} alt="" />
+  <img class="border-white rounded-full w-full h-full object-cover" style={_borderWidth} {src} on:error={() => (src = defaultImage)} alt="" />
 </div>
