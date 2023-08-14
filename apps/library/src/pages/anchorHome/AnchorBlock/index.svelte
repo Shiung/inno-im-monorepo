@@ -11,9 +11,9 @@
   import Loading from './Loading.svelte'
   import Arrow from './images/arrow_right_small.svg'
 
-  import { getSquareStore } from '../store'
+  import { getAnchorStore } from '../store'
 
-  const { anchorMatches } = getSquareStore()
+  const { anchorMatches } = getAnchorStore()
 
   export let data: IWebAnchor[] = []
   export let loading: boolean = false
