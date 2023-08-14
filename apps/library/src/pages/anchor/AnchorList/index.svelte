@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
   import { convertSid, AbortControllers } from 'utils'
-  import { locale, getUseLang, isLg, isXl } from '$stores'
+  import { locale, getUseLang, isLg, t, isXl } from '$stores'
   import { params } from 'svelte-spa-router'
 
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
@@ -13,11 +13,8 @@
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
 
-  import {
-    fetchAnchorsApi,
-    fetchAnchorMatches,
-    isDepositAnchor
-  } from './utils'
+  import { fetchAnchorsApi, fetchAnchorMatches, isDepositAnchor } from './utils'
+  import BackBar from '$containers/BackBar'
 
   let keyWord = ''
   let pageIdx = 1
@@ -34,7 +31,7 @@
 
   const abortControllers = new AbortControllers()
 
-  const fetchAnchors = async ({ sid, keyWord, useLang }: { sid: ReturnType<typeof convertSid>, keyWord: string, useLang: string }) => {
+  const fetchAnchors = async ({ sid, keyWord, useLang }: { sid: ReturnType<typeof convertSid>; keyWord: string; useLang: string }) => {
     let ret: IWebAnchor[]
 
     const { list, pager } = await fetchAnchorsApi({
@@ -50,7 +47,7 @@
     if (list?.length) ret = list
 
     setHasMoreData(pager)
-    
+
     return ret
   }
 
@@ -79,12 +76,9 @@
     try {
       const resData = await fetchAnchors({ sid, keyWord, useLang })
       if (resData?.length) {
-        const filteredResData = await fetchMatchesFromAnchors(
-          filterAnchorsBySidAndMatchCount(resData)
-        )
+        const filteredResData = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
         data = [...data, ...filteredResData]
       }
-
     } catch (error) {
       console.error(error)
       setHasMoreData()
@@ -92,12 +86,12 @@
   }
 
   const filterAnchorsBySidAndHasMatch = (data: IWebAnchor[]) => {
-    return data.filter(item => isDepositAnchor(item) || matchesMap[item.houseId].data )
+    return data.filter((item) => isDepositAnchor(item) || matchesMap[item.houseId].data)
   }
 
   // TODO: 待後端與三方 api 調整後移除，後端會只給 matchCount > 0 的賽事主播
   export const filterAnchorsBySidAndMatchCount = (data: IWebAnchor[]) => {
-    return data.filter(item => isDepositAnchor(item) || item.matchCount)
+    return data.filter((item) => isDepositAnchor(item) || item.matchCount)
   }
 
   const setHasMoreData = (pager?: IPager) => {
@@ -124,9 +118,7 @@
       initLoading = true
       const resData = await fetchAnchors({ sid, keyWord, useLang })
       if (resData?.length) {
-        data = await fetchMatchesFromAnchors(
-          filterAnchorsBySidAndMatchCount(resData)
-        )
+        data = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
 
         while (data.length < ANCHOR_MIN_COUNT && hasMoreData) {
           await loadAnchors()
@@ -134,7 +126,6 @@
 
         isInit = false
       }
-
     } catch (error) {
       console.error(error)
       setHasMoreData()
@@ -161,30 +152,32 @@
   $: init(useLang)
 </script>
 
-<div data-cid="Anchor_AnchorList" class="bg-white">
-  <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
-
-  <div class="space-y-3 px-4 py-3">
-    {#if initLoading}
-      <Loading size={ANCHOR_MIN_COUNT} />
-    {:else if !data?.length}
-      <Empty class="h-[calc(100vh_-_170px)]" />
-    {:else}
-      <RetryInfiniteScroll
-        hasMore={hasMoreData}
-        isInit={isInit}
-        load={() => loadAnchors()}
-      >
-        <div class='grid grid-cols-2 gap-3'>
-          {#each data || [] as anchor}
-            <Anchor
-              class='items-stretch'
-              {anchor}
-              matchInfo={matchesMap[anchor?.houseId]}
-            />
-          {/each}
-        </div>
-      </RetryInfiniteScroll>
+<div data-cid="Anchor_AnchorList" class="lg:px-[20px] lg:py-[16px]">
+  <BackBar title={$t('anchor.all')}>
+    {#if $isLg}
+      <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
     {/if}
+  </BackBar>
+
+  <div class="md:bg-white rouned-[20px] pb-[8px] px-[12px] lg:p-[16px] lg:rounded-[10px]">
+    {#if !$isLg}
+      <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
+    {/if}
+
+    <div class="space-y-3 px-4 py-3">
+      {#if initLoading}
+        <Loading size={ANCHOR_MIN_COUNT} />
+      {:else if !data?.length}
+        <Empty class="h-[calc(100vh_-_170px)]" />
+      {:else}
+        <RetryInfiniteScroll hasMore={hasMoreData} {isInit} load={() => loadAnchors()}>
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {#each data || [] as anchor}
+              <Anchor class="items-stretch" {anchor} matchInfo={matchesMap[anchor?.houseId]} />
+            {/each}
+          </div>
+        </RetryInfiniteScroll>
+      {/if}
+    </div>
   </div>
 </div>
