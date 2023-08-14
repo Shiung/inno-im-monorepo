@@ -6,18 +6,29 @@ export const writableSyncLocalStorage = <T>(key: string, init: any): Writable<T>
   const def = stored || init
 
   const store = svelteWritable<T>(def)
-  localStorage.setItem(key, def)
-
+  try {
+    localStorage.setItem(key, def)
+  } catch (e) {
+    // just catch for safari private mode
+  }
 
   return {
     subscribe: store.subscribe,
     set: (data: any) => {
       store.set(data)
-      localStorage.setItem(key, data)
+      try {
+        localStorage.setItem(key, data)
+      } catch (e) {
+        // just catch for safari private mode
+      }
     },
     update: (func) => {
       store.update(func)
-      localStorage.setItem(key, get(store) as any)
+      try {
+        localStorage.setItem(key, get(store) as any)
+      } catch (e) {
+        // just catch for safari private mode
+      }
     }
   }
 }

@@ -13,6 +13,7 @@ export interface IChatroomInfo {
   expandAnimation: boolean
   header: 'normal' | 'text' | 'deposit'
   betListSheetContainerId?: string
+  isDefaultTranslate?: boolean
 }
 
 export const initInfo: IChatroomInfo = {
@@ -25,7 +26,8 @@ export const initInfo: IChatroomInfo = {
   showBetEnable: true,
   expandAnimation: true,
   header: 'normal',
-  betListSheetContainerId: ''
+  betListSheetContainerId: '',
+  isDefaultTranslate: false
 }
 
 export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)

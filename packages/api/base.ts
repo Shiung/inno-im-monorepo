@@ -43,7 +43,7 @@ export default class Base {
     this.headers = headers
   }
 
-  protected apiGenerator<T extends ApiType<T['res']>>({ url, method }: IApiInit): (req?: Request<T['query'], T['body']>, options?: any) => Promise<T['res']> {
+  protected apiGenerator<T extends ApiType<T['res'], T['body']>>({ url, method }: IApiInit): (req?: Request<T['query'], T['body']>, options?: any) => Promise<T['res']> {
 
     return async (request?: Request<T['query'], T['body']>, options?: any) => {
       const _method = request?.method || method || 'get'
