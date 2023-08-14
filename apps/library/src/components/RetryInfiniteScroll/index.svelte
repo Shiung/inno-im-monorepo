@@ -4,6 +4,7 @@
 
   export let hasMore: boolean
   export let load: ((...args: any) => Promise<any>)
+  export let isInit: boolean = false
 
   let triggerRefetch: boolean = false
   let moreLoading: boolean = false
@@ -28,19 +29,12 @@
     }
   }
 
-  let observer = new IntersectionObserver(async (entries) => {
+  let observer = new IntersectionObserver((entries) => {
     const entry = entries[0]
-    if (!hasMore) return
 
-    if (entry.isIntersecting) {
-      triggerRefetch = true
-      if (!moreLoading) {
-        await loadData()
-        reFetchIfNeeded()
-      }
-    } else {
-      triggerRefetch = false
-    }
+    triggerRefetch = entry.isIntersecting
+
+    if (!isInit && !moreLoading) reFetchIfNeeded()
   })
 
   const clearObserver = () => {

@@ -2,7 +2,7 @@ import { writable } from 'svelte/store'
 
 import type { Writable } from 'svelte/store'
 import type { IPlatformAnchor } from '../anchors/types'
-
+import type { sportSID } from '$src/constant'
 
 const createAnchors = () => {
   const list = writable<string[]>()
@@ -53,3 +53,4 @@ const createAnchors = () => {
 
 export const list = createAnchors()
 export const streaming = writable<IPlatformAnchor>()
+export const matchSid = writable<typeof sportSID[keyof typeof sportSID]>()

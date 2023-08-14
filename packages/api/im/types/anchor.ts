@@ -25,6 +25,7 @@ export interface IWebAnchors {
     pageIdx: number
     pageSize: number
     lang?: string
+    anchorType?: number
   }
   body: null
   res: withData<{
