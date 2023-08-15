@@ -108,7 +108,7 @@
     <Header />
   {/if}
 
-  <div class="space-y-[10px] lg:pb-4 lg:px-[20px]">
+  <div class="space-y-[10px] pb-4 lg:px-[20px]">
     <StreamBlock {streaming} {loading} />
 
     <AnchorBlock {data} {loading} />
