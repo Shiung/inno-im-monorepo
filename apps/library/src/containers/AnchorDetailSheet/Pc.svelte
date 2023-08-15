@@ -13,6 +13,8 @@
 
   import type { ITabs } from './types'
 
+  import { CODE_STATUS_OK } from '$src/constant'
+
   export let open: boolean
   export let houseId: string
 
@@ -35,8 +37,7 @@
 </script>
 
 <Modal class="px-0 py-[20px] w-[517px] h-[682px]" on:dismiss={closeModal} bind:show={open}>
-  <div class="w-full flex justify-between px-[15px]">
-    <div />
+  <div class="w-full flex justify-end px-[15px]">
     <Ripple on:click={closeModal}>
       <Close width={20} height={20} fill="#666666" />
     </Ripple>
@@ -45,10 +46,14 @@
   {#await detailPromise}
     <Loading />
   {:then detail}
-    <DetailHeader detail={detail.data} bind:activedTab tabs={Object.keys(tabs)} />
+    {@const { data, code } = detail || {}}
 
-    <div class="overflow-y-scroll w-full px-2">
-      <DetailContent {activedTab} {tabs} {houseId} />
-    </div>
+    {#if code === CODE_STATUS_OK}
+      <DetailHeader detail={data} bind:activedTab tabs={Object.keys(tabs)} />
+
+      <div class="overflow-y-scroll w-full px-2">
+        <DetailContent {activedTab} {tabs} {houseId} />
+      </div>
+    {/if}
   {/await}
 </Modal>
