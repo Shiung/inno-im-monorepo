@@ -50,7 +50,7 @@
   }
 
   const filterAnchorsHasMatch = (data: IWebAnchor[]) => {
-    return data.filter(item => matchesMap[item.houseId].data )
+    return data.filter(item => matchesMap[item.houseId]?.data )
   }
 
   const loadAnchors = async () => {
