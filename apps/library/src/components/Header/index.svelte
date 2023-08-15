@@ -4,7 +4,7 @@
 
 </script>
 
-<div class={twMerge('flex justify-between items-center bg-white h-[44px]', $$props.class)}>
+<div data-cid='Header' class={twMerge('flex justify-between items-center bg-white h-[44px]', $$props.class)}>
   <div>
     <slot name='left'>
       <VendorLogo class='h-[26px] w-auto' />
