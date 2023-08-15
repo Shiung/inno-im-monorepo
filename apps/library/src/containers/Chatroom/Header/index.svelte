@@ -8,7 +8,7 @@
   export let isTransition: boolean
   export let fixed: boolean = false
 
-  const { header } = getInfo()
+  const { header, headerClass } = getInfo()
 
   const loadComponent = async (header) => {
     let comp
@@ -34,11 +34,10 @@
 <div>
   {#await promise then comp}
     {#if $header === 'normal'}
-      <svelte:component this={comp} bind:dom {fixed} {isTransition} showClose on:close />
+      <!-- <svelte:component this={comp} bind:dom {fixed} {isTransition} showClose on:close /> -->
+      <svelte:component this={comp} bind:dom {fixed} {isTransition} class={$headerClass} />
     {:else if $header === 'text'}
-      <svelte:component this={comp} bind:dom />
-    {:else if $header === 'deposit'}
-      <svelte:component this={comp} bind:dom {fixed} {isTransition} />
+      <svelte:component this={comp} bind:dom {fixed} {isTransition} class={$headerClass} />
     {/if}
   {/await}
 </div>

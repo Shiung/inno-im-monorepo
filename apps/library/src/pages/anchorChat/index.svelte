@@ -72,7 +72,7 @@
     iid: 0,
     showBetEnable: false,
     expandAnimation: false,
-    header: 'deposit'
+    header: 'normal'
   })
 
   onMount(() => {

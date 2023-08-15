@@ -56,7 +56,8 @@
       showBetEnable: true,
       expandAnimation: true,
       size: 'default',
-      header: 'deposit'
+      header: 'normal',
+      headerClass: 'custom-class'
     })
   }
 
