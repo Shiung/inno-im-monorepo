@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
+  import { twMerge } from 'tailwind-merge'
   import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
   import { locale, getUseLang, isLg } from '$stores'
   import { AbortControllers } from 'utils'
 
-  import Empty from '$containers/Empty'
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
   import Anchor from './Anchor.svelte'
   import { NO_LANG } from '$src/constant'
@@ -15,7 +16,6 @@
     isDepositAnchor
   } from '$src/pages/anchor/AnchorList/utils'
   import Loading from '$src/pages/anchor/AnchorList/Loading.svelte'
-    import { twMerge } from 'tailwind-merge'
 
   let pageIdx = 1
   $: ANCHOR_MIN_COUNT = $isLg ? 9 : 6
@@ -29,6 +29,8 @@
   const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
 
   const abortControllers = new AbortControllers()
+
+  const dispatch = createEventDispatcher()
 
   const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
     try {
@@ -92,7 +94,7 @@
     const controller = {
       ctl: new AbortController(),
       isAborted: false,
-      key: 'fetch-im.webAnchors'
+      key: 'platform-fetch-im.webAnchors'
     }
     abortControllers.addController(controller)
 
@@ -117,7 +119,10 @@
       console.error(error)
       setHasMoreData()
     } finally {
-      if (!controller.isAborted) initLoading = false
+      if (!controller.isAborted) {
+        initLoading = false
+        dispatch('nodata', !data?.length)
+      }
 
       abortControllers.spliceController(controller)
     }
@@ -139,9 +144,7 @@
 <div data-cid='Platform_anchors_OtherAnchors' class={twMerge('px-4', $$props.class)}>
   {#if initLoading}
     <Loading size={ANCHOR_MIN_COUNT} />
-  {:else if !displayedData?.length}
-    <Empty class="h-[300px]" />
-  {:else}
+  {:else if displayedData?.length}
     <RetryInfiniteScroll
       hasMore={hasMoreData}
       load={() => loadAnchors()}
@@ -156,5 +159,7 @@
         {/each}
       </div>
     </RetryInfiniteScroll>
+  {:else}
+    <div class='h-[200px]'></div>
   {/if}
 </div>
