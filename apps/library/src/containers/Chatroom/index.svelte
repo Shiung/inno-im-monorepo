@@ -42,7 +42,7 @@
   import { showBetList } from './store'
   import { hasVisibleMsg } from './utils'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header, betListSheetContainerId } = setInfo($info)
+  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header, betListSheetContainerId, headerClass } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -57,6 +57,7 @@
       if (get(expandAnimation) !== e.expandAnimation) expandAnimation.set(e.expandAnimation)
       if (get(header) !== e.header) header.set(e.header)
       if (get(betListSheetContainerId) !== e.betListSheetContainerId) betListSheetContainerId.set(e.betListSheetContainerId)
+      if (get(headerClass) !== e.headerClass) headerClass.set(e.headerClass)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -152,7 +153,8 @@
     on:onTouchMoveChange={(e) => touchMoveOffset = e.detail }
   >
     <svelte:fragment slot='header'>
-      <Header {isTransition} fixed={isWindow} on:close={foldChatroom} />
+      <!-- <Header {isTransition} fixed={isWindow} on:close={foldChatroom} /> -->
+      <Header {isTransition} fixed={isWindow} />
     </svelte:fragment>
 
     <svelte:fragment slot='messages'>

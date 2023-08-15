@@ -99,7 +99,7 @@
       </div>
     </div>
   {:else}
-    <div class="flex items-center justify-center z-10" bind:this={dom}>
+    <div class="flex items-center justify-center" bind:this={dom}>
       <div class="bg-white rounded-[10px]" style:transform={`translateY(${offsetY}px)`}>
         <div class="flex items-center justify-center bg-[rgba(76,158,234,0.05)] rounded-[10px] h-[34px] px-[16px]">
           <div class="text-[12px] text-imprimary">{$t('chat.dropToMore')}</div>
