@@ -26,6 +26,18 @@ export const removeModalRootIfEmpty = (args?: { delay?: number }) => {
   }, delay)
 }
 
+export const removePortalElementWhenDestroyed = (args?: { node?: HTMLElement; delay?: number }): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const container = document.getElementById(CONTAINER_ID)
+      if (container && container.contains(args?.node)) {
+        container.removeChild(args?.node)
+      }
+      resolve()
+    }, args?.delay || 0)
+  })
+}
+
 export const removeModalRoot = (args?: { delay?: number }) => {
   const delay = args.delay || 0
   setTimeout(() => {
