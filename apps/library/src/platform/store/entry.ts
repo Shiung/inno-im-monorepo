@@ -6,7 +6,8 @@ import {
   setGoLogin,
   setGoVipCenter,
   setGoDetail,
-  setGoDeposit
+  setGoDeposit,
+  initChatroomTranslationApi
 } from '$stores'
 import { regWindowSizeListener } from '$src/utils/listener'
 
@@ -26,7 +27,8 @@ const setImStore = {
     goSportDetail: setGoDetail,
     goDeposit: setGoDeposit
   },
-  regWindowSizeListener: regWindowSizeListener
+  regWindowSizeListener: regWindowSizeListener,
+  initChatroomTranslationApi: initChatroomTranslationApi
 }
 
 // 暴露三方設定 global store

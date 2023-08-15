@@ -4,10 +4,11 @@
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
   import { Ripple } from 'ui'
-  import { t, type ITransStore } from '$stores'
+  import { t, type ITransStore, isTranslateOn, allowTranslate } from '$stores'
 
   import Send from '../images/send.svg'
   import ShowS from '../images/show_s.svg'
+  import Translate from '../images/translate.svg'
   import Plus from '../images/plus.svg'
 
   import { EErrorCode, errorCodeMsgMap } from '../constant'
@@ -15,6 +16,7 @@
   import { userInfo, userAuth, type IUserInfo, type IUserAuth, goLoginCallback, goVipCenterCallback, goDepositCallback } from '$stores'
   import { chatroomSetting, type IChatroomSetting } from '../controller/localEnv'
   import { inputRect, inputAreaOffset, showBetList } from '../store'
+  import { get } from 'svelte/store'
 
   export let fixed: boolean = false
 
@@ -153,6 +155,13 @@
     if (disabled) routerCallback && routerCallback()
     else $showBetList = true
   }
+
+  const toggleTranslation = () => {
+    const isOn = get(isTranslateOn)
+    allowTranslate.set(
+      isOn ? 'not-allow' : 'allow'
+    )
+  }
 </script>
 
 <div class="relative">
@@ -197,6 +206,10 @@
           <ShowS width={28} height={28} fill="#999999" />
         </Ripple>
       {/if}
+
+      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
+        <Translate width={28} height={28} fill={ $isTranslateOn ? "rgb(var(--im-monorepo-primary))" : "#999999"} />
+      </Ripple>
 
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
         <Plus width={28} height={28} fill="#999999" />

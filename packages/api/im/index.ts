@@ -36,7 +36,6 @@ class IM extends Base {
   chatroomPastMessage = this.apiGenerator<Types.IChatroomPastMessage>({ url: `${prefix}/v1/chat-room/past-message` })
   chatroomSelfOrders = this.apiGenerator<Types.IChatroomSelfOrders>({ url: `${prefix}/product/business/bets/ordersWithIid` })
   chatroomOtherOrders = this.apiGenerator<Types.IChatroomOtherOrders>({ url: `${prefix}/product/chat/betOrder/getOthers` })
-  chatroomTranslation = this.apiGenerator<Types.IChatroomTranslate>({ url: `${prefix}/product/chat/translate`, method: 'post' })
 }
 
 export default new IM()

@@ -109,23 +109,3 @@ export interface IBetOrder extends ISelfOrder {
 }
 
 export type IFetchData = IChatroomSelfOrders['res']['data'] | IChatroomOtherOrders['res']['data']
-
-
-export interface ITranslationPayload {
-  fromLang: string
-  toLang: string
-  message: string
-}
-
-export interface ITranslatedResult {
-  message: string
-  translatedMessage: string
-}
-
-export interface IChatroomTranslate {
-  query: null
-  body: {
-    data: ITranslationPayload[]
-  }
-  res: withData<ITranslatedResult[]>
-} 

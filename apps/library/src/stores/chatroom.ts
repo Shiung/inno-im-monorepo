@@ -1,8 +1,6 @@
 import { writable, get, derived } from 'svelte/store'
-import { im } from 'api'
-import { NO_LANG } from '$src/constant'
-import { getUseLang } from './language'
 import { writableSyncLocalStorage } from './utils'
+import { locale } from './locale'
 
 type Translation = {
   [key: string]: string
@@ -27,7 +25,24 @@ export const isTranslateOn = derived(
   }
 )
 
+interface ITranslationPayload {
+  fromLang: string
+  toLang: string
+  message: string
+}
+
+interface ITranslatedResult {
+  message: string
+  translatedMessage: string
+}
+
+
 export const chatroomTranslation = writable<TranslationMap>({})
+const chatroomTranslationApi = writable<(data: ITranslationPayload[]) => Promise<{ data: ITranslatedResult[] }>>(null)
+
+export function initChatroomTranslationApi(fn) {
+  chatroomTranslationApi.set(fn);
+}
 
 interface ITranslationPayload {
   fromLang: string
@@ -46,13 +61,20 @@ function getRequestKey(payload: ITranslationPayload) {
   return `${payload.fromLang}-${payload.toLang}-${payload.message}`
 }
 
+function localeNormalize(langCode: string) {
+  if (langCode === 'zh') {
+    return 'zh-cn'
+  }
+  return langCode.toLowerCase().replace('_', '-')
+}
+
 async function batchTranslateMessage(messageList: ITranslationPayload[]) {
   const notRequestedMessageList = messageList.filter(item => !requestedMessageMap[getRequestKey(item)])
   if (notRequestedMessageList.length > 0) {
     notRequestedMessageList.forEach(item => {
       requestedMessageMap[getRequestKey(item)] = true
     })
-    const { data } = await im.chatroomTranslation({ body: { data: notRequestedMessageList } })
+    const { data } = await get(chatroomTranslationApi)(notRequestedMessageList)
     if (data?.length > 0) {
       // batch translation must be in the same language
       const lang = notRequestedMessageList[0].toLang
@@ -79,8 +101,8 @@ function translateMessage(msg: string, fromLang: string, toLang: string) {
   // due to chatroom has many messages, we need to batch translate
   // we apply a throttle to avoid too many requests
   batchQueue.push({
-    fromLang,
-    toLang,
+    fromLang: localeNormalize(fromLang),
+    toLang: localeNormalize(toLang),
     message: msg
   })
   if (!batchTranslateTimer) {
@@ -92,12 +114,19 @@ function translateMessage(msg: string, fromLang: string, toLang: string) {
   }
 }
 
+const allowTranslateLanguage = [
+  'zh-cn',
+  'vi-vn'
+]
+
 export const chatT = derived(
-  [chatroomTranslation, getUseLang, isTranslateOn],
-  ([$chatroomTranslation, $getUseLang, $isTranslateOn]) => (msg: string, msgLang: string) => {
-    const userLang = $getUseLang()
+  [chatroomTranslation, locale, isTranslateOn, chatroomTranslationApi],
+  ([$chatroomTranslation, $locale, $isTranslateOn, $chatroomTranslationApi]) => (msg: string, msgLang: string) => {
+    const userLang = $locale;
+    const normalizedUserLang = localeNormalize($locale);
+    const normalizedMsgLang = localeNormalize(msgLang);
     // TODO: msgLang and userLang may be using '_', while translation api is using '-', may need to transform it
-    if (!$isTranslateOn || userLang === NO_LANG || userLang === msgLang) {
+    if ($chatroomTranslationApi && allowTranslateLanguage.includes(normalizedUserLang) && (!$isTranslateOn || normalizedUserLang === normalizedMsgLang)) {
       return msg
     }
     const translatedMsg = $chatroomTranslation[userLang]?.[msg]
