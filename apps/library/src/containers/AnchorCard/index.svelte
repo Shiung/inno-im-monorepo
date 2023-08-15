@@ -26,7 +26,7 @@
   $: borderStyle = isLive ? 'border-imprimary' : 'border-transparent'
 </script>
 
-<div>
+<div data-houseId={anchor.houseId} data-iid={isMatchType ? match?.iid : ''}>
   <Ripple class="w-full flex flex-col items-center im-shadow rounded-[10px] p-2 space-y-1" on:click>
     <div class="relative w-full" on:click={() => navigationAnchor(isMatchType, match, anchor.houseId)} on:keypress>
       {#if isLive}

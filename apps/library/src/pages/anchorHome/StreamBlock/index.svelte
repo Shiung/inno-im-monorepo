@@ -83,74 +83,74 @@
   $: borderStyle = isLive ? 'border-imprimary' : 'border-transparent'
 </script>
 
-{#if loading}
-  <Loading />
-{:else if streaming}
-  <!-- {#if !streamError} -->
-  <div class="min-h-[200px]">
-    <Ripple class="flex w-full relative" on:click={onStreamingClick}>
-      {#if streaming?.liveStatus === StreamLiveStatus.LIVE && streamLoading}
-        <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
-          <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
-            <Circle stroke="rgb(var(--im-monorepo-primary))" />
-          </div>
-        </div>
-      {/if}
-
-      <InStreamingPlayer
-        {streaming}
-        onReadyCallback={streamOnReadyCb}
-        onErrorCallback={streamOnErrorCb}
-        onLostDataCallback={streamOnLostDataCb}
-      />
-      
-      {#if streaming?.liveStatus === StreamLiveStatus.LIVE}
-        <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
-          <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded" />
-        </div>
-      {/if}
-    </Ripple>
-
-    <Ripple class="flex w-full bg-white px-3 py-2 space-y-2 rounded-b-[20px] lg:rounded-b-[10px]" on:click={onStreamingClick}>
-      {#if streaming}
-        <div class="flex flex-1 items-center max-w-full">
-          <Ripple class='flex justify-center items-center rounded-full im-shadow' on:click={() => (openDetailSheet = true)}>
-            <AnchorImage src={streaming?.userImage} class={twMerge('block w-[38px] h-[38px] !shadow-none', borderStyle)} borderWidth={2} />
-          </Ripple>
-
-          <div class="flex justify-between items-center flex-1 ml-3 overflow-hidden">
-            <div class="flex-1 overflow-hidden text-left">
-              <div class="leading-[18px] truncate">
-                {#if matchLoading}
-                  <div class="bg-[#eee] animate-pulse h-[15px] rounded-md" />
-                {:else if match}
-                  {match.homeName} VS {match.awayName}
-                {:else}
-                  {streaming?.houseName}
-                {/if}
-              </div>
-  
-              <div class="leading-[15px] text-[14px] text-[#999] truncate">
-                {streaming?.nickName}
-              </div>
+<div data-houseId={streaming?.houseId} data-iid={match?.iid}>
+  {#if loading}
+    <Loading />
+  {:else if streaming}
+    <!-- {#if !streamError} -->
+    <div class="min-h-[200px]">
+      <Ripple class="flex w-full relative" on:click={onStreamingClick}>
+        {#if streaming?.liveStatus === StreamLiveStatus.LIVE && streamLoading}
+          <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
+            <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
+              <Circle stroke="rgb(var(--im-monorepo-primary))" />
             </div>
-
-            <Badget
-              class="rounded-[12px] leading-3 h-[20px] text-[14px] flex-none text-right px-2"
-              background={isMatchType
-                ? `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`
-                : `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`}
-            >
-              {$t(badgeStr)}
-            </Badget>
           </div>
-        </div>
-      {/if}
-    </Ripple>
-  </div>
-  <!-- {/if} -->
+        {/if}
 
-  <AnchorDetailSheet bind:open={openDetailSheet} houseId={streaming?.houseId} />
-{:else}
-  <div></div>
-{/if}
+        <InStreamingPlayer
+          {streaming}
+          onReadyCallback={streamOnReadyCb}
+          onErrorCallback={streamOnErrorCb}
+          onLostDataCallback={streamOnLostDataCb}
+        />
+        
+        {#if streaming?.liveStatus === StreamLiveStatus.LIVE}
+          <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
+            <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded" />
+          </div>
+        {/if}
+      </Ripple>
+
+      <Ripple class="flex w-full bg-white px-3 py-2 space-y-2 rounded-b-[20px] lg:rounded-b-[10px]" on:click={onStreamingClick}>
+        {#if streaming}
+          <div class="flex flex-1 items-center max-w-full">
+            <Ripple class='flex justify-center items-center rounded-full im-shadow' on:click={() => (openDetailSheet = true)}>
+              <AnchorImage src={streaming?.userImage} class={twMerge('block w-[38px] h-[38px] !shadow-none', borderStyle)} borderWidth={2} />
+            </Ripple>
+
+            <div class="flex justify-between items-center flex-1 ml-3 overflow-hidden">
+              <div class="flex-1 overflow-hidden text-left">
+                <div class="leading-[18px] truncate">
+                  {#if matchLoading}
+                    <div class="bg-[#eee] animate-pulse h-[15px] rounded-md" />
+                  {:else if match}
+                    {match.homeName} VS {match.awayName}
+                  {:else}
+                    {streaming?.houseName}
+                  {/if}
+                </div>
+    
+                <div class="leading-[15px] text-[14px] text-[#999] truncate">
+                  {streaming?.nickName}
+                </div>
+              </div>
+
+              <Badget
+                class="rounded-[12px] leading-3 h-[20px] text-[14px] flex-none text-right px-2"
+                background={isMatchType
+                  ? `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`
+                  : `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`}
+              >
+                {$t(badgeStr)}
+              </Badget>
+            </div>
+          </div>
+        {/if}
+      </Ripple>
+    </div>
+    <!-- {/if} -->
+
+    <AnchorDetailSheet bind:open={openDetailSheet} houseId={streaming?.houseId} />
+  {/if}
+</div>
