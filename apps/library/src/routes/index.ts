@@ -32,64 +32,64 @@ const routes = {
     },
   }),
 
-  '/anchorChat/:anchorHouseId?': wrap({
-    asyncComponent: () => import('$pages/anchorChat/index.svelte'),
-    userData: {
-      showBottomNav: false,
-      showNavTab: false
-    },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.anchorHouseId) replace('/anchor/0')
-        return true
-      }
-    ]
-  }),
-  '/expert/:expertSid?': wrap({
-    asyncComponent: () => import('$pages/expert/index.svelte'),
-    userData: {
-      bottomNav: 'expert'
-    },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.expertSid) replace('/expert/0')
-        return true
-      }
-    ]
-  }),
-  '/expertDetail/:expertId/:method?': wrap({
-    asyncComponent: () => import('$pages/expertDetail/index.svelte'),
-    userData: {
-      showBottomNav: false,
-      showNavTab: false,
-      isExpertRelevant: true
-    },
-    conditions: [
-      (detail) => {
-        if (!get(userAuth).userToken) return false
+  // '/anchorChat/:anchorHouseId?': wrap({
+  //   asyncComponent: () => import('$pages/anchorChat/index.svelte'),
+  //   userData: {
+  //     showBottomNav: false,
+  //     showNavTab: false
+  //   },
+  //   conditions: [
+  //     (detail) => {
+  //       if (!detail?.params?.anchorHouseId) replace('/anchor/0')
+  //       return true
+  //     }
+  //   ]
+  // }),
+  // '/expert/:expertSid?': wrap({
+  //   asyncComponent: () => import('$pages/expert/index.svelte'),
+  //   userData: {
+  //     bottomNav: 'expert'
+  //   },
+  //   conditions: [
+  //     (detail) => {
+  //       if (!detail?.params?.expertSid) replace('/expert/0')
+  //       return true
+  //     }
+  //   ]
+  // }),
+  // '/expertDetail/:expertId/:method?': wrap({
+  //   asyncComponent: () => import('$pages/expertDetail/index.svelte'),
+  //   userData: {
+  //     showBottomNav: false,
+  //     showNavTab: false,
+  //     isExpertRelevant: true
+  //   },
+  //   conditions: [
+  //     (detail) => {
+  //       if (!get(userAuth).userToken) return false
 
-        const { expertId, method } = detail?.params || {}
-        if (!method) replace(`/expertDetail/${expertId}/plan`)
-        return true
-      }
-    ]
-  }),
-  '/planDetail/:expertId/:articleId': wrap({
-    asyncComponent: () => import('$pages/planDetail/index.svelte'),
-    userData: {
-      showBottomNav: false,
-      showNavTab: false,
-      isExpertRelevant: true
-    },
-    conditions: [
-      () => {
-        if (!get(userAuth).userToken) return false
+  //       const { expertId, method } = detail?.params || {}
+  //       if (!method) replace(`/expertDetail/${expertId}/plan`)
+  //       return true
+  //     }
+  //   ]
+  // }),
+  // '/planDetail/:expertId/:articleId': wrap({
+  //   asyncComponent: () => import('$pages/planDetail/index.svelte'),
+  //   userData: {
+  //     showBottomNav: false,
+  //     showNavTab: false,
+  //     isExpertRelevant: true
+  //   },
+  //   conditions: [
+  //     () => {
+  //       if (!get(userAuth).userToken) return false
 
-        window.scrollTo(0, 0)
-        return true
-      }
-    ]
-  }),
+  //       window.scrollTo(0, 0)
+  //       return true
+  //     }
+  //   ]
+  // }),
   '/test/chatroom': wrap({
     asyncComponent: () => import('../pages/test/chatroom/index.svelte'),
     userData: {

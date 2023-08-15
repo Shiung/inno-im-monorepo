@@ -58,8 +58,8 @@
       <Badget
         class="rounded-[12px] leading-3 text-[11px] lg:text-[14px] lg:h-[20px] lg:px-2 px-[6px]"
         background={isMatchType
-          ? `linear-gradient(270deg, #84DFFF 0%, #50BDFF 100%)`
-          : `linear-gradient(108.1deg, #6AA1FF 0%, #FD99E1 100%)`}
+          ? 'linear-gradient(270deg, rgb(var(--im-monorepo-primary)) 0%, rgb(var(--im-monorepo-secondary)) 100%)'
+          : 'linear-gradient(108deg, #6AA1FF 0%, #FD99E1 100%)'}
       >
         {$t(badgeStr)}
       </Badget>
