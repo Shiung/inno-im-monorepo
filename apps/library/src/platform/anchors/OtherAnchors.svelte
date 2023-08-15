@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
   import { locale, getUseLang, isLg } from '$stores'
+  import { AbortControllers } from 'utils'
 
   import Empty from '$containers/Empty'
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
@@ -23,10 +24,11 @@
 
   let initLoading: boolean = false
   let data: IWebAnchor[] = []
-  let isInit: boolean = true
   let hasMoreData: boolean = false
 
   const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
+
+  const abortControllers = new AbortControllers()
 
   const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
     try {
@@ -84,11 +86,22 @@
 
     pageIdx = 1
     data = []
-    isInit = true
+    hasMoreData = false
+
+    abortControllers.abortControllers('platform-fetch-im.webAnchors')
+    const controller = {
+      ctl: new AbortController(),
+      isAborted: false,
+      key: 'fetch-im.webAnchors'
+    }
+    abortControllers.addController(controller)
 
     try {
       initLoading = true
-      const { list, pager } = await fetchAnchorsApi({ sid, lang: useLang, pageIdx, pageSize })
+      const { list, pager } = await fetchAnchorsApi(
+        { sid, lang: useLang, pageIdx, pageSize },
+        { signal: controller.ctl.signal }
+      )
       if (list?.length) {
         data = await fetchMatchesFromAnchors(
           filterAnchorsByMatchCountAndCurrentMatchAnchors(list)
@@ -104,8 +117,9 @@
       console.error(error)
       setHasMoreData()
     } finally {
-      initLoading = false
-      isInit = false
+      if (!controller.isAborted) initLoading = false
+
+      abortControllers.spliceController(controller)
     }
   }
 
@@ -130,7 +144,6 @@
   {:else}
     <RetryInfiniteScroll
       hasMore={hasMoreData}
-      isInit={isInit}
       load={() => loadAnchors()}
     >
       <div class='grid grid-cols-2 lg:grid-cols-3 gap-3'>
