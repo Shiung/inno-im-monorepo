@@ -263,6 +263,13 @@ const genLangMockData = (length: number): Types.IWebAnchorLanguage['res']['data'
   }
 }
 
+const getSid = (anchorType: number) => {
+  if (Number(anchorType) === 2) return 100
+  if (Number(anchorType) === 1) return Random.integer(1,3)
+
+  return Random.pick([1,2,3,100])
+}
+
 const webAnchors: IMockData[] = [
   {
     url: `${prefix}/v1/anchor/web-anchors`,
@@ -282,7 +289,7 @@ const webAnchors: IMockData[] = [
         playStreamAddress: "https://live5.haoksoft.com/live/52295.flv?auth_key=1690190714-0-2295-d919e4d3db0784389037cfd582826042",
         playStreamAddress2: "https://live5.haoksoft.com/live/52295.m3u8?auth_key=1690190714-0-2295-d919e4d3db0784389037cfd582826042",
         liveStatus: Random.natural(1, 4) as Types.IWebAnchor['liveStatus'],
-        sid: idx % 3 === 0 ? 100 : Random.integer(1,3) as Types.IWebAnchor['sid'],
+        sid: getSid(Number(query.anchorType)) as Types.IWebAnchor['sid'],
         fansCount: Random.natural(0, 10000000),
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10),

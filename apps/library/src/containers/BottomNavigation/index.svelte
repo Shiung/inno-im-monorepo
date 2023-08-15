@@ -23,12 +23,6 @@
       onClick: goHome
     },
     {
-      id: 'square',
-      icon: () => import('./images/square.svg'),
-      text: _t('common.square'),
-      onClick: () => push('/square')
-    },
-    {
       id: 'anchor',
       icon: () => import('./images/anchor.svg'),
       text: _t('common.anchor'),
@@ -37,8 +31,13 @@
     {
       id: 'expert',
       icon: () => import('./images/expert.svg'),
+      // 因GDIM-173 先硬寫
+      component: {
+        item: SunGlass,
+        className: 'absolute top-1 translate-x-[12px]'
+      },
       text: _t('common.expert'),
-      onClick: () => push('/expert')
+      onClick: () => (showExpertModal = true)
     }
   ]
 

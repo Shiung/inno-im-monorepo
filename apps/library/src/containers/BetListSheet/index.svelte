@@ -4,7 +4,7 @@
 
   import { Header, Content, Footer } from 'ui/components/BottomSheet'
   import { getInfo, getOrdersInfo } from '$containers/Chatroom/context'
-  import { chatEnv } from '$containers/Chatroom/controller'
+  import { isXl } from '$stores'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
 
@@ -22,7 +22,7 @@
   const { chatId, iid } = getInfo()
   const { followOrdersCallback } = getOrdersInfo()
 
-  const Container = $chatEnv.device === 'pc' ? Pc : Wap
+  const Container = $isXl ? Pc : Wap
 
   const tabs: ITabs = {
     'chat.betList': () => import('./DetailContent/Self.svelte'),

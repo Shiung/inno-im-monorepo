@@ -9,97 +9,99 @@ const routes = {
     asyncComponent: () => null,
     conditions: [
       () => {
-        replace('/square')
+        replace('/anchor')
         return true
       }
     ],
     userData: {
-      bottomNav: 'square'
+      bottomNav: 'anchor'
     }
   }),
-  '/square': wrap({
-    asyncComponent: () => import('$pages/square/index.svelte'),
-    userData: {
-      bottomNav: 'square'
-    }
-  }),
-  '/anchor/:anchorSid?': wrap({
-    asyncComponent: () => import('$pages/anchor/index.svelte'),
+  '/anchor': wrap({
+    asyncComponent: () => import('$pages/anchorHome/index.svelte'),
     userData: {
       bottomNav: 'anchor'
-    },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.anchorSid) replace('/anchor/0')
-        return true
-      }
-    ]
+    }
   }),
-  '/anchorChat/:anchorHouseId?': wrap({
-    asyncComponent: () => import('$pages/anchorChat/index.svelte'),
+  '/anchorList': wrap({
+    asyncComponent: () => import('$pages/anchor/index.svelte'),
     userData: {
+      bottomNav: 'anchor',
+      showNavTab: false,
       showBottomNav: false
     },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.anchorHouseId) replace('/anchor/0')
-        return true
-      }
-    ]
   }),
-  '/expert/:expertSid?': wrap({
-    asyncComponent: () => import('$pages/expert/index.svelte'),
-    userData: {
-      bottomNav: 'expert'
-    },
-    conditions: [
-      (detail) => {
-        if (!detail?.params?.expertSid) replace('/expert/0')
-        return true
-      }
-    ]
-  }),
-  '/expertDetail/:expertId/:method?': wrap({
-    asyncComponent: () => import('$pages/expertDetail/index.svelte'),
-    userData: {
-      showBottomNav: false,
-      isExpertRelevant: true
-    },
-    conditions: [
-      (detail) => {
-        if (!get(userAuth).userToken) return false
 
-        const { expertId, method } = detail?.params || {}
-        if (!method) replace(`/expertDetail/${expertId}/plan`)
-        return true
-      }
-    ]
-  }),
-  '/planDetail/:expertId/:articleId': wrap({
-    asyncComponent: () => import('$pages/planDetail/index.svelte'),
-    userData: {
-      showBottomNav: false,
-      isExpertRelevant: true
-    },
-    conditions: [
-      () => {
-        if (!get(userAuth).userToken) return false
+  // '/anchorChat/:anchorHouseId?': wrap({
+  //   asyncComponent: () => import('$pages/anchorChat/index.svelte'),
+  //   userData: {
+  //     showBottomNav: false,
+  //     showNavTab: false
+  //   },
+  //   conditions: [
+  //     (detail) => {
+  //       if (!detail?.params?.anchorHouseId) replace('/anchor/0')
+  //       return true
+  //     }
+  //   ]
+  // }),
+  // '/expert/:expertSid?': wrap({
+  //   asyncComponent: () => import('$pages/expert/index.svelte'),
+  //   userData: {
+  //     bottomNav: 'expert'
+  //   },
+  //   conditions: [
+  //     (detail) => {
+  //       if (!detail?.params?.expertSid) replace('/expert/0')
+  //       return true
+  //     }
+  //   ]
+  // }),
+  // '/expertDetail/:expertId/:method?': wrap({
+  //   asyncComponent: () => import('$pages/expertDetail/index.svelte'),
+  //   userData: {
+  //     showBottomNav: false,
+  //     showNavTab: false,
+  //     isExpertRelevant: true
+  //   },
+  //   conditions: [
+  //     (detail) => {
+  //       if (!get(userAuth).userToken) return false
 
-        window.scrollTo(0, 0)
-        return true
-      }
-    ]
-  }),
+  //       const { expertId, method } = detail?.params || {}
+  //       if (!method) replace(`/expertDetail/${expertId}/plan`)
+  //       return true
+  //     }
+  //   ]
+  // }),
+  // '/planDetail/:expertId/:articleId': wrap({
+  //   asyncComponent: () => import('$pages/planDetail/index.svelte'),
+  //   userData: {
+  //     showBottomNav: false,
+  //     showNavTab: false,
+  //     isExpertRelevant: true
+  //   },
+  //   conditions: [
+  //     () => {
+  //       if (!get(userAuth).userToken) return false
+
+  //       window.scrollTo(0, 0)
+  //       return true
+  //     }
+  //   ]
+  // }),
   '/test/chatroom': wrap({
     asyncComponent: () => import('../pages/test/chatroom/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     }
   }),
   '/test/anchors': wrap({
     asyncComponent: () => import('../pages/test/anchors/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     }
   }),
   '/test/anchorChat/:anchorHouseId?': wrap({
@@ -117,7 +119,8 @@ const routes = {
   '/test/expert': wrap({
     asyncComponent: () => import('../pages/test/expert/index.svelte'),
     userData: {
-      showBottomNav: false
+      showBottomNav: false,
+      showNavTab: false
     }
   }),
   '*': wrap({

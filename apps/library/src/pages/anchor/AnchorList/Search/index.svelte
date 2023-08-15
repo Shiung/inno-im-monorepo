@@ -1,16 +1,16 @@
 <script lang='ts'>
 import { createEventDispatcher } from 'svelte'
 import { Search } from 'ui'
-import { t, locale } from '$stores'
+import { t, locale, isLg } from '$stores'
+
+export let value: string
 
 const dispatch = createEventDispatcher()
 
 const en = () => import('./dict/en')
 const cn = () => import('./dict/cn')
 
-
 let dict: string[] = []
-export let value: string
 
 const changeDict = async (_locale: typeof $locale) => {
   switch (_locale) {
@@ -29,10 +29,15 @@ const changeDict = async (_locale: typeof $locale) => {
 }
 
 $: changeDict($locale)
-
+$: height = $isLg ? 32 : 36
+$: dropdownList = !$isLg 
 </script>
 
-<Search class='mb-[10px] text-[11px]' dict={dict} bind:value={value}
+<Search class='mb-[10px] text-[11px] lg:mb-0 lg:w-[340px] md:pt-[1px]' 
+  {dict}
+  {height}
+  {dropdownList}
+  bind:value
   on:submit={() => dispatch('searchEvent')}
   on:select={(e) => {
     value = e.detail

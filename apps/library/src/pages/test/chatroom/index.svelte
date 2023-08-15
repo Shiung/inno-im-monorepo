@@ -34,7 +34,6 @@
 
   $: if (dom) {
     controller.setChatEnv({
-      device: 'wap',
       subscribeBindingChatroom: true
     })
 
@@ -57,7 +56,8 @@
       showBetEnable: true,
       expandAnimation: true,
       size: 'default',
-      header: 'deposit'
+      header: 'normal',
+      headerClass: 'custom-class'
     })
   }
 

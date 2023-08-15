@@ -141,7 +141,7 @@
   })
 </script>
 
-<video class={twMerge('w-full h-full', !url && 'h-0', $$props.class)} autoplay bind:this={video} bind:paused bind:muted {controls}>
+<video class={twMerge('w-full h-full lg:rounded-t-[10px]', !url && 'h-0', $$props.class)} autoplay bind:this={video} bind:paused bind:muted {controls}>
   <track kind="captions" />
   Your browser is too old which doesn't support HTML5 video.
 </video>

@@ -24,6 +24,7 @@
   import { onDestroy, tick } from 'svelte'
   import { t } from '$stores'
   import { get } from 'svelte/store'
+  import Portal from 'svelte-portal'
 
   import Empty from '$src/containers/Empty'
 
@@ -41,7 +42,7 @@
   import { showBetList } from './store'
   import { hasVisibleMsg } from './utils'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header } = setInfo($info)
+  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header, betListSheetContainerId, headerClass } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -55,6 +56,8 @@
       if (get(iid) !== e.iid) iid.set(e.iid)
       if (get(expandAnimation) !== e.expandAnimation) expandAnimation.set(e.expandAnimation)
       if (get(header) !== e.header) header.set(e.header)
+      if (get(betListSheetContainerId) !== e.betListSheetContainerId) betListSheetContainerId.set(e.betListSheetContainerId)
+      if (get(headerClass) !== e.headerClass) headerClass.set(e.headerClass)
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -131,6 +134,8 @@
 
   $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
 
+  $: portalDomEl = document.getElementById($betListSheetContainerId)
+
   onDestroy(() => {
     unsubscribeStoreModule()
     resetStoreModule()
@@ -148,7 +153,8 @@
     on:onTouchMoveChange={(e) => touchMoveOffset = e.detail }
   >
     <svelte:fragment slot='header'>
-      <Header {isTransition} fixed={isWindow} on:close={foldChatroom} />
+      <!-- <Header {isTransition} fixed={isWindow} on:close={foldChatroom} /> -->
+      <Header {isTransition} fixed={isWindow} />
     </svelte:fragment>
 
     <svelte:fragment slot='messages'>
@@ -171,6 +177,12 @@
       <InputArea fixed={isWindow} />
     </svelte:fragment>
 
-    <BetListSheet bind:open={$showBetList} />
+    {#if portalDomEl}
+      <Portal target={portalDomEl}>
+        <BetListSheet bind:open={$showBetList} />
+      </Portal>
+    {:else}
+      <BetListSheet bind:open={$showBetList} />
+    {/if}
   </Container>
 {/if}

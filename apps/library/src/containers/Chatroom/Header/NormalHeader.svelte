@@ -8,7 +8,7 @@
   import { Marquee } from 'ui'
 
   import Info from '../images/info.svg'
-  import Close from '../images/close.svg'
+  // import Close from '../images/close.svg'
 
   import { getInfo } from '../context'
   import { headerRect } from '../store'
@@ -16,11 +16,11 @@
   export let fixed: boolean
   export let dom: HTMLDivElement
   export let isTransition: boolean
-  export let showClose: false
+  // export let showClose: false
 
   const { height } = getInfo()
 
-  const dispatch = createEventDispatcher()
+  // const dispatch = createEventDispatcher()
 
   let showRemind: boolean = false
 
@@ -29,7 +29,8 @@
 
 <div
   class={twMerge(
-    'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-30 transition-[top] duration-300 ease-in-out',
+    'w-full bg-white flex items-center justify-between min-h-[44px] px-[15px] z-[1] transition-[top] duration-300 ease-in-out',
+    $$props.class,
     fixed ? 'fixed left-0' : 'sticky'
   )}
   style:top={fixed ? (!isTransition ? `${$height}px` : '') : '0'}
@@ -51,11 +52,11 @@
     {/if}
   </div>
 
-  {#if showClose}
+  <!-- {#if showClose}
     <Ripple class="rounded-full" on:click={() => dispatch('close')}>
       <Close width={20} height={20} fill="#333333" />
     </Ripple>
-  {/if}
+  {/if} -->
 </div>
 
 <div style:height={fixed ? `${$headerRect?.height}px` : 0} />

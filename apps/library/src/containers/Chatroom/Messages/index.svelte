@@ -7,7 +7,7 @@
   import { im as impb } from 'protobuf'
   import { Ripple } from 'ui'
 
-  import { t } from '$stores'
+  import { t, isXl } from '$stores'
   import { im as imWs } from 'api/wsMaster'
 
   import { messageBoxRect } from '../store'
@@ -17,7 +17,6 @@
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
-  import { chatEnv } from '../controller'
   import { filterDuplicatesByMsgId, getLatestVisibleMsg, getOldestMsg, sortMsgsByMsgIdAsc } from '../utils'
   import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
 
@@ -105,8 +104,6 @@
     dispatch('domBound', dom)
   }
 
-  $: isPC = $chatEnv.device === 'pc'
-
   const checkWatched = () => {
     if (lastReadId === getLatestVisibleMsg($chatMessages).msgId) allWatched = true
     else allWatched = false
@@ -156,7 +153,7 @@
   style:overscroll-behavior={isWindow ? 'auto' : 'none'}
   bind:this={dom}
 >
-  {#if isPC}
+  {#if $isXl}
     <ButtonLoader loading={fetchMoreLoading} on:fetchMore={fetchMore} />
   {:else}
     <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />

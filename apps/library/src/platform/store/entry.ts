@@ -8,6 +8,7 @@ import {
   setGoDetail,
   setGoDeposit
 } from '$stores'
+import { regWindowSizeListener } from '$src/utils/listener'
 
 const setImStore = {
   // 三方 設定im語系
@@ -24,7 +25,8 @@ const setImStore = {
     goVipCenter: setGoVipCenter,
     goSportDetail: setGoDetail,
     goDeposit: setGoDeposit
-  }
+  },
+  regWindowSizeListener: regWindowSizeListener
 }
 
 // 暴露三方設定 global store

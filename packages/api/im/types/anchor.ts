@@ -25,6 +25,7 @@ export interface IWebAnchors {
     pageIdx: number
     pageSize: number
     lang?: string
+    anchorType?: 1 | 2 // 1:賽事主播 2:充提主播
   }
   body: null
   res: withData<{

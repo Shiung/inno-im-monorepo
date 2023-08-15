@@ -1,62 +1,109 @@
 <script lang="ts">
-  import { im } from 'api'
-  import { convertSid, AbortControllers, debounce } from 'utils'
-  import { locale, getUseLang } from '$stores'
+  import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
+  import { convertSid, AbortControllers } from 'utils'
+  import { locale, getUseLang, isLg, t, isXl } from '$stores'
   import { params } from 'svelte-spa-router'
 
-  import InfiniteScroll from 'ui/components/InfiniteScroll'
+  import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
 
   import Empty from '$src/containers/Empty'
+  import { NO_LANG } from '$src/constant'
 
   import Loading from './Loading.svelte'
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
 
-  import { PREVIEW_BAR_TOP_RATIO, PREVIEW_BAR_WIDTH } from './previewConfig'
-
-  import { NO_LANG, StreamLiveStatus } from '$src/constant'
+  import { fetchAnchorsApi, fetchAnchorMatches, isDepositAnchor } from './utils'
+  import BackBar from '$containers/BackBar'
 
   let keyWord = ''
-
   let pageIdx = 1
-  let pageSize = 20
+  // TODO: changed by device
+  $: ANCHOR_MIN_COUNT = $isXl ? 15 : $isLg ? 12 : 8
+  $: pageSize = 50
 
   let initLoading: boolean = false
-  let data: Awaited<ReturnType<typeof im.webAnchors>>['data']['list'] = []
+  let data: IWebAnchor[] = []
   let hasMoreData: boolean = false
+
+  const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
 
   const abortControllers = new AbortControllers()
 
-  const loadAnchors = async (props: { keyWord: string; sid: ReturnType<typeof convertSid> }) => {
-    const { keyWord, sid } = props
+  const fetchAnchors = async ({ sid, keyWord, useLang }: { sid: ReturnType<typeof convertSid>; keyWord: string; useLang: string }, options?: any) => {
+    let ret: IWebAnchor[]
 
+    const { list, pager } = await fetchAnchorsApi({
+      sid,
+      keyWord,
+      lang: useLang,
+      pageIdx,
+      pageSize,
+      // TODO: 等充提上線時需拔掉
+      anchorType: 1
+    }, options)
+
+    if (list?.length) ret = list
+
+    setHasMoreData(pager)
+
+    return ret
+  }
+
+  const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
     try {
-      const response = await im.webAnchors({
-        query: {
-          ...(sid && { sid }),
-          ...(keyWord && { keyWord }),
-          pageIdx,
-          pageSize,
-          lang: useLang
-        },
-        headers: { 'Accept-Language': $locale }
-      })
-      const { list, pager } = response?.data || {}
+      if (!matchesMap[houseId]) matchesMap[houseId] = { data: null }
 
-      if (list?.length) data = [...data, ...list]
-
-      const { totalPage } = pager || {}
-      hasMoreData = totalPage > pageIdx
-      if (hasMoreData) pageIdx++
+      const [first] = await fetchAnchorMatches(houseId, $locale)
+      if (first) matchesMap[houseId].data = first
     } catch (error) {
       console.error(error)
-      hasMoreData = false
+      return Promise.reject(error)
     }
   }
 
-  const fetchInit = async ({ sid }: { sid: ReturnType<typeof convertSid> }) => {
+  const fetchMatchesFromAnchors = async (data: IWebAnchor[]) => {
+    return await Promise.allSettled(
+      data.reduce((filtered, item) => {
+        if (isDepositAnchor(item)) return filtered
+        return [...filtered, fetchMatchesByAnchor(item.houseId)]
+      }, [])
+    ).then(() => filterAnchorsBySidAndHasMatch(data))
+  }
+
+  const loadAnchors = async () => {
+    try {
+      const resData = await fetchAnchors({ sid, keyWord, useLang })
+      if (resData?.length) {
+        const filteredResData = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
+        data = [...data, ...filteredResData]
+      }
+    } catch (error) {
+      console.error(error)
+      setHasMoreData()
+    }
+  }
+
+  const filterAnchorsBySidAndHasMatch = (data: IWebAnchor[]) => {
+    return data.filter((item) => isDepositAnchor(item) || matchesMap[item.houseId].data)
+  }
+
+  // TODO: 待後端與三方 api 調整後移除，後端會只給 matchCount > 0 的賽事主播
+  export const filterAnchorsBySidAndMatchCount = (data: IWebAnchor[]) => {
+    return data.filter((item) => isDepositAnchor(item) || item.matchCount)
+  }
+
+  const setHasMoreData = (pager?: IPager) => {
+    if (!pager) return (hasMoreData = false)
+    const { totalPage } = pager || {}
+    hasMoreData = totalPage > pageIdx
+    if (hasMoreData) pageIdx++
+  }
+
+  const fetchInit = async () => {
     pageIdx = 1
     data = []
+    hasMoreData = false
 
     abortControllers.abortControllers('fetch-im.webAnchors')
     const controller = {
@@ -68,32 +115,18 @@
 
     try {
       initLoading = true
-      const response = await im.webAnchors(
-        {
-          query: {
-            ...(sid && { sid }),
-            ...(keyWord && { keyWord }),
-            pageIdx,
-            pageSize,
-            lang: useLang
-          },
-          headers: { 'Accept-Language': $locale }
-        },
-        {
-          signal: controller.ctl.signal
+      const resData = await fetchAnchors({ sid, keyWord, useLang }, { signal: controller.ctl.signal })
+      if (resData?.length) {
+        data = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
+
+        while (data.length < ANCHOR_MIN_COUNT && hasMoreData) {
+          await loadAnchors()
         }
-      )
-      const { list, pager } = response?.data || {}
 
-      if (list?.length) data = list
-
-      const { totalPage } = pager || {}
-      hasMoreData = totalPage > pageIdx
-      if (hasMoreData) pageIdx++
-      setActiveId(data?.[0]?.houseId)
+      }
     } catch (error) {
       console.error(error)
-      hasMoreData = false
+      setHasMoreData()
     } finally {
       if (!controller.isAborted) initLoading = false
 
@@ -101,69 +134,48 @@
     }
   }
 
-  const init = async (sid, lang) => {
-    if (sid != null && lang !== NO_LANG) {
+  const init = (lang) => {
+    if (lang !== NO_LANG) {
       document.body.scrollTo(0, 0)
       window.scrollTo(0, 0)
 
-      fetchInit({ sid })
+      fetchInit()
     }
   }
 
   $: sid = convertSid($params?.anchorSid)
-  
-  let activeId: string
-  const setActiveId = debounce((id: string) => {
-    activeId = id
-  }, 250)
 
-  let isInit = false
-  const onWindowScroll = () => {
-    if (isInit && window.scrollY > 10) return
-
-    if (window.scrollY > 10) {
-      isInit = true
-      if(data?.[1]?.liveStatus === StreamLiveStatus.LIVE) setActiveId(data?.[1]?.houseId)
-    } else {
-      isInit = false
-      if(data?.[0]?.liveStatus === StreamLiveStatus.LIVE) setActiveId(data?.[0]?.houseId)
-    }
-  }
-
-  // debug
-  // let marginTop = PREVIEW_BAR_TOP_RATIO * 100
-
-  // 44 = header, 75.5 = bottomNavigation
-  let whiteBlockHeight = window.innerHeight * (1 - PREVIEW_BAR_TOP_RATIO) - PREVIEW_BAR_WIDTH - 44 - 75.5
   $: useLang = $getUseLang()
 
-  $: init(sid, useLang)
+  $: init(useLang)
 </script>
 
-<svelte:window on:scroll={onWindowScroll} />
-
-<div data-cid="Anchor_AnchorList" class="bg-white mt-[8px] rouned-[20px] py-[8px] px-[12px]">
-  <Search bind:value={keyWord} on:searchEvent={() => init(sid, useLang)} />
-
-  <div class="space-y-[12px]">
-    {#if initLoading}
-      <Loading />
-    {:else if !data?.length}
-      <Empty class="h-[calc(100vh_-_170px)]" />
-    {:else}
-      <InfiniteScroll hasMore={hasMoreData} load={() => loadAnchors({ keyWord, sid})}>
-        {#each data || [] as anchor}
-          <Anchor {anchor} preview={activeId === anchor.houseId} on:preview={(e) => setActiveId(e.detail)} />
-        {/each}
-      </InfiniteScroll>
+<div data-cid="Anchor_AnchorList" class="lg:px-[20px] lg:py-[16px]">
+  <BackBar title={$t('anchor.all')}>
+    {#if $isLg}
+      <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
     {/if}
+  </BackBar>
+
+  <div class="md:bg-white rouned-[20px] pb-[8px] px-[12px] lg:p-[16px] lg:rounded-[10px]">
+    {#if !$isLg}
+      <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
+    {/if}
+
+    <div class="space-y-3 px-4 py-3">
+      {#if initLoading}
+        <Loading size={ANCHOR_MIN_COUNT} />
+      {:else if !data?.length}
+        <Empty class="h-[calc(100vh_-_170px)]" />
+      {:else}
+        <RetryInfiniteScroll hasMore={hasMoreData} load={() => loadAnchors()}>
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {#each data || [] as anchor}
+              <Anchor class="items-stretch" {anchor} matchInfo={matchesMap[anchor?.houseId]} />
+            {/each}
+          </div>
+        </RetryInfiniteScroll>
+      {/if}
+    </div>
   </div>
-
-  <!-- for able to preview last anchor streaming-->
-  {#if !hasMoreData}
-    <div class='flex justify-center items-center' style:height={`${whiteBlockHeight}px`}></div>
-  {/if}
-
-  <!-- debug -->
-  <!-- <div class='bg-red-500 fixed left-0 right-0' style:top={`${marginTop}%`} style:height={`${PREVIEW_BAR_WIDTH}px`} ></div> -->
 </div>

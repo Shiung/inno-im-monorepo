@@ -1,7 +1,12 @@
 <script lang='ts'>
+  import { twMerge } from 'tailwind-merge'
   import AnchorLoading from './Anchor/Loading.svelte'
+
+  export let size: number = 8
 </script>
 
-{#each { length: 10 } as _}
-  <AnchorLoading />
-{/each}
+<div class={twMerge('grid grid-cols-2 lg:grid-cols-3 gap-3', $$props.class)}>
+  {#each { length: size } as _}
+    <AnchorLoading />
+  {/each}
+</div>

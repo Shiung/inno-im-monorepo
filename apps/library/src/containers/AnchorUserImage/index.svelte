@@ -15,9 +15,9 @@
   $: if(!bg) fetchDefaultBgByType(type)
 </script>
 
-<div class={twMerge('rounded-[10px] relative', $$props.class)}>
+<div class={twMerge('rounded-[10px] relative overflow-hidden', $$props.class)}>
 
   <img class='block w-full h-auto' src={bg} alt="background">
 
-  <AnchorImage class='absolute block bottom-0 left-1/2 -translate-x-[50%] w-1/2' src={user} />
+  <AnchorImage class='absolute block top-1/2 left-1/2 -translate-y-[50%] -translate-x-[50%] border-imprimary w-[57px] h-[57px] lg:w-[72px] lg:h-[72px]' src={user} />
 </div>

@@ -1,7 +1,6 @@
 <script lang='ts'>
 import { twMerge } from 'tailwind-merge'
 import { Ripple } from 'ui'
-import { Header } from 'ui/components/BottomSheet'
 import { t } from '$stores'
 import AnchorImage from '$containers/AnchorImage'
 
@@ -16,7 +15,7 @@ export let tabs: string[]
 
 </script>
 
-<Header class='mt-[5px] bg-white px-[15px]'>
+<div class='mt-[5px] bg-white px-[15px]'>
   <div class='flex justify-center'>
     <div class='relative flex justify-center w-[375px] h-[193px] bg-cover bg-center bg-no-repeat'
       style:background-image={`url(${anchorBg})`}
@@ -60,4 +59,4 @@ export let tabs: string[]
     {/each}
   </div>
 
-</Header>
+</div>
