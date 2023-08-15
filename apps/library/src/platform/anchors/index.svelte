@@ -43,15 +43,13 @@
   let _list: string[] = []
 
   houseIdList.subscribe((value) => {
-    _list = value
+    Array.isArray(value) && (_list = value)
   })
 
 </script>
 
-{#if !_list || _list?.length === 0}
-  <Empty class="h-[300px]" />
-{:else}
-  <div data-cid="Platform_anchors" class='bg-white py-4 space-y-4'>
+<div data-cid="Platform_anchors" class='bg-white py-4 space-y-4'>
+  {#if _list.length > 0}
     <Title titleKey={'anchor.currentMatchAnchors'} class='px-4' />
       
     <AnchorGroup.Container class='[&>:first-of-type]:ml-4 [&>:last-of-type]:!mr-4 py-4'>
@@ -72,14 +70,14 @@
         </GroupContainer>
       {/each}
     </AnchorGroup.Container>
+  {/if}
 
-    <Title titleKey={'anchor.otherAnchors'} class='px-4'>
-      <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => goAnchorListCallback('/anchorList')}>
-        <span> {$t('anchor.all')} </span>
-        <Arrow width={12} height={12} fill="#333333" />
-      </Ripple>
-    </Title>
+  <Title titleKey={'anchor.otherAnchors'} class='px-4'>
+    <Ripple class="flex items-center space-x-[6px] text-[14px] pl-2 rounded-full" on:click={() => goAnchorListCallback('/anchorList')}>
+      <span> {$t('anchor.all')} </span>
+      <Arrow width={12} height={12} fill="#333333" />
+    </Ripple>
+  </Title>
 
-    <OtherAnchors />
-  </div>
-{/if}
+  <OtherAnchors />
+</div>
