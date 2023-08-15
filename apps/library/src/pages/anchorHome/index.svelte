@@ -30,7 +30,7 @@
   $: useLang = $getUseLang()
 
   const fetchMatchesFromAnchors = async (list: typeof originData, lang: ILanguages) => {
-    if (Object.keys($anchorMatches).length === 5) return (loading = false)
+    if (Object.keys($anchorMatches).length >= 5) return (loading = false)
 
     const { matchCount, houseId } = list[0] || {}
     if (matchCount > 0) {
@@ -68,6 +68,9 @@
 
   const fetchAnchors = async (lang: string) => {
     try {
+      // 避免連發兩次
+      if (loading) return
+
       loading = true
 
       const response = await im.webAnchors({
