@@ -4,11 +4,11 @@
 
   export let hasMore: boolean
   export let load: ((...args: any) => Promise<any>)
-  export let isInit: boolean = false
 
   let triggerRefetch: boolean = false
   let moreLoading: boolean = false
   let dom: HTMLDivElement
+  let observer: IntersectionObserver
 
   const loadData = async () => {
     try {
@@ -25,17 +25,13 @@
   const reFetchIfNeeded = async () => {
     if(hasMore && triggerRefetch) {
       await loadData()
-      reFetchIfNeeded()
+      // 暫時寫死
+      // 等 100 ms 看看是否會有新的 observer callback 停掉 refetch 行為
+      setTimeout(() => {
+        reFetchIfNeeded()
+      }, 100)
     }
   }
-
-  let observer = new IntersectionObserver((entries) => {
-    const entry = entries[0]
-
-    triggerRefetch = entry.isIntersecting
-
-    if (!isInit && !moreLoading) reFetchIfNeeded()
-  })
 
   const clearObserver = () => {
     if (observer) {
@@ -44,7 +40,20 @@
     }
   }
 
-  $: if (dom) observer.observe(dom)
+  const createIntersectionObserver = (dom: HTMLDivElement) => {
+    clearObserver()
+
+    observer = new IntersectionObserver((entries) => {
+      const entry = entries[0]
+
+      triggerRefetch = entry.isIntersecting
+
+      if (!moreLoading) reFetchIfNeeded()
+    })
+    observer.observe(dom)
+  }
+
+  $: if (dom) createIntersectionObserver(dom)
 
   $: if (!hasMore) clearObserver()
 
