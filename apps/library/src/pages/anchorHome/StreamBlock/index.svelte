@@ -66,6 +66,8 @@
     prevStreamUrl = isFlvUse ? streaming?.playStreamAddress : streaming?.playStreamAddress2
   }
 
+  const onStreamingClick = () => navigationAnchor(isMatchType, match, streaming.houseId)
+
   $: resetStatus(streaming)
 
   $: match = $anchorMatches[streaming?.houseId]
@@ -85,37 +87,39 @@
   <Loading />
 {:else if streaming}
   <!-- {#if !streamError} -->
-  <div class="relative min-h-[200px]">
-    {#if streaming?.liveStatus === StreamLiveStatus.LIVE && streamLoading}
-      <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
-        <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
-          <Circle stroke="rgb(var(--im-monorepo-primary))" />
+  <div class="min-h-[200px]">
+    <Ripple class="flex w-full relative" on:click={onStreamingClick}>
+      {#if streaming?.liveStatus === StreamLiveStatus.LIVE && streamLoading}
+        <div class="absolute z-10 inset-0 bg-white flex items-center justify-center">
+          <div class="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[30px] overflow-hidden">
+            <Circle stroke="rgb(var(--im-monorepo-primary))" />
+          </div>
         </div>
-      </div>
-    {/if}
+      {/if}
 
-    <div class="relative" on:click={() => navigationAnchor(isMatchType, match, streaming.houseId)} on:keypress>
       <InStreamingPlayer
         {streaming}
         onReadyCallback={streamOnReadyCb}
         onErrorCallback={streamOnErrorCb}
         onLostDataCallback={streamOnLostDataCb}
       />
+      
+      {#if streaming?.liveStatus === StreamLiveStatus.LIVE}
+        <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
+          <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded" />
+        </div>
+      {/if}
+    </Ripple>
 
-      <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
-        <AnchorLiveBadge class="rounded-none rounded-br-lg lg:rounded" />
-      </div>
-    </div>
-
-    <div class="bg-white px-3 py-2 space-y-2 rounded-b-[20px] lg:rounded-b-[10px]">
+    <Ripple class="flex w-full bg-white px-3 py-2 space-y-2 rounded-b-[20px] lg:rounded-b-[10px]" on:click={onStreamingClick}>
       {#if streaming}
-        <div class="flex items-center">
-          <Ripple on:click={() => (openDetailSheet = true)}>
-            <AnchorImage src={streaming?.userImage} class={twMerge('block w-[38px] h-[38px]', borderStyle)} borderWidth={2} />
+        <div class="flex flex-1 items-center max-w-full">
+          <Ripple class='flex justify-center items-center rounded-full im-shadow' on:click={() => (openDetailSheet = true)}>
+            <AnchorImage src={streaming?.userImage} class={twMerge('block w-[38px] h-[38px] !shadow-none', borderStyle)} borderWidth={2} />
           </Ripple>
 
-          <div class="flex justify-between items-center flex-1 ml-3 overflow-hidden" on:click={() => navigationAnchor(isMatchType, match, streaming.houseId)} on:keypress>
-            <div class="flex-1 overflow-hidden">
+          <div class="flex justify-between items-center flex-1 ml-3 overflow-hidden">
+            <div class="flex-1 overflow-hidden text-left">
               <div class="leading-[18px] truncate">
                 {#if matchLoading}
                   <div class="bg-[#eee] animate-pulse h-[15px] rounded-md" />
@@ -142,11 +146,11 @@
           </div>
         </div>
       {/if}
-    </div>
+    </Ripple>
   </div>
   <!-- {/if} -->
 
   <AnchorDetailSheet bind:open={openDetailSheet} houseId={streaming?.houseId} />
 {:else}
-  <div />
+  <div></div>
 {/if}

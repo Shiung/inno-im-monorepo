@@ -8,6 +8,6 @@
   $: _borderWidth = `border-width: ${borderWidth}px`
 </script>
 
-<div class={twMerge($$props.class, 'rounded-full im-shadow')} style={_borderWidth}>
+<div class={twMerge('rounded-full im-shadow', $$props.class)} style={_borderWidth}>
   <img class="border-white rounded-full w-full h-full object-cover" style={_borderWidth} {src} on:error={() => (src = defaultImage)} alt="" />
 </div>
