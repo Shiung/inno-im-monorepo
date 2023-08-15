@@ -10,4 +10,6 @@
   
 </script>
 
-<svelte:component this={comp} bind:open {houseId} />
+<div data-cid='AnchorDetailSheet'>
+  <svelte:component this={comp} bind:open {houseId} />
+</div>

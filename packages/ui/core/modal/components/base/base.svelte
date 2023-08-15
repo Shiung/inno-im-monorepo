@@ -24,7 +24,7 @@
   $: if (shake) recoverShake()
 </script>
 
-<div hidden>
+<div data-cid='Modal' hidden>
   {#if show}
     <div
       use:portal
