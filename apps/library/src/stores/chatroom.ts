@@ -91,7 +91,7 @@ async function batchTranslateMessage(messageList: ITranslationPayload[]) {
 
 let batchTranslateTimer: NodeJS.Timeout | null = null
 let batchQueue: ITranslationPayload[] = []
-const throttleBatchTime = 16
+const throttleBatchTime = 100
 
 function translateMessage(msg: string, fromLang: string, toLang: string) {
   // if target language has been changed, we need to clear the batch queue
