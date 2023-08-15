@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
+  import { twMerge } from 'tailwind-merge'
   import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
   import { locale, getUseLang, isLg } from '$stores'
+  import { AbortControllers } from 'utils'
 
-  import Empty from '$containers/Empty'
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
   import Anchor from './Anchor.svelte'
   import { NO_LANG } from '$src/constant'
@@ -14,7 +16,6 @@
     isDepositAnchor
   } from '$src/pages/anchor/AnchorList/utils'
   import Loading from '$src/pages/anchor/AnchorList/Loading.svelte'
-    import { twMerge } from 'tailwind-merge'
 
   let pageIdx = 1
   $: ANCHOR_MIN_COUNT = $isLg ? 9 : 6
@@ -23,10 +24,13 @@
 
   let initLoading: boolean = false
   let data: IWebAnchor[] = []
-  let isInit: boolean = true
   let hasMoreData: boolean = false
 
   const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
+
+  const abortControllers = new AbortControllers()
+
+  const dispatch = createEventDispatcher()
 
   const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
     try {
@@ -50,7 +54,7 @@
   }
 
   const filterAnchorsHasMatch = (data: IWebAnchor[]) => {
-    return data.filter(item => matchesMap[item.houseId].data )
+    return data.filter(item => matchesMap[item.houseId]?.data )
   }
 
   const loadAnchors = async () => {
@@ -84,11 +88,22 @@
 
     pageIdx = 1
     data = []
-    isInit = true
+    hasMoreData = false
+
+    abortControllers.abortControllers('platform-fetch-im.webAnchors')
+    const controller = {
+      ctl: new AbortController(),
+      isAborted: false,
+      key: 'platform-fetch-im.webAnchors'
+    }
+    abortControllers.addController(controller)
 
     try {
       initLoading = true
-      const { list, pager } = await fetchAnchorsApi({ sid, lang: useLang, pageIdx, pageSize })
+      const { list, pager } = await fetchAnchorsApi(
+        { sid, lang: useLang, pageIdx, pageSize },
+        { signal: controller.ctl.signal }
+      )
       if (list?.length) {
         data = await fetchMatchesFromAnchors(
           filterAnchorsByMatchCountAndCurrentMatchAnchors(list)
@@ -104,8 +119,12 @@
       console.error(error)
       setHasMoreData()
     } finally {
-      initLoading = false
-      isInit = false
+      if (!controller.isAborted) {
+        initLoading = false
+        dispatch('nodata', !data?.length)
+      }
+
+      abortControllers.spliceController(controller)
     }
   }
 
@@ -125,12 +144,9 @@
 <div data-cid='Platform_anchors_OtherAnchors' class={twMerge('px-4', $$props.class)}>
   {#if initLoading}
     <Loading size={ANCHOR_MIN_COUNT} />
-  {:else if !displayedData?.length}
-    <Empty class="h-[300px]" />
-  {:else}
+  {:else if displayedData?.length}
     <RetryInfiniteScroll
       hasMore={hasMoreData}
-      isInit={isInit}
       load={() => loadAnchors()}
     >
       <div class='grid grid-cols-2 lg:grid-cols-3 gap-3'>
@@ -143,5 +159,7 @@
         {/each}
       </div>
     </RetryInfiniteScroll>
+  {:else}
+    <div class='h-[200px]'></div>
   {/if}
 </div>

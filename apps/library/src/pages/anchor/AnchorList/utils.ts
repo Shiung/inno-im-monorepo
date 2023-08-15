@@ -19,7 +19,7 @@ export const fetchAnchorMatches = async (houseId: string, lang: ILanguages) => {
 
 type IWebAnchorQueryWithLocale = IWebAnchors['query']
 
-export const fetchAnchorsApi = async ({ sid, keyWord, lang, pageIdx, pageSize, anchorType }: IWebAnchorQueryWithLocale) => {
+export const fetchAnchorsApi = async ({ sid, keyWord, lang, pageIdx, pageSize, anchorType }: IWebAnchorQueryWithLocale, options?: any) => {
   const defaultRes = { list: null, pager: null }
   try {
     const response = await im.webAnchors({
@@ -31,8 +31,8 @@ export const fetchAnchorsApi = async ({ sid, keyWord, lang, pageIdx, pageSize, a
         ...(lang && { lang }),
         ...(anchorType && { anchorType })
       },
-      headers: { 'Accept-Language': get(locale) }
-    })
+      headers: { 'Accept-Language': get(locale) },
+    }, options)
   
     return response?.data || defaultRes
   } catch (error) {

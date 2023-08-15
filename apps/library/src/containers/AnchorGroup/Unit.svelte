@@ -7,7 +7,7 @@
 
 <div class='shadow-[0_0_20px_0_rgba(0,0,0,.1)] rounded-[12px]'>
   <Ripple
-    class={twMerge('w-[146px] h-[70px] rounded-[12px] shrink-0 cursor-point', active && 'pointer-events-none')}
+    class={twMerge('w-[146px] h-[70px] rounded-[12px] shrink-0 cursor-pointer', active && 'pointer-events-none')}
     on:click>
     <div
       class='w-full h-full p-[3px]'

@@ -24,14 +24,13 @@
 
   let initLoading: boolean = false
   let data: IWebAnchor[] = []
-  let isInit: boolean = true
   let hasMoreData: boolean = false
 
   const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
 
   const abortControllers = new AbortControllers()
 
-  const fetchAnchors = async ({ sid, keyWord, useLang }: { sid: ReturnType<typeof convertSid>; keyWord: string; useLang: string }) => {
+  const fetchAnchors = async ({ sid, keyWord, useLang }: { sid: ReturnType<typeof convertSid>; keyWord: string; useLang: string }, options?: any) => {
     let ret: IWebAnchor[]
 
     const { list, pager } = await fetchAnchorsApi({
@@ -42,7 +41,7 @@
       pageSize,
       // TODO: 等充提上線時需拔掉
       anchorType: 1
-    })
+    }, options)
 
     if (list?.length) ret = list
 
@@ -104,7 +103,7 @@
   const fetchInit = async () => {
     pageIdx = 1
     data = []
-    isInit = true
+    hasMoreData = false
 
     abortControllers.abortControllers('fetch-im.webAnchors')
     const controller = {
@@ -116,7 +115,7 @@
 
     try {
       initLoading = true
-      const resData = await fetchAnchors({ sid, keyWord, useLang })
+      const resData = await fetchAnchors({ sid, keyWord, useLang }, { signal: controller.ctl.signal })
       if (resData?.length) {
         data = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
 
@@ -124,7 +123,6 @@
           await loadAnchors()
         }
 
-        isInit = false
       }
     } catch (error) {
       console.error(error)
@@ -170,7 +168,7 @@
       {:else if !data?.length}
         <Empty class="h-[calc(100vh_-_170px)]" />
       {:else}
-        <RetryInfiniteScroll hasMore={hasMoreData} {isInit} load={() => loadAnchors()}>
+        <RetryInfiniteScroll hasMore={hasMoreData} load={() => loadAnchors()}>
           <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {#each data || [] as anchor}
               <Anchor class="items-stretch" {anchor} matchInfo={matchesMap[anchor?.houseId]} />
