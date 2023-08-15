@@ -62,7 +62,7 @@
 </script>
 
 {#if _open}
-  <div>
+  <div data-cid='BottomSheet_Container'>
     <div
       class={twMerge(
         'bg-white rounded-t-[30px]',

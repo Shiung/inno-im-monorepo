@@ -83,7 +83,7 @@
   $: borderStyle = isLive ? 'border-imprimary' : 'border-transparent'
 </script>
 
-<div data-houseId={streaming?.houseId} data-iid={match?.iid}>
+<div data-cid="StreamBlock" data-houseId={streaming?.houseId} data-iid={match?.iid}>
   {#if loading}
     <Loading />
   {:else if streaming}
