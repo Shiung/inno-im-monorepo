@@ -14,6 +14,7 @@ export interface IChatroomInfo {
   header: 'normal' | 'text' | 'deposit'
   betListSheetContainerId?: string
   isDefaultTranslate?: boolean
+  isTranslationFeatureOn?: boolean
 }
 
 export const initInfo: IChatroomInfo = {

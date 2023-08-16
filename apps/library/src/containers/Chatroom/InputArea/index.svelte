@@ -4,7 +4,7 @@
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
   import { Ripple } from 'ui'
-  import { t, type ITransStore, isTranslateOn, allowTranslate } from '$stores'
+  import { t, type ITransStore, isTranslateOn, allowTranslate, isTranslationFeatureOn } from '$stores'
 
   import Send from '../images/send.svg'
   import ShowS from '../images/show_s.svg'
@@ -207,9 +207,11 @@
         </Ripple>
       {/if}
 
+      {#if $isTranslationFeatureOn}
       <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
         <Translate width={28} height={28} fill={ $isTranslateOn ? "rgb(var(--im-monorepo-primary))" : "#999999"} />
       </Ripple>
+      {/if}
 
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
         <Plus width={28} height={28} fill="#999999" />

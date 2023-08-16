@@ -8,11 +8,15 @@ type Translation = {
 
 type AllowTranslateState = 'default' | 'allow' | 'not-allow'
 
+export const isTranslationFeatureOn = writable(false)
 export const allowTranslate = writableSyncLocalStorage<AllowTranslateState>('imAllowTranslate', 'default')
 export const defaultAllowTranslate = writable(false)
 export const isTranslateOn = derived(
-  [allowTranslate, defaultAllowTranslate],
-  ([$allowTranslate, $defaultAllowTranslate]) => {
+  [isTranslationFeatureOn, allowTranslate, defaultAllowTranslate],
+  ([$isTranslationFeatureOn, $allowTranslate, $defaultAllowTranslate]) => {
+    if (!$isTranslationFeatureOn) {
+      return false
+    }
     if ($allowTranslate === 'default') {
       return $defaultAllowTranslate
     } else {
