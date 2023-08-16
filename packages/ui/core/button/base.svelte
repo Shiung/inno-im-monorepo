@@ -43,8 +43,8 @@ const handleClick = (e: any) => {
 
 </button>
 
-
-<style lang='scss'>
+<!-- don't add scss for this style, it will cause :global and postcss-add-root-selector added double prefix -->
+<style>
 :global(.button__ripple) {
   position: absolute;
   border-radius: 50%;
