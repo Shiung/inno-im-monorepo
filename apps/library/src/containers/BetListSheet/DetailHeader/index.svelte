@@ -7,7 +7,7 @@
   export let tabs: string[]
 </script>
 
-<div class="flex justify-between text-[16px]">
+<div class="flex justify-between text-[16px] lg:text-[14px]">
   {#each tabs as tab}
     <div
       class="flex justify-center items-center duration-300 rounded-[10px]"
