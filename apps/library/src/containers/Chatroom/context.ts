@@ -30,7 +30,7 @@ export const initInfo: IChatroomInfo = {
   header: 'normal',
   betListSheetContainerId: '',
   isDefaultTranslate: false,
-  isTranslationFeatureOn,
+  isTranslationFeatureOn: false,
   headerClass: ''
 }
 
