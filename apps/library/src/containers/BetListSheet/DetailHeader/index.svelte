@@ -10,7 +10,7 @@
 <div class="flex justify-between text-[16px]">
   {#each tabs as tab}
     <div
-      class="flex justify-center items-center duration-300 rounded-[10px]"
+      class="flex justify-center items-center duration-300 rounded-[10px] max-w-[45%]"
       style:background-color={activedTab === tab ? 'rgb(var(--im-monorepo-primary))' : '#eeeeee'}
     >
       <Ripple

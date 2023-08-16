@@ -116,6 +116,7 @@
   const resetStoreModule = () => {
     setChatInfo({ ...initInfo })
     setChatOrdersInfo({ ...initOrdersInfo })
+    showBetList.set(false)
   }
 
   $: changeRoomSizeByTouchMove(touchMoveOffset)

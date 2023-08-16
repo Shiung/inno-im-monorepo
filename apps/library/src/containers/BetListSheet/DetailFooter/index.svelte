@@ -19,7 +19,7 @@
 
   $: transl = self ? 'chat.betList' : 'chat.follow'
 
-  $: ({ minBet, displayName } = CurrencyMap[$userInfo.userCurrency])
+  $: ({ minBet, displayName } = CurrencyMap[$userInfo.userCurrency] || {})
 </script>
 
 <div class="flex justify-between items-center h-[83px] text-[12px] shadow-[0_0_6px_0_rgba(0,0,0,.1)] pl-[20px] pr-[16px]">
