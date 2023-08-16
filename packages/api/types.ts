@@ -12,9 +12,9 @@ export type IApiInit = {
   mock?: IMockData
 }
 
-export type ApiType<TRes> = {
+export type ApiType<TRes, TBody = void> = {
   query: {[key: string]: string | number} | null,
-  body: {[key: string]: string | number} | null,
+  body: {[key: string]: string | number} | null | TBody,
   res: TRes
 }
 

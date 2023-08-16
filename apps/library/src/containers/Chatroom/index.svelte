@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { onDestroy, tick } from 'svelte'
-  import { t } from '$stores'
+  import { defaultAllowTranslate, isTranslationFeatureOn, t } from '$stores'
   import { get } from 'svelte/store'
   import Portal from 'svelte-portal'
 
@@ -58,6 +58,8 @@
       if (get(header) !== e.header) header.set(e.header)
       if (get(betListSheetContainerId) !== e.betListSheetContainerId) betListSheetContainerId.set(e.betListSheetContainerId)
       if (get(headerClass) !== e.headerClass) headerClass.set(e.headerClass)
+      if (e.isDefaultTranslate !== null && get(defaultAllowTranslate) !== e.isDefaultTranslate) defaultAllowTranslate.set(e.isDefaultTranslate)
+      if (get(isTranslationFeatureOn) !== e.isTranslationFeatureOn) isTranslationFeatureOn.set(Boolean(e.isTranslationFeatureOn))
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {

@@ -14,6 +14,8 @@ export interface IChatroomInfo {
   header: 'normal' | 'text'
   betListSheetContainerId?: string
   headerClass?: string
+  isDefaultTranslate?: boolean
+  isTranslationFeatureOn?: boolean
 }
 
 export const initInfo: IChatroomInfo = {
@@ -27,6 +29,8 @@ export const initInfo: IChatroomInfo = {
   expandAnimation: true,
   header: 'normal',
   betListSheetContainerId: '',
+  isDefaultTranslate: false,
+  isTranslationFeatureOn,
   headerClass: ''
 }
 

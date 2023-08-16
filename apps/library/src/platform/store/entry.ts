@@ -6,7 +6,7 @@ import {
   setGoLogin,
   setGoVipCenter,
   setGoDetail,
-  setGoDeposit
+  setGoDeposit,
 } from '$stores'
 import { regWindowSizeListener } from '$src/utils/listener'
 

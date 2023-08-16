@@ -3,6 +3,7 @@
   import { fetchAvatar, fetchVip } from '$src/utils/images'
   import { im } from 'protobuf'
   import BetOrder from './BetOrder/index.svelte'
+  import { chatT } from '$stores'
 
   export let message: IChatMessage
   export let thisEl: HTMLDivElement
@@ -34,6 +35,7 @@
 
   $: typeof message.avatar === 'string' && fetchAvatarImg()
   $: typeof message.vip === 'number' && fetchVipImg()
+
 </script>
 
 {#if message.visible === im.enum.visible.ALL}
@@ -54,7 +56,7 @@
             <BetOrder message={JSON.parse(message.content)} />
           {:else}
             <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
-              <div class="text-[14px]">{message.content}</div>
+              <div class="text-[14px]">{$chatT(message.content, message.translationList)}</div>
             </div>
           {/if}
         </div>
