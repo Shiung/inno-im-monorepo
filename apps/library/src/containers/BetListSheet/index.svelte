@@ -22,7 +22,7 @@
   const { chatId, iid } = getInfo()
   const { followOrdersCallback } = getOrdersInfo()
 
-  const Container = $isXl ? Pc : Wap
+  $: Container = $isXl ? Pc : Wap
 
   const tabs: ITabs = {
     'chat.betList': () => import('./DetailContent/Self.svelte'),

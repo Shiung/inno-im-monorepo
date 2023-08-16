@@ -4,7 +4,7 @@
   import type { ILanguages } from 'env-config'
 
   import Header from '$components/Header'
-  import VIPNotification from '$containers/VIPNotification'
+  // import VIPNotification from '$containers/VIPNotification'
 
   import { locale, getUseLang } from '$stores'
   import { NO_LANG } from '$src/constant'
@@ -105,7 +105,7 @@
   }
 </script>
 
-<VIPNotification />
+<!-- <VIPNotification /> -->
 <div data-cid='AnchorHome'>
   {#if !$isLg}
     <Header />

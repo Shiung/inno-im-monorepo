@@ -10,7 +10,7 @@
 </script>
 
 <div class='w-full flex justify-center'>
-  <Ripple class="flex items-center justify-center z-10 cursor-pointer" on:click={() => dispatch('fetchMore')}>
+  <Ripple class="flex items-center justify-center cursor-pointer" on:click={() => dispatch('fetchMore')}>
     <div class="flex items-center justify-center bg-[rgba(76,158,234,0.05)] rounded-[10px] h-[34px] px-[16px]">
       {#if loading}
         <div class='text-[12px] text-imprimary'> {$t('chat.loading')} </div>

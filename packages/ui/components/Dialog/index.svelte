@@ -61,8 +61,8 @@
     <div
       on:click={() => onDismiss()}
       on:keydown={() => {}}
-      class={twMerge('bg-black w-screen inset-0 z-40', 
-      absolute ? 'absolute h-full' : 'fixed h-screen')}
+      class={twMerge('bg-black inset-0 z-40', 
+      absolute ? 'absolute w-full h-full' : 'fixed w-screen h-screen')}
       style:opacity={opacity}
     />
   </div>
