@@ -109,7 +109,7 @@ export const genSelfOrder = (iid: number) => {
     marketType: Random.pick(['ML', 'EU', 'IN', 'HK']),
     status: 2,
     cashOut: Random.boolean(),
-    currency: Random.pick(['CNY', 'nIDR', 'WBTC_ERC20', 'BCH']),
+    currency: Random.pick(['CNY', 'nIDR', 'WBTC_ERC20', 'BRL']),
     tnPriority: 50131,
     orderStatus: 0,
     safeFlag: true,

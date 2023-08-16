@@ -49,7 +49,8 @@ export enum Currency {
   UNI_ERC20 = 'UNI_ERC20',
   WBTC_ERC20 = 'WBTC_ERC20',
   AAVE_ERC20 = 'AAVE_ERC20',
-  TRX = 'TRX'
+  TRX = 'TRX',
+  BRL = 'BRL'
 }
 
 export const NO_LANG = 'NO-LANG'

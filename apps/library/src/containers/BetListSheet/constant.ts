@@ -116,5 +116,9 @@ export const CurrencyMap: ICurrencyMap = {
   TRX: {
     displayName: 'TRX',
     minBet: 1000
+  },
+  BRL: {
+    displayName: 'BRL',
+    minBet: 100
   }
 }

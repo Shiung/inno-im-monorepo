@@ -44,7 +44,7 @@
 
     setUserInfo({
       userVip: 10,
-      userCurrency: 'CNY'
+      userCurrency: 'BRL'
     })
 
     setChatInfo({
