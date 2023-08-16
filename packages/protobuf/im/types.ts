@@ -44,6 +44,7 @@ export interface IPushMessageEntity {
   timestamp: number
   houseId?: string
   lang: string
+  translationList: { [key: string]: string }
 }
 
 
