@@ -29,6 +29,7 @@
     "d3": "^7.8.4",
     "env-config": "workspace:*",
     "localforage": "^1.10.0",
+    "postcss-add-root-selector": "^1.0.5",
     "protobuf": "workspace:*",
     "svelte-portal": "^2.2.0",
     "svelte-spa-router": "^3.3.0",
