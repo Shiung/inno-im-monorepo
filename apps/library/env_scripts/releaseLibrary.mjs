@@ -54,7 +54,7 @@ const runCheck = async () => {
 }
 
 const pushToGit = async (version) => {
-  await $`cd release && git add * && git commit -m "v${version}" && git push`
+  await $`cd release && git add . && git commit -m "v${version}" && git push`
   await $`cd release && git tag v${version} && git push --tag`
 }
 
