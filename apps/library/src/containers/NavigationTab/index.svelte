@@ -4,7 +4,7 @@
   import Item from './Item.svelte'
   import { Button } from 'ui'
   import Modal, { Header, Mark } from 'ui/components/Modal'
-  import SunGlass from '../BottomNavigation/SunGlass.svelte'
+  import Gear from '../BottomNavigation/Gear.svelte'
 
   import { t } from '$stores'
 
@@ -23,7 +23,7 @@
       id: 'expert',
       icon: () => import('./images/expert.svg'),
       component: {
-        item: SunGlass,
+        item: Gear,
         className: 'absolute top-0 right-[-0.25rem]'
       },
       text: 'common.expert',

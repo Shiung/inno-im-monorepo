@@ -9,7 +9,7 @@
   import { t, type ITransStore } from '$stores'
   import { bottomNav } from '$stores/layout'
 
-  import SunGlass from './SunGlass.svelte'
+  import Gear from './Gear.svelte'
 
   export let goHome: () => void = () => {}
 
@@ -33,7 +33,7 @@
       icon: () => import('./images/expert.svg'),
       // 因GDIM-173 先硬寫
       component: {
-        item: SunGlass,
+        item: Gear,
         className: 'absolute top-1 translate-x-[12px]'
       },
       text: _t('common.expert'),
