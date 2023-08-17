@@ -6,7 +6,7 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
     'postcss-add-root-selector': {
-      rootSelector: '.im'
+      rootSelector: '.im-library'
     }
   },
 };
