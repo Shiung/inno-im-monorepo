@@ -30,7 +30,9 @@
   })
 </script>
 
-{#key $locale}
-  <ExpertList mid={$matchInfo?.mid} vd={$matchInfo?.vd} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
-{/key}
+<main class='im-library'>
+  {#key $locale}
+    <ExpertList mid={$matchInfo?.mid} vd={$matchInfo?.vd} goToPlanDetail={$goToPlanDetail} goToExpertDetail={$goToExpertDetail} />
+  {/key}
+</main>
 

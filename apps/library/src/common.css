@@ -2,7 +2,7 @@
   box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.1)
 }
 
-.im-library {
+.im-base {
   min-height: calc(var(--im-monorepo-vh) * 100);
   background-color: #f5f5f5;
   color: #333333;

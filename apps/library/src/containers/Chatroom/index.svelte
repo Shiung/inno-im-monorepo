@@ -147,45 +147,47 @@
   })
 </script>
 
-{#if $size === EChatroomSize.DEFAULT}
-  <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
-{:else}
-  <Container
-    {isTransition}
-    on:isTransitionChange={(e) => isTransition = e.detail }
-    on:onTouchMoveChange={(e) => touchMoveOffset = e.detail }
-  >
-    <svelte:fragment slot='header'>
-      <!-- <Header {isTransition} fixed={isWindow} on:close={foldChatroom} /> -->
-      <Header {isTransition} fixed={isWindow} />
-    </svelte:fragment>
+<main class="im-library">
+  {#if $size === EChatroomSize.DEFAULT}
+    <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
+  {:else}
+    <Container
+      {isTransition}
+      on:isTransitionChange={(e) => isTransition = e.detail }
+      on:onTouchMoveChange={(e) => touchMoveOffset = e.detail }
+    >
+      <svelte:fragment slot='header'>
+        <!-- <Header {isTransition} fixed={isWindow} on:close={foldChatroom} /> -->
+        <Header {isTransition} fixed={isWindow} />
+      </svelte:fragment>
 
-    <svelte:fragment slot='messages'>
-      {#if initFetchLoading || isTransition}
-        <Loading />
-      {:else if !$hasMsgs}
-        <Empty class="flex-1" title={$t('chat.empty')} />
+      <svelte:fragment slot='messages'>
+        {#if initFetchLoading || isTransition}
+          <Loading />
+        {:else if !$hasMsgs}
+          <Empty class="flex-1" title={$t('chat.empty')} />
+        {:else}
+          <Messages
+            bind:lastReadId
+            {chatMessages}
+            on:domBound={(e) => {
+              boxContainerDom = e.detail
+            }}
+          />
+        {/if}
+      </svelte:fragment>
+
+      <svelte:fragment slot='input'>
+        <InputArea fixed={isWindow} />
+      </svelte:fragment>
+
+      {#if portalDomEl}
+        <Portal target={portalDomEl}>
+          <BetListSheet bind:open={$showBetList} />
+        </Portal>
       {:else}
-        <Messages
-          bind:lastReadId
-          {chatMessages}
-          on:domBound={(e) => {
-            boxContainerDom = e.detail
-          }}
-        />
-      {/if}
-    </svelte:fragment>
-
-    <svelte:fragment slot='input'>
-      <InputArea fixed={isWindow} />
-    </svelte:fragment>
-
-    {#if portalDomEl}
-      <Portal target={portalDomEl}>
         <BetListSheet bind:open={$showBetList} />
-      </Portal>
-    {:else}
-      <BetListSheet bind:open={$showBetList} />
-    {/if}
-  </Container>
-{/if}
+      {/if}
+    </Container>
+  {/if}
+</main>

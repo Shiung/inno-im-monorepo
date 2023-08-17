@@ -62,17 +62,19 @@
 </script>
 
 <main class="im-library">
-  <div class='xl:max-w-[1280px] mx-auto'>
-    {#if $showNavTab && $isLg}
-      <div class="px-[20px] pt-[16px] mb-[12px]">
-        <NavigationTab />
-      </div>
-    {/if}
-    
-    <Router {routes} on:conditionsFailed={conditionsFailed} on:routeLoading={routeLoading} />
+  <div class='im-base'>
+    <div class='xl:max-w-[1280px] mx-auto'>
+      {#if $showNavTab && $isLg}
+        <div class="px-[20px] pt-[16px] mb-[12px]">
+          <NavigationTab />
+        </div>
+      {/if}
+      
+      <Router {routes} on:conditionsFailed={conditionsFailed} on:routeLoading={routeLoading} />
 
-    {#if $showBottomNav && !$isLg}
-      <BottomNavigation goHome={() => $goHomeCallback()} />
-    {/if}
+      {#if $showBottomNav && !$isLg}
+        <BottomNavigation goHome={() => $goHomeCallback()} />
+      {/if}
+    </div>
   </div>
 </main>
