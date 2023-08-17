@@ -55,7 +55,7 @@
     const MAX_MESSAGES_LIMIT = 500
     const SLICE_SIZE = 300
 
-    if($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update(e => e.slice(-SLICE_SIZE))
+    if ($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update((e) => e.slice(-SLICE_SIZE))
   }
 
   const observer = new MutationObserver((mutations) => {
@@ -88,7 +88,10 @@
       // workaround 2 - better
       if (isWindow) {
         const { offsetTop, offsetHeight } = unreadDom
-        window.scrollTo(0, offsetTop - (window.innerHeight - $height - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight)
+        window.scrollTo(
+          0,
+          offsetTop - (window.innerHeight - ($height || 0) - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight
+        )
       } else {
         unreadDom.scrollIntoView({ block: 'end' })
       }
@@ -130,18 +133,16 @@
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: oldest?.msgId || 0, chatId: $chatId || String($iid) }
     })
-    chatMessages.update((messages) => filterDuplicatesByMsgId(
-      messages,
-      sortMsgsByMsgIdAsc(res.data.pushMessageEntity)
-    ))
+    chatMessages.update((messages) => filterDuplicatesByMsgId(messages, sortMsgsByMsgIdAsc(res.data.pushMessageEntity)))
     fetchMoreLoading = false
 
     await tick()
     targetDom?.scrollIntoView()
 
     const offset = 10
-    if (isWindow) window.scrollTo({ top: window.scrollY - $headerRect?.height - $loadMoreRect?.height - offset - $height })
-    dom.scrollTo({ top: dom.scrollTop - $headerRect?.height - offset })
+    if (isWindow)
+      window.scrollTo({ top: window.scrollY - ($headerRect?.height || 0) - ($loadMoreRect?.height || 0) - offset - ($height || 0) })
+    dom.scrollTo({ top: dom.scrollTop - ($headerRect?.height || 0) - offset })
   }
 </script>
 
