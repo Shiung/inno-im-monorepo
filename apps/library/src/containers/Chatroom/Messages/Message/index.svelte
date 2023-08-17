@@ -30,10 +30,13 @@
         }
       }
     },
-    { rootMargin: `0px 0px -${$inputRect?.height}px 0px` }
+    { rootMargin: `0px 0px -${$inputRect?.height || 0}px 0px` }
   )
 
-  $: boxContainerHeight = $displayType === 'window' ? window.innerHeight - $height - $headerRect?.height - $inputRect?.height : $messageBoxRect?.height
+  $: boxContainerHeight =
+    $displayType === 'window'
+      ? window.innerHeight - ($height || 0) - ($headerRect?.height || 0) - ($inputRect?.height || 0)
+      : $messageBoxRect?.height || 0
 
   $: if (dom) {
     if (dom.offsetTop <= boxContainerHeight) checkAndSetLastReadId(dom.getAttribute('data-id'))

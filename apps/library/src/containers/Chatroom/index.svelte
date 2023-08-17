@@ -104,7 +104,7 @@
   }
 
   const changeRoomSizeByTouchMove = (moveOffset: number) => {
-    const scrollY = isWindow ? window.scrollY : boxContainerDom?.scrollTop
+    const scrollY = isWindow ? window.scrollY : (boxContainerDom?.scrollTop || 0)
 
     if (!isExpand && moveOffset >= CHATROOM_EXPAND_TRIGGER_DISTANCE) {
       isExpand = true
