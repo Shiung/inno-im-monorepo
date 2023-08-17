@@ -73,7 +73,8 @@ export default defineConfig(({ mode }) => {
       'process.env.version': JSON.stringify(packageJson.version),
       'process.env.commitHEAD': JSON.stringify(execSync('git rev-parse HEAD').toString()),
       'process.env.login': process.env.LOGIN,
-      'process.env.SCREENS': genScreens()
+      'process.env.SCREENS': genScreens(),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     },
     plugins: [
       svelte({ preprocess: sveltePreprocess() }),
