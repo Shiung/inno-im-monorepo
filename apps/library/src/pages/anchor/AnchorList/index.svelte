@@ -157,7 +157,7 @@
     {/if}
   </BackBar>
 
-  <div class="md:bg-white rouned-[20px] pb-[8px] px-[12px] lg:p-[16px] lg:rounded-[10px]">
+  <div class="bg-white rouned-[20px] pb-[8px] px-[12px] lg:p-[16px] lg:rounded-[10px]">
     {#if !$isLg}
       <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
     {/if}

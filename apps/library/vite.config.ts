@@ -4,6 +4,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import svelteSVG from 'vite-plugin-svelte-svg'
 import { execSync } from 'child_process'
 import tailwindPreset from 'tailwind-config/tailwind.present.cjs'
+import sveltePreprocess from 'svelte-preprocess'
 
 const packageJson = require('./package.json')
 
@@ -75,7 +76,7 @@ export default defineConfig(({ mode }) => {
       'process.env.SCREENS': genScreens()
     },
     plugins: [
-      svelte(),
+      svelte({ preprocess: sveltePreprocess() }),
       svelteSVGPlugin()
     ],
     resolve: {

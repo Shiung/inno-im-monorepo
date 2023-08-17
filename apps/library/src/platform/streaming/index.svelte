@@ -24,4 +24,6 @@ import StreamingPlayer from '$containers/StreamingPlayer'
 $: streaming = anchor.streaming
 </script>
 
-<StreamingPlayer streaming={$streaming} />
+<main class='im-library'>
+  <StreamingPlayer streaming={$streaming} />
+</main>
