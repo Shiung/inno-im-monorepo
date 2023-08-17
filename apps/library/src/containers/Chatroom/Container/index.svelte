@@ -33,7 +33,7 @@
   class={twMerge('relative flex flex-1 flex-col bg-white', isWindow && isTransition && 'fixed w-full z-30 bottom-0')}
   style:min-height={isWindow ? boxContainerHeight : '100%'}
   style:max-height={isWindow ? (!isTransition ? 'none' : boxContainerHeight) : '100%'}
-  transition:fly|local={$expandAnimation && { y: isWindow ? window.innerHeight - $height : '100%', duration: 500 }}
+  transition:fly|local={$expandAnimation ? { y: isWindow ? window.innerHeight - $height : '100%', duration: 500 } : { duration: 0 }}
   on:introend={() => {
     dispatch('isTransitionChange', false)
   }}
