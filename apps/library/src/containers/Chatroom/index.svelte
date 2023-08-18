@@ -21,6 +21,7 @@
 </script>
 
 <script lang="ts">
+  import { twMerge } from 'tailwind-merge'
   import { onDestroy, tick } from 'svelte'
   import { defaultAllowTranslate, isTranslationFeatureOn, t } from '$stores'
   import { get } from 'svelte/store'
@@ -94,14 +95,15 @@
     sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
   }
 
-  const foldChatroom = async () => {
-    isTransition = true
-    await tick() // for chatroom content change to <Loading>
-    touchMoveOffset = 0
-    isWindow && window.scrollTo({ top: 0 })
-    sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.DEFAULT, transition: !isExpand })
-    isExpand = false
-  }
+  // unused now
+  // const foldChatroom = async () => {
+  //   isTransition = true
+  //   await tick() // for chatroom content change to <Loading>
+  //   touchMoveOffset = 0
+  //   isWindow && window.scrollTo({ top: 0 })
+  //   sizeChangedCallback && sizeChangedCallback({ size: EChatroomSize.DEFAULT, transition: !isExpand })
+  //   isExpand = false
+  // }
 
   const changeRoomSizeByTouchMove = (moveOffset: number) => {
     const scrollY = isWindow ? window.scrollY : (boxContainerDom?.scrollTop || 0)
@@ -147,7 +149,7 @@
   })
 </script>
 
-<main class="im-library">
+<main class={twMerge("im-library", !isWindow && 'h-full')}>
   {#if $size === EChatroomSize.DEFAULT}
     <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
   {:else}
