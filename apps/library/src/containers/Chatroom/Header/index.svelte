@@ -4,6 +4,7 @@
 
   import { getInfo } from '../context'
   import { headerRect } from '../store'
+  import { streaming } from '$src/platform/store'
 
   export let isTransition: boolean
   export let fixed: boolean = false
@@ -35,7 +36,7 @@
   {#await promise then comp}
     {#if $header === 'normal'}
       <!-- <svelte:component this={comp} bind:dom {fixed} {isTransition} showClose on:close /> -->
-      <svelte:component this={comp} bind:dom {fixed} {isTransition} class={$headerClass} />
+      <svelte:component this={comp} bind:dom {fixed} {isTransition} class={$headerClass} anchor={$streaming} />
     {:else if $header === 'text'}
       <svelte:component this={comp} bind:dom {fixed} {isTransition} class={$headerClass} />
     {/if}
