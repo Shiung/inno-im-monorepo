@@ -27,7 +27,7 @@
 </script>
 
 <div data-cid="AnchorCard" data-houseId={anchor.houseId} data-iid={isMatchType ? match?.iid : ''}>
-  <Ripple class="w-full flex flex-col items-center im-shadow rounded-[10px] p-2 space-y-1" on:click>
+  <Ripple class="w-full im-shadow rounded-[10px] p-2 space-y-1" on:click>
     <div class="relative w-full" on:click={() => navigationAnchor(isMatchType, match, anchor.houseId)} on:keypress>
       {#if isLive}
         <div class="absolute top-0 left-0 z-[1]">
