@@ -2,7 +2,9 @@
   import { im } from 'api'
   import { Ripple } from 'ui'
   import { onDestroy } from 'svelte'
+  import { portal } from "svelte-portal"
   import BottomSheet, { Header, Content } from 'ui/components/BottomSheet'
+
   import { dataCid } from '../BottomNavigation'
   import { locale } from '$stores'
 
@@ -57,36 +59,39 @@
   onDestroy(() => clearZIndexOfBottomNav())
 </script>
 
-<BottomSheet
-  class={onMax && 'rounded-none'}
-  dragBar
-  bind:open
-  initHeight={(height) => (height * 3) / 4}
-  maxHeight={(height) => height + 20}
-  {onMaxHeight}
->
-  <Header class="mt-[5px] bg-white px-[15px]">
-    <div class="flex justify-end">
-      <Ripple on:click={() => (open = false)}>
-        <Close width={20} height={20} fill="#666666" />
-      </Ripple>
-    </div>
-  </Header>
 
-  {#await detailPromise}
-    <Loading />
-  {:then detail}
-    {@const { data, code } = detail || {}}
+<main use:portal class='im-library'>
+  <BottomSheet
+    class={onMax && 'rounded-none'}
+    dragBar
+    bind:open
+    initHeight={(height) => (height * 3) / 4}
+    maxHeight={(height) => height + 20}
+    {onMaxHeight}
+  >
+    <Header class="mt-[5px] bg-white px-[15px]">
+      <div class="flex justify-end">
+        <Ripple on:click={() => (open = false)}>
+          <Close width={20} height={20} fill="#666666" />
+        </Ripple>
+      </div>
+    </Header>
 
-    {#if code === CODE_STATUS_OK}
-      <DetailHeader detail={data} bind:activedTab tabs={Object.keys(tabs)} />
+    {#await detailPromise}
+      <Loading />
+    {:then detail}
+      {@const { data, code } = detail || {}}
 
-      <Content>
-        <DetailContent {activedTab} {tabs} {houseId} />
-        {#if onMax}
-          <div class="min-h-[75px]" />
-        {/if}
-      </Content>
-    {/if}
-  {/await}
-</BottomSheet>
+      {#if code === CODE_STATUS_OK}
+        <DetailHeader detail={data} bind:activedTab tabs={Object.keys(tabs)} />
+
+        <Content>
+          <DetailContent {activedTab} {tabs} {houseId} />
+          {#if onMax}
+            <div class="min-h-[75px]" />
+          {/if}
+        </Content>
+      {/if}
+    {/await}
+  </BottomSheet>
+</main>

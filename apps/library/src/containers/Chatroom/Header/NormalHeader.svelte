@@ -1,24 +1,37 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  // import { createEventDispatcher } from 'svelte'
   import { slide } from 'svelte/transition'
   import { Ripple } from 'ui'
   import { t } from '$stores'
   import { twMerge } from 'tailwind-merge'
-
   import { Marquee } from 'ui'
 
-  import Info from '../images/info.svg'
-  // import Close from '../images/close.svg'
+  import type { IPlatformAnchor } from '$src/platform/anchors/types'
 
+  const AnchorTitle = () => import('./AnchorTitle/index.svelte')
+  // import Close from '../images/close.svg'
+  import Info from '../images/info.svg'
+  
   import { getInfo } from '../context'
   import { headerRect } from '../store'
 
   export let fixed: boolean
   export let dom: HTMLDivElement
   export let isTransition: boolean
+  export let anchor: IPlatformAnchor
+
   // export let showClose: false
 
   const { height } = getInfo()
+
+  const loadAnchorTitle = async () => {
+    let comp = await AnchorTitle()
+
+    return comp?.default
+  }
+
+  let promise: ReturnType<typeof loadAnchorTitle>
+  $: if (anchor) promise = loadAnchorTitle()
 
   // const dispatch = createEventDispatcher()
 
@@ -36,9 +49,16 @@
   style:top={fixed ? (!isTransition ? `${$height}px` : '') : '0'}
   bind:this={dom}
 >
-  <div class="flex items-center">
-    <div class="text-[18px] font-semibold">{$t('chat.title')}</div>
-    <Ripple class="rounded-full flex items-center justify-center w-[25px] h-[25px]" on:click={() => (showRemind = !showRemind)}>
+  <div class="flex items-center w-full">
+    {#if anchor}
+      {#await promise then AnchorTitle}
+        <AnchorTitle {anchor} />
+      {/await}
+    {:else}
+      <div class="text-[18px] font-semibold">{$t('chat.title')}</div>
+    {/if}
+
+    <Ripple class="flex-none rounded-full flex items-center justify-center w-[25px] h-[25px]" on:click={() => (showRemind = !showRemind)}>
       <Info width={20} height={20} fill={showRemind ? 'rgb(var(--im-monorepo-primary))' : '#999999'} />
     </Ripple>
 
