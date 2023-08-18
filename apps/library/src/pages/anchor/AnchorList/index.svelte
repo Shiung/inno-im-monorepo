@@ -162,7 +162,7 @@
       <Search bind:value={keyWord} on:searchEvent={() => init(useLang)} />
     {/if}
 
-    <div class="space-y-3 px-4 py-3">
+    <div class="space-y-3 py-3">
       {#if initLoading}
         <Loading size={ANCHOR_MIN_COUNT} />
       {:else if !data?.length}
