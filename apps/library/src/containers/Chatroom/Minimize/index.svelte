@@ -75,7 +75,7 @@
 
 <div
   bind:this={dom}
-  class={twMerge('fixed left-0 bottom-[18px] w-[100vw] px-[20px]', $useScrollCollapse && 'transition-transform')}
+  class={twMerge('fixed left-0 bottom-[18px] z-[1] w-[100vw] px-[20px]', $useScrollCollapse && 'transition-transform')}
   style:transform={collapseStyles.transform}
 >
   <Ripple class="flex items-center w-full im-shadow rounded-[20px] h-[48px] px-[20px] bg-white" on:click>
