@@ -33,7 +33,7 @@ $: height = $isLg ? 32 : 36
 $: dropdownList = !$isLg 
 </script>
 
-<Search class='mb-[10px] text-[11px] lg:mb-0 lg:w-[340px] md:pt-[1px]' 
+<Search class='pt-[1px] text-[11px] lg:w-[340px]'
   {dict}
   {height}
   {dropdownList}
