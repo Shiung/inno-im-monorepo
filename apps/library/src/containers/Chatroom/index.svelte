@@ -26,6 +26,7 @@
   import { defaultAllowTranslate, isTranslationFeatureOn, t } from '$stores'
   import { get } from 'svelte/store'
   import Portal from 'svelte-portal'
+  import { isXl } from '$stores'
 
   import Empty from '$src/containers/Empty'
 
@@ -153,6 +154,15 @@
   {#if $size === EChatroomSize.DEFAULT}
     <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
   {:else}
+    {#if $isXl}
+      {#if portalDomEl}
+        <Portal target={portalDomEl}>
+          <BetListSheet bind:open={$showBetList} />
+        </Portal>
+      {:else}
+        <BetListSheet bind:open={$showBetList} />
+      {/if}
+    {/if}
     <Container
       {isTransition}
       on:isTransitionChange={(e) => isTransition = e.detail }
@@ -183,12 +193,15 @@
         <InputArea fixed={isWindow} />
       </svelte:fragment>
 
-      {#if portalDomEl}
-        <Portal target={portalDomEl}>
+      
+      {#if !$isXl}
+        {#if portalDomEl}
+          <Portal target={portalDomEl}>
+            <BetListSheet bind:open={$showBetList} />
+          </Portal>
+        {:else}
           <BetListSheet bind:open={$showBetList} />
-        </Portal>
-      {:else}
-        <BetListSheet bind:open={$showBetList} />
+        {/if}
       {/if}
     </Container>
   {/if}
