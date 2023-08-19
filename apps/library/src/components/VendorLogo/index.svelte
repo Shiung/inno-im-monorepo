@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getConfig } from 'env-config'
   import { twMerge } from 'tailwind-merge'
-  import { locale } from '$stores'
+  import { locale, goHomeCallback } from '$stores'
   import type { ILanguages } from 'env-config'
 
   const DEFAULT_RESOURCE = `${getConfig().FE_CDN_URL}/frontend/${getConfig().DEPLOY_ENV}/fe-images/${
@@ -22,5 +22,12 @@
 </script>
 
 {#if !error && src}
-  <img class={twMerge('block', $$props.class)} src={getVdSource($locale)} on:error={() => (error = true)} alt="" />
+  <img
+    class={twMerge('block', $$props.class)}
+    src={getVdSource($locale)}
+    on:click={() => $goHomeCallback()}
+    on:error={() => (error = true)}
+    alt=""
+    aria-hidden="true"
+  />
 {/if}
