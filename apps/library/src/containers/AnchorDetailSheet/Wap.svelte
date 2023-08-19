@@ -2,7 +2,8 @@
   import { im } from 'api'
   import { Ripple } from 'ui'
   import { onDestroy } from 'svelte'
-  import { portal } from "svelte-portal"
+  import { twMerge } from 'tailwind-merge'
+  import { portal } from 'svelte-portal'
   import BottomSheet, { Header, Content } from 'ui/components/BottomSheet'
 
   import { dataCid } from '../BottomNavigation'
@@ -53,23 +54,29 @@
     onMax = true
   }
 
-  const onMaxHeight = () => setZIndexOfBottomNav('51')
+  const onMaxHeight = (value: boolean) => {
+    if (value === onMax) return
+    if (value) {
+      setZIndexOfBottomNav('51')
+    } else {
+      clearZIndexOfBottomNav()
+    }
+  }
 
   $: if (!open) clearZIndexOfBottomNav()
   onDestroy(() => clearZIndexOfBottomNav())
 </script>
 
-
-<main use:portal class='im-library'>
+<main use:portal class="im-library">
   <BottomSheet
     class={onMax && 'rounded-none'}
-    dragBar
+    draggable
     bind:open
-    initHeight={(height) => (height * 3) / 4}
+    initHeight={(height) => height * 0.86}
     maxHeight={(height) => height + 20}
     {onMaxHeight}
   >
-    <Header class="mt-[5px] bg-white px-[15px]">
+    <Header class={twMerge('px-[15px] transition-transform duration-200 ease-out', onMax ? 'translate-y-4' : 'translate-y-0')}>
       <div class="flex justify-end">
         <Ripple on:click={() => (open = false)}>
           <Close width={20} height={20} fill="#666666" />

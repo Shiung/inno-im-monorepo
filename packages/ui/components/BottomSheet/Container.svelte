@@ -1,15 +1,16 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   import { twMerge } from 'tailwind-merge'
+  import Draggable from './Draggable.svelte'
   import DragBar from './DragBar.svelte'
 
   export let open: boolean = false
-  export let dragBar: boolean = false
+  export let draggable: boolean = false
   export let initHeight: (innerHeight: number) => number
   export let maxHeight: (innerHeight: number) => number
   export let onDismiss: () => void = () => {}
 
-  export let onMaxHeight: () => void = () => {}
+  export let onMaxHeight: (onMax: boolean) => void = () => {}
 
   let _open: boolean = open
   let contentOpacity: number = 1
@@ -21,7 +22,7 @@
     const html = document.getElementsByTagName('html')[0]
     html.style.overflowY = 'hidden'
     _open = open
-    _maxHeight = maxHeight ? maxHeight(window.innerHeight) : (window.innerHeight / 4) * 3
+    _maxHeight = maxHeight ? maxHeight(window.innerHeight) : window.innerHeight * 0.86
     _initHeight = initHeight ? initHeight(window.innerHeight) : _maxHeight
     height = 0
 
@@ -62,33 +63,25 @@
 </script>
 
 {#if _open}
-  <div data-cid='BottomSheet_Container'>
-    <div
-      class={twMerge(
-        'bg-white rounded-t-[30px]',
-        $$props.class,
-        'flex flex-col w-full fixed left-0 right-0 bottom-0 z-50 overflow-hidden will-change-[height] duration-200 ease-out'
-      )}
-      style:height={`${height}px`}
+  <div data-cid="BottomSheet_Container">
+    <Draggable
+      class={twMerge('bg-white rounded-t-[30px]', $$props.class, 'flex flex-col w-full fixed left-0 right-0 bottom-0 z-50 overflow-hidden')}
+      bind:open
+      bind:height
+      isDisabled={!draggable}
+      initHeight={_initHeight}
+      maxHeight={_maxHeight}
+      closeH={fadeH}
+      {onMaxHeight}
     >
-      {#if dragBar}
-        <DragBar
-          bind:height
-          bind:open
-          bind:opacity={contentOpacity}
-          maxHeight={_maxHeight}
-          closeH={fadeH}
-          {onMaxHeight}
-        />
+      {#if draggable}
+        <DragBar opacity={contentOpacity} />
       {/if}
 
-      <div
-        class="flex flex-col flex-1 will-change-[opacity] overflow-hidden"
-        style:opacity={contentOpacity}
-      >
+      <div class="flex flex-col flex-1 will-change-[opacity] overflow-hidden" style:opacity={contentOpacity}>
         <slot />
       </div>
-    </div>
+    </Draggable>
 
     <div
       on:click={() => onDismiss()}

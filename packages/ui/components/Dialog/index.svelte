@@ -16,7 +16,7 @@
     const html = document.getElementsByTagName('html')[0]
     html.style.overflowY = 'hidden'
     _open = open
-    _initHeight = initHeight ? initHeight(window.innerHeight) : (window.innerHeight / 4) * 3
+    _initHeight = initHeight ? initHeight(window.innerHeight) : window.innerHeight * 0.86
     height = 0
 
     setTimeout(() => {
@@ -61,9 +61,8 @@
     <div
       on:click={() => onDismiss()}
       on:keydown={() => {}}
-      class={twMerge('bg-black inset-0 z-40', 
-      absolute ? 'absolute w-full h-full' : 'fixed w-screen h-screen')}
-      style:opacity={opacity}
+      class={twMerge('bg-black inset-0 z-40', absolute ? 'absolute w-full h-full' : 'fixed w-screen h-screen')}
+      style:opacity
     />
   </div>
 {/if}
