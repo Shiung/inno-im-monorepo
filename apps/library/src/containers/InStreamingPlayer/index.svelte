@@ -9,7 +9,6 @@
   import FlvPlayer from 'ui/components/FlvPlayer'
   import VideoPlayer from 'ui/components/VideoPlayer'
   import HouseImage from '$containers/AnchorHouseImage'
-  import VideoControls from '$containers/VideoControls/index.svelte'
 
   import { StreamLiveStatus } from '$src/constant'
   import type { TStreamLiveStatus } from '$src/types'
@@ -17,6 +16,9 @@
   export let onReadyCallback = () => {}
   export let onLostDataCallback = () => {}
   export let onErrorCallback = () => {}
+  export let onMutedCallback = () => {}
+  export let onPausedCallback = () => {}
+
   export let streaming: {
     playStreamAddress: string;
     playStreamAddress2: string;
@@ -25,27 +27,16 @@
   }
   export let useDefControls: boolean = false
 
-  let showControls = false
-  let muted = false
-  let paused = false
   let dom: SvelteComponent
 
-  const onMutedCallback = (m: boolean) => {
-    muted = m
-  }
+  export const setMute = () => {
+    if (!dom) return
 
-  const onPausedCallback = (p: boolean) => {
-    paused = p
+    dom?.inMuteHandler()
   }
 </script>
 
-<div 
-  on:click={() => {
-  if (useDefControls) showControls = true
-  }} 
-  on:keypress
-  class="w-full relative"
->
+<div class="w-full relative">
   {#if streaming?.liveStatus === StreamLiveStatus.LIVE}
     {#if isFlvUse}
       <FlvPlayer
@@ -57,6 +48,7 @@
         internalOnErrorCallback={onErrorCallback}
         internalOnPausedCallback={onPausedCallback}
         internalOnMutedCallback={onMutedCallback}
+        controls={useDefControls}
       />
     {:else}
       <VideoPlayer
@@ -67,20 +59,12 @@
         internalOnErrorCallback={onErrorCallback}
         internalOnPausedCallback={onPausedCallback}
         internalOnMutedCallback={onMutedCallback}
-      />
-    {/if}
-
-    {#if useDefControls}
-      <VideoControls 
-        bind:showControls
-        bind:paused
-        bind:muted
-        setPause={() => dom?.inPauseHandler(true)}
-        setMute={dom?.inMuteHandler}
-        setFullScreen={dom?.inFullScreenHandler}
+        controls={useDefControls}
       />
     {/if}
   {:else}
     <HouseImage src={streaming?.houseImage} />
   {/if}
+
+  <slot></slot>
 </div>
