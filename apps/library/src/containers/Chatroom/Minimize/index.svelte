@@ -21,9 +21,17 @@
   let collapseStyles = { transform: '' }
   let isFold = false
 
+  const findLastIndex = <T>(array: T[], callback: (element: T, index: number) => boolean): number | undefined => {
+    for (let i = array.length - 1; i >= 0; i--) {
+      if (callback(array[i], i)) {
+        return i;
+      }
+    }
+    return undefined;
+  }
+
   const calculateUnread = (msgs: IChatMessage[], _lastReadId: number) => {
-    //@ts-ignore findLastIndex 屬於 stage-3 的新功能，ts 檢查會噴錯
-    const lastIdx = msgs.findLastIndex((msg) => msg.msgId === _lastReadId)
+    const lastIdx = findLastIndex(msgs, (msg) => msg.msgId === _lastReadId)
 
     const unreadLength = filterVisibleMsgs(msgs, lastIdx + 1).length
 
