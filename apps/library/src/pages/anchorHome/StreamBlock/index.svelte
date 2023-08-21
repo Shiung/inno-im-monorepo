@@ -14,6 +14,9 @@
   import { getAnchorStore } from '../store'
   import AnchorLiveBadge from '$containers/AnchorLiveBadge'
   import { navigationAnchor } from '$src/utils/anchor'
+  import SoundOn from '$containers/VideoControls/images/sound_on.svg'
+  import SoundOff from '$containers/VideoControls/images/sound_off.svg'
+  import type { SvelteComponentTyped } from 'svelte'
 
   const { anchorMatches, anchorMatchLoadings } = getAnchorStore()
 
@@ -27,6 +30,10 @@
   let streamOnReadyCb
   let streamOnErrorCb
   let streamOnLostDataCb
+  let streamOnMutedCb
+  let streamPlayer: SvelteComponentTyped
+
+  let muted: boolean = false
 
   const regStreamingCallbacks = () => {
     streamOnReadyCb = () => {
@@ -42,6 +49,10 @@
     streamOnLostDataCb = () => {
       streamLoading = false
       streamError = true
+    }
+
+    streamOnMutedCb = (m: boolean) => {
+      muted = m
     }
   }
 
@@ -99,11 +110,21 @@
         {/if}
 
         <InStreamingPlayer
+          bind:this={streamPlayer}
           {streaming}
           onReadyCallback={streamOnReadyCb}
           onErrorCallback={streamOnErrorCb}
           onLostDataCallback={streamOnLostDataCb}
-        />
+          onMutedCallback={streamOnMutedCb}
+        >
+          <div class="absolute bottom-4 right-4" on:click|stopPropagation={() => streamPlayer?.setMute()} on:keypress>
+            {#if muted}
+              <SoundOn />
+            {:else}
+              <SoundOff />
+            {/if}
+          </div>
+        </InStreamingPlayer>
         
         {#if streaming?.liveStatus === StreamLiveStatus.LIVE}
           <div class="absolute top-0 left-0 z-[1] lg:bottom-4 lg:left-5 lg:top-auto">
