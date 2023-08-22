@@ -28,7 +28,12 @@
 
   $: setStatusAndCallbackByCondition($userInfo, $userAuth, $chatroomSetting, $t)
 
-  const setStatusAndCallbackByCondition = (userInfo: IUserInfo, userAuth: IUserAuth, chatroomSetting: IChatroomSetting, _t: ITransStore) => {
+  const setStatusAndCallbackByCondition = (
+    userInfo: IUserInfo,
+    userAuth: IUserAuth,
+    chatroomSetting: IChatroomSetting,
+    _t: ITransStore
+  ) => {
     resetStatus()
 
     const { userCurrency } = userInfo
@@ -56,8 +61,8 @@
   const setByChatSettingError = (chatroomSetting: IChatroomSetting, userCurrency: IUserInfo['userCurrency'], _t: ITransStore) => {
     const { errorCode, vip, depositLimit } = chatroomSetting
     const _onCurrencyLimit = (depositLimit: IChatroomSetting['depositLimit'], userCurrency: string, _t: ITransStore) => {
-      const limitRule = depositLimit.find(item => item.currency === userCurrency)
-      placeHolder = _t(errorCodeMsgMap[EErrorCode.CURRENCY_LIMIT], { currency: limitRule?.currency, amount: limitRule?.amount})
+      const limitRule = depositLimit.find((item) => item.currency === userCurrency)
+      placeHolder = _t(errorCodeMsgMap[EErrorCode.CURRENCY_LIMIT], { currency: limitRule?.currency, amount: limitRule?.amount })
       routerCallback = $goDepositCallback
       message = ''
     }
@@ -67,9 +72,11 @@
       message = ''
     }
 
-    switch(errorCode) {
-      case EErrorCode.VIP_LIMIT: return _onVipLimit(vip, _t)
-      case EErrorCode.CURRENCY_LIMIT: return _onCurrencyLimit(depositLimit, userCurrency, _t)
+    switch (errorCode) {
+      case EErrorCode.VIP_LIMIT:
+        return _onVipLimit(vip, _t)
+      case EErrorCode.CURRENCY_LIMIT:
+        return _onCurrencyLimit(depositLimit, userCurrency, _t)
     }
   }
 
@@ -151,16 +158,14 @@
     }, 2000)
   }
 
-  const handleOrderClick = () => {    
+  const handleOrderClick = () => {
     if (disabled) routerCallback && routerCallback()
     else $showBetList = true
   }
 
   const toggleTranslation = () => {
     const isOn = get(isTranslateOn)
-    allowTranslate.set(
-      isOn ? 'not-allow' : 'allow'
-    )
+    allowTranslate.set(isOn ? 'not-allow' : 'allow')
   }
 </script>
 
@@ -172,7 +177,7 @@
         'flex items-center px-[15px] bg-imprimary text-[12px] text-white h-[32px] w-full',
         fixed ? 'fixed' : 'absolute -translate-y-full'
       )}
-      style:bottom={fixed && `${($inputRect?.height || 0)}px`}
+      style:bottom={fixed && `${$inputRect?.height || 0}px`}
     >
       {warningMsg}
     </div>
@@ -199,6 +204,10 @@
         >
           <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
         </Ripple>
+
+        {#if disabled}
+          <div class="absolute h-full w-full" />
+        {/if}
       </div>
 
       {#if $showBetEnable}
@@ -208,9 +217,9 @@
       {/if}
 
       {#if $isTranslationFeatureOn}
-      <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
-        <Translate width={28} height={28} fill={ $isTranslateOn ? "rgb(var(--im-monorepo-primary))" : "#999999"} />
-      </Ripple>
+        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
+          <Translate width={28} height={28} fill={$isTranslateOn ? 'rgb(var(--im-monorepo-primary))' : '#999999'} />
+        </Ripple>
       {/if}
 
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
@@ -219,5 +228,5 @@
     </div>
   </div>
 
-  <div style:height={fixed ? `${($inputRect?.height || 0)}px` : 0} />
+  <div style:height={fixed ? `${$inputRect?.height || 0}px` : 0} />
 </div>
