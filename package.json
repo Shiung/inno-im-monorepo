@@ -4,7 +4,8 @@
     "build": "turbo run build",
     "dev": "turbo run --concurrency 15 dev",
     "lint": "turbo run lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "turbo run release --filter=im-library"
   },
   "devDependencies": {
     "eslint": "^8.0.0",
