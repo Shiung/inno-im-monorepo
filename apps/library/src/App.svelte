@@ -10,7 +10,7 @@
   import { fetchUserKeyInfo } from '$api'
   import { goHomeCallback, fetchLangInfo, userAuth, userVipList, diffTime, bottomNav, showBottomNav, showNavTab, setImVh, isLg } from '$stores'
   import { CODE_STATUS_OK } from '$src/constant'
-  import { localDevUserLogin } from 'utils/dev'
+  import { localDevUserLogin, isSetDevLogin, type IUser } from 'utils/dev'
 
   import NavigationTab from '$containers/NavigationTab'
 
@@ -52,8 +52,15 @@
 
   const unRegListener = regWindowSizeListener([setImVh])
 
-  onMount(() => {
-    if (localStorage.getItem('dev_login') === 'true') localDevUserLogin('sean001', 'test1234')
+  let user: IUser = { account: '', token: '' }
+  onMount(async () => {
+    if (isSetDevLogin()) {
+      user = await localDevUserLogin('sean001', 'test1234')
+      userAuth.set({
+        userAccount: user.account,
+        userToken: user.token
+      })
+    }
     setImVh()
     fetchLangInfo()
   })

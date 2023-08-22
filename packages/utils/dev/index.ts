@@ -70,3 +70,5 @@ export const localDevUserLogin = async (account: string, password: string) => {
     token: (userInfo.token as string) || ''
   }
 }
+
+export const isSetDevLogin = () => localStorage.getItem('dev_login') === 'true'
