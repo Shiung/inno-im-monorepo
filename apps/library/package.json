@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "npm run locales && npm run _dev",
-    "dev:login": "LOGIN=true zx ./env_scripts/login.mjs",
     "build": "npm run locales && npm run _build",
     "build:library": "APP_ENV=library vite build",
     "build:library-watch": "APP_ENV=library vite build -w",
