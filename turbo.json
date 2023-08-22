@@ -6,6 +6,9 @@
       "outputs": [".svelte-kit/**", ".vercel/**"]
     },
     "lint": {},
+    "release": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true
