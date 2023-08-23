@@ -291,7 +291,7 @@ const webAnchors: IMockData[] = [
     url: `${prefix}/v1/anchor/web-anchors`,
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IWebAnchors>({
-      list: Array.from({ length: 5 }, (_, idx) => ({
+      list: Array.from({ length: Number(query.pageSize) }, (_, idx) => ({
         houseId: genHouseId(),
         houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
         userImage: getRandomItemFromArray([
