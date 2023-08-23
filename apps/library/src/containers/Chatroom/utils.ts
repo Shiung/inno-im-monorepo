@@ -20,7 +20,12 @@ export const sortMsgsByMsgIdAsc = (data: IChatMessage[]) => {
 
 export const getOldestMsg = (messages: IChatMessage[]) => (messages?.[0] || {}) as IPushMessageEntity
 
-//@ts-ignore findLast 屬於 stage-3 的新功能，ts 檢查會噴錯
-export const getLatestVisibleMsg = (messages: IChatMessage[]) => (messages.findLast(isMsgVisible) || {}) as IPushMessageEntity
+export const getLatestVisibleMsg = (messages: IChatMessage[]) => {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const chatMsg = messages[i]
+    if (isMsgVisible(chatMsg)) return chatMsg
+  }
+  return {} as IPushMessageEntity
+}
 
 export const hasVisibleMsg = (messages: IChatMessage[]) => messages.findIndex(isMsgVisible) !== -1
