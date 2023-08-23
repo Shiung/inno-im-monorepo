@@ -1,5 +1,9 @@
 //@ts-ignore
 import { publicEncrypt, constants } from 'crypto-browserify'
+// *****IMPORTANT*****
+// 因為 vite 在起 dev 環境的時候沒有全局定義 global 變數為 window (webpack 會)
+// 在引入下面這個套件的時候會因為找不到 global 而出問題
+// 短解可以參考 apps/library/vite.config.ts
 import { Buffer } from 'buffer'
 import { getConfig } from 'env-config'
 
