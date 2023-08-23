@@ -2,6 +2,12 @@ import WatchDog from './watchdog'
 import type { WatchDogProps, WsMasterProps, SyncOptions, IWsMasterEvent, WsMessage } from './types'
 import wsObservables from './wsObservables'
 
+declare global {
+  interface URLSearchParams {
+    size: number
+  }
+}
+
 type PromiseResolver = { resolve: (value: any) => void; timer: ReturnType<typeof setTimeout> }
 
 class WsMaster {
