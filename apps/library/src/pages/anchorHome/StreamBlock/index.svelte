@@ -119,9 +119,9 @@
         >
           <div class="absolute bottom-4 right-4" on:click|stopPropagation={() => streamPlayer?.setMute()} on:keypress>
             {#if muted}
-              <SoundOn />
-            {:else}
               <SoundOff />
+            {:else}
+              <SoundOn />
             {/if}
           </div>
         </InStreamingPlayer>
