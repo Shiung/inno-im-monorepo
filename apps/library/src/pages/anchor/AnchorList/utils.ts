@@ -42,3 +42,7 @@ export const fetchAnchorsApi = async ({ sid, keyWord, lang, pageIdx, pageSize, a
 }
 
 export const isDepositAnchor = (item: IWebAnchor) => item.sid === SID.deposit
+
+export const filterAnchorList = (data: IWebAnchor[]) => {
+  return data.filter((item) => isDepositAnchor(item) || item.matchList?.length > 0)
+}
