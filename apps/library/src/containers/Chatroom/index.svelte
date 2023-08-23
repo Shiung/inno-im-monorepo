@@ -123,6 +123,14 @@
   }
 
   const onFocus = () => {
+    try {
+      window.scroll({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      })
+    } catch {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
     isFocused = true
   }
 
