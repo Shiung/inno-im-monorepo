@@ -1,0 +1,3 @@
+[submodule "packages/protobuf/im/im-pb"]
+	path = packages/protobuf/im/im-pb
+	url = git@gitlab.innotech.me:game/im/im-pb.git
