@@ -2,7 +2,6 @@
   import type { IWebAnchor, IWebAnchorMatch } from 'api/im/types'
 
   import AnchorCard from '$containers/AnchorCard'
-  import { navigationAnchor } from '$src/utils/anchor'
   import { SID } from '$src/constant'
 
   export let anchor: IWebAnchor
