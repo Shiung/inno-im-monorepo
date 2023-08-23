@@ -93,7 +93,9 @@
           offsetTop - (window.innerHeight - ($height || 0) - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight
         )
       } else {
-        unreadDom.scrollIntoView({ block: 'end' })
+        if (dom.clientHeight < dom.scrollHeight) {
+          unreadDom.scrollIntoView({ block: 'end' })
+        }
       }
 
       // flash(unreadDom)
