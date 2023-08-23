@@ -84,6 +84,7 @@
   let boxContainerDom: HTMLDivElement
   let touchMoveOffset: number
   let isExpand: boolean = false
+  let isFocused: boolean = false
 
   let previous: { chatId: string; iid: number } = { chatId: '', iid: 0 }
 
@@ -107,6 +108,9 @@
   // }
 
   const changeRoomSizeByTouchMove = (moveOffset: number) => {
+    if (isFocused){
+      return 
+    }
     const scrollY = isWindow ? window.scrollY : (boxContainerDom?.scrollTop || 0)
 
     if (!isExpand && moveOffset >= CHATROOM_EXPAND_TRIGGER_DISTANCE) {
@@ -116,6 +120,14 @@
       isExpand = false
       sizeChangedCallback({ size: EChatroomSize.NORMAL, transition: true })
     }
+  }
+
+  const onFocus = () => {
+    isFocused = true
+  }
+
+  const onBlur = () => {
+    isFocused = false
   }
 
   const resetStoreModule = () => {
@@ -190,7 +202,7 @@
       </svelte:fragment>
 
       <svelte:fragment slot='input'>
-        <InputArea fixed={isWindow} />
+        <InputArea fixed={isWindow} onFocus={onFocus} onBlur={onBlur}/>
       </svelte:fragment>
 
       

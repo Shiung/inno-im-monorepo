@@ -149,35 +149,38 @@
 <svelte:window on:scroll={isWindow && onWindowScroll} />
 
 <div
-  class="relative flex-1 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white"
-  on:scroll={!isWindow && onDomScroll}
-  style:overscroll-behavior={isWindow ? 'auto' : 'none'}
-  bind:this={dom}
->
-  {#if $isXl}
-    <ButtonLoader loading={fetchMoreLoading} on:fetchMore={fetchMore} />
-  {:else}
-    <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
-  {/if}
+  class="relative flex-1 ">
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white"
+    on:scroll={!isWindow && onDomScroll}
+    style:overscroll-behavior={isWindow ? 'auto' : 'none'}
+    bind:this={dom}
+  >
+    {#if $isXl}
+      <ButtonLoader loading={fetchMoreLoading} on:fetchMore={fetchMore} />
+    {:else}
+      <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
+    {/if}
 
-  {#each $chatMessages as message (message.msgId)}
-    <Message {message} bind:lastReadId self={message.isSelf} />
-  {/each}
+    {#each $chatMessages as message (message.msgId)}
+      <Message {message} bind:lastReadId self={message.isSelf} />
+    {/each}
 
-  {#if !scrollToNewest && !allWatched}
-    <div
-      in:fly={{ y: 50, duration: 300 }}
-      class={twMerge('flex justify-center mx-auto !mt-0 z-10', isWindow ? 'fixed left-1/2 -translate-x-1/2' : 'sticky')}
-      style:bottom={`${$inputAreaOffset}px`}
-    >
-      <Ripple
-        class="flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]"
-        ripple="white"
-        on:click={gotoNewest}
+    {#if !scrollToNewest && !allWatched}
+      <div
+        in:fly={{ y: 50, duration: 300 }}
+        class={twMerge('flex justify-center mx-auto !mt-0 z-10', isWindow ? 'fixed left-1/2 -translate-x-1/2' : 'sticky')}
+        style:bottom={`${$inputAreaOffset}px`}
       >
-        <div>{$t('chat.moreMessage')}</div>
-        <Arrow width={20} height={20} fill="white" />
-      </Ripple>
-    </div>
-  {/if}
+        <Ripple
+          class="flex items-center rounded-full bg-imprimary text-[12px] text-white px-[8px] py-[3px]"
+          ripple="white"
+          on:click={gotoNewest}
+        >
+          <div>{$t('chat.moreMessage')}</div>
+          <Arrow width={20} height={20} fill="white" />
+        </Ripple>
+      </div>
+    {/if}
+  </div>
 </div>

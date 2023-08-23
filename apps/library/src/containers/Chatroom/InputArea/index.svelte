@@ -19,6 +19,8 @@
   import { get } from 'svelte/store'
 
   export let fixed: boolean = false
+  export let onFocus: () => void
+  export let onBlur: () => void
 
   const { chatId, iid, showBetEnable } = getInfo()
   let placeHolder: string = ''
@@ -195,6 +197,8 @@
           {disabled}
           bind:value={message}
           maxlength="300"
+          on:focus={onFocus}
+          on:blur={onBlur}
         />
 
         <Ripple
