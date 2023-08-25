@@ -82,6 +82,7 @@
   let initFetchLoading: boolean = false
   let isTransition = false
   let boxContainerDom: HTMLDivElement
+  let inputContainerDom: HTMLDivElement
   let touchMoveOffset: number
   let isExpand: boolean = false
   let isFocused: boolean = false
@@ -123,7 +124,7 @@
   }
 
   const onFocus = () => {
-    boxContainerDom.scrollIntoView({ block: 'end', behavior: 'smooth' })
+    inputContainerDom?.scrollIntoView({ block: 'end', behavior: 'smooth' })
     isFocused = true
   }
 
@@ -201,12 +202,12 @@
           />
         {/if}
       </svelte:fragment>
-
       <svelte:fragment slot='input'>
-        <InputArea fixed={isWindow} onFocus={onFocus} onBlur={onBlur}/>
+          <div bind:this={inputContainerDom}>
+            <InputArea fixed={isWindow} onFocus={onFocus} onBlur={onBlur}/>
+          </div>
       </svelte:fragment>
 
-      
       {#if !$isXl}
         {#if portalDomEl}
           <Portal target={portalDomEl}>
