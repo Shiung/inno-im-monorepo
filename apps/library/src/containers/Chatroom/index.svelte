@@ -204,7 +204,7 @@
       </svelte:fragment>
       <svelte:fragment slot='input'>
           <div bind:this={inputContainerDom}>
-            <InputArea fixed={isWindow} onFocus={onFocus} onBlur={onBlur}/>
+            <InputArea fixed={isWindow} hasMsgs={$hasMsgs} onFocus={onFocus} onBlur={onBlur}/>
           </div>
       </svelte:fragment>
 
