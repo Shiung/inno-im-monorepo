@@ -171,6 +171,12 @@
   }
 </script>
 
+<style>
+  .input-placeholder::placeholder {
+    color: #c8c8c8;
+  }
+</style>
+
 <div class="relative">
   {#if showWarning}
     <div
@@ -186,13 +192,13 @@
   {/if}
 
   <div
-    class={twMerge('im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]', fixed ? 'fixed' : 'sticky')}
+    class={twMerge('im-shadow bottom-0 left-0 right-0 h-[50px] bg-white pt-[7px] px-[10px]', fixed ? 'fixed' : 'sticky')}
     bind:this={dom}
   >
     <div class="flex items-center">
       <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
-          class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary"
+          class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary input-placeholder"
           placeholder={placeHolder}
           {disabled}
           bind:value={message}
