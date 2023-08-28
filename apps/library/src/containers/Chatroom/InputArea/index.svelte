@@ -19,6 +19,7 @@
   import { get } from 'svelte/store'
 
   export let fixed: boolean = false
+  export let hasMsgs: boolean = false
   export let onFocus: () => void
   export let onBlur: () => void
 
@@ -28,13 +29,14 @@
   let lastSend: number = 0
   let routerCallback: () => void
 
-  $: setStatusAndCallbackByCondition($userInfo, $userAuth, $chatroomSetting, $t)
+  $: setStatusAndCallbackByCondition($userInfo, $userAuth, $chatroomSetting, $t, hasMsgs)
 
   const setStatusAndCallbackByCondition = (
     userInfo: IUserInfo,
     userAuth: IUserAuth,
     chatroomSetting: IChatroomSetting,
-    _t: ITransStore
+    _t: ITransStore,
+    hasMsgs: boolean
   ) => {
     resetStatus()
 
@@ -45,7 +47,7 @@
 
     if (chatroomSetting.errorCode !== 0) return setByChatSettingError(chatroomSetting, userCurrency, _t)
 
-    setNormal(_t)
+    setNormal(_t, hasMsgs)
   }
 
   const resetStatus = () => {
@@ -82,8 +84,8 @@
     }
   }
 
-  const setNormal = (_t: ITransStore) => {
-    placeHolder = _t('chat.normalPlaceholder')
+  const setNormal = (_t: ITransStore, hasMsgs: boolean) => {
+    placeHolder = !hasMsgs ? _t('chat.empty') : ''
     disabled = false
     routerCallback = undefined
   }
