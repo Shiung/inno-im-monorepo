@@ -5,10 +5,10 @@ import { goSportDetailHOF } from '$src/utils/match'
 import { push } from 'svelte-spa-router'
 
 export const navigationAnchor = (isMatchType: boolean, match: IWebAnchorMatch, houseId: string) => {
-  // tell sport detail page that user should play IM anchor video
+  // tell sport detail page that user should play IM anchor video and the target houseId
   // TODO: dirty hack, change later 
   try {
-    sessionStorage.setItem('isPlayImAnchor', 'true')
+    sessionStorage.setItem('selectedImAnchorHouseId', houseId)
   } catch (e) {
     // just ignore
   }  
