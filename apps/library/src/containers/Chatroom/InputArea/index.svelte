@@ -171,11 +171,6 @@
   }
 </script>
 
-<style>
-  .input-placeholder::placeholder {
-    color: #c8c8c8;
-  }
-</style>
 
 <div class="relative">
   {#if showWarning}
@@ -198,7 +193,7 @@
     <div class="flex items-center">
       <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
-          class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary input-placeholder"
+          class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary placeholder-[#c8c8c8]"
           placeholder={placeHolder}
           {disabled}
           bind:value={message}
