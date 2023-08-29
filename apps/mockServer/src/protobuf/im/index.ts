@@ -1,19 +1,39 @@
 import impb from 'protobuf/im/node'
 import {
-  pushMessage,
-  pushMessageEntity,
-  genPushMessages,
-  genFetchOtherOrdersMessages,
-  pushChatSetting
+  pushEncode,
+  pushMessageEntityEncode,
+  fetchMessages,
+  fetchOtherOrders,
+  pushChatSettingEncode,
 } from './messageGenerator'
-
+import { mockMessageEntity, mockChatSetting } from '../../mock/im/chatroom'
+import { getRandomItemFromArray } from 'utils'
 import { subscribed } from './store'
 
 import type { IRequest } from 'protobuf/im/types'
 import type { RawData, WebSocket } from 'ws'
 
-
 let sendInterval: NodeJS.Timer
+
+const pushMessage = (props?: { reqId?: string, value?: Uint8Array }) => {
+  const chatId = getRandomItemFromArray(Array.from(subscribed))
+  const value = props?.value || pushMessageEntityEncode(mockMessageEntity({ chatId }, Date.now()))
+
+  return pushEncode({
+    reqId: '',
+    command: impb.enum.command.PUSH_MESSAGE,
+    data: { value }
+  })
+}
+
+const pushChatSetting = (props?: { reqId?: string, value?: Uint8Array }) => {
+  const value = props?.value || pushChatSettingEncode(mockChatSetting())
+  return pushEncode({
+    reqId: props?.reqId,
+    command: impb.enum.command.CHAT_SETTING,
+    data: { value }
+  })
+}
 
 export const onConnection = (ws: WebSocket) => {
   if (!impb.done) {
@@ -41,7 +61,13 @@ const onReceivePing = (ws: WebSocket) => {
 }
 
 const sendReply = (ws: WebSocket, data: IRequest) => {
-  const buffer = impb.push?.encode({ ...(data.reqId && { reqId: data.reqId }), command: data.command, code: 0, msg: '', data: data.data })
+  const buffer = pushEncode({
+    reqId: data.reqId,
+    command: data.command,
+    msg: 'OK',
+    data: { type_url: data.data.type_url, value: new Uint8Array() }
+  })
+
   if (buffer) ws.send(buffer)
 }
 
@@ -49,24 +75,27 @@ const onReceiveSendMessage = (ws: WebSocket, data: IRequest) => {
   sendReply(ws, data)
   const message = impb.requestMessageEntity?.decode(data.data.value as Uint8Array)
 
-  const pushMsg = pushMessageEntity({
+  const pushMsg = pushMessageEntityEncode({
     content: message.content,
     contentType: message.contentType,
-    sender: '',
+    senderName: '',
     isSelf: true,
     chatId: message.chatId,
     iid: message.iid
   })
 
-  const buf = pushMessage({ value: pushMsg })
+  const buf = pushMessage({ reqId: data.reqId, value: pushMsg })
   if (buf) ws.send(buf)
 }
 
 const onReceiveFetchMessage = (ws: WebSocket, __data: IRequest) => {
   const fetchArgs = impb.fetchArgs.decode(__data.data.value)
-  const _data = genPushMessages({ chatId: fetchArgs.chatId })
+  const _data = fetchMessages({ chatId: fetchArgs.chatId }) || new Uint8Array()
 
-  const buf = impb.push?.encode({ reqId: '', command: impb.enum.command.FETCH_MESSAGES, code: 0, msg: '', data: { value: _data || new Uint8Array() } })
+  const buf = pushEncode({
+    reqId: __data?.reqId,
+    command: impb.enum.command.FETCH_MESSAGES,
+    data: { value: _data } })
   if (buf) {
     setTimeout(() => {
       ws.send(buf)
@@ -76,9 +105,13 @@ const onReceiveFetchMessage = (ws: WebSocket, __data: IRequest) => {
 
 const onReceiveFetchOtherOrders = (ws: WebSocket, __data: IRequest) => {
   const props = impb.fetchOtherOrdersArgs.decode(__data.data.value)
-  const _data = genFetchOtherOrdersMessages(props.iid)
+  const _data = fetchOtherOrders(props.iid) || new Uint8Array()
 
-  const buf = impb.push?.encode({ reqId: '', command: impb.enum.command.FETCH_OTHER_ORDERS, code: 0, msg: '', data: { value: _data || new Uint8Array() } })
+  const buf = pushEncode({
+    reqId: __data?.reqId,
+    command: impb.enum.command.FETCH_OTHER_ORDERS,
+    data: { value: _data }
+  })
   if (buf) ws.send(buf)
 }
 

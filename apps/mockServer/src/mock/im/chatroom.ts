@@ -1,9 +1,9 @@
 import { mock, Random } from 'mockjs'
 import { prefix, withData, genSelfOrder } from './utils'
 
-import { ECommand } from 'protobuf/im/constants'
 import type * as Types from 'api/im/types'
 import type { IMockData } from '../../types'
+import { IPushMessageEntity } from 'protobuf/im/types'
 
 export interface MessageEntityDataProps {
   content?: string
@@ -12,17 +12,19 @@ export interface MessageEntityDataProps {
   isSelf?: boolean
   chatId?: string
   iid?: number
+  vdId?: number
 }
 
-export const messageEntityData = (ts: number = Date.now(), props?: MessageEntityDataProps) => {
+export const mockMessageEntity = (props?: MessageEntityDataProps, ts: number = Date.now()): IPushMessageEntity => {
   const _content = props?.content
   const _sender = props?.sender
   const _contentType = props?.contentType
+  const vdId = props?.vdId || 4
 
   return mock({
     msgId: ts,
     contentType: _contentType || 1,
-    vdId: 4,
+    vdId: vdId || 4,
     senderName: _sender || '@name',
     isSelf: !!props?.isSelf,
     chatId: props?.chatId || '@guid',
@@ -33,7 +35,7 @@ export const messageEntityData = (ts: number = Date.now(), props?: MessageEntity
     content: _content || '@sentence',
     visible: Random.integer(0, 2),
     timestamp: ts,
-    ...(props?.chatId && { houseId: props?.chatId }),
+    houseId: props?.chatId || '',
     lang: Random.pick([
       'zh_CN',
       'zh_HK',
@@ -46,23 +48,13 @@ export const messageEntityData = (ts: number = Date.now(), props?: MessageEntity
       'ko_KR',
       'th_TH',
       'pt_PT'
-    ])
+    ]),
+    translationList: {
+      vi_VN: "@sentence",
+      zh_CN: "@csentence"
+    }
   })
 }
-
-export const pushMessageData = (props: { reqId?: string; value?: Uint8Array }) => {
-  const reqId = props.reqId
-  const value = props.value || new Uint8Array()
-
-  return {
-    ...(reqId && { reqId }),
-    command: ECommand.PUSH_MESSAGE,
-    code: 0,
-    msg: '',
-    data: { value }
-  }
-}
-
 export interface ChatSettingDataProps {
   timeInterval: number
   chatLimitType: number
@@ -70,7 +62,7 @@ export interface ChatSettingDataProps {
   depositLimit: any[]
 }
 
-export const chatSettingData = (props?: ChatSettingDataProps) => {
+export const mockChatSetting = (props?: ChatSettingDataProps) => {
   return mock({
     timeInterval: props?.timeInterval || Random.integer(0, 5) * 1000,
     chatLimitType: props?.chatLimitType || Random.integer(0, 2),
@@ -192,17 +184,15 @@ export const chatSettingData = (props?: ChatSettingDataProps) => {
   })
 }
 
-export const pushChatSettingData = (props: { reqId?: string; value?: Uint8Array }) => {
-  const reqId = props.reqId
-  const value = props.value || new Uint8Array()
-
-  return {
-    ...(reqId && { reqId }),
-    command: ECommand.CHAT_SETTING,
-    code: Random.pick([0, 4007, 4008]),
-    msg: '',
-    data: { value }
-  }
+export const mockOtherOrder = (iid: number) => {
+  return mock({
+    iid,
+    nickName: Random.name(),
+    account:  Random.name(),
+    vip: Random.integer(1, 9),
+    avatar: Random.integer(1, 10),
+    betOrder: { ...genSelfOrder(iid) },
+  })
 }
 
 const expert: IMockData[] = [

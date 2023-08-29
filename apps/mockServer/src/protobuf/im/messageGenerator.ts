@@ -1,51 +1,56 @@
 import impb from 'protobuf/im/node'
-import { getRandomItemFromArray } from 'utils'
 
-import { subscribed } from './store'
+import { mockMessageEntity, mockOtherOrder } from '../../mock/im/chatroom'
+import type { ChatSettingDataProps, MessageEntityDataProps } from '../../mock/im/chatroom'
+import type { IPushMessageEntity, IPush } from 'protobuf/im/types'
 
-import { messageEntityData, pushMessageData, pushChatSettingData, chatSettingData } from '../../mock/im/chatroom'
-import type { MessageEntityDataProps, ChatSettingDataProps } from '../../mock/im/chatroom'
-import { genOtherOrder } from '../../mock/im/utils'
+type PickPartial<T, K extends keyof T> = Pick<T, Extract<keyof T, K>> & Partial<Pick<T, Exclude<keyof T, K>>> 
 
-export const pushMessageEntity = (msg?: MessageEntityDataProps) => {
-  const data = messageEntityData(Date.now(), msg)
-  return impb.pushMessageEntity?.encode(data)
+export const pushEncode = (props: PickPartial<IPush, 'command'>) => {
+  const reqId = props.reqId || ''
+  const code = props.code || 0
+  const msg = props.msg || ''
+  const data = props.data || { value: new Uint8Array() }
+
+  return impb.push?.encode({
+    reqId,
+    command: props.command,
+    code,
+    msg,
+    data
+  })
 }
 
-export const genChatSetting = (setting?: ChatSettingDataProps) => {
-  const data = chatSettingData(setting)
+export const pushMessageEntityEncode = (data: Partial<IPushMessageEntity>) => {
+  return impb.pushMessageEntity?.encode(mockMessageEntity(data))
+}
+
+export const pushMessageEntityWrapperEncode = (data: IPushMessageEntity[]) => {
+  return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
+}
+
+export const pushChatSettingEncode = (data?: ChatSettingDataProps) => {
   return impb.chatSetting?.encode({ setting: JSON.stringify(data) })
-}
-
-export const pushMessage = (props?: { reqId?: string, value?: Uint8Array | undefined }) => {
-  const chatId = getRandomItemFromArray(Array.from(subscribed))
-  const data = pushMessageData({ reqId: props?.reqId, value: props?.value || pushMessageEntity({ chatId }) })
-  return impb.push?.encode(data)
-}
-
-export const pushChatSetting = (props?: { reqId?: string, value?: Uint8Array | undefined }) => {
-  const data = pushChatSettingData({ reqId: props?.reqId, value: props?.value || genChatSetting() })
-  return impb.push?.encode(data)
 }
 
 let lastDateId = Date.now()
 
-export const genPushMessages = (msg?: MessageEntityDataProps) => {
+export const fetchMessages = (msg?: MessageEntityDataProps) => {
   const data = Array.from({ length: 100 }, (_, idx) => ({
-    ...messageEntityData(lastDateId - (100 - idx), msg)
+    ...mockMessageEntity(msg, lastDateId - (100 - idx))
   }))
 
   lastDateId = data[0].msgId
 
-  return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
+  return pushMessageEntityWrapperEncode(data)
 }
 
-export const genFetchOtherOrdersMessages = (props?: { iid: number }) => {
+export const fetchOtherOrders = (props?: { iid: number }) => {
   const data = Array.from({ length: 10 }, (_) => ({
-    ...messageEntityData(Date.now(), {
+    ...mockMessageEntity({
       contentType: 2,
-      content: JSON.stringify(genOtherOrder(props?.iid || 0))
+      content: JSON.stringify(mockOtherOrder(props?.iid || 0))
     })
   }))
-  return impb.pushMessageEntityWrapper?.encode({ pushMessageEntity: data })
+  return pushMessageEntityWrapperEncode(data)
 }
