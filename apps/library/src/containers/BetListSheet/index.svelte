@@ -63,8 +63,6 @@
       data
     })
 
-    console.log('publish res: ', res)
-
     loading = false
     open = false
     betData = null

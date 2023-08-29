@@ -120,8 +120,6 @@
       data
     })
 
-    console.log('publish res: ', res)
-
     if (res.code !== 0) setWarningMsg(res.code, res.msg)
 
     lastSend = now

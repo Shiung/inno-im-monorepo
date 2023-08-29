@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { twMerge } from 'tailwind-merge'
-  import { onDestroy, tick } from 'svelte'
+  import { onDestroy, /* tick */ } from 'svelte'
   import { defaultAllowTranslate, isTranslationFeatureOn, t } from '$stores'
   import { get } from 'svelte/store'
   import Portal from 'svelte-portal'
