@@ -86,10 +86,9 @@
 </script>
 
 <svelte:component this={Container} bind:open>
-  <!-- TODO: will open when backend fixed the bugs -->
-  <!-- <Header class="py-[9px] bg-white px-[15px]">
+  <Header class="py-[9px] bg-white px-[15px]">
     <DetailHeader bind:activedTab tabs={Object.keys(tabs)} />
-  </Header> -->
+  </Header>
   <div class={$isXl ? 'py-2' : 'py-3'}></div>
 
   <Content class="px-[10px] overflow-x-hidden">
