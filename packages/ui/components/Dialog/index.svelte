@@ -13,8 +13,9 @@
   let _initHeight: number
 
   const mount = () => {
-    const html = document.getElementsByTagName('html')[0]
-    html.style.overflowY = 'hidden'
+    // will affect platform scroller
+    // const html = document.getElementsByTagName('html')[0]
+    // html.style.overflowY = 'hidden'
     _open = open
     _initHeight = initHeight ? initHeight(window.innerHeight) : window.innerHeight * 0.86
     height = 0

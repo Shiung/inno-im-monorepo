@@ -18,7 +18,7 @@
 
   import { getInfo } from '../context'
   import { filterDuplicatesByMsgId, getLatestVisibleMsg, getOldestMsg, sortMsgsByMsgIdAsc } from '../utils'
-  import { headerRect, inputRect, loadMoreRect, inputAreaOffset } from '../store'
+  import { headerRect, /* inputRect, */ loadMoreRect, inputAreaOffset } from '../store'
 
   import type { Writable } from 'svelte/store'
   import type { IChatMessage } from 'api/im/types'
@@ -32,6 +32,7 @@
 
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
+  let allWatched: boolean = true
 
   const dispatch = createEventDispatcher()
 
@@ -74,40 +75,54 @@
     checkWatched()
   })
 
-  $: if (dom) observer.observe(dom, { childList: true })
+  // const scrollToUnread = () => {
+  //   const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
+  //   if (unreadDom) {
+  //     // workaround 1
+  //     // need to consider browser collapse height (window.outerHeight - window.innerHeight)
+  //     // unreadDom.scrollIntoView({ block: 'end' })
+  //     // if (isWindow) window.scrollTo({ top: window.scrollY + (window.outerHeight - window.innerHeight) + 83 })
 
-  let allWatched: boolean = true
-  const scrollToUnread = () => {
-    const unreadDom = document.querySelector(`div[data-id='${lastReadId}']`) as HTMLElement
-    if (unreadDom) {
-      // workaround 1
-      // need to consider browser collapse height (window.outerHeight - window.innerHeight)
-      // unreadDom.scrollIntoView({ block: 'end' })
-      // if (isWindow) window.scrollTo({ top: window.scrollY + (window.outerHeight - window.innerHeight) + 83 })
+  //     // workaround 2 - better
+  //     if (isWindow) {
+  //       const { offsetTop, offsetHeight } = unreadDom
+  //       window.scrollTo(
+  //         0,
+  //         offsetTop - (window.innerHeight - ($height || 0) - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight
+  //       )
+  //     } else {
+  //       if (dom.clientHeight < dom.scrollHeight) {
+  //         unreadDom.scrollIntoView({ block: 'end' })
+  //       }
+  //     }
 
-      // workaround 2 - better
-      if (isWindow) {
-        const { offsetTop, offsetHeight } = unreadDom
-        window.scrollTo(
-          0,
-          offsetTop - (window.innerHeight - ($height || 0) - ($headerRect?.height || 0) - ($inputRect?.height || 0)) + offsetHeight
-        )
-      } else {
-        if (dom.clientHeight < dom.scrollHeight) {
-          unreadDom.scrollIntoView({ block: 'end' })
-        }
-      }
+  //     // flash(unreadDom)
+  //   }
+  // }
 
-      // flash(unreadDom)
+  // $: if (dom) scrollToUnread()
+
+  let isInitScroll: boolean = true
+
+  const scrollToLatest = (msgs: any[]) => {
+    if (!isInitScroll) return
+
+    const target = isWindow ? window : dom
+    const targetScrollH = isWindow ? document.documentElement.scrollHeight : dom.scrollHeight
+
+    if (msgs.length) {
+      target.scrollTo({ top: targetScrollH })
+      isInitScroll = false
     }
   }
 
-  $: if (dom) scrollToUnread()
-
   $: if (dom) {
-    messageBoxRect.set(dom?.getBoundingClientRect())
+    observer.observe(dom, { childList: true })
     dispatch('domBound', dom)
+    messageBoxRect.set(dom?.getBoundingClientRect())
   }
+
+  $: if (dom) scrollToLatest($chatMessages)
 
   const checkWatched = () => {
     if (lastReadId === getLatestVisibleMsg($chatMessages).msgId) allWatched = true
@@ -153,7 +168,10 @@
 <div
   class="relative flex-1 ">
   <div
-    class="absolute top-0 bottom-0 left-0 right-0 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white"
+    class={twMerge(
+      "space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white",
+      !isWindow ? 'absolute top-0 bottom-0 left-0 right-0' : ''
+    )}
     on:scroll={!isWindow && onDomScroll}
     style:overscroll-behavior={isWindow ? 'auto' : 'none'}
     bind:this={dom}
