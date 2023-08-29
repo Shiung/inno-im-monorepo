@@ -153,7 +153,10 @@
 <div
   class="relative flex-1 ">
   <div
-    class="absolute top-0 bottom-0 left-0 right-0 space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white"
+    class={twMerge(
+      "space-y-[12px] overflow-y-scroll pb-[10px] px-[15px] bg-white",
+      !isWindow ? 'absolute top-0 bottom-0 left-0 right-0' : ''
+    )}
     on:scroll={!isWindow && onDomScroll}
     style:overscroll-behavior={isWindow ? 'auto' : 'none'}
     bind:this={dom}
