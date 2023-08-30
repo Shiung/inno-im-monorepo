@@ -102,14 +102,14 @@
       return setWarningMsg(EErrorCode.TOO_OFTEN)
     }
 
-    const waitSendMessage = message
+    const trimmedMessage = message.trim()
 
     const data = {
       contentType: im.enum.contentType.CHAT,
       chatId: $chatId || String($iid),
       iid: $iid,
       // replyTo:
-      content: waitSendMessage,
+      content: trimmedMessage,
       ...($chatId && { houseId: $chatId })
     }
 
@@ -202,13 +202,15 @@
           on:blur={onBlur}
         />
 
-        <Ripple
-          class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
-          disabled={disabled || !message}
-          on:click={publishMessage}
-        >
-          <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
-        </Ripple>
+        {#if message?.trim().length > 0}
+          <Ripple
+            class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
+            disabled={disabled || !message}
+            on:click={publishMessage}
+          >
+            <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
+          </Ripple>
+        {/if}
 
         {#if disabled}
           <div class="absolute h-full w-full" />
