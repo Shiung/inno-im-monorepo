@@ -40,7 +40,7 @@
 
 {#if message.visible === im.enum.visible.ALL}
   <div data-id={message.msgId} class="rounded-[10px]" bind:this={thisEl}>
-    <div class="flex">
+    <div class="flex break-all">
       <div class="min-w-[30px] h-[30px] rounded-full flex items-center justify-center">
         {#if avatarImg}<img src={avatarImg} class="block w-[30px] h-[30px]" alt="avatar" />{/if}
       </div>
