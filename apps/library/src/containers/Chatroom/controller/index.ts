@@ -1,12 +1,10 @@
 import { writable, get } from 'svelte/store'
-import { getConfig } from 'env-config'
+import { getConfig, type ILanguages } from 'env-config'
 import { refererTools } from 'utils'
 import { im as impb } from 'protobuf'
 import { im as imWs } from 'api/wsMaster'
 
-import { locale } from '$stores'
-
-import { userAuth, type IUserAuth} from '$stores'
+import { userAuth, locale, type IUserAuth} from '$stores'
 
 import type { IChatMessage } from 'api/im/types'
 import type { Writable } from 'svelte/store'
@@ -22,6 +20,7 @@ let pollingChatSettingTimer: ReturnType<typeof setInterval>
 const pollingChatSettingInterval = 10 * 1000
 
 let unSubUserInfo: ReturnType<typeof userAuth.subscribe>
+let unSubLocale: ReturnType<typeof locale.subscribe>
 
 let pushMessageSub: ReturnType<typeof imWs.subscribe>
 
@@ -147,14 +146,14 @@ const clearAllStores = () => {
   hasVisibleMsgMap.forEach(store => store.set(false))
 }
 
-const imWsConnect = (e: IUserAuth) => {
+const imWsConnect = (user: IUserAuth, language: ILanguages) => {
   imWs.setParams({
-    account: e.userAccount,
+    account: user.userAccount,
     vd: getConfig().vendor_id,
-    lang: get(locale),
+    lang: language,
     referer: refererTools.getBase64()
   })
-  imWs.setSubprotocols(e.userToken)
+  imWs.setSubprotocols(user.userToken)
 
   clearAllStores()
   if (pollingChatSettingTimer) clearTimeout(pollingChatSettingTimer)
@@ -188,7 +187,8 @@ export const active = () => {
   if (isActive) return
 
   isActive = true
-  unSubUserInfo = userAuth.subscribe(imWsConnect)
+  unSubUserInfo = userAuth.subscribe((user) => imWsConnect(user, get(locale)))
+  unSubLocale = locale.subscribe((locale) => imWsConnect(get(userAuth), locale))
   pushMessageSub = subscribePushMessage()
   chatSettingSub = subscribeChatSetting()
   imWs.register(() => {
@@ -199,6 +199,7 @@ export const active = () => {
 
 export const destroy = () => {
   unSubUserInfo()
+  unSubLocale()
   if (pushMessageSub) pushMessageSub.unsubscribe()
   if (chatSettingSub) chatSettingSub.unsubscribe()
   if (pollingChatSettingTimer) clearTimeout(pollingChatSettingTimer)
