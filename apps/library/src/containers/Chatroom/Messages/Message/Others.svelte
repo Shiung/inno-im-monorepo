@@ -40,7 +40,7 @@
 
 {#if message.visible === im.enum.visible.ALL}
   <div data-id={message.msgId} class="rounded-[10px]" bind:this={thisEl}>
-    <div class="flex break-all">
+    <div class="flex">
       <div class="min-w-[30px] h-[30px] rounded-full flex items-center justify-center">
         {#if avatarImg}<img src={avatarImg} class="block w-[30px] h-[30px]" alt="avatar" />{/if}
       </div>
@@ -56,7 +56,7 @@
             <BetOrder message={JSON.parse(message.content)} />
           {:else}
             <div class="bg-[#f5f5f5] rounded-[10px] p-[8px]">
-              <div class="text-[14px]">{$chatT(message.content, message.translationList)}</div>
+              <div class="text-[14px] break-all">{$chatT(message.content, message.translationList)}</div>
             </div>
           {/if}
         </div>
