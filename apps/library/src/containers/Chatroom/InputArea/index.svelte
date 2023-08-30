@@ -93,10 +93,10 @@
   let dom: HTMLDivElement
   $: if (dom) inputRect.set(dom?.getBoundingClientRect())
 
-  let message: string
+  let message: string | undefined
 
   const publishMessage = async () => {
-    if (!message) return
+    if (!message?.trim()) return
     const now = Date.now()
     if (now - lastSend <= $chatroomSetting.timeInterval) {
       return setWarningMsg(EErrorCode.TOO_OFTEN)
