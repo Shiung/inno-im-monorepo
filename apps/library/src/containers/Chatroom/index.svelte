@@ -142,6 +142,8 @@
 
   $: if (!$hasMsgs) $hasMsgs = hasVisibleMsg($chatMessages)
 
+  $: if ($size !== EChatroomSize.EXPAND && isExpand) isExpand = false
+
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
 
