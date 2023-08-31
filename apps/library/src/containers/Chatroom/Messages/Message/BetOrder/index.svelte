@@ -11,6 +11,7 @@
   import { ShowConf, ActiveConf } from './types'
 
   import Loading from 'ui/core/button/loading.svelte'
+  import { getBetOrderAction } from './utils/images'
   
   export let message
   export let self: boolean = false
@@ -28,8 +29,7 @@
   // const status = isMarketClosed ? 'disable' : 'active'
 
   const fetchImg = async (_type: string, _lang: string, _status: string) => {
-    const loader = () => import(`./images/${_type}_${_lang}_${_status}.png`)
-    const img = await loader()
+    const img = await getBetOrderAction(_type, _lang, _status)
     return img.default
   }
 
