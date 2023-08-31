@@ -30,8 +30,8 @@
   let vendor: string = getVendorTheme(getConfig()?.VENDERID || 'vd004')
   // const status = isMarketClosed ? 'disable' : 'active'
 
-  const fetchImg = async (vendor: string, _type: string, _lang: string, _status: string) => {
-    const img = await import(`./images/vendors/${vendor}/${_type}_${_lang}_${_status}.png`)
+  const fetchImg = async (_vendor: string, _type: string, _lang: string, _status: string) => {
+    const img = await import(`./images/vendors/${_vendor}/${_type}_${_lang}_${_status}.png`)
     return img.default
   }
 
