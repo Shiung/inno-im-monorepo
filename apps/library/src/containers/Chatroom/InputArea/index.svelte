@@ -93,7 +93,7 @@
   let dom: HTMLDivElement
   $: if (dom) inputRect.set(dom?.getBoundingClientRect())
 
-  let message: string
+  let message = ''
   $: trimmedMessage = message.trim()
 
   const publishMessage = async () => {
