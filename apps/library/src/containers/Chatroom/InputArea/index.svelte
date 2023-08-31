@@ -93,16 +93,15 @@
   let dom: HTMLDivElement
   $: if (dom) inputRect.set(dom?.getBoundingClientRect())
 
-  let message: string | undefined
+  let message: string
+  $: trimmedMessage = message.trim()
 
   const publishMessage = async () => {
-    if (!message?.trim()) return
+    if (!trimmedMessage) return
     const now = Date.now()
     if (now - lastSend <= $chatroomSetting.timeInterval) {
       return setWarningMsg(EErrorCode.TOO_OFTEN)
     }
-
-    const trimmedMessage = message.trim()
 
     const data = {
       contentType: im.enum.contentType.CHAT,
@@ -202,7 +201,7 @@
           on:blur={onBlur}
         />
 
-        {#if message?.trim().length > 0}
+        {#if trimmedMessage.length > 0}
           <Ripple
             class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
             disabled={disabled || !message}
