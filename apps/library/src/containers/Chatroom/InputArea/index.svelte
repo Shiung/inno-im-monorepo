@@ -3,7 +3,6 @@
   import { twMerge } from 'tailwind-merge'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
-  import { Ripple } from 'ui'
   import { t, type ITransStore, isTranslateOn, allowTranslate, isTranslationFeatureOn } from '$stores'
 
   import Send from '../images/send.svg'
@@ -202,13 +201,13 @@
         />
 
         {#if trimmedMessage.length > 0}
-          <Ripple
+          <button
             class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
             disabled={disabled || !message}
             on:click={publishMessage}
           >
             <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
-          </Ripple>
+          </button>
         {/if}
 
         {#if disabled}
@@ -217,15 +216,15 @@
       </div>
 
       {#if $showBetEnable}
-        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
+        <button class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
           <ShowS width={28} height={28} fill="#999999" />
-        </Ripple>
+        </button>
       {/if}
 
       {#if $isTranslationFeatureOn}
-        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
+        <button class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
           <Translate width={28} height={28} fill={$isTranslateOn ? 'rgb(var(--im-monorepo-primary))' : '#999999'} />
-        </Ripple>
+        </button>
       {/if}
 
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">
