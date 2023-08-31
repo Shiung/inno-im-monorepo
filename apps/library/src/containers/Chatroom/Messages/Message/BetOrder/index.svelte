@@ -11,7 +11,8 @@
   import { ShowConf, ActiveConf } from './types'
 
   import Loading from 'ui/core/button/loading.svelte'
-  import { getBetOrderAction } from './utils/images'
+  import { getConfig } from 'env-config'
+  import { getVendorTheme } from 'utils'
   
   export let message
   export let self: boolean = false
@@ -27,6 +28,12 @@
   let lang: ILanguages = ['zh_CN', 'zh_HK'].includes($locale) ? $locale : 'en_US'
   let status: ActiveType = self ? ActiveConf.disable : ActiveConf.active
   // const status = isMarketClosed ? 'disable' : 'active'
+
+  const getBetOrderAction = async (_type: string, _lang: string, _status: string) => {
+    const vendor = getVendorTheme(getConfig()?.VENDERID || 'vd004')
+    const image = await import(`./images/vendors/${vendor}/${_type}_${_lang}_${_status}.png`)
+    return image
+  }
 
   const fetchImg = async (_type: string, _lang: string, _status: string) => {
     const img = await getBetOrderAction(_type, _lang, _status)
