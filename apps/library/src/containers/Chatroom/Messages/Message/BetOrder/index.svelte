@@ -27,20 +27,15 @@
   let type: ShowType = self ? ShowConf.show : ShowConf.follow
   let lang: ILanguages = ['zh_CN', 'zh_HK'].includes($locale) ? $locale : 'en_US'
   let status: ActiveType = self ? ActiveConf.disable : ActiveConf.active
+  let vendor: string = getVendorTheme(getConfig()?.VENDERID || 'vd004')
   // const status = isMarketClosed ? 'disable' : 'active'
 
-  const getBetOrderAction = async (_type: string, _lang: string, _status: string) => {
-    const vendor = getVendorTheme(getConfig()?.VENDERID || 'vd004')
-    const image = await import(`./images/vendors/${vendor}/${_type}_${_lang}_${_status}.png`)
-    return image
-  }
-
-  const fetchImg = async (_type: string, _lang: string, _status: string) => {
-    const img = await getBetOrderAction(_type, _lang, _status)
+  const fetchImg = async (vendor: string, _type: string, _lang: string, _status: string) => {
+    const img = await import(`./images/vendors/${vendor}/${_type}_${_lang}_${_status}.png`)
     return img.default
   }
 
-  $: (async () => {src = await fetchImg(type, lang, status)})()
+  $: (async () => {src = await fetchImg(vendor, type, lang, status)})()
   
   $: isDisable = isProcess || status === ActiveConf.disable
 
@@ -53,7 +48,7 @@
   }
 
   onMount(async () => {
-    src = await fetchImg(type, lang, status)
+    src = await fetchImg(vendor, type, lang, status)
   })
 </script>
 
