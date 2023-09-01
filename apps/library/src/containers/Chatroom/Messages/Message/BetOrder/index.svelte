@@ -81,7 +81,7 @@
       chatMessage
     />
     <ResultIcon betItem={message} />
-    <Market betItem={message} />
+    <Market betItem={message} showMarketType={false} />
     <BetOn betItem={message} />
     <Ante betItem={message} color={'#999'} />
   </div>
