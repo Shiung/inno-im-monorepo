@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import { createEventDispatcher } from 'svelte'
+  import { onMount, /* createEventDispatcher */ } from 'svelte'
   import { slide } from 'svelte/transition'
   import { Ripple } from 'ui'
   import { t } from '$stores'
@@ -38,6 +38,10 @@
   let showRemind: boolean = false
 
   $: marqueeInfo = [$t('chat.remind')]
+
+  onMount(() => {
+    showRemind = true
+  })
 </script>
 
 <div
