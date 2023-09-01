@@ -3,16 +3,15 @@
   import { tweened } from 'svelte/motion'
   import { fly } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
-  import { createEventDispatcher, tick } from 'svelte'
+  import { createEventDispatcher, tick, onMount } from 'svelte'
   import { im as impb } from 'protobuf'
   import { Ripple } from 'ui'
-
+  
   import { t, isXl } from '$stores'
   import { im as imWs } from 'api/wsMaster'
 
   import { messageBoxRect } from '../store'
   import Message from './Message'
-  import DropdownLoader from './Loader/DropdownLoader.svelte'
   import ButtonLoader from './Loader/ButtonLoader.svelte'
   import Arrow from '../images/arrow_down_small.svg'
 
@@ -33,6 +32,8 @@
   let dom: HTMLDivElement
   let scrollToNewest: boolean = false
   let allWatched: boolean = true
+  let lastScrollTop: number = 0
+  let timeout: ReturnType<typeof setTimeout>
 
   const dispatch = createEventDispatcher()
 
@@ -41,6 +42,19 @@
       scrollToNewest = true
       lastReadId = getLatestVisibleMsg($chatMessages).msgId
     } else scrollToNewest = false
+
+    // wap版取得歷史訊息
+    if ($isXl) return
+    if (scrollTop === 0 && !fetchMoreLoading) fetchMore()
+    if (lastScrollTop === 0 && scrollTop > 0) {
+      dom.style.overflowY = 'initial'
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        dom.style.overflowY = 'scroll'
+        if (!isWindow) dom.scrollTo(0, scrollTop)
+      })
+    }
+    lastScrollTop = scrollTop;
   }
 
   const onDomScroll = (e: UIEvent) => {
@@ -156,7 +170,12 @@
   }
 
   let fetchMoreLoading: boolean = false
+  let fetchCount: number = 0
+  let tempChatMessages: IChatMessage[]
+
   const fetchMore = async () => {
+    if (fetchCount > 1 && tempChatMessages.length === 0 && !$isXl) return
+
     const oldest = getOldestMsg($chatMessages)
     const targetDom = document.querySelector(`div[data-id='${oldest?.msgId}']`)
 
@@ -165,8 +184,10 @@
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: oldest?.msgId || 0, chatId: $chatId || String($iid) }
     })
+    tempChatMessages = res.data.pushMessageEntity
     chatMessages.update((messages) => filterDuplicatesByMsgId(messages, sortMsgsByMsgIdAsc(res.data.pushMessageEntity)))
     fetchMoreLoading = false
+    fetchCount++
 
     await tick()
     targetDom?.scrollIntoView()
@@ -176,6 +197,10 @@
       window.scrollTo({ top: window.scrollY - ($headerRect?.height || 0) - ($loadMoreRect?.height || 0) - offset - ($height || 0) })
     dom.scrollTo({ top: dom.scrollTop - ($headerRect?.height || 0) - offset })
   }
+
+  onMount(() => {
+    if (!$isXl) fetchMore()
+  })
 </script>
 
 <svelte:window on:scroll={isWindow && onWindowScroll} />
@@ -193,8 +218,6 @@
   >
     {#if $isXl}
       <ButtonLoader loading={fetchMoreLoading} on:fetchMore={fetchMore} />
-    {:else}
-      <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
     {/if}
 
     {#each $chatMessages as message (message.msgId)}
