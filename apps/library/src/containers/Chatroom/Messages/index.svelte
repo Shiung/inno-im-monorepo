@@ -3,7 +3,7 @@
   import { tweened } from 'svelte/motion'
   import { fly } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
-  import { createEventDispatcher, tick } from 'svelte'
+  import { afterUpdate, createEventDispatcher, tick } from 'svelte'
   import { im as impb } from 'protobuf'
   import { Ripple } from 'ui'
 
@@ -111,21 +111,6 @@
     const targetScrollH = isWindow ? document.documentElement.scrollHeight : dom.scrollHeight
 
     if (msgs.length) {
-      // hack to make sure the element is scrolled to bottom
-      if (!isWindow) {
-        const startTime = Date.now()
-        const timer = setInterval(() => {
-          // prevent infinite loop
-          if (Date.now() - startTime > 1000) {
-            clearInterval(timer)
-          }
-          if (!dom) return
-          dom.scrollTo({ top: targetScrollH })
-          if (dom.scrollHeight - dom.scrollTop - dom.clientHeight === 0) {
-            clearInterval(timer)
-          }
-        }, 1000 / 60)
-      }
       target.scrollTo({ top: targetScrollH })
       isInitScroll = false
     }
@@ -137,7 +122,9 @@
     messageBoxRect.set(dom?.getBoundingClientRect())
   }
 
-  $: if (dom) scrollToLatest($chatMessages)
+  afterUpdate(() => {
+    if (dom) scrollToLatest($chatMessages)
+  })
 
   const checkWatched = () => {
     if (lastReadId === getLatestVisibleMsg($chatMessages).msgId) allWatched = true
