@@ -4,6 +4,7 @@
   import { getOrdersInfo } from '$containers/Chatroom/context'
 
   export let betItem
+  export let showMarketType: boolean = true
 
   const { sportMarketSummary } = getOrdersInfo()
 
@@ -19,5 +20,7 @@
 
 <div class="flex justify-between">
   <span>{marketTitle}</span>
-  <span>{marketType && $t(`chat.marketType_${marketType}`)}</span>
+  {#if showMarketType}
+    <span>{marketType && $t(`chat.marketType_${marketType}`)}</span>
+  {/if}
 </div>
