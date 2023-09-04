@@ -57,7 +57,7 @@
       ...($chatId && { houseId: $chatId })
     }
 
-    const res = await imWs.publish({
+    await imWs.publish({
       pairId: now,
       eventkey,
       data
@@ -75,12 +75,13 @@
   }
 
   $: self = activedTab === 'chat.betList'
-  $: {
-    // reset betData when activedTab change
-    if (activedTab) {
-      betData = null
-    }
-  }
+
+  // reset betData when activedTab change
+  $: if (activedTab) betData = null
+
+  // reset betData when close bet list
+  $: if (!open) betData = null
+  
 </script>
 
 <svelte:component this={Container} bind:open>
