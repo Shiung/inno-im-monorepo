@@ -71,6 +71,9 @@
         <Marquee
           infos={marqueeInfo}
           class="text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden"
+          loop={false}
+          count={2}
+          on:complete={() => showRemind = false}
         />
       </div>
     {/if}

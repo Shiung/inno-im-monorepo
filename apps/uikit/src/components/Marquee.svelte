@@ -20,3 +20,6 @@
 
 <br/>
 <Marquee infos={list} class='bg-[#ccc]' speed={2} />
+
+<br/>
+<Marquee infos={list} class='bg-[#ccc]' speed={4} loop={false} count={2} on:complete={() => console.log('⛔️⛔️⛔️⛔️⛔️ complete!!!') } />
