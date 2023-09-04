@@ -53,8 +53,8 @@
   }
 
   const rmvPrevMsgsWhenOverLimit = () => {
-    const MAX_MESSAGES_LIMIT = 500
-    const SLICE_SIZE = 300
+    const MAX_MESSAGES_LIMIT = 100
+    const SLICE_SIZE = 60
 
     if ($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update((e) => e.slice(-SLICE_SIZE))
   }
