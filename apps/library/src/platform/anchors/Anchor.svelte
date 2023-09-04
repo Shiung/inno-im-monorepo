@@ -6,7 +6,6 @@
 
   export let anchor: IWebAnchor
   export let matchInfo: { data: IWebAnchorMatch } = null
-
   $: isMatchType = anchor.sid !== SID.deposit
 </script>
 

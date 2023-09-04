@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { twMerge } from 'tailwind-merge'
-  import { onDestroy, tick } from 'svelte'
+  import { onDestroy, /* tick */ } from 'svelte'
   import { defaultAllowTranslate, isTranslationFeatureOn, t } from '$stores'
   import { get } from 'svelte/store'
   import Portal from 'svelte-portal'
@@ -82,6 +82,7 @@
   let initFetchLoading: boolean = false
   let isTransition = false
   let boxContainerDom: HTMLDivElement
+  let inputContainerDom: HTMLDivElement
   let touchMoveOffset: number
   let isExpand: boolean = false
   let isFocused: boolean = false
@@ -123,7 +124,7 @@
   }
 
   const onFocus = () => {
-    boxContainerDom.scrollIntoView({ block: 'end', behavior: 'smooth' })
+    inputContainerDom?.scrollIntoView({ block: 'end', behavior: 'smooth' })
     isFocused = true
   }
 
@@ -140,6 +141,8 @@
   $: changeRoomSizeByTouchMove(touchMoveOffset)
 
   $: if (!$hasMsgs) $hasMsgs = hasVisibleMsg($chatMessages)
+
+  $: if ($size !== EChatroomSize.EXPAND && isExpand) isExpand = false
 
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
@@ -201,12 +204,12 @@
           />
         {/if}
       </svelte:fragment>
-
       <svelte:fragment slot='input'>
-        <InputArea fixed={isWindow} onFocus={onFocus} onBlur={onBlur}/>
+          <div bind:this={inputContainerDom}>
+            <InputArea fixed={isWindow} hasMsgs={$hasMsgs} onFocus={onFocus} onBlur={onBlur}/>
+          </div>
       </svelte:fragment>
 
-      
       {#if !$isXl}
         {#if portalDomEl}
           <Portal target={portalDomEl}>

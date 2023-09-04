@@ -3,7 +3,6 @@
   import { twMerge } from 'tailwind-merge'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
-  import { Ripple } from 'ui'
   import { t, type ITransStore, isTranslateOn, allowTranslate, isTranslationFeatureOn } from '$stores'
 
   import Send from '../images/send.svg'
@@ -19,6 +18,7 @@
   import { get } from 'svelte/store'
 
   export let fixed: boolean = false
+  export let hasMsgs: boolean = false
   export let onFocus: () => void
   export let onBlur: () => void
 
@@ -28,13 +28,14 @@
   let lastSend: number = 0
   let routerCallback: () => void
 
-  $: setStatusAndCallbackByCondition($userInfo, $userAuth, $chatroomSetting, $t)
+  $: setStatusAndCallbackByCondition($userInfo, $userAuth, $chatroomSetting, $t, hasMsgs)
 
   const setStatusAndCallbackByCondition = (
     userInfo: IUserInfo,
     userAuth: IUserAuth,
     chatroomSetting: IChatroomSetting,
-    _t: ITransStore
+    _t: ITransStore,
+    hasMsgs: boolean
   ) => {
     resetStatus()
 
@@ -45,7 +46,7 @@
 
     if (chatroomSetting.errorCode !== 0) return setByChatSettingError(chatroomSetting, userCurrency, _t)
 
-    setNormal(_t)
+    setNormal(_t, hasMsgs)
   }
 
   const resetStatus = () => {
@@ -82,8 +83,8 @@
     }
   }
 
-  const setNormal = (_t: ITransStore) => {
-    placeHolder = _t('chat.normalPlaceholder')
+  const setNormal = (_t: ITransStore, hasMsgs: boolean) => {
+    placeHolder = !hasMsgs ? _t('chat.empty') : ''
     disabled = false
     routerCallback = undefined
   }
@@ -91,23 +92,22 @@
   let dom: HTMLDivElement
   $: if (dom) inputRect.set(dom?.getBoundingClientRect())
 
-  let message: string
+  let message = ''
+  $: trimmedMessage = message.trim()
 
   const publishMessage = async () => {
-    if (!message) return
+    if (!trimmedMessage) return
     const now = Date.now()
     if (now - lastSend <= $chatroomSetting.timeInterval) {
       return setWarningMsg(EErrorCode.TOO_OFTEN)
     }
-
-    const waitSendMessage = message
 
     const data = {
       contentType: im.enum.contentType.CHAT,
       chatId: $chatId || String($iid),
       iid: $iid,
       // replyTo:
-      content: waitSendMessage,
+      content: trimmedMessage,
       ...($chatId && { houseId: $chatId })
     }
 
@@ -117,8 +117,6 @@
       eventkey: im.enum.command.SEND_MESSAGE,
       data
     })
-
-    console.log('publish res: ', res)
 
     if (res.code !== 0) setWarningMsg(res.code, res.msg)
 
@@ -171,6 +169,7 @@
   }
 </script>
 
+
 <div class="relative">
   {#if showWarning}
     <div
@@ -186,13 +185,13 @@
   {/if}
 
   <div
-    class={twMerge('im-shadow bottom-0 left-0 right-0 h-[83px] bg-white pt-[8px] px-[10px]', fixed ? 'fixed' : 'sticky')}
+    class={twMerge('im-shadow bottom-0 left-0 right-0 h-[50px] bg-white pt-[7px] px-[10px]', fixed ? 'fixed' : 'sticky')}
     bind:this={dom}
   >
     <div class="flex items-center">
       <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
-          class="h-[36px] w-full bg-[#F5F5F5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary"
+          class="h-[36px] w-full bg-[#f5f5f5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary placeholder-[#c8c8c8] disabled:opacity-100"
           placeholder={placeHolder}
           {disabled}
           bind:value={message}
@@ -201,13 +200,15 @@
           on:blur={onBlur}
         />
 
-        <Ripple
-          class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
-          disabled={disabled || !message}
-          on:click={publishMessage}
-        >
-          <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
-        </Ripple>
+        {#if trimmedMessage.length > 0}
+          <button
+            class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
+            disabled={disabled || !message}
+            on:click={publishMessage}
+          >
+            <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
+          </button>
+        {/if}
 
         {#if disabled}
           <div class="absolute h-full w-full" />
@@ -215,15 +216,15 @@
       </div>
 
       {#if $showBetEnable}
-        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
+        <button class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
           <ShowS width={28} height={28} fill="#999999" />
-        </Ripple>
+        </button>
       {/if}
 
       {#if $isTranslationFeatureOn}
-        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
+        <button class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
           <Translate width={28} height={28} fill={$isTranslateOn ? 'rgb(var(--im-monorepo-primary))' : '#999999'} />
-        </Ripple>
+        </button>
       {/if}
 
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">

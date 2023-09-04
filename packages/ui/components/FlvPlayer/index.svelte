@@ -90,6 +90,8 @@
     flvPlayer.on(flvjs.Events.MEDIA_INFO, internal ? internalOnReadyCallback : onReadyCallback)
 
     flvPlayer.on(flvjs.Events.STATISTICS_INFO, (e) => {
+      if (e.decodedFrames === 0) return internal ? internalOnLostDataCallback : onLostDataCallback()
+
       if (e.speed === 0) noDataCount += 1
       else noDataCount = 0
     })
@@ -141,7 +143,14 @@
   })
 </script>
 
-<video class={twMerge('w-full h-full lg:rounded-t-[10px]', !url && 'h-0', $$props.class)} autoplay bind:this={video} bind:paused bind:muted {controls}>
+<video
+  class={twMerge('w-full h-full lg:rounded-t-[10px]', !url && 'h-0', $$props.class)}
+  autoplay
+  bind:this={video}
+  bind:paused
+  bind:muted
+  {controls}
+>
   <track kind="captions" />
   Your browser is too old which doesn't support HTML5 video.
 </video>
