@@ -12,7 +12,7 @@
     type EChatroomSize
   } from '$src/containers/Chatroom'
 
-  import { getUser, type IUser } from './utils'
+  import { localDevUserLogin, isSetDevLogin, type IUser } from 'utils'
 
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
@@ -110,7 +110,9 @@
   }
 
   onMount(async () => {
-    user = await getUser()
+    if (isSetDevLogin()) {
+      user = await localDevUserLogin('sean001', 'test1234')
+    }
     await fetchMarket()
     controller.active()
     selfOrdersCallback = fetchSelfOrders
