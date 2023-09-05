@@ -75,7 +75,7 @@ export default defineConfig(({ mode }) => {
       'process.env.login': process.env.LOGIN,
       'process.env.SCREENS': genScreens(),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      global: 'globalThis'
+      global: 'globalThis' // detail: packages/utils/dev/index.ts
     },
     plugins: [
       svelte({ preprocess: sveltePreprocess() }),
