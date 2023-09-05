@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import { twMerge } from 'tailwind-merge'
-  import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
-  import { locale, getUseLang, isLg } from '$stores'
+  import type { IPager, IWebAnchor } from 'api/im/types'
+  import { getUseLang, isLg } from '$stores'
   import { AbortControllers } from 'utils'
 
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
@@ -10,11 +10,7 @@
   import { NO_LANG } from '$src/constant'
   import { list, matchSid } from '../store'
 
-  import {
-    fetchAnchorsApi,
-    fetchAnchorMatches,
-    isDepositAnchor
-  } from '$src/pages/anchor/AnchorList/utils'
+  import { fetchAnchorsApi } from '$src/pages/anchor/AnchorList/utils'
   import Loading from '$src/pages/anchor/AnchorList/Loading.svelte'
 
   let pageIdx = 1
@@ -26,45 +22,16 @@
   let data: IWebAnchor[] = []
   let hasMoreData: boolean = false
 
-  const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
-
   const abortControllers = new AbortControllers()
 
   const dispatch = createEventDispatcher()
-
-  const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
-    try {
-      if (!matchesMap[houseId]) matchesMap[houseId] = { data: null }
-
-      const [first] = await fetchAnchorMatches(houseId, $locale)
-      if (first) matchesMap[houseId].data = first
-    } catch (error) {
-      console.error(error)
-      return Promise.reject(error)
-    }
-  }
-
-  const fetchMatchesFromAnchors = async (data: IWebAnchor[]) => {
-    return await Promise.allSettled(
-      data.reduce((filtered, item) => {
-        if (isDepositAnchor(item)) return filtered
-        return [...filtered, fetchMatchesByAnchor(item.houseId)]
-      }, [])
-    ).then(() => filterAnchorsHasMatch(data))
-  }
-
-  const filterAnchorsHasMatch = (data: IWebAnchor[]) => {
-    return data.filter(item => matchesMap[item.houseId]?.data )
-  }
 
   const loadAnchors = async () => {
     try {
       const { list, pager } = await fetchAnchorsApi({ sid, lang: useLang, pageIdx, pageSize })
 
       if (list?.length) {
-        const filteredResData = await fetchMatchesFromAnchors(
-          filterAnchorsByMatchCountAndCurrentMatchAnchors(list)
-        )
+        const filteredResData = filterAnchorsByMatchCountAndCurrentMatchAnchors(list)
         data = [...data, ...filteredResData]
       }
 
@@ -105,9 +72,7 @@
         { signal: controller.ctl.signal }
       )
       if (list?.length) {
-        data = await fetchMatchesFromAnchors(
-          filterAnchorsByMatchCountAndCurrentMatchAnchors(list)
-        )
+        data = filterAnchorsByMatchCountAndCurrentMatchAnchors(list)
 
         setHasMoreData(pager, data.length)
 
@@ -129,7 +94,7 @@
   }
 
   const filterAnchorsByMatchCountAndCurrentMatchAnchors = (data: IWebAnchor[]) => {
-    return data.filter(item => item.matchCount && !list.get(item.houseId))
+    return data.filter(item => item.matchList?.length > 0 && !list.get(item.houseId))
   }
 
   $: sid = $matchSid
@@ -154,7 +119,7 @@
           <Anchor
             class='items-stretch'
             {anchor}
-            matchInfo={matchesMap[anchor?.houseId]}
+            matchInfo={{ data: anchor?.matchList[0] }}
           />
         {/each}
       </div>
