@@ -22,7 +22,7 @@
 
   // export let showClose: false
 
-  const { height } = getInfo()
+  const { height, chatId } = getInfo()
 
   const loadAnchorTitle = async () => {
     let comp = await AnchorTitle()
@@ -54,9 +54,9 @@
   bind:this={dom}
 >
   <div class="flex items-center w-full">
-    {#if anchor}
+    {#if $chatId}
       {#await promise then AnchorTitle}
-        <AnchorTitle {anchor} />
+        <AnchorTitle anchorId={$chatId} />
       {/await}
     {:else}
       <div class="text-[18px] font-semibold">{$t('chat.title')}</div>
