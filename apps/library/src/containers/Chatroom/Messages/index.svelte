@@ -6,14 +6,12 @@
   import { afterUpdate, createEventDispatcher, tick } from 'svelte'
   import { im as impb } from 'protobuf'
   import { Ripple } from 'ui'
-
-  import { t, isXl } from '$stores'
+  
+  import { t } from '$stores'
   import { im as imWs } from 'api/wsMaster'
 
   import { messageBoxRect } from '../store'
   import Message from './Message'
-  import DropdownLoader from './Loader/DropdownLoader.svelte'
-  import ButtonLoader from './Loader/ButtonLoader.svelte'
   import Arrow from '../images/arrow_down_small.svg'
 
   import { getInfo } from '../context'
@@ -41,6 +39,8 @@
       scrollToNewest = true
       lastReadId = getLatestVisibleMsg($chatMessages).msgId
     } else scrollToNewest = false
+
+    if (scrollTop < 700 && !fetchMoreLoading) fetchMore()
   }
 
   const onDomScroll = (e: UIEvent) => {
@@ -53,8 +53,8 @@
   }
 
   const rmvPrevMsgsWhenOverLimit = () => {
-    const MAX_MESSAGES_LIMIT = 500
-    const SLICE_SIZE = 300
+    const MAX_MESSAGES_LIMIT = 100
+    const SLICE_SIZE = 60
 
     if ($chatMessages.length > MAX_MESSAGES_LIMIT) chatMessages.update((e) => e.slice(-SLICE_SIZE))
   }
@@ -143,7 +143,12 @@
   }
 
   let fetchMoreLoading: boolean = false
+  let isFetched: boolean = false
+  let tempChatMessages: IChatMessage[]
+
   const fetchMore = async () => {
+    if (isFetched && tempChatMessages.length === 0) return
+
     const oldest = getOldestMsg($chatMessages)
     const targetDom = document.querySelector(`div[data-id='${oldest?.msgId}']`)
 
@@ -152,16 +157,18 @@
       eventkey: impb.enum.command.FETCH_MESSAGES,
       data: { pointer: oldest?.msgId || 0, chatId: $chatId || String($iid) }
     })
+    tempChatMessages = res.data.pushMessageEntity
     chatMessages.update((messages) => filterDuplicatesByMsgId(messages, sortMsgsByMsgIdAsc(res.data.pushMessageEntity)))
     fetchMoreLoading = false
+    isFetched = true
 
     await tick()
     targetDom?.scrollIntoView()
 
     const offset = 10
-    if (isWindow)
+    if (isWindow) {
       window.scrollTo({ top: window.scrollY - ($headerRect?.height || 0) - ($loadMoreRect?.height || 0) - offset - ($height || 0) })
-    dom.scrollTo({ top: dom.scrollTop - ($headerRect?.height || 0) - offset })
+    }
   }
 </script>
 
@@ -178,12 +185,6 @@
     style:overscroll-behavior={isWindow ? 'auto' : 'none'}
     bind:this={dom}
   >
-    {#if $isXl}
-      <ButtonLoader loading={fetchMoreLoading} on:fetchMore={fetchMore} />
-    {:else}
-      <DropdownLoader loading={fetchMoreLoading} root={dom} on:fetchMore={fetchMore} />
-    {/if}
-
     {#each $chatMessages as message (message.msgId)}
       <Message {message} bind:lastReadId self={message.isSelf} />
     {/each}
