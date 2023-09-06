@@ -38,13 +38,25 @@
   import InputArea from './InputArea/index.svelte'
   import BetListSheet from '../BetListSheet/index.svelte'
 
-  import { genId, subscribeRoom, unsubscribeRoom, getMessages, getHasVisibleMsgs, chatEnv } from './controller'
+  import { genId, subscribeRoom, unsubscribeRoom, getMessages, getHasVisibleMsgs } from './controller'
   import { setInfo, setOrdersInfo } from './context'
   import { EChatroomSize, CHATROOM_EXPAND_TRIGGER_DISTANCE } from './constant'
   import { showBetList } from './store'
   import { hasVisibleMsg } from './utils'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header, headerClass } = setInfo($info)
+  const {
+    displayType,
+    useScrollCollapse,
+    height,
+    size,
+    chatId,
+    iid,
+    showBetEnable,
+    expandAnimation,
+    header,
+    headerClass,
+    subscribeBindingChatroom
+  } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -61,6 +73,7 @@
       if (get(headerClass) !== e.headerClass) headerClass.set(e.headerClass)
       if (e.isDefaultTranslate !== null && get(defaultAllowTranslate) !== e.isDefaultTranslate) defaultAllowTranslate.set(e.isDefaultTranslate)
       if (get(isTranslationFeatureOn) !== e.isTranslationFeatureOn) isTranslationFeatureOn.set(Boolean(e.isTranslationFeatureOn))
+      if (get(subscribeBindingChatroom) !== e.subscribeBindingChatroom) subscribeBindingChatroom.set(Boolean(e.subscribeBindingChatroom))
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -151,13 +164,13 @@
     previous = { chatId: $chatId, iid: $iid }
   }
 
-  $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
+  $: if ($subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
 
   onDestroy(() => {
     unsubscribeStoreModule()
     resetStoreModule()
 
-    if($chatEnv.subscribeBindingChatroom) unsubscribeRoom(previous)
+    if($subscribeBindingChatroom) unsubscribeRoom(previous)
   })
 </script>
 
