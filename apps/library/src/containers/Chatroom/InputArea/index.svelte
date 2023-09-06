@@ -3,7 +3,6 @@
   import { twMerge } from 'tailwind-merge'
   import { im as imWs } from 'api/wsMaster'
   import { im } from 'protobuf'
-  import { Ripple } from 'ui'
   import { t, type ITransStore, isTranslateOn, allowTranslate, isTranslationFeatureOn } from '$stores'
 
   import Send from '../images/send.svg'
@@ -93,23 +92,22 @@
   let dom: HTMLDivElement
   $: if (dom) inputRect.set(dom?.getBoundingClientRect())
 
-  let message: string
+  let message = ''
+  $: trimmedMessage = message.trim()
 
   const publishMessage = async () => {
-    if (!message) return
+    if (!trimmedMessage) return
     const now = Date.now()
     if (now - lastSend <= $chatroomSetting.timeInterval) {
       return setWarningMsg(EErrorCode.TOO_OFTEN)
     }
-
-    const waitSendMessage = message
 
     const data = {
       contentType: im.enum.contentType.CHAT,
       chatId: $chatId || String($iid),
       iid: $iid,
       // replyTo:
-      content: waitSendMessage,
+      content: trimmedMessage,
       ...($chatId && { houseId: $chatId })
     }
 
@@ -202,13 +200,15 @@
           on:blur={onBlur}
         />
 
-        <Ripple
-          class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
-          disabled={disabled || !message}
-          on:click={publishMessage}
-        >
-          <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
-        </Ripple>
+        {#if trimmedMessage.length > 0}
+          <button
+            class="absolute flex items-center justify-center rounded-full h-[26px] w-[26px] right-[10px]"
+            disabled={disabled || !message}
+            on:click={publishMessage}
+          >
+            <Send width={18} height={18} fill="rgb(var(--im-monorepo-primary))" />
+          </button>
+        {/if}
 
         {#if disabled}
           <div class="absolute h-full w-full" />
@@ -216,15 +216,15 @@
       </div>
 
       {#if $showBetEnable}
-        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
+        <button class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={handleOrderClick}>
           <ShowS width={28} height={28} fill="#999999" />
-        </Ripple>
+        </button>
       {/if}
 
       {#if $isTranslationFeatureOn}
-        <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
+        <button class="flex items-center justify-center rounded-full h-[36px] w-[36px]" on:click={toggleTranslation}>
           <Translate width={28} height={28} fill={$isTranslateOn ? 'rgb(var(--im-monorepo-primary))' : '#999999'} />
-        </Ripple>
+        </button>
       {/if}
 
       <!-- <Ripple class="flex items-center justify-center rounded-full h-[36px] w-[36px]">

@@ -270,12 +270,28 @@ const getSid = (anchorType: number) => {
   return Random.pick([1,2,3,100])
 }
 
+const genMatchList = (): Types.IWebAnchorMatch => {
+  return mock({
+    ...genTeamInfo(true) as Pick<Types.IWebAnchorMatch, 'homeId' | 'homeName' | 'awayId' | 'awayName'>,
+    tnName: "@cname",
+    tid: Random.integer(10000, 50000),
+    sid: Random.integer(1, 3) as Types.IWebAnchorMatch['sid'],
+    iid: Random.integer(0, 99999),
+    matchId: "@id",
+    matchTime: randomPostTime(),
+    matchStatus: Random.integer(1, 8) as Types.IWebAnchorMatch['matchStatus'],
+    mid: Random.integer(10000, 50000),
+    vd: Random.word(1),
+    score: "@integer(1,10)-@integer(1,10)"
+  })
+}
+
 const webAnchors: IMockData[] = [
   {
     url: `${prefix}/v1/anchor/web-anchors`,
     timeout: 500,
     response: ({ query }) => mock(withData<Types.IWebAnchors>({
-      list: Array.from({ length: Number(query.pageSize) || 20 }, (_, idx) => ({
+      list: Array.from({ length: Number(query.pageSize) }, (_, idx) => ({
         houseId: genHouseId(),
         houseImage: "https://oss-logo-hk.oss-accelerate.aliyuncs.com/business/image/596/PztnHi1kR12iCdGOCr1lvA.png",
         userImage: getRandomItemFromArray([
@@ -293,6 +309,7 @@ const webAnchors: IMockData[] = [
         fansCount: Random.natural(0, 10000000),
         attentionStatus: Random.natural(0, 2) as Types.IWebAnchor['attentionStatus'],
         matchCount: Random.natural(0, 10),
+        matchList: Array.from({ length: Random.natural(0, 2) }, () => genMatchList()),
         houseIntroduction: "@csentence",
         lang: query.lang
       })),

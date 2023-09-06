@@ -4,13 +4,12 @@
   export let betItem
 
   const { FE_CDN_URL, DEPLOY_ENV, VENDERID } = getConfig()
-  const { nickName = '', account = '', vip } = betItem
-  const name = (nickName || account).substring(0, 3) + '***** :'
-  const vipUrl = `${FE_CDN_URL}/frontend/${DEPLOY_ENV}/fe-images/${VENDERID}/chatRoom/vip/${vip}.png`
+  $: name = betItem?.senderName ? (betItem?.senderName).substring(0, 3) + '***** :' : ''
+  $: vipUrl = `${FE_CDN_URL}/frontend/${DEPLOY_ENV}/fe-images/${VENDERID}/chatRoom/vip/${betItem?.vip}.png`
 </script>
 
 <div class="flex">
-  {#if vip}
+  {#if betItem?.vip}
     <img class="w-[36px] h-[14px] mr-[5px]" src={vipUrl} alt="" />
   {/if}
   <div class="text-[rgb(var(--im-monorepo-primary))]">

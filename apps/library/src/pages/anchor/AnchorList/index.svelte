@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { IPager, IWebAnchor, IWebAnchorMatch } from 'api/im/types'
+  import type { IPager, IWebAnchor } from 'api/im/types'
   import { convertSid, AbortControllers } from 'utils'
-  import { locale, getUseLang, isLg, t, isXl } from '$stores'
+  import { getUseLang, isLg, t, isXl } from '$stores'
   import { params } from 'svelte-spa-router'
 
   import RetryInfiniteScroll from '$components/RetryInfiniteScroll'
@@ -13,7 +13,7 @@
   import Anchor from './Anchor/index.svelte'
   import Search from './Search/index.svelte'
 
-  import { fetchAnchorsApi, fetchAnchorMatches, isDepositAnchor } from './utils'
+  import { fetchAnchorsApi, filterAnchorList } from './utils'
   import BackBar from '$containers/BackBar'
 
   let keyWord = ''
@@ -25,8 +25,6 @@
   let initLoading: boolean = false
   let data: IWebAnchor[] = []
   let hasMoreData: boolean = false
-
-  const matchesMap: { [k: string]: { data: IWebAnchorMatch } } = {}
 
   const abortControllers = new AbortControllers()
 
@@ -50,47 +48,17 @@
     return ret
   }
 
-  const fetchMatchesByAnchor = async (houseId: IWebAnchor['houseId']) => {
-    try {
-      if (!matchesMap[houseId]) matchesMap[houseId] = { data: null }
-
-      const [first] = await fetchAnchorMatches(houseId, $locale)
-      if (first) matchesMap[houseId].data = first
-    } catch (error) {
-      console.error(error)
-      return Promise.reject(error)
-    }
-  }
-
-  const fetchMatchesFromAnchors = async (data: IWebAnchor[]) => {
-    return await Promise.allSettled(
-      data.reduce((filtered, item) => {
-        if (isDepositAnchor(item)) return filtered
-        return [...filtered, fetchMatchesByAnchor(item.houseId)]
-      }, [])
-    ).then(() => filterAnchorsBySidAndHasMatch(data))
-  }
-
   const loadAnchors = async () => {
     try {
       const resData = await fetchAnchors({ sid, keyWord, useLang })
       if (resData?.length) {
-        const filteredResData = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
+        const filteredResData = filterAnchorList(resData)
         data = [...data, ...filteredResData]
       }
     } catch (error) {
       console.error(error)
       setHasMoreData()
     }
-  }
-
-  const filterAnchorsBySidAndHasMatch = (data: IWebAnchor[]) => {
-    return data.filter((item) => isDepositAnchor(item) || matchesMap[item.houseId].data)
-  }
-
-  // TODO: 待後端與三方 api 調整後移除，後端會只給 matchCount > 0 的賽事主播
-  export const filterAnchorsBySidAndMatchCount = (data: IWebAnchor[]) => {
-    return data.filter((item) => isDepositAnchor(item) || item.matchCount)
   }
 
   const setHasMoreData = (pager?: IPager) => {
@@ -117,7 +85,7 @@
       initLoading = true
       const resData = await fetchAnchors({ sid, keyWord, useLang }, { signal: controller.ctl.signal })
       if (resData?.length) {
-        data = await fetchMatchesFromAnchors(filterAnchorsBySidAndMatchCount(resData))
+        data = filterAnchorList(resData)
 
         while (data.length < ANCHOR_MIN_COUNT && hasMoreData) {
           await loadAnchors()
@@ -171,7 +139,7 @@
         <RetryInfiniteScroll hasMore={hasMoreData} load={() => loadAnchors()}>
           <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {#each data || [] as anchor}
-              <Anchor class="items-stretch" {anchor} matchInfo={matchesMap[anchor?.houseId]} />
+              <Anchor class="items-stretch" {anchor} matchInfo={{ data: anchor?.matchList[0] }} />
             {/each}
           </div>
         </RetryInfiniteScroll>
