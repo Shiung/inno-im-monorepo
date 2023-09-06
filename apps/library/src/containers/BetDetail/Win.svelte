@@ -19,7 +19,7 @@
 
     <div class="text-[18px] text-[#cb0202]">
       {amountThousandthTransformer(netWin, {
-        decimal: CurrencyMap[currency].decimal,
+        decimal: CurrencyMap[currency]?.decimal,
         trimZero: true,
         format: {
           prefix: netWin > 0 ? '+' : '',
@@ -37,7 +37,7 @@
     <CurrencyIcon class="w-[20px] h-[20px] mx-[5px]" {currency} />
 
     <div class={chatMessage ? 'text-[22px]' : 'text-[18px]'}>
-      {amountThousandthTransformer(mayWinAmount, { decimal: CurrencyMap[currency].decimal, trimZero: true })}
+      {amountThousandthTransformer(mayWinAmount, { decimal: CurrencyMap[currency]?.decimal, trimZero: true })}
     </div>
   {/if}
 </div>

@@ -17,6 +17,6 @@
   <CurrencyIcon class="w-[15px] h-[15px] mx-[5px]" {currency} />
 
   <div class="text-[14px]" style:color>
-    {amountThousandthTransformer(totalAnte, { decimal: CurrencyMap[currency].decimal, trimZero: true })}
+    {amountThousandthTransformer(totalAnte, { decimal: CurrencyMap[currency]?.decimal, trimZero: true })}
   </div>
 </div>
