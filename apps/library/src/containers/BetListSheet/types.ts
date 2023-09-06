@@ -10,6 +10,7 @@ export type ITabs = {
 interface ICurrencyValue {
   displayName: string
   minBet: number
+  decimal: number
 }
 
 export type ICurrencyMap = {

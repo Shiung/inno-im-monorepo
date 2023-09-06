@@ -4,6 +4,7 @@
   import { amountThousandthTransformer } from 'utils/amount'
 
   import CurrencyIcon from '$components/CurrencyIcon/index.svelte'
+  import { CurrencyMap } from '$containers/BetListSheet/constant'
 
   export let betItem
   export let chatMessage = false
@@ -18,7 +19,7 @@
 
     <div class="text-[18px] text-[#cb0202]">
       {amountThousandthTransformer(netWin, {
-        decimal: 2,
+        decimal: CurrencyMap[currency].decimal,
         trimZero: true,
         format: {
           prefix: netWin > 0 ? '+' : '',
@@ -36,7 +37,7 @@
     <CurrencyIcon class="w-[20px] h-[20px] mx-[5px]" {currency} />
 
     <div class={chatMessage ? 'text-[22px]' : 'text-[18px]'}>
-      {amountThousandthTransformer(mayWinAmount, { decimal: 2, trimZero: true })}
+      {amountThousandthTransformer(mayWinAmount, { decimal: CurrencyMap[currency].decimal, trimZero: true })}
     </div>
   {/if}
 </div>
