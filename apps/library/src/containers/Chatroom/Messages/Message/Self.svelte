@@ -42,7 +42,7 @@
           <div class="rounded-[10px] p-[8px] bg-imprimary relative
             after:content-[''] after:absolute after:right-0 after:top-[12px] after:translate-x-full
             after:border-transparent after:border-[5px] after:border-l-[rgb(var(--im-monorepo-primary))]">
-            <div class="text-[14px] text-white">{message.content}</div>
+            <div class="text-[14px] text-white break-all">{message.content}</div>
           </div>
         {:else if message.contentType === im.enum.contentType.ORDER}
           <BetOrder message={JSON.parse(message.content)} self />

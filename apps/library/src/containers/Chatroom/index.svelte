@@ -124,7 +124,7 @@
   }
 
   const onFocus = () => {
-    inputContainerDom?.scrollIntoView({ block: 'end', behavior: 'smooth' })
+    inputContainerDom?.scrollIntoView({ block: 'end' })
     isFocused = true
   }
 
