@@ -1,6 +1,7 @@
 <script lang="ts">
   import { im } from 'api'
   import type { IWebAnchor, IPager } from 'api/im/types'
+  import type { ILanguages } from 'env-config'
 
   import Header from '$components/Header'
   // import VIPNotification from '$containers/VIPNotification'
@@ -11,7 +12,7 @@
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
   import { setAnchorStore, initAnchorStore } from './store'
-  import { isLg } from '$stores'
+  import { isLg, locale } from '$stores'
 
   let streaming: IWebAnchor
 
@@ -51,7 +52,7 @@
       filterMatchesFromAnchors(list)
     } else if (hasMoreData) {
       loading = false
-      fetchAnchors(useLang)
+      fetchAnchors(useLang, $locale)
     } else {
       loading = false
     }
@@ -64,7 +65,7 @@
     if (hasMoreData) pageIdx++
   }
 
-  const fetchAnchors = async (lang: string) => {
+  const fetchAnchors = async (lang: string, platformLang: ILanguages) => {
     try {
       // 避免連發兩次
       if (loading) return
@@ -78,7 +79,7 @@
           lang,
           anchorType: 1
         },
-        headers: { 'Accept-Language': lang }
+        headers: { 'Accept-Language': platformLang }
       })
 
       const { list, pager } = response?.data || {}
@@ -99,7 +100,7 @@
     streaming = undefined
     data = []
 
-    fetchAnchors(useLang)
+    fetchAnchors(useLang, $locale)
   }
 </script>
 
