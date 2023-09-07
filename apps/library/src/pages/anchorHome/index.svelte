@@ -1,14 +1,12 @@
 <script lang="ts">
   import { im } from 'api'
   import type { IWebAnchor, IPager } from 'api/im/types'
-  import type { ILanguages } from 'env-config'
 
   import Header from '$components/Header'
   // import VIPNotification from '$containers/VIPNotification'
 
-  import { locale, getUseLang } from '$stores'
+  import { getUseLang } from '$stores'
   import { NO_LANG } from '$src/constant'
-  import { fetchAnchorMatches } from '$pages/anchor/AnchorList/utils'
 
   import StreamBlock from './StreamBlock'
   import AnchorBlock from './AnchorBlock'
@@ -29,14 +27,13 @@
 
   $: useLang = $getUseLang()
 
-  const fetchMatchesFromAnchors = async (list: typeof originData, lang: ILanguages) => {
+  const filterMatchesFromAnchors = (list: typeof originData) => {
     if (Object.keys($anchorMatches).length >= 5) return (loading = false)
 
-    const { matchCount, houseId } = list[0] || {}
-    if (matchCount > 0) {
+    const { matchList = [], houseId } = list[0] || {}
+    if (matchList?.length > 0) {
       anchorMatchLoadings.update((prev) => ({ ...prev, [houseId]: true }))
-      const [firstMatch] = await fetchAnchorMatches(houseId, lang)
-
+      const [firstMatch] = matchList
       if (firstMatch) {
         anchorMatches.update((prev) => ({ ...prev, [houseId]: firstMatch }))
         anchorMatchLoadings.update((prev) => ({ ...prev, [houseId]: false }))
@@ -51,8 +48,9 @@
 
     list.shift()
     if (list.length) {
-      fetchMatchesFromAnchors(list, lang)
+      filterMatchesFromAnchors(list)
     } else if (hasMoreData) {
+      loading = false
       fetchAnchors(useLang)
     } else {
       loading = false
@@ -87,7 +85,7 @@
       setHasMoreData(pager)
 
       if (list?.length) {
-        fetchMatchesFromAnchors(list, $locale)
+        filterMatchesFromAnchors(list)
       } else {
         loading = false
       }

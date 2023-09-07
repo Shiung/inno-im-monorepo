@@ -38,13 +38,25 @@
   import InputArea from './InputArea/index.svelte'
   import BetListSheet from '../BetListSheet/index.svelte'
 
-  import { genId, subscribeRoom, unsubscribeRoom, getMessages, getHasVisibleMsgs, chatEnv } from './controller'
+  import { genId, subscribeRoom, unsubscribeRoom, getMessages, getHasVisibleMsgs } from './controller'
   import { setInfo, setOrdersInfo } from './context'
   import { EChatroomSize, CHATROOM_EXPAND_TRIGGER_DISTANCE } from './constant'
   import { showBetList } from './store'
   import { hasVisibleMsg } from './utils'
 
-  const { displayType, useScrollCollapse, height, size, chatId, iid, showBetEnable, expandAnimation, header, betListSheetContainerId, headerClass } = setInfo($info)
+  const {
+    displayType,
+    useScrollCollapse,
+    height,
+    size,
+    chatId,
+    iid,
+    showBetEnable,
+    expandAnimation,
+    header,
+    headerClass,
+    subscribeBindingChatroom
+  } = setInfo($info)
   const { sportMarketSummary, selfOrdersCallback, followOrdersCallback } = setOrdersInfo($ordersInfo)
 
   const subscribeStoreModule = () => {
@@ -58,10 +70,10 @@
       if (get(iid) !== e.iid) iid.set(e.iid)
       if (get(expandAnimation) !== e.expandAnimation) expandAnimation.set(e.expandAnimation)
       if (get(header) !== e.header) header.set(e.header)
-      if (get(betListSheetContainerId) !== e.betListSheetContainerId) betListSheetContainerId.set(e.betListSheetContainerId)
       if (get(headerClass) !== e.headerClass) headerClass.set(e.headerClass)
       if (e.isDefaultTranslate !== null && get(defaultAllowTranslate) !== e.isDefaultTranslate) defaultAllowTranslate.set(e.isDefaultTranslate)
       if (get(isTranslationFeatureOn) !== e.isTranslationFeatureOn) isTranslationFeatureOn.set(Boolean(e.isTranslationFeatureOn))
+      if (get(subscribeBindingChatroom) !== e.subscribeBindingChatroom) subscribeBindingChatroom.set(Boolean(e.subscribeBindingChatroom))
     })
 
     const ordersInfoUnsubscribe = ordersInfo.subscribe((e) => {
@@ -142,6 +154,8 @@
 
   $: if (!$hasMsgs) $hasMsgs = hasVisibleMsg($chatMessages)
 
+  $: if ($size !== EChatroomSize.EXPAND && isExpand) isExpand = false
+
   const subscribeRoomAndUnsubscribePreviousIfNeeded = () => {
     const id = genId({ chatId: $chatId, iid: $iid })
 
@@ -152,15 +166,13 @@
     previous = { chatId: $chatId, iid: $iid }
   }
 
-  $: if ($chatEnv.subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
-
-  $: portalDomEl = document.getElementById($betListSheetContainerId)
+  $: if ($subscribeBindingChatroom && ($chatId || $iid)) subscribeRoomAndUnsubscribePreviousIfNeeded()
 
   onDestroy(() => {
     unsubscribeStoreModule()
     resetStoreModule()
 
-    if($chatEnv.subscribeBindingChatroom) unsubscribeRoom(previous)
+    if($subscribeBindingChatroom) unsubscribeRoom(previous)
   })
 </script>
 
@@ -169,14 +181,9 @@
     <Minimize {lastReadId} {chatMessages} on:click={expandChatroom} />
   {:else}
     {#if $isXl}
-      {#if portalDomEl}
-        <Portal target={portalDomEl}>
-          <BetListSheet bind:open={$showBetList} />
-        </Portal>
-      {:else}
-        <BetListSheet bind:open={$showBetList} />
-      {/if}
+      <BetListSheet bind:open={$showBetList} />
     {/if}
+
     <Container
       {isTransition}
       on:isTransitionChange={(e) => isTransition = e.detail }
@@ -202,6 +209,7 @@
           />
         {/if}
       </svelte:fragment>
+
       <svelte:fragment slot='input'>
           <div bind:this={inputContainerDom}>
             <InputArea fixed={isWindow} hasMsgs={$hasMsgs} onFocus={onFocus} onBlur={onBlur}/>
@@ -209,13 +217,7 @@
       </svelte:fragment>
 
       {#if !$isXl}
-        {#if portalDomEl}
-          <Portal target={portalDomEl}>
-            <BetListSheet bind:open={$showBetList} />
-          </Portal>
-        {:else}
-          <BetListSheet bind:open={$showBetList} />
-        {/if}
+        <BetListSheet bind:open={$showBetList} />
       {/if}
     </Container>
   {/if}

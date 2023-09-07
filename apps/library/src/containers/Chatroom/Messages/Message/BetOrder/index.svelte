@@ -11,6 +11,8 @@
   import { ShowConf, ActiveConf } from './types'
 
   import Loading from 'ui/core/button/loading.svelte'
+  import { getConfig } from 'env-config'
+  import { getVendorTheme } from 'utils'
   
   export let message
   export let self: boolean = false
@@ -25,15 +27,15 @@
   let type: ShowType = self ? ShowConf.show : ShowConf.follow
   let lang: ILanguages = ['zh_CN', 'zh_HK'].includes($locale) ? $locale : 'en_US'
   let status: ActiveType = self ? ActiveConf.disable : ActiveConf.active
+  let vendor: string = getVendorTheme(getConfig()?.VENDERID || 'vd004')
   // const status = isMarketClosed ? 'disable' : 'active'
 
-  const fetchImg = async (_type: string, _lang: string, _status: string) => {
-    const loader = () => import(`./images/${_type}_${_lang}_${_status}.png`)
-    const img = await loader()
+  const fetchImg = async (_vendor: string, _type: string, _lang: string, _status: string) => {
+    const img = await import(`./images/vendors/${_vendor}/${_type}_${_lang}_${_status}.png`)
     return img.default
   }
 
-  $: (async () => {src = await fetchImg(type, lang, status)})()
+  $: (async () => {src = await fetchImg(vendor, type, lang, status)})()
   
   $: isDisable = isProcess || status === ActiveConf.disable
 
@@ -46,7 +48,7 @@
   }
 
   onMount(async () => {
-    src = await fetchImg(type, lang, status)
+    src = await fetchImg(vendor, type, lang, status)
   })
 </script>
 
@@ -79,7 +81,7 @@
       chatMessage
     />
     <ResultIcon betItem={message} />
-    <Market betItem={message} />
+    <Market betItem={message} showMarketType={false} />
     <BetOn betItem={message} />
     <Ante betItem={message} color={'#999'} />
   </div>

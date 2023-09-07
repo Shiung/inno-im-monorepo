@@ -66,7 +66,12 @@
           console.error(error)
         }
 
-        return content
+        return {
+          ...content,
+          // other orders display need
+          senderName: e.senderName,
+          vip: e.vip
+        }
       })
     }
     fetchData.loading = false

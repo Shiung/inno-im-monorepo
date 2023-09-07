@@ -1,12 +1,10 @@
 <script lang="ts">
-  // import { createEventDispatcher } from 'svelte'
+  import { onMount, /* createEventDispatcher */ } from 'svelte'
   import { slide } from 'svelte/transition'
   import { Ripple } from 'ui'
   import { t } from '$stores'
   import { twMerge } from 'tailwind-merge'
   import { Marquee } from 'ui'
-
-  import type { IPlatformAnchor } from '$src/platform/anchors/types'
 
   const AnchorTitle = () => import('./AnchorTitle/index.svelte')
   // import Close from '../images/close.svg'
@@ -18,11 +16,10 @@
   export let fixed: boolean
   export let dom: HTMLDivElement
   export let isTransition: boolean
-  export let anchor: IPlatformAnchor
 
   // export let showClose: false
 
-  const { height } = getInfo()
+  const { height, chatId } = getInfo()
 
   const loadAnchorTitle = async () => {
     let comp = await AnchorTitle()
@@ -31,13 +28,17 @@
   }
 
   let promise: ReturnType<typeof loadAnchorTitle>
-  $: if (anchor) promise = loadAnchorTitle()
+  $: if ($chatId) promise = loadAnchorTitle()
 
   // const dispatch = createEventDispatcher()
 
   let showRemind: boolean = false
 
   $: marqueeInfo = [$t('chat.remind')]
+
+  onMount(() => {
+    showRemind = true
+  })
 </script>
 
 <div
@@ -50,9 +51,9 @@
   bind:this={dom}
 >
   <div class="flex items-center w-full">
-    {#if anchor}
+    {#if $chatId}
       {#await promise then AnchorTitle}
-        <AnchorTitle {anchor} />
+        <AnchorTitle anchorId={$chatId} />
       {/await}
     {:else}
       <div class="text-[18px] font-semibold">{$t('chat.title')}</div>
@@ -67,6 +68,9 @@
         <Marquee
           infos={marqueeInfo}
           class="text-[12px] bg-[#eeeeee] rounded-[10px] py-[6px] px-[10px] whitespace-nowrap w-[200px] overflow-hidden"
+          loop={false}
+          count={2}
+          on:complete={() => showRemind = false}
         />
       </div>
     {/if}

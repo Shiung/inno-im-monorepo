@@ -16,6 +16,7 @@ export interface IChatroomInfo {
   headerClass?: string
   isDefaultTranslate?: boolean
   isTranslationFeatureOn?: boolean
+  subscribeBindingChatroom?: boolean
 }
 
 export const initInfo: IChatroomInfo = {
@@ -31,7 +32,8 @@ export const initInfo: IChatroomInfo = {
   betListSheetContainerId: '',
   isDefaultTranslate: false,
   isTranslationFeatureOn: false,
-  headerClass: ''
+  headerClass: '',
+  subscribeBindingChatroom: true
 }
 
 export const [setInfo, getInfo] = createStoreContext<IChatroomInfo>('chatroomInfo', initInfo)

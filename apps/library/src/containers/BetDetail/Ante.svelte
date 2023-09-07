@@ -3,6 +3,7 @@
   import { amountThousandthTransformer } from 'utils/amount'
 
   import CurrencyIcon from '$components/CurrencyIcon/index.svelte'
+  import { CurrencyMap } from '$containers/BetListSheet/constant'
 
   export let betItem
   export let color: string = 'rgb(var(--im-monorepo-primary))'
@@ -16,6 +17,6 @@
   <CurrencyIcon class="w-[15px] h-[15px] mx-[5px]" {currency} />
 
   <div class="text-[14px]" style:color>
-    {amountThousandthTransformer(totalAnte, { decimal: 2, trimZero: true })}
+    {amountThousandthTransformer(totalAnte, { decimal: CurrencyMap[currency]?.decimal, trimZero: true })}
   </div>
 </div>

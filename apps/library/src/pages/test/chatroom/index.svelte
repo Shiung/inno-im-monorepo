@@ -12,7 +12,7 @@
     type EChatroomSize
   } from '$src/containers/Chatroom'
 
-  import { getUser, type IUser } from './utils'
+  import { localDevUserLogin, isSetDevLogin, type IUser } from 'utils'
 
   import type { ISportMarketSummary } from '$containers/BetDetail/types'
 
@@ -33,10 +33,6 @@
   $: changedHeight = initHeight
 
   $: if (dom) {
-    controller.setChatEnv({
-      subscribeBindingChatroom: true
-    })
-
     setUserAuth({
       userAccount: user.account,
       userToken: user.token,
@@ -57,7 +53,10 @@
       expandAnimation: true,
       size: 'default',
       header: 'normal',
-      headerClass: 'custom-class'
+      headerClass: 'custom-class',
+      isDefaultTranslate: true,
+      isTranslationFeatureOn: true,
+      subscribeBindingChatroom: true
     })
   }
 
@@ -110,7 +109,9 @@
   }
 
   onMount(async () => {
-    user = await getUser()
+    if (isSetDevLogin()) {
+      user = await localDevUserLogin('sean001', 'test1234')
+    }
     await fetchMarket()
     controller.active()
     selfOrdersCallback = fetchSelfOrders

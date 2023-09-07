@@ -13,4 +13,7 @@ export default defineConfig({
     svelte(),
     svelteSVGPlugin()
   ],
+  define: {
+    global: 'globalThis' // detail: packages/utils/dev/index.ts
+  }
 })

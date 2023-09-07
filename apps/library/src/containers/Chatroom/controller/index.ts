@@ -10,7 +10,6 @@ import type { IChatMessage } from 'api/im/types'
 import type { Writable } from 'svelte/store'
 import { setChatroomSetting } from './localEnv'
 import { filterDuplicatesByMsgId, sortMsgsByMsgIdAsc } from '../utils'
-export * from './env'
 
 const hasVisibleMsgMap = new Map<string, Writable<boolean>>()
 const messageMap = new Map<string, Writable<IChatMessage[]>>()
