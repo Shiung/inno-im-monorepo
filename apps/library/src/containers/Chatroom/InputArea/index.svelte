@@ -193,7 +193,7 @@
     <div class="flex items-center">
       <div class="flex-1 flex items-center relative" on:click={onInputClick} on:keypress={onInputKeyPress}>
         <input
-          class="h-[36px] w-full bg-[#f5f5f5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary placeholder-[#c8c8c8] disabled:opacity-100"
+          class="h-[36px] w-full bg-[#f5f5f5] rounded-[22px] pl-[20px] pr-[40px] text-[14px] focus:outline-imprimary placeholder-[#c8c8c8] disabled:opacity-50"
           placeholder={placeHolder}
           {disabled}
           bind:value={message}
