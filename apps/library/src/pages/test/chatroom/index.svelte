@@ -33,10 +33,6 @@
   $: changedHeight = initHeight
 
   $: if (dom) {
-    controller.setChatEnv({
-      subscribeBindingChatroom: true
-    })
-
     setUserAuth({
       userAccount: user.account,
       userToken: user.token,
@@ -57,7 +53,10 @@
       expandAnimation: true,
       size: 'default',
       header: 'normal',
-      headerClass: 'custom-class'
+      headerClass: 'custom-class',
+      isDefaultTranslate: true,
+      isTranslationFeatureOn: true,
+      subscribeBindingChatroom: true
     })
   }
 

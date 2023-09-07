@@ -53,10 +53,6 @@
     height = videoHeight + 44
   }
 
-  controller.setChatEnv({
-    subscribeBindingChatroom: true
-  })
-
   $: useLang = $getUseLang()
   
   $: houseId = $params?.anchorHouseId
@@ -72,7 +68,8 @@
     iid: 0,
     showBetEnable: false,
     expandAnimation: false,
-    header: 'normal'
+    header: 'normal',
+    subscribeBindingChatroom: true
   })
 
   onMount(() => {
