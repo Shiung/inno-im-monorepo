@@ -6,8 +6,6 @@
   import { twMerge } from 'tailwind-merge'
   import { Marquee } from 'ui'
 
-  import type { IPlatformAnchor } from '$src/platform/anchors/types'
-
   const AnchorTitle = () => import('./AnchorTitle/index.svelte')
   // import Close from '../images/close.svg'
   import Info from '../images/info.svg'
@@ -18,7 +16,6 @@
   export let fixed: boolean
   export let dom: HTMLDivElement
   export let isTransition: boolean
-  export let anchor: IPlatformAnchor
 
   // export let showClose: false
 
@@ -31,7 +28,7 @@
   }
 
   let promise: ReturnType<typeof loadAnchorTitle>
-  $: if (anchor) promise = loadAnchorTitle()
+  $: if ($chatId) promise = loadAnchorTitle()
 
   // const dispatch = createEventDispatcher()
 
