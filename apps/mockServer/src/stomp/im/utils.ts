@@ -1,4 +1,4 @@
-import { messageEntityData } from '../../mock/im/chatroom'
+import { mockMessageEntity } from '../../mock/im/chatroom'
 
 import type { WebSocket } from 'ws'
 import type { IHeaders, IStompData } from '../types'
@@ -23,7 +23,7 @@ export const genChatRoomBody = (props?: { message?: string, userId?: string }) =
   const _message = props?.message
   const _userId = props?.userId
 
-  return messageEntityData(Date.now(), { content: _message, sender: _userId })
+  return mockMessageEntity({ content: _message, sender: _userId }, Date.now())
 }
 
 export const sendData = (props: { ws: WebSocket, data: IStompData, body: object }) => {
