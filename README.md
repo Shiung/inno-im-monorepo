@@ -18,19 +18,16 @@
     - [utils](#FolderStructure_packages_utils)
     - [vd-resource](#FolderStructure_packages_vd-resource)
 - [Anchors](#Roadmap)
-  - [mock](#Roadmap)
   - [language mechanism](#Roadmap)
   - [retry mechanism](#Roadmap)
-- [Experts](#Roadmap)
-  - [mock](#Roadmap)
 - [Chatroom](#Roadmap)
   - [websocket](#Roadmap)
   - [protobuf](#Roadmap)
-  - [mock](#Roadmap)
 - [Release Flow](#ReleaseFlow)
 - [Environment Variables](#EnvironmentVariables)
+- [Local Development](#LocalDevelopment)
 - [Mock Data Server](#MockDataServer)
-- [Communication w/ Platform](#Communication_w/_Platform)
+- [Embedded In Platform](#Embedded_In_Platform)
 - [I18n](#I18n)
 - [Theme](#Theme)
 - [Api](#Api)
@@ -47,8 +44,8 @@ Environment : [Node ≥ v16.x](https://nodejs.org/en)
 >
 > [Pnpm v.s Node Version Compatibility](https://pnpm.io/zh-TW/installation#compatibility)
 >
-> turbo 需要安裝在電腦全域的 npm module 
-> (未嘗試過，或許能安裝在專案內)
+> turbo 需要安裝在電腦全域的 npm module
+> (或許能只安裝在專案內，需測試)
 
 ---
 
@@ -90,7 +87,7 @@ pnpm dev
 | |-- common.css # global 樣式
 | |-- commonInit.ts # 入口組件
 | |-- constant.ts # 共用常數
-| |-- main.ts # 廣場入口
+| |-- main.ts # 專案入口
 | |-- types.ts # 共用型別宣告
 | |-- vite-env.d.ts # client 相關型別宣告
 
@@ -102,7 +99,7 @@ pnpm dev
 ```bash
 |-- src
 | |-- echo/ # (unused)
-| |-- mock/ # 測試用 mock資 料
+| |-- mock/ # 測試用 mock資料
 | |-- protobuf/ # ws protobuf server
 | |-- stomp/ # (unused)
 | |-- index.ts # 入口
@@ -232,6 +229,39 @@ pnpm run release
 6. `imAllowTranslate` : 是否打開翻譯的參數
     > allow = 是, not-allow = 否, default = 看預設值
 
+#### .env
+存放專案打包路徑設定。
+
+---
+
+### <a name='LocalDevelopment'></a>Local Development
+因為 im-library 是打包後被平台透過 npm 安裝下來的，
+在本地若需測試兩個專案一起的話，
+是透過 **vite watch mode** 的方式將專案打包至本地 `universe-portal-wap` 底下的 `node_modules/im-library`，是透過 `.env` 設定來控制打包路徑。
+
+操作方式：
+
+1. 將專案底下 apps/library/.env.development 複製一份並取名 .env
+```bash
+cp ./apps/library/.env.development ./apps/library/.env
+```
+
+2. 修改 .env 檔案內的 `PLATFORM_OUT_DIR` 參數成自己電腦裡 `universe-portal-wap` 的 `node_modules/im-library` 路徑
+```properties
+PLATFORM_OUT_DIR="{YOUR_PROJECT_BASE_PATH}/node_modules/im-library"
+```
+
+3. 在 apps/library/ 底下執行指令以 `watch mode` 形式打包到 `universe-portal-wap` 下
+```bash
+cd apps/library
+
+pnpm run build:library-watch
+```
+
+4. 啟動平台專案
+
+5. 只要 im-library 中有檔案異動，都會重新打包一次放到平台底下
+
 ---
 
 ### <a name='MockDataServer'></a>Mock Data Server
@@ -263,7 +293,7 @@ host 在 http://localhost:5174 domain 底下。
 
 ---
 
-### <a name='Communication_w/_Platform'></a>Communication w/ Platform
+### <a name='Embedded_In_Platform'></a>Embedded In Platform
 
 專案會以 `npm package` 的形式給平台引入，
 會將需要的模組打包並推至 gitlab 的 `im-library` repo，
@@ -308,8 +338,128 @@ const Chatroom = () => {
 
 因為要在 react 內嵌入 svelte 組件，會用 `SvelteAdapter` 這個組件包裹 im 導出的 svelte component，而內部是透過 `new comp({ target: node })` 的方式將組件掛載到指定的 html 元素上。
 
+至於兩個專案的狀態共享與溝通有幾種方式：
+
+1. localStorage
+
+像是專案中的兩個專案的語系是透過 `localStorage` 去同步。
+平台使用的是 `locale.current`，而 im 會在初始化的時候去 `localStorage` 看這個 key 後同步自己內部的 locale store。
+
+2. callback registration
+
+svelte 有提供一個 context module 的方式將組件的狀態可由外部透過 script 或是 ESM 引入。
+這個狀態是全局而非屬於某個組件實例的，可能導致的問題見 [Issue](#Issues)
+
+通常會是註冊某個組件的特定事件發生時要執行的 callback。
+
+svelte 組件：
+```javascript
+<script lang="ts" context="module">
+  // ...
+  let onReadyCallback: () => void = () => {}
+  // ...
+  export const onReady = (callback: typeof onReadyCallback) => {
+    // ...
+    onReadyCallback = callback
+  }
+  // ...
+</script>
+```
+
+平台使用：
+```javascript
+// @ts-ignore 
+import { onReady } from 'im-library/streaming';
+
+// ...
+
+export const usePlayer = ({ loadingCallback, errorCallback }: Props) => {
+  // ...
+  onReady(() => {
+    // do something
+  });
+  // ...
+}
+```
+
+3. setter registration
+同上，一樣是透過 context module 的方式，搭配 svelte/store 去將 store setter 暴露給平台去使用。
+
+
+svelte 組件：
+```javascript
+<script lang="ts" context="module">
+  // ...
+  import * as anchor from '../store'
+  // ...
+  export const setStreaming = anchor.streaming.set
+  // ...
+</script>
+```
+
+平台使用：
+```javascript
+// @ts-ignore 
+import { setStreaming } from 'im-library/streaming';
+
+// ...
+
+export const usePlayer = ({ loadingCallback, errorCallback }: Props) => {
+  // ...
+  
+  useEffect(() => {
+    // ...
+    timeId = setTimeout(() => setStreaming(), 1000);
+  }, []);
+  // ...
+}
+```
+
+4. event handler registration
+
+暴露一個 event handler 註冊的 function 在平台引入並執行，來管理與更新 svelte 組件內的狀態。
+
+svelte 組件：
+```javascript
+import { throttle } from 'utils'
+
+let handleResize = null
+
+export const regWindowSizeListener = (callbacks?: Array<(e?: Event) => any>) => {
+  if (!window) return
+
+  window.removeEventListener('resize', handleResize)
+
+  handleResize = throttle((e: Event) => {
+    // do something
+  }, 250)
+  
+  window.addEventListener('resize', handleResize)
+  return () => {
+    window.removeEventListener('resize', handleResize)
+  }
+}
+```
+
+平台使用：
+```javascript
+import setImStore from 'im-library/store';
+// ...
+
+const useIMstore = () => {
+  // ...
+
+  const unRegListener = setImStore.regWindowSizeListener();
+
+  return () => {
+    unRegListener && unRegListener();
+  };
+}
+```
+
+> Note: 
 > 加上 //@ts-ignore 的原因是現在還沒有找到可以產出模組 .d.ts 宣告檔的方法，
-> svelte 官方提供的套件包 svelte-package 是針對某個根路徑去產生底下的 .d.ts，
+> svelte 官方提供的套件包 svelte-package 是針對某個根路徑去產生底下所有的 .d.ts，
 > 但是 im 專案只有導出特定模組，就算針對根目錄為 `platform/` 去跑指令，
 > 底下的模組又會引用其他非 `platform/` 底下的模組，產生出來的 .d.ts 路徑也會有問題。
 >
@@ -322,7 +472,6 @@ const Chatroom = () => {
 
 ### <a name='I18n'></a>I18n
 
-#### locales 腳本
 與其他 FE 專案一樣，會將 i18n 的 mapping 表放在 [i18n 服務](http://locale.fd.innotech.me/#/im-monorepo) 上，專案會在啟動 dev 跟 build 的時候去執行 nodejs 腳本將語系檔下載下來放至專案內一起打包。
 
 在執行 `locales.mjs` 腳本時會將 key 中第一個點前面相同的 `category` 抓出來放在一個 json 檔案裡，再根據語系去產出 json 檔，然後產出一個 `fetcher.ts` 檔案做 `dynamic lazy import`。
