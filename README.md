@@ -53,94 +53,29 @@ Environment : [Node ≥ v16.x](https://nodejs.org/en)
 
 #### <a name='FolderStructure_apps'></a>apps
 
-主要產品資料夾，所有業務邏輯與代碼都會在這個專案下
-在專案根目錄下運行已下指令，會透過 turbo 併發執行底下三個子模組的 dev
-
-```bash
-# im-monorepo/
-pnpm dev
-
-# same as
-# im-monorepo/apps/library pnpm dev
-# im-monorepo/apps/mockServer pnpm dev
-# im-monorepo/apps/uikit pnpm dev
-``` 
+For more detail see [README](./apps/README.md) .
 
 ##### <a name='FolderStructure_apps_library'></a>library
-主要 IM Library，裡面包含所有提供給 `universe-portal-wap` 使用的組件，會放在 `platform/` 子資料夾下。
 
-```bash
-|-- env_scripts # 部署/語系 shell 腳本
-|-- src
-| |-- api/ # 共用的 fetch api wrapper function
-| |-- assets/ # 需要打包的靜態資源
-| |-- components/ # 共用元件
-| |-- containers/ # 業務相關共用元件
-| |-- pages/ # 廣場頁面
-| |-- platform/ # 供平台引入的元件、狀態管理
-| |-- routes/ # 廣場路由
-| |-- stores/ # 狀態管理
-| |-- utils/ # 業務相關共用函式
-| |-- app.css # tailwind preset
-| |-- app.d.ts # 自定義 ts 宣告
-| |-- App.svelte # 廣場入口組件
-| |-- common.css # global 樣式
-| |-- commonInit.ts # 入口組件
-| |-- constant.ts # 共用常數
-| |-- main.ts # 專案入口
-| |-- types.ts # 共用型別宣告
-| |-- vite-env.d.ts # client 相關型別宣告
-
-```
+For more detail see [README](./apps/library/README.md) .
 
 ##### <a name='FolderStructure_apps_mockServer'></a>mockServer
-前端測試用 mock data server，內含 http request api、websocket 的 mock 測試。
 
-```bash
-|-- src
-| |-- echo/ # (unused)
-| |-- mock/ # 測試用 mock資料
-| |-- protobuf/ # ws protobuf server
-| |-- stomp/ # (unused)
-| |-- index.ts # 入口
-| |-- moduleDict.ts # mock data map
-| |-- types.ts # common types
-```
+For more detail see [README](./apps/mockServer/README.md) .
 
 ##### <a name='FolderStructure_apps_uikit'></a>uikit
-常用的 ui 元件展示用頁面，元件大多都來自 packages/ui 底下。
 
-```bash
-|-- src
-| |-- App.svelte
-| |-- app.css
-| |-- app.d.ts
-| |-- assets
-| |-- components
-| |-- main.ts
-| |-- routes
-| |-- vite-env.d.ts
-```
+For more detail see [README](./apps/uikit/README.md) .
 
 ---
 
 #### <a name='FolderStructure_packages'></a>packages
 
-用來存放在多個不同子專案都共用的函式、參數或規範。
+For more detail see [README](./packages/README.md) .
 
 ##### <a name='FolderStructure_packages_api'></a>api
-存放打業務 api 的模組．內含 http request api、websocket 的 mock 測試。
 
-```bash
-| |--core/ # 存放核心 ws 模組
-| |--echo/ # (unused)
-| |--im/ # (unused)
-| |--stompMaster/ # (unused)
-| |--wsMaster/ # im ws 入口
-| |--base.ts # 存放核心 api 模組(可以移到core裏)
-| |--index.ts # 入口
-| |--types.ts # api 型別宣告
-```
+For more detail see [README](./packages/api/README.md) .
 
 ##### <a name='FolderStructure_packages_assets'></a>assets
 
@@ -148,62 +83,41 @@ pnpm dev
 
 ##### <a name='FolderStructure_packages_env-config'></a>env-config
 
-取圖匡環境參數的模組，目前會與 `universe-portal-wap/` 配合，在開發環境下 `universe-portal-wap/` 專案會暴露 `_env_` 變數給 im 使用。
+For more detail see [README](./packages/env-config/README.md) .
 
 ##### <a name='FolderStructure_packages_eslint-config-custom'></a>eslint-config-custom
 
-跨專案共用的 eslint-config，會在各專案下的 `.eslintrc.cjs` 引入。
-
-```js
-// root/
-module.exports = {
-  extends: ['custom']
-};
-```
+For more detail see [README](./packages/eslint-config-custom/README.md) .
 
 ##### <a name='FolderStructure_packages_node-env'></a>node-env
 
-存放在 nodejs 環境下需要的環境參數，像是 library 內的腳本使用參數。
+For more detail see [README](./packages/node-env/README.md) .
 
 ##### <a name='FolderStructure_packages_protobuf'></a>protobuf
 
-存放跨專案共用的 protobuf encoding/decoding 模組，又分為給 client/server 端的兩個入口。
+For more detail see [README](./packages/protobuf/README.md) .
 
 ##### <a name='FolderStructure_packages_tailwind-config'></a>tailwind-config
 
-存放跨專案共用的 tailwind css config。 ex: 業主色、裝置尺寸
+For more detail see [README](./packages/tailwind-config/README.md) .
 
 ##### <a name='FolderStructure_packages_ui'></a>ui
 
-存放跨專案共用的 UI 組件。 ex: 按鈕、彈窗、Player
+For more detail see [README](./packages/ui/README.md) .
 
 ##### <a name='FolderStructure_packages_utils'></a>utils
 
-存放跨專案共用的 utils。
+For more detail see [README](./packages/utils/README.md) .
 
 ##### <a name='FolderStructure_packages_vd-resource'></a>vd-resource
 
-放各業主會使用到的靜態資源。
+For more detail see [README](./packages/vd-resource/README.md) .
 
 ---
 
 ### <a name='ReleaseFlow'></a>Release Flow
 
-im-monorepo 現在沒有透過 gitlab CI/CD 去做上版控制，是透過執行專案底下的
-`apps/library/env_scripts/releaseLibrary.mjs` 腳本做上版動作。
-
-```bash
-
-cd apps/library
-
-pnpm run release
-```
-
-可能失敗原因：
-1. type check failed
-2. 版號與遠端 im-library repo 一致。
-
-[流程圖](./apps/library/env_scripts/README.md)
+For more detail see [README](./apps/library/env_scripts/README.md) .
 
 ---
 
@@ -266,30 +180,7 @@ pnpm run build:library-watch
 
 ### <a name='MockDataServer'></a>Mock Data Server
 
-mock server 有分為兩種，http request & websocket。
-是用 `nodejs` 原生提供的 `http` 模組去啟動一個 local server，
-host 在 http://localhost:5174 domain 底下。
-
-在設置 localStorage `mock` 為 `true` 時會將專案內的 `api 請求` 與 `ws 連線` 都轉為連到這個 domain。
-
-而假資料是透過 [mockjs](https://github.com/nuysoft/Mock/wiki) 這個 package 去產生的。可以參考：
-`apps/mockServer/src/mock/im/*`。
-
-#### http request
-
-在串接一個新的 api 時，可以在 `apps/mockServer/src/mock/im/` 新增自己的 mock api 資料。
-
-資料型別宣告： `apps/mockServer/src/types.ts`
-
-通常會將 `packages/api/im/types` 內定義的 api 資料型別拿來在 mock data 定義，要做[型別斷言](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions)。
-
-細節：`apps/mockServer/src/index.ts`
-
-#### websocket connection
-
-
-
-細節：`apps/mockServer/src/protobuf/im/index.ts`
+For more detail see [README](./apps/mockServer/README.md) .
 
 ---
 
@@ -545,59 +436,6 @@ colors: {
     DEFAULT: 'rgba(var(--im-monorepo-secondary))'
   }
 }
-```
----
-
-### <a name='Api'></a>Api
-
-專案是使用 [fetch api](https://developer.mozilla.org/zh-TW/docs/Web/API/Fetch_API/Using_Fetch) 做 http request 請求，多封裝了一層方便使用與型別判斷。
-
-細節： `packages/api/base.ts`
-
-加入新的 api 及 mock api 方式：
-
-1. 到 `packages/api/im/index.ts` 加上新的 api method 至 api class
-```javascript
-webAnchors = this.apiGenerator<Types.IWebAnchors>({ url: `${prefix}/v1/anchor/web-anchors` })
-```
-2. 到 `packages/api/im/types/anchor.ts` 定義該 api 方法的型別
-```javascript
-export interface IWebAnchors {
-  query: { // api querystring
-    sid?: number
-    keyWord?: string
-    pageIdx: number
-    pageSize: number
-    lang?: string
-    anchorType?: 1 | 2 // 1:賽事主播 2:充提主播
-  }
-  body: null // api body
-  res: withData<{ // api response
-    list: IWebAnchor[]
-    pager: IPager
-  }>
-}
-
-// packages/api/im/types/common.ts
-export interface withData<T> { // 與後端定義的統一 api 格式型別
-  message: string
-  code: number
-  data: T
-  serverTime: number
-}
-```
-
-3. 到 `apps/mockServer/src/mock/im/*.ts` 定義 mock api response 資料
-```javascript
-{
-  url: `${prefix}/v1/anchor/web-anchors`, // 網址，與實際 api 一致
-  timeout: 500, // 模擬 api 延遲使用的秒數設定
-  // mock response
-  response: ({ query }) => mock(withData<Types.IWebAnchors>({
-    list,
-    pager
-  }))
-},
 ```
 ---
 
