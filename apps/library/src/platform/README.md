@@ -53,7 +53,7 @@ const Chatroom = () => {
 2. *callback registration*
 
 svelte 有提供一個 [context module](https://svelte.dev/docs/svelte-components#script-context-module) 的方式將組件的狀態可由外部透過 script 或是 ESM 引入。
-這個狀態是全局而非屬於某個組件實例的，可能導致的問題見 [Issue](../../../../README.md#Issues)
+這個狀態是全局而非屬於某個組件實例的，可能導致的問題見 [Issue](/README.md#Issues)
 
 通常會是註冊某個組件的特定事件發生時要執行的 callback。
 

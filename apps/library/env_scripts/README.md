@@ -63,7 +63,7 @@ git push origin im/release-4.10.1
 
 與其他 FE 專案一樣，會將 i18n 的 mapping 表放在 [i18n 服務](http://locale.fd.innotech.me/#/im-monorepo) 上，專案會在啟動 dev 跟 build 的時候去執行 nodejs 腳本將語系檔下載下來放至專案內一起打包。
 
-在執行 `locales.mjs` 腳本時會將 key 中第一個點前面相同的 `category` 抓出來放在一個 json 檔案裡，再根據語系去產出 json 檔，然後產出一個 `fetcher.ts` 檔案做 `dynamic lazy import`。
+在執行 `locales.mjs` 腳本時會將 key 中第一個點前面相同的 `category` 抓出來放在一個 `json` 檔案裡，再根據語系去產出 `json` 檔，然後產出一個 `fetcher.ts` 檔案做 `dynamic lazy import`。
 
 細節：`apps/library/env_scripts/locales.mjs`
 

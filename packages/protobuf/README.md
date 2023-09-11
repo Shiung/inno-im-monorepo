@@ -12,6 +12,8 @@ protobuf 的核心在於會有一個由開發人員共同規範的 .proto file�
 
 這套規範的文件目前放在 im 後端的 [repo](https://gitlab.innotech.me/game/im/im-pb) 內做管理，而我們專案是使用 [git submodule](https://blog.kennycoder.io/2020/06/14/Git-submodule-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/) 的方式去做同步與版控。
 
+---
+
 #### .proto import
 
 因為 .proto 檔非一般 js/ts 檔案，不能被 vite 解析，比較像是靜態資源引入的概念，所以在引入的時候會在路徑後面加上 [`?url`](https://vitejs.dev/guide/assets.html#explicit-url-imports) 來告訴 vite 這是一個外部資源。
@@ -20,6 +22,8 @@ protobuf 的核心在於會有一個由開發人員共同規範的 .proto file�
 // index.ts
 import pb from './im-pb/im-chat/im.proto?url'
 ```
+
+---
 
 #### folder structure
 
@@ -32,9 +36,11 @@ import pb from './im-pb/im-chat/im.proto?url'
 |-- types.ts # protobuf types declaration
 ```
 
+---
+
 #### 新增 protobuf 格式定義
 
-之前的做法不是讓 protobufjs 自己去產生 source code，而是用提供的 API 去做編譯解譯。
+之前的做法不是用 protobufjs 產生編譯解譯的 tool code，而是用提供的 API 去做。
 
 ##### message
 

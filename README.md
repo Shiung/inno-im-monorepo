@@ -17,20 +17,15 @@
     - [ui](#FolderStructure_packages_ui)
     - [utils](#FolderStructure_packages_utils)
     - [vd-resource](#FolderStructure_packages_vd-resource)
-- [Anchors](#Roadmap)
-  - [language mechanism](#Roadmap)
-  - [retry mechanism](#Roadmap)
-- [Chatroom](#Roadmap)
-  - [websocket](#Roadmap)
-  - [protobuf](#Roadmap)
 - [Release Flow](#ReleaseFlow)
 - [Mock Data Server](#MockDataServer)
 - [LocalStorage](#LocalStorage)
 - [Local Development](#LocalDevelopment)
 - [Embedded In Platform](#Embedded_In_Platform)
-- [I18n](#I18n)
 - [Theme](#Theme)
-- [Api](#Api)
+- [Locales](#Locales)
+- [Device](#Device)
+- [Chatroom](#Chatroom)
 - [Issues](#Issues)
 
 ---
@@ -181,8 +176,6 @@ For more detail see [README](./apps/library/src/platform/README.md) .
 
 ### <a name='Theme'></a>Theme
 
-實現方式：
-
 在專案啟動的時候根據 `env-config` 中的業主代號去抓該業主的主題色 mapping。
 
 目前只有分`谷歌`及`瑞銀`兩主題色，其他業主都會是這兩個其中之一。
@@ -232,6 +225,29 @@ colors: {
 ```
 ---
 
+### <a name='Locales'>Locales
+
+#### script
+
+For script detail see [README](./apps/library/env_scripts/README.md#locales) .
+
+#### localStorage
+
+For localStorage detail see [README](./apps/library/src/platform/README.md) .
+
+#### anchor
+
+主播有一個語系機制比較特別：
+
+1. 因為廣場是串接 51 第三方，而第三方語系跟我們的語系有差異，需要做對應
+2. 後台可以控制哪些語系的主播可以呈現在前台，又分為指定語系與預設語系
+
+##### flow chart
+
+![anchor-language-mechanism](images/anchor-language-mechanism.png)
+
+---
+
 ### <a name='Device'></a>Device
 
 im 專案也有做 `rwd` 的設計，而實作方式基本上與 `universe-portal-wap` 的機制相同。
@@ -263,6 +279,12 @@ im 專案也有做 `rwd` 的設計，而實作方式基本上與 `universe-porta
   <div>我是手機版看到的</div>
 {/if}
 ```
+---
+
+### <a name='Chatroom'></a>Chatroom
+
+For more detail see [README](./apps/library/src/containers/Chatroom/README.md) .
+
 ---
 
 ### <a name='Issues'></a>Issues
@@ -322,3 +344,5 @@ im 專案也有做 `rwd` 的設計，而實作方式基本上與 `universe-porta
 
     2. 一樣使用 context module 的方式，但是多一層維度去管理各個創建的組件。可以用像是 map 去對每個創建的組件存放屬於它自己的狀態與方法。
     
+
+---
