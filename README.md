@@ -24,9 +24,9 @@
   - [websocket](#Roadmap)
   - [protobuf](#Roadmap)
 - [Release Flow](#ReleaseFlow)
-- [Environment Variables](#EnvironmentVariables)
-- [Local Development](#LocalDevelopment)
 - [Mock Data Server](#MockDataServer)
+- [LocalStorage](#LocalStorage)
+- [Local Development](#LocalDevelopment)
 - [Embedded In Platform](#Embedded_In_Platform)
 - [I18n](#I18n)
 - [Theme](#Theme)
@@ -121,19 +121,16 @@ For more detail see [README](./apps/library/env_scripts/README.md) .
 
 ---
 
-### <a name='EnvironmentVariables'></a>Environment Variables
+### <a name='MockDataServer'></a>Mock Data Server
 
-#### window.\_env\_
-線上環境：
-    與 `universe-portal-wap` 專案或其他公司專案一樣，都是透過 devops 提供的圖框環境參數來決定一些環境變數，ex: api url, ws url, translate, etc。
-本地開發：
-    若是要測試在平台專案下經過 build 的 `im-library`，
-    `universe-portal-wap` 內會在 `NODE_ENV` 的值是 `development` 時，
-    暴露它所使用的開發環境的 `\_env\_` 到 `window` 下供 im-library 抓取。
+For more detail see [README](./apps/mockServer/README.md) .
+
+---
+### <a name='LocalStorage'></a>LocalStorage
 
 #### localStorage
 
-目前有一些供測試或是與平台相關的 localStorage 變數在使用：
+目前有一些供測試或是與 `universe-portal-wap/` 相關的 localStorage 變數在使用：
 
 1. `imVIPNotify` : 記錄專家頁面隱藏金色鎖頭的過期時間
 2. `dev` : 設為 `true` 打開 ws 的 `debug mode`，可以參考 [聊天室文件](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2581922325/IM#%E7%B7%9A%E4%B8%8A%E9%99%A4%E9%8C%AF%E5%B7%A5%E5%85%B7)
@@ -142,9 +139,6 @@ For more detail see [README](./apps/library/env_scripts/README.md) .
 5. `dev_login` : 設為 `true` 可以在 im 專案執行平台登入動作
 6. `imAllowTranslate` : 是否打開翻譯的參數
     > allow = 是, not-allow = 否, default = 看預設值
-
-#### .env
-存放專案打包路徑設定。
 
 ---
 
@@ -175,12 +169,6 @@ pnpm run build:library-watch
 4. 啟動平台專案
 
 5. 只要 im-library 中有檔案異動，都會重新打包一次放到平台底下
-
----
-
-### <a name='MockDataServer'></a>Mock Data Server
-
-For more detail see [README](./apps/mockServer/README.md) .
 
 ---
 
@@ -348,17 +336,6 @@ const useIMstore = () => {
 }
 ```
 
-> Note: 
-> 加上 //@ts-ignore 的原因是現在還沒有找到可以產出模組 .d.ts 宣告檔的方法，
-> svelte 官方提供的套件包 svelte-package 是針對某個根路徑去產生底下所有的 .d.ts，
-> 但是 im 專案只有導出特定模組，就算針對根目錄為 `platform/` 去跑指令，
-> 底下的模組又會引用其他非 `platform/` 底下的模組，產生出來的 .d.ts 路徑也會有問題。
->
-> 暫時沒有找到其他解法，所以才先使用最暴力的 //@ts-ignore
-> 能想到的 workaround：
-> 1. 跑完 svelte-package 後透過 shell 腳本去解決路徑問題並放到 release/ 底下。
-> 2. 手動定義 .d.ts 宣告
-
 ---
 
 ### <a name='I18n'></a>I18n
@@ -474,3 +451,58 @@ im 專案也有做 `rwd` 的設計，而實作方式基本上與 `universe-porta
 
 ### <a name='Issues'></a>Issues
 
+1. **type declaration** : 
+    現在打包到平台使用的 svelte 組件沒有做 .d.ts 檔的宣告，所以只能暴力的使用 `//@ts-ignore` 去忽略報錯。
+
+    svelte 官方提供的套件包 [svelte-package](https://kit.svelte.dev/docs/packaging)/[svelte2tsx](https://github.com/sveltejs/language-tools/tree/master/packages/svelte2tsx) 是針對某個根路徑去產生底下所有的 .d.ts，但是 im 專案只有導出特定模組，就算針對根目錄 `platform/` 去跑指令，底下的模組又會引用其他非 `platform/` 底下的模組，產生出來的 `.d.ts 路徑` 也會有問題。
+
+    詳情可參考檔案: `apps/library/env_scripts/generateDts.mjs`
+
+    ```bash
+    # apps/library/
+    pnpm run dts-generate
+    ```
+
+    *workaround：*
+    1. 跑完官方提供套件後透過 `shell` 腳本去解決路徑問題並放到 `release/` 底下。
+    2. 手動定義 .d.ts 宣告
+<br>
+
+2. **Version Control** :
+    現在專案沒有走正常的 gitlab CI/CD 流程，而是完全透過 shell script 來做上版。
+    **會有一個很嚴重的問題，程式碼可以不經過版控系統直接推至遠端 repo**。
+    因為只透過 [shell script](./apps/library/env_scripts/README.md) 檢查版號是否一致，只要更動版號後就算在本地的程式碼也能夠直接推至 `im-library` repo，而且 `im-library` repo 也沒有做嚴格的分支保護，此情況下是可能完全找不到問題點的。
+
+    *workaround：*
+    - 專案改走正規 gitlab CI/CD 流程
+<br>
+
+3. **聊天室偶發斷線問題**：
+    [之前 QA 有測出聊天室會斷線](https://innotech.atlassian.net/browse/IN-5921?focusedCommentId=331974)，
+    <br>
+
+    *發生的異常有兩種：*
+    1. 整個斷線送訊息都沒有反應，重整以後也沒有看到之前送出的訊息。
+    2. 推測有連線成功但送訊息沒有回應，重整後有看到之前送出的訊息。
+    <br>
+
+    *推測問題原因：*
+    1. 可能平台用戶 token 已經過期，沒有做重新登入(flutter端有做)
+    2. 後端的 push message 有異常。
+
+    之後若再發生可能需與移動端討論當時如何實作這個登入機制，以及去看 `sports-chatroom` 專案是否有做什麼特殊處理。
+<br>
+
+4. svelte context module
+    [串接平台](#Embedded_In_Platform) 的部分有提到，目前與平台溝通都是透過 svelte 提供的 context module 來在平台註冊對應的 callback/setter
+    <br>
+
+    *但是這會有一個隱憂：*
+    如果未來需求需要掛載複數個同樣的組件到平台內，因為 context module `static state` 的特性，所有組件都會共享這個狀態，會造成組件互相影響、狀態管理受到污染。
+    <br>
+
+    *workaround：*
+    1. svelte 有提供類似 react `ref` 的功能，能夠[呼叫組件實例內部暴露的方法](https://svelte.dev/docs/component-directives#bind-this)，再搭配 react `ref` 或許能做到從 `SvelteAdapter` 呼叫綁定的 svelte component 內部的 method/state，就能將狀態切割開來。
+
+    2. 一樣使用 context module 的方式，但是多一層維度去管理各個創建的組件。可以用像是 map 去對每個創建的組件存放屬於它自己的狀態與方法。
+    
