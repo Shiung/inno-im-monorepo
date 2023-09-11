@@ -126,9 +126,8 @@ For more detail see [README](./apps/library/env_scripts/README.md) .
 For more detail see [README](./apps/mockServer/README.md) .
 
 ---
-### <a name='LocalStorage'></a>LocalStorage
 
-#### localStorage
+### <a name='LocalStorage'></a>LocalStorage
 
 目前有一些供測試或是與 `universe-portal-wap/` 相關的 localStorage 變數在使用：
 
@@ -138,7 +137,9 @@ For more detail see [README](./apps/mockServer/README.md) .
 4. `mock` : 設為 `true` 改打 mock data server
 5. `dev_login` : 設為 `true` 可以在 im 專案執行平台登入動作
 6. `imAllowTranslate` : 是否打開翻譯的參數
-    > allow = 是, not-allow = 否, default = 看預設值
+    `allow` = 是, `not-allow` = 否, `default` = 看預設值
+
+> 目前散落在專案各處，未來可以統整在一起。
 
 ---
 
@@ -176,31 +177,6 @@ pnpm run build:library-watch
 
 For more detail see [README](./apps/library/src/platform/README.md) .
 
----
-
-### <a name='I18n'></a>I18n
-
-與其他 FE 專案一樣，會將 i18n 的 mapping 表放在 [i18n 服務](http://locale.fd.innotech.me/#/im-monorepo) 上，專案會在啟動 dev 跟 build 的時候去執行 nodejs 腳本將語系檔下載下來放至專案內一起打包。
-
-在執行 `locales.mjs` 腳本時會將 key 中第一個點前面相同的 `category` 抓出來放在一個 json 檔案裡，再根據語系去產出 json 檔，然後產出一個 `fetcher.ts` 檔案做 `dynamic lazy import`。
-
-細節：`apps/library/env_scripts/locales.mjs`
-
-```bash
-# {locale}_common.json
-common.confirm
-common.cancel
-
-# {locale}_anchor.json
-anchor.all
-anchor.life
-
-# {locale}_expert.json
-expert.plan
-expert.plan.prediction
-
-# {category}.{key1}.{key2}...
-```
 ---
 
 ### <a name='Theme'></a>Theme
