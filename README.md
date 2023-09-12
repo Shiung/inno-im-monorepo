@@ -24,6 +24,9 @@
 - [Embedded In Platform](#Embedded_In_Platform)
 - [Theme](#Theme)
 - [Locales](#Locales)
+  - [script](#Locales_script)
+  - [localStorage](#Locales_localStorage)
+  - [anchor](#Locales_anchor)
 - [Device](#Device)
 - [Chatroom](#Chatroom)
 - [Issues](#Issues)
@@ -225,17 +228,17 @@ colors: {
 ```
 ---
 
-### <a name='Locales'>Locales
+### <a name='Locales'></a>Locales
 
-#### script
+#### <a name='Locales_script'></a>script
 
 For script detail see [README](./apps/library/env_scripts/README.md#locales) .
 
-#### localStorage
+#### <a name='Locales_localStorage'></a>localStorage
 
 For localStorage detail see [README](./apps/library/src/platform/README.md) .
 
-#### anchor
+#### <a name='Locales_anchor'></a>anchor
 
 主播有一個語系機制比較特別：
 
