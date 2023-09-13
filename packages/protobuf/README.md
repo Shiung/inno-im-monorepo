@@ -42,14 +42,14 @@ import pb from './im-pb/im-chat/im.proto?url'
 
 #### 新增 protobuf 格式定義
 
-之前的做法不是用 protobufjs 產生編譯解譯的 tool code，而是用提供的 API 去做。
+> 之前的做法不是用 protobufjs 產生編譯解譯的 tool code，而是用提供的 API 去做。
 
 ##### message
 
 以下以 `PushMessageEntity` 為例：
 
 
-1. 確認 .proto 檔的格式有沒有加入
+1. 確認 `im.proto` 檔的格式有沒有加入
 
 ```protobuf
 message PushMessageEntity {
@@ -135,7 +135,7 @@ export const pushMessageParser = (decoded: IPush) => {
 
 以下以 `Command` 為例：
 
-1. 確認 .proto 檔的格式有沒有加入
+1. 確認 `im.proto` 檔的格式有沒有加入
 
 ```protobuf
 enum Command {
