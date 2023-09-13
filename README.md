@@ -377,4 +377,5 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
     *workaround：*
     
     改成使用 [store subscribe](https://svelte.dev/docs/svelte-store#writable) 的方式去做狀態響應式處理。
+
 ---

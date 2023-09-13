@@ -1,5 +1,7 @@
 ### protobuf
 
+![protobuf-flow](./images/protobuf-flow.png)
+
 存放跨專案共用的 protobuf encoding/decoding 模組，又分為給 client/server 端的兩個入口。
 
 [protobuf](https://protobuf.dev/) 是 google 開發的一種資料通訊格式，有別於傳統 XML、JSON，在資料面上更輕量、傳輸更快速且經過編碼，而且支援很多種語言的動態產生編譯程式碼。
