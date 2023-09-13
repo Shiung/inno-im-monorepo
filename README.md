@@ -332,11 +332,13 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 
     [之前 QA 有測出聊天室會斷線](https://innotech.atlassian.net/browse/IN-5921?focusedCommentId=331974)
 
-    *發生的異常有兩種：*
+    *發生異常：*
+
     1. 整個斷線送訊息都沒有反應，重整以後也沒有看到之前送出的訊息。
     2. 推測有連線成功但送訊息沒有回應，重整後有看到之前送出的訊息。
 
     *推測問題原因：*
+
     1. 可能平台用戶 token 已經過期，沒有做重新登入(flutter端有做)
     2. 後端的 push message 有異常。
 
@@ -346,13 +348,29 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 4. **svelte context module**
     [串接平台](/apps/library/src/platform/README.md) 的部分有提到，目前與平台溝通都是透過 svelte 提供的 `context module` 來在平台註冊對應的 callback/setter
 
-    *但是這會有一個隱憂：*
+    *隱憂：*
+
     如果未來需求需要掛載複數個同樣的組件到平台內，因為 `context module static state` 的特性，所有組件都會共享這個狀態，會造成組件互相影響、狀態管理受到污染。
 
     *workaround：*
+
     1. svelte 有提供類似 react `ref` 的功能，能夠[呼叫組件實例內部暴露的方法](https://svelte.dev/docs/component-directives#bind-this)，再搭配 react `ref` 或許能做到從 `SvelteAdapter` 呼叫綁定的 svelte component 內部的 method/state，就能將狀態切割開來。
 
     2. 一樣使用 `context module` 的方式，但是多一層維度去管理各個創建的組件。可以用像是 map 去對每個創建的組件存放屬於它自己的狀態與方法。
 
 5. **svelte in react**
+
+    *在串接平台專案時有遇到的一些問題：*
+
+    1. react 在觸發 re-create component 時 (`key bind`、`new component`) 會`先產生新的 component 才會清掉舊的`，這會導致 svelte 的組件在其生命週期執行順序上會有問題(ex: 聊天室訂閱，先訂閱新的又被清掉訂閱)。
+    
+    *workaround：*
+
+    暫時的解法都是先共用同一個組件，勁量不做 `re-create` 的動作。
+    
+    2. `react-redux` 在執行 [dispatch event](https://react-redux.js.org/using-react-redux/usage-with-typescript#typing-the-usedispatch-hook) 時會影響到 [svelte store reactive syntax](https://svelte.dev/docs/svelte-components#script-4-prefix-stores-with-$-to-access-their-values) 的機制，如果同時執行會導致 reactive syntax 失效。
+
+    *workaround：*
+    
+    改成使用 [store subscribe](https://svelte.dev/docs/svelte-store#writable) 的方式去做狀態響應式處理。
 ---
