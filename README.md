@@ -293,7 +293,7 @@ pnpm run test:watch
 unit-testing 目前大多用來測試 function, class 的正確性，比較少用來測試組件。
 因為 unit-testing 不好用來測試有異步行為邏輯的組件 (ex: 在生命週期下執行業務邏輯的行為)，組件多半是測試`傳入 props` 後的行為、`event 觸發`行為等等。
 
-測試範例可以參考： `packages/utils/amount/amount.test.ts`
+測試範例可以參考： [packages/utils/amount/amount.test.ts](/packages/utils/amount/amount.test.ts)
 
 
 ---
@@ -306,7 +306,7 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 
     svelte 官方提供的套件包 [svelte-package](https://kit.svelte.dev/docs/packaging)/[svelte2tsx](https://github.com/sveltejs/language-tools/tree/master/packages/svelte2tsx) 是針對某個根路徑去產生底下所有的 .d.ts，但是 im 專案只有導出特定模組，就算針對根目錄 `platform/` 去跑指令，底下的模組又會引用其他非 `platform/` 底下的模組，產生出來的 `.d.ts 路徑` 也會有問題。
 
-    詳情可參考檔案: `apps/library/env_scripts/generateDts.mjs`
+    詳情可參考檔案: [apps/library/env_scripts/generateDts.mjs](/apps/library/env_scripts/generateDts.mjs)
 
     ```bash
     # apps/library/
