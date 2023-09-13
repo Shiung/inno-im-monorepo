@@ -29,6 +29,8 @@
   - [anchor](#Locales_anchor)
 - [Device](#Device)
 - [Chatroom](#Chatroom)
+- [Postcss Root Selector](#Postcss_Root_Selector)
+- [Unit Testing][#Unit_Testing]
 - [Issues](#Issues)
 
 ---
@@ -290,6 +292,79 @@ For more detail see [README](./apps/library/src/containers/Chatroom/README.md) .
 
 ---
 
+### <a name="Postcss_Root_Selector"></a>Postcss Root Selector
+
+`im` 專案與 `universe-portal-wap` 專案都有在使用 `tailwindCSS` 寫樣式，之前遇到一個問題：
+
+平台的樣式因為 `RWD` 的需求會有 `media-query` 的樣式覆寫：
+```javascript
+<div class='color-red-500 lg:color-blue-500 xl:color-white'></div>
+```
+
+可是 `media-query` 與一般樣式是屬於`同層級`的選擇器，只因載入順序與尺寸影響。
+所以如果有一個一模一樣的樣式在載入順序上比平台的更後面時，會導致就算平台有使用 `media-query`，還是會被同名的樣式覆蓋。
+
+EX: 
+```javascript
+
+// 載入 bundled CSS 的順序：
+// 1. 平台 color-red-500 
+// 2. 平台 lg:color-blue-500
+// 3. 平台 xl:color-white
+// 4. im color-red-500 
+
+<div class='color-red-500 lg:color-blue-500 xl:color-white'></div>
+```
+
+這時候前面的 media-query 的樣式就會因為載入順序的關係被 im 的樣式覆蓋。
+
+*workaround:*
+
+引入 `postcss-add-root-selector` 套件，將 im 打包的 css 全部都加上 `.im-library` 的前綴，以此來跟平台的樣式區隔開，平台就不會在同名的 class 去引入 im 的樣式。
+
+*drawbacks:*
+
+所有會在平台底下使用的 im 組件都必須包裹一個有 `.im-library` 的外層 html 元素，包含會 portal 到 body 的也是。
+
+如果有些 im 暴露出去的元素是套件 (ex: [mobile-select.js](https://github.com/onlyhom/mobile-select))，且能確保套件的樣式不會影響到平台，可以在 `postcss.config.cjs` 加上 `exclude` option 去濾掉某些樣式檔不用加前綴這件事。
+
+```javascript
+// postcss.config.cjs
+module.exports = {
+  plugins: {
+    // ...
+    'postcss-add-root-selector': {
+      rootSelector: '.im-library',
+      exclude: ['mobile-select.css']
+    }
+  }
+}
+```
+
+---
+
+### <a name='Unit_Testing'></a>Unit Testing
+
+專案有用 [testing-library](https://testing-library.com/docs/svelte-testing-library/intro), [vitest](https://vitest.dev/) 做單元測試。
+
+跑測試會涵蓋 `library,ui,utils 及 api 底下的 *.{test,spec}.{ts,js...}` 的檔案。
+
+```bash
+# testing
+pnpm run test
+
+# testing in watch mode
+pnpm run test:watch
+```
+
+unit-testing 目前大多用來測試 function, class 的正確性，比較少用來測試組件。
+因為 unit-testing 不好用來測試有異步行為邏輯的組件 (ex: 在生命週期下執行業務邏輯的行為)，組件多半是測試`傳入 props` 後的行為、`event 觸發`行為等等。
+
+測試範例可以參考： `packages/utils/amount/amount.test.ts`
+
+
+---
+
 ### <a name='Issues'></a>Issues
 
 1. **type declaration** : 
@@ -334,7 +409,7 @@ For more detail see [README](./apps/library/src/containers/Chatroom/README.md) .
     之後若再發生可能需與移動端討論當時如何實作這個登入機制，以及去看 `sports-chatroom` 專案是否有做什麼特殊處理。
 <br>
 
-4. svelte context module
+4. **svelte context module**
     [串接平台](#Embedded_In_Platform) 的部分有提到，目前與平台溝通都是透過 svelte 提供的 context module 來在平台註冊對應的 callback/setter
     <br>
 
@@ -346,6 +421,5 @@ For more detail see [README](./apps/library/src/containers/Chatroom/README.md) .
     1. svelte 有提供類似 react `ref` 的功能，能夠[呼叫組件實例內部暴露的方法](https://svelte.dev/docs/component-directives#bind-this)，再搭配 react `ref` 或許能做到從 `SvelteAdapter` 呼叫綁定的 svelte component 內部的 method/state，就能將狀態切割開來。
 
     2. 一樣使用 context module 的方式，但是多一層維度去管理各個創建的組件。可以用像是 map 去對每個創建的組件存放屬於它自己的狀態與方法。
-    
 
 ---
