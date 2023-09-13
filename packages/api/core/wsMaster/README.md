@@ -69,9 +69,9 @@ class WsMaster {
 
   async publish(event: IWsMasterEvent) // ws 發送訊息
 
-  notifyToObservable(event: IWsMasterEvent)
+  notifyToObservable(event: IWsMasterEvent) // 通知執行過註冊的監聽器執行 callback
 
-  register(callback: () => void) // 註冊每次重連都要執行的 function
+  register(callback: () => void) // 註冊每次連線成功都要執行的 function
 
   clearAllRegisters() // 清除所有註冊的 function
 }
