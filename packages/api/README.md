@@ -1,6 +1,12 @@
 ### Api
 
-存放打業務 api 的模組．內含 http request api、websocket 的 mock 測試。
+存放業務 api 的模組．內含 http request、websocket。
+
+專案是使用 [fetch api](https://developer.mozilla.org/zh-TW/docs/Web/API/Fetch_API/Using_Fetch) 做 http request 請求，多封裝了一層方便使用與型別判斷。
+
+細節： `packages/api/base.ts`
+
+#### folder structure
 
 ```bash
 | |--core/ # 存放核心 ws 模組
@@ -15,11 +21,7 @@
 
 ---
 
-專案是使用 [fetch api](https://developer.mozilla.org/zh-TW/docs/Web/API/Fetch_API/Using_Fetch) 做 http request 請求，多封裝了一層方便使用與型別判斷。
-
-細節： `packages/api/base.ts`
-
-加入新的 api 及 mock api 方式：
+#### 加入新 api 及 mock api 方式
 
 1. 到 `packages/api/im/index.ts` 加上新的 api method 至 api class
 ```javascript
