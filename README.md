@@ -3,20 +3,7 @@
 - [Requirement](#Requirement)
 - [Folder Structure](#FolderStructure)
   - [apps](#FolderStructure_apps)
-    - [library](#FolderStructure_apps_library)
-    - [mockServer](#FolderStructure_apps_mockServer)
-    - [uikit](#FolderStructure_apps_uikit)
   - [packages](#FolderStructure_packages)
-    - [api](#FolderStructure_packages_api)
-    - [assets](#FolderStructure_packages_assets)
-    - [env-config](#FolderStructure_packages_env-config)
-    - [eslint-config-custom](#FolderStructure_packages_eslint-config-custom)
-    - [node-env](#FolderStructure_packages_node-env)
-    - [protobuf](#FolderStructure_packages_protobuf)
-    - [tailwind-config](#FolderStructure_packages_tailwind-config)
-    - [ui](#FolderStructure_packages_ui)
-    - [utils](#FolderStructure_packages_utils)
-    - [vd-resource](#FolderStructure_packages_vd-resource)
 - [Release Flow](#ReleaseFlow)
 - [Mock Data Server](#MockDataServer)
 - [LocalStorage](#LocalStorage)
@@ -55,63 +42,11 @@ Environment : [Node ≥ v16.x](https://nodejs.org/en)
 
 For more detail see [README](./apps/README.md) .
 
-##### <a name='FolderStructure_apps_library'></a>library
-
-For more detail see [README](./apps/library/README.md) .
-
-##### <a name='FolderStructure_apps_mockServer'></a>mockServer
-
-For more detail see [README](./apps/mockServer/README.md) .
-
-##### <a name='FolderStructure_apps_uikit'></a>uikit
-
-For more detail see [README](./apps/uikit/README.md) .
-
 ---
 
 #### <a name='FolderStructure_packages'></a>packages
 
 For more detail see [README](./packages/README.md) .
-
-##### <a name='FolderStructure_packages_api'></a>api
-
-For more detail see [README](./packages/api/README.md) .
-
-##### <a name='FolderStructure_packages_assets'></a>assets
-
-(unused)
-
-##### <a name='FolderStructure_packages_env-config'></a>env-config
-
-For more detail see [README](./packages/env-config/README.md) .
-
-##### <a name='FolderStructure_packages_eslint-config-custom'></a>eslint-config-custom
-
-For more detail see [README](./packages/eslint-config-custom/README.md) .
-
-##### <a name='FolderStructure_packages_node-env'></a>node-env
-
-For more detail see [README](./packages/node-env/README.md) .
-
-##### <a name='FolderStructure_packages_protobuf'></a>protobuf
-
-For more detail see [README](./packages/protobuf/README.md) .
-
-##### <a name='FolderStructure_packages_tailwind-config'></a>tailwind-config
-
-For more detail see [README](./packages/tailwind-config/README.md) .
-
-##### <a name='FolderStructure_packages_ui'></a>ui
-
-For more detail see [README](./packages/ui/README.md) .
-
-##### <a name='FolderStructure_packages_utils'></a>utils
-
-For more detail see [README](./packages/utils/README.md) .
-
-##### <a name='FolderStructure_packages_vd-resource'></a>vd-resource
-
-For more detail see [README](./packages/vd-resource/README.md) .
 
 ---
 
@@ -144,13 +79,13 @@ For more detail see [README](./apps/mockServer/README.md) .
 ---
 
 ### <a name='LocalDevelopment'></a>Local Development
-因為 im-library 是打包後被平台透過 npm 安裝下來的，
+因為 `im-monorepo` 是打包後被平台透過 npm 安裝下來的，
 在本地若需測試兩個專案一起的話，
 是透過 **vite watch mode** 的方式將專案打包至本地 `universe-portal-wap` 底下的 `node_modules/im-library`，是透過 `.env` 設定來控制打包路徑。
 
 操作方式：
 
-1. 將專案底下 apps/library/.env.development 複製一份並取名 .env
+1. 將專案底下 `apps/library/.env.development` 複製一份並取名 `.env`
 ```bash
 cp ./apps/library/.env.development ./apps/library/.env
 ```
@@ -160,7 +95,7 @@ cp ./apps/library/.env.development ./apps/library/.env
 PLATFORM_OUT_DIR="{YOUR_PROJECT_BASE_PATH}/node_modules/im-library"
 ```
 
-3. 在 apps/library/ 底下執行指令以 `watch mode` 形式打包到 `universe-portal-wap` 下
+3. 在 `apps/library/` 底下執行指令以 `watch mode` 形式打包到 `universe-portal-wap` 下
 ```bash
 cd apps/library
 
@@ -169,7 +104,7 @@ pnpm run build:library-watch
 
 4. 啟動平台專案
 
-5. 只要 im-library 中有檔案異動，都會重新打包一次放到平台底下
+5. 只要 `im-monorepo` 中有檔案異動，都會重新打包一次放到平台底下
 
 ---
 
