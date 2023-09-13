@@ -1,5 +1,7 @@
 ### Embedded In Platform
 
+#### 使用方式
+
 專案會以 `npm package` 的形式給平台引入，
 會將需要的模組打包並推至 gitlab 的 `im-library` repo，
 然後 `universe-portal-wap/` 專案透過 npm 安裝下來使用。
@@ -42,6 +44,8 @@ const Chatroom = () => {
 ```
 
 因為要在 react 內嵌入 svelte 組件，會用 `SvelteAdapter` 這個組件包裹 im 導出的 svelte component，而內部是透過 `new comp({ target: node })` 的方式將組件掛載到指定的 html 元素上。
+
+#### 狀態管理/溝通
 
 至於兩個專案的狀態共享與溝通有幾種方式：
 
@@ -161,5 +165,11 @@ const useIMstore = () => {
   };
 }
 ```
+
+#### API 權限
+
+im 專案的有些 api 需要[綁定平台權限](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2551906630/-+API+expert)，因此在初始化的時候會去監聽使用者資訊，改變時去重設 api request 的 header。
+
+細節： `apps/library/src/commonInit.ts`
 
 ---

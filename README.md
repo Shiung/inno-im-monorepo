@@ -30,7 +30,7 @@
 - [Device](#Device)
 - [Chatroom](#Chatroom)
 - [Postcss Root Selector](#Postcss_Root_Selector)
-- [Unit Testing][#Unit_Testing]
+- [Unit Testing](#Unit_Testing)
 - [Issues](#Issues)
 
 ---
@@ -381,7 +381,7 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 
     *workaround：*
     1. 跑完官方提供套件後透過 `shell` 腳本去解決路徑問題並放到 `release/` 底下。
-    2. 手動定義 .d.ts 宣告
+    2. 手動定義 `.d.ts` 宣告
 <br>
 
 2. **Version Control** :
@@ -410,16 +410,16 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 <br>
 
 4. **svelte context module**
-    [串接平台](#Embedded_In_Platform) 的部分有提到，目前與平台溝通都是透過 svelte 提供的 context module 來在平台註冊對應的 callback/setter
+    [串接平台](/apps/library/src/platform/README.md) 的部分有提到，目前與平台溝通都是透過 svelte 提供的 `context module` 來在平台註冊對應的 callback/setter
     <br>
 
     *但是這會有一個隱憂：*
-    如果未來需求需要掛載複數個同樣的組件到平台內，因為 context module `static state` 的特性，所有組件都會共享這個狀態，會造成組件互相影響、狀態管理受到污染。
+    如果未來需求需要掛載複數個同樣的組件到平台內，因為 `context module static state` 的特性，所有組件都會共享這個狀態，會造成組件互相影響、狀態管理受到污染。
     <br>
 
     *workaround：*
     1. svelte 有提供類似 react `ref` 的功能，能夠[呼叫組件實例內部暴露的方法](https://svelte.dev/docs/component-directives#bind-this)，再搭配 react `ref` 或許能做到從 `SvelteAdapter` 呼叫綁定的 svelte component 內部的 method/state，就能將狀態切割開來。
 
-    2. 一樣使用 context module 的方式，但是多一層維度去管理各個創建的組件。可以用像是 map 去對每個創建的組件存放屬於它自己的狀態與方法。
+    2. 一樣使用 `context module` 的方式，但是多一層維度去管理各個創建的組件。可以用像是 map 去對每個創建的組件存放屬於它自己的狀態與方法。
 
 ---

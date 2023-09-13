@@ -12,6 +12,13 @@ pnpm dev
 # im-monorepo/apps/mockServer pnpm dev
 # im-monorepo/apps/uikit pnpm dev
 ``` 
+<br>
+
+| project | domain |
+| ------- | ------ |
+| library | http://localhost:5173 |
+| mock server | http://localhost:5174 |
+| uikit | http://localhost:5175 |
 
 #### sub folder
 1. [library](./library/README.md)
