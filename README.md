@@ -318,7 +318,7 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
     2. 手動定義 `.d.ts` 宣告
 <br>
 
-2. **Version Control** :
+2. **Version Control**
 
     現在專案沒有走正常的 gitlab CI/CD 流程，而是完全透過 shell script 來做上版。
     **會有一個很嚴重的問題，程式碼可以不經過版控系統直接推至遠端 repo**。
@@ -336,6 +336,7 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 
     1. 整個斷線送訊息都沒有反應，重整以後也沒有看到之前送出的訊息。
     2. 推測有連線成功但送訊息沒有回應，重整後有看到之前送出的訊息。
+    <br>
 
     *推測問題原因：*
 
@@ -346,11 +347,13 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 <br>
 
 4. **svelte context module**
+
     [串接平台](/apps/library/src/platform/README.md) 的部分有提到，目前與平台溝通都是透過 svelte 提供的 `context module` 來在平台註冊對應的 callback/setter
 
     *隱憂：*
 
     如果未來需求需要掛載複數個同樣的組件到平台內，因為 `context module static state` 的特性，所有組件都會共享這個狀態，會造成組件互相影響、狀態管理受到污染。
+    <br>
 
     *workaround：*
 
@@ -363,7 +366,8 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
     *在串接平台專案時有遇到的一些問題：*
 
     1. react 在觸發 re-create component 時 (`key bind`、`new component`) 會`先產生新的 component 才會清掉舊的`，這會導致 svelte 的組件在其生命週期執行順序上會有問題(ex: 聊天室訂閱，先訂閱新的又被清掉訂閱)。
-    
+    <br>
+
     *workaround：*
 
     暫時的解法都是先共用同一個組件，勁量不做 `re-create` 的動作。
