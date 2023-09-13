@@ -42,8 +42,6 @@ Environment : [Node ≥ v16.x](https://nodejs.org/en)
 
 For more detail see [README](./apps/README.md) .
 
----
-
 #### <a name='FolderStructure_packages'></a>packages
 
 For more detail see [README](./packages/README.md) .
