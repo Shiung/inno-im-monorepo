@@ -86,7 +86,8 @@ switch (data.command) {
 
 ##### 新增一個 mock command request
 
-protobuf 可以參考 [protobuf package README](/packages/protobuf/README.md)
+[protobuf新增定義請看](/packages/protobuf/README.md)
+
 以 fetch message 為例：
 
 1. client 端的 protobuf type `Request` 資料 decode
@@ -99,7 +100,7 @@ const onReceiveFetchMessage = (ws: WebSocket, __data: IRequest) => {
 }
 ```
 
-2. 產生 protobuf type `PushMessageEntityWrapper` 資料 encode
+2. 產生 `PushMessageEntityWrapper` type 的 encoded 資料
 
 ```javascript
 
@@ -126,7 +127,7 @@ export const fetchMessages = (msg?: MessageEntityDataProps) => {
 }
 ```
 
-3. 產生 protobuf type `Push` encoded 資料並送出
+3. 產生 `Push` type 的 encoded 資料並送出
 
 ```javascript
 export const pushEncode = (props: PickPartial<IPush, 'command'>) => {
