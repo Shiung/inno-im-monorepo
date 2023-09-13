@@ -12,7 +12,7 @@
 - [Theme](#Theme)
 - [Locales](#Locales)
   - [script](#Locales_script)
-  - [localStorage](#Locales_localStorage)
+  - [global storage](#Locales_global_storage)
   - [anchor](#Locales_anchor)
 - [Device](#Device)
 - [Chatroom](#Chatroom)
@@ -88,9 +88,9 @@ For more detail see [README](./apps/mockServer/README.md) .
 cp ./apps/library/.env.development ./apps/library/.env
 ```
 
-2. 修改 .env 檔案內的 `PLATFORM_OUT_DIR` 參數成自己電腦裡 `universe-portal-wap` 的 `node_modules/im-library` 路徑
+2. 將 `.env` 檔案內的 `PLATFORM_OUT_DIR` 參數修改成自己電腦裡 `universe-portal-wap` 的 `node_modules/im-library` 路徑
 ```properties
-PLATFORM_OUT_DIR="{YOUR_PROJECT_BASE_PATH}/node_modules/im-library"
+PLATFORM_OUT_DIR="{UNIVERSE_PORTAL_WAP_PROJECT_PATH}/node_modules/im-library"
 ```
 
 3. 在 `apps/library/` 底下執行指令以 `watch mode` 形式打包到 `universe-portal-wap` 下
@@ -100,7 +100,7 @@ cd apps/library
 pnpm run build:library-watch
 ```
 
-4. 啟動平台專案
+4. 啟動 [universe-portal-wap](https://gitlab.innotech.me/frontend/universe-portal-wap) 專案
 
 5. 只要 `im-monorepo` 中有檔案異動，都會重新打包一次放到平台底下
 
@@ -114,22 +114,25 @@ For more detail see [README](./apps/library/src/platform/README.md) .
 
 ### <a name='Theme'></a>Theme
 
-在專案啟動的時候根據 `env-config` 中的業主代號去抓該業主的主題色 mapping。
+#### theme map
+在專案啟動的時候根據 `env-config` 中的`業主代號`去抓該業主的主題色 mapping。
 
 目前只有分`谷歌`及`瑞銀`兩主題色，其他業主都會是這兩個其中之一。
 
 ``` javascript
 // packages/utils/vdThemeGenerator/map.ts
 
-vd001: theme.ruiYin,
-vd002: theme.guGe,
-vd003: theme.guGe,
-vd004: theme.ruiYin,
-// vd005: theme.guGe,
-vd006: theme.guGe,
-vd007: theme.ruiYin,
-vd008: theme.guGe,
-vd009: theme.ruiYin
+const themeMap = {
+  vd001: theme.ruiYin,
+  vd002: theme.guGe,
+  vd003: theme.guGe,
+  vd004: theme.ruiYin,
+  // vd005: theme.guGe,
+  vd006: theme.guGe,
+  vd007: theme.ruiYin,
+  vd008: theme.guGe,
+  vd009: theme.ruiYin
+}
 
 ruiYin: {
   primary: '76 158 234', // #4C9EEA
@@ -141,7 +144,7 @@ guGe: {
 }
 ```
 
-取到對應的主題色 mapping 表後，會透過 js 將 `mapping 表` 轉換成 `css 變數表` 並以 `<style></style>` 包裹後插入至 `<head></head>` 中
+取到對應的主題色 mapping 表後，用 js 將 `mapping 表` 轉換成 `css 變數表` 並以 `<style></style>` 包裹後插入至 `<head></head>` 中
 
 ```html
 <style>:root {--im-monorepo-primary:76 158 234;
@@ -149,8 +152,9 @@ guGe: {
 }</style>
 ```
 
-因為專案也有使用 `tailwind-css`，所以也會定義 `tailwind color extend`。
-細節： `packages/tailwind-config/tailwind.present.cjs`
+因為專案也有使用 [tailwindcss](https://tailwindcss.com/)，所以也會定義 [extend color](https://tailwindcss.com/docs/customizing-colors#adding-additional-colors)。
+細節： [packages/tailwind-config/tailwind.present.cjs](/packages/tailwind-config/tailwind.present.cjs).
+
 ```javascript
 colors: {
   imprimary: {
@@ -161,28 +165,51 @@ colors: {
   }
 }
 ```
+
+#### getVendorTheme utils
+
+這個 utils function 主要是用來取圖片用的，有些分業主的圖片檔會放在 `vd002` / `vd004` 的資料夾內，這個 utils 會去決定要去哪個資料夾底下拿。
+
+```javascript
+// packages/utils/getVendorTheme/index.ts
+switch (VENDORID) {
+  case 'vd001':
+  case 'vd004':
+  case 'vd007':
+  case 'vd009':
+    return 'vd004'
+  case 'vd002':
+  case 'vd003':
+  case 'vd006':
+  case 'vd008':
+    return 'vd002'
+  default:
+    return
+}
+```
+
 ---
 
 ### <a name='Locales'></a>Locales
 
 #### <a name='Locales_script'></a>script
 
-For script detail see [README](./apps/library/env_scripts/README.md#locales) .
+For more detail see [README](./apps/library/env_scripts/README.md#locales) .
 
-#### <a name='Locales_localStorage'></a>localStorage
+#### <a name='Locales_global_storage'></a>global storage
 
-For localStorage detail see [README](./apps/library/src/platform/README.md) .
+For more detail see [README](./apps/library/src/platform/README.md) .
 
 #### <a name='Locales_anchor'></a>anchor
 
 主播有一個語系機制比較特別：
 
-1. 因為廣場是串接 51 第三方，而第三方語系跟我們的語系有差異，需要做對應
+1. 因為廣場資料來源是串接 51 第三方，而第三方語系跟我們的語系有差異，需要做對應
 2. 後台可以控制哪些語系的主播可以呈現在前台，又分為指定語系與預設語系
 
 ##### flow chart
 
-![anchor-language-mechanism](images/anchor-language-mechanism.png)
+![anchor-language-mechanism](./images/anchor%20language%20mechanism.png)
 
 ---
 
@@ -190,13 +217,13 @@ For localStorage detail see [README](./apps/library/src/platform/README.md) .
 
 im 專案也有做 `rwd` 的設計，而實作方式基本上與 `universe-portal-wap` 的機制相同。
 
-- md: 375px (手機)
-- lg: 600px (平板)
-- xl: 1024px (電腦)
+- `md: 375px` (手機)
+- `lg: 600px` (平板)
+- `xl: 1024px` (電腦)
 
-1. 會在專案啟動時透過 `vite.config` 將裝置尺寸設定從 `tailwind.config` 讀取進來
+1. 在專案啟動時透過 `vite.config` 將裝置尺寸設定從 `tailwind.config` 讀取進來
 2. 將設定透過 `vite.config` 的 `define` 功能定義至 `process.env.SCREENS` 變數
-3. 會註冊一個全域的 `resize` 事件監聽當前畫面尺寸，再跟上述設定值做比對分辨現在屬於哪一種裝置。
+3. 註冊一個全域的 `resize` 事件監聽當前畫面尺寸，再跟上述設定值做比對分辨現在屬於哪一種裝置。
 
 兩種根據尺寸做調整`樣式/功能`的方法：
 
@@ -334,13 +361,13 @@ unit-testing 目前大多用來測試 function, class 的正確性，比較少�
 
     *發生異常：*
 
-    1. 整個斷線送訊息都沒有反應，重整以後也沒有看到之前送出的訊息。
-    2. 推測有連線成功但送訊息沒有回應，重整後有看到之前送出的訊息。
+    1. 送訊息都沒有回應，重整以後`沒有看到之前送出的訊息`。
+    2. 推測有連線成功但送訊息沒有回應，重整後`有看到之前送出的訊息`。
     <br>
 
     *推測問題原因：*
 
-    1. 可能平台用戶 token 已經過期，沒有做重新登入(flutter端有做)
+    1. 可能平台用戶 `token` 已經過期，沒有做重新登入(flutter 有做)
     2. 後端的 push message 有異常。
 
     之後若再發生可能需與移動端討論當時如何實作這個登入機制，以及去看 [sports-chatroom](https://gitlab.innotech.me/frontend/sports-chatroom) 專案是否有做什麼特殊處理。

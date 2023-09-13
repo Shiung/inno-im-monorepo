@@ -51,124 +51,132 @@ const Chatroom = () => {
 
 1. *localStorage*
 
-兩個專案的語系是透過 `localStorage` 去同步。
-平台使用的是 `locale.current`，而 im 會在初始化的時候去 `localStorage` 看這個 key 後同步自己內部的 `locale store` 以及 `locale` localStorage。
+    兩個專案的語系是透過 `localStorage` 去同步。
+    平台使用的是 `locale.current`，而 im 會在初始化的時候去 `localStorage` 看這個 key 後同步自己內部的 `locale store` 以及 `locale` localStorage。
 
 2. *callback registration*
 
-svelte 有提供一個 [context module](https://svelte.dev/docs/svelte-components#script-context-module) 的方式將組件的狀態可由外部透過 script 或是 ESM 引入。
-這個狀態是全局而非屬於某個組件實例的，可能導致的問題見 [Issue](/README.md#Issues)
+    svelte 有提供一個 [context module](https://svelte.dev/docs/svelte-components#script-context-module) 的方式將組件的狀態可由外部透過 script 或是 ESM 引入。
+    這個狀態是`全局而非屬於某個組件實例`的，可能導致的問題見 [Issue](/README.md#Issues)
 
-通常會是註冊某個組件的特定事件發生時要執行的 callback。
+    通常會是註冊某個組件的特定事件發生時要執行的 callback。
 
-svelte 組件：
-```javascript
-<script lang="ts" context="module">
-  // ...
-  let onReadyCallback: () => void = () => {}
-  // ...
-  export const onReady = (callback: typeof onReadyCallback) => {
+    svelte 組件：
+    ```javascript
+    <script lang="ts" context="module">
+      // ...
+      let onReadyCallback: () => void = () => {}
+      // ...
+      export const onReady = (callback: typeof onReadyCallback) => {
+        // ...
+        onReadyCallback = callback
+      }
+      // ...
+    </script>
+    ```
+
+    平台使用：
+    ```javascript
+    // @ts-ignore 
+    import { onReady } from 'im-library/streaming';
+
     // ...
-    onReadyCallback = callback
-  }
-  // ...
-</script>
-```
 
-平台使用：
-```javascript
-// @ts-ignore 
-import { onReady } from 'im-library/streaming';
-
-// ...
-
-export const usePlayer = ({ loadingCallback, errorCallback }: Props) => {
-  // ...
-  onReady(() => {
-    // do something
-  });
-  // ...
-}
-```
+    export const usePlayer = ({ loadingCallback, errorCallback }: Props) => {
+      // ...
+      onReady(() => {
+        // do something
+      });
+      // ...
+    }
+    ```
 
 3. *setter registration*
-可能是透過 [context module](https://svelte.dev/docs/svelte-components#script-context-module) 的方式，或者 svelte/store 去將 store setter 暴露給平台去使用。
+
+    可能是透過 [context module](https://svelte.dev/docs/svelte-components#script-context-module) 的方式，或者 svelte/store 去將 store setter 暴露給平台去使用。
 
 
-svelte 組件：
-```javascript
-<script lang="ts" context="module">
-  // ...
-  import * as anchor from '../store'
-  // ...
-  export const setStreaming = anchor.streaming.set
-  // ...
-</script>
-```
+    svelte 組件：
+    ```javascript
+    <script lang="ts" context="module">
+      // ...
+      import * as anchor from '../store'
+      // ...
+      export const setStreaming = anchor.streaming.set
+      // ...
+    </script>
+    ```
 
-平台使用：
-```javascript
-// @ts-ignore 
-import { setStreaming } from 'im-library/streaming';
+    ```javascript
+    const setImStore = {
+      locale: locale.set, // store setter
+      // ...
+    }
+    ```
 
-// ...
+    平台使用：
+    ```javascript
+    // @ts-ignore 
+    import { setStreaming } from 'im-library/streaming';
 
-export const usePlayer = ({ loadingCallback, errorCallback }: Props) => {
-  // ...
-  
-  useEffect(() => {
     // ...
-    timeId = setTimeout(() => setStreaming(), 1000);
-  }, []);
-  // ...
-}
-```
+
+    export const usePlayer = ({ loadingCallback, errorCallback }: Props) => {
+      // ...
+      
+      useEffect(() => {
+        // ...
+        timeId = setTimeout(() => setStreaming(), 1000);
+      }, []);
+      // ...
+    }
+    ```
 
 4. *event handler registration*
 
-暴露一個 event handler 註冊的 function 在平台引入並執行，來管理與更新 svelte 組件內的狀態。
+    暴露一個註冊 `event handler` 的 function 在平台引入並執行，來管理與更新 svelte 組件內的狀態。
 
-svelte 組件：
-```javascript
-import { throttle } from 'utils'
+    svelte 組件：
+    ```javascript
+    import { throttle } from 'utils'
 
-let handleResize = null
+    let handleResize = null
 
-export const regWindowSizeListener = (callbacks?: Array<(e?: Event) => any>) => {
-  if (!window) return
+    export const regWindowSizeListener = (callbacks?: Array<(e?: Event) => any>) => {
+      if (!window) return
 
-  window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', handleResize)
 
-  handleResize = throttle((e: Event) => {
-    // do something
-  }, 250)
-  
-  window.addEventListener('resize', handleResize)
-  return () => {
-    window.removeEventListener('resize', handleResize)
-  }
-}
-```
+      handleResize = throttle((e: Event) => {
+        // do something
+      }, 250)
+      
+      window.addEventListener('resize', handleResize)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+    ```
 
-平台使用：
-```javascript
-import setImStore from 'im-library/store';
-// ...
+    平台使用：
+    ```javascript
+    import setImStore from 'im-library/store';
+    // ...
 
-const useIMstore = () => {
-  // ...
+    const useIMstore = () => {
+      // ...
 
-  const unRegListener = setImStore.regWindowSizeListener();
+      const unRegListener = setImStore.regWindowSizeListener();
 
-  return () => {
-    unRegListener && unRegListener();
-  };
-}
-```
+      return () => {
+        unRegListener && unRegListener();
+      };
+    }
+    ```
 
 #### API 權限
 
-im 專案的有些 api 需要[綁定平台權限](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2551906630/-+API+expert)，因此在初始化的時候會去監聽使用者資訊，改變時去重設 api request 的 header。
+im 專案的有些 api 需要[綁定平台權限](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2551906630/-+API+expert)，因此在初始化的時候會去監聽使用者資訊，改變時去重設 api request 的 `header`。
 
 細節： `apps/library/src/commonInit.ts`
 
