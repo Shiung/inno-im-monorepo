@@ -4,12 +4,12 @@
 
 ```bash
 |-- src
-| |-- App.svelte
-| |-- app.css
-| |-- app.d.ts
-| |-- assets
-| |-- components
-| |-- main.ts
-| |-- routes
-| |-- vite-env.d.ts
+| |-- App.svelte # uikit 入口組件
+| |-- app.css # tailwind preset
+| |-- app.d.ts # 自定義 ts 宣告
+| |-- assets (unused)
+| |-- components # uikit 元件
+| |-- main.ts # 入口
+| |-- routes # uikit 路由
+| |-- vite-env.d.ts # client 相關型別宣告
 ```
