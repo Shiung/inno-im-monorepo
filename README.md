@@ -5,6 +5,7 @@
   - [apps](#FolderStructure_apps)
   - [packages](#FolderStructure_packages)
 - [Release Flow](#ReleaseFlow)
+- [Version](#Version)
 - [Mock Data Server](#MockDataServer)
 - [LocalStorage](#LocalStorage)
 - [Local Development](#LocalDevelopment)
@@ -53,6 +54,24 @@ For more detail see [README](./packages/README.md) .
 For more detail see [README](./apps/library/env_scripts/README.md) .
 
 ---
+
+### <a name='Version'></a>Version
+
+im 上版後要在線上環境確認版號，可以透過下面方式：
+
+1. 進到平台的線上環境
+
+`https://en-vd004-tiger-portal.innodev.site/`
+
+2. 進到平台廣場
+
+![im](/images/im.png)
+
+3. 打開 devtool 輸入 `_version_`，便可查到現在線上版本以及 `git commit sha`
+
+![im](/images/devtool.png)
+
+細節：[apps/library/src/utils/versionInfo.ts](/apps/library/src/utils/versionInfo.ts)
 
 ### <a name='MockDataServer'></a>Mock Data Server
 
