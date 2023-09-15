@@ -1,0 +1,116 @@
+syntax = "proto3"; 
+
+package message; 
+option go_package = "/pkg/pb/message";
+
+enum ContentType {
+	CONTENT_TYPE_NONE = 0;
+	CHAT              = 1;
+	ORDER             = 2;
+  ANCHOR_HOST       = 3;
+	ANCHOR_MEMBER     = 4;
+}
+
+enum Visible {
+	VISIBLE_NONE = 0;
+	ALL          = 1;
+	SENDER       = 2;
+}
+
+message Pager {
+  int32 PageIdx = 1;
+  int32 PageSize = 2;
+  int32 TotalPage = 3;
+  int32 TotalRow = 4;
+}
+
+message FetchMessageReq{
+  int64               pointer         = 1;
+  string              chatId          = 2;
+  int64               vdId            = 3;
+}
+
+message FetchMessageResp{
+  Error error =1;
+  repeated Message message =2;
+}
+
+message Error {
+  int64 code = 1;
+  string msg = 2;
+}
+
+message Message {
+  int64               msgId           = 1;
+  ContentType         contentType     = 2;
+  int64               vdId            = 3;
+  string              sender          = 4;
+  string              senderName      = 5;
+  string              houseId         = 6;
+  int32               iid             = 7;
+  string              chatId          = 8;
+  int32               vip             = 9;
+  string              avatar          = 10;
+  int64               replyTo         = 11;
+  string              content         = 12;
+  Visible             visible         = 13;
+  int64               timestamp       = 14;
+  string              lang            = 15;
+  map<string, string> translationList = 16;
+}
+
+message FetchOtherOrdersReq {
+  int64 vdId = 1;
+  string sender =2;
+  int32 iid =3;
+  string chatId =4;
+}
+
+message FetchAdminMessageReq {
+  int64 vdId = 1;
+  int32 page = 2;
+  int32 pageSize = 3;
+  int64 pointer = 4;
+  string lang = 5;
+}
+
+message FetchAdminMessageRes {
+  message FetchAdminMessage {
+    string msg = 1;
+    bool	black =2;
+    int64	time= 3;
+    string	account = 4;
+    int64	msgId =5;
+    MatchInfo matchInfo = 6;
+  }
+  message MatchInfo {
+    string away = 1;
+    string home = 2;
+		string tournament = 3;
+		int32 sid = 4;
+		int64 kickOff = 5;
+  }
+
+  repeated FetchAdminMessage msgList = 1;
+  Pager pager = 2;
+}
+
+message FetchAdminMessageForbiddenWord {
+  string lang = 1;
+  int64 vdId = 2;
+}
+
+message ForbiddenWordResp {
+  message ForbiddenWord {
+    int32 id = 1;
+    string replaceWord = 2;
+    string word = 3;
+  }
+  repeated ForbiddenWord forbiddenWords = 1;
+}
+
+service messageService {
+  rpc FetchMessage(FetchMessageReq) returns (FetchMessageResp);
+  rpc FetchAdminMessage(FetchAdminMessageReq) returns (FetchAdminMessageRes);
+  rpc FetchOtherOrders(FetchOtherOrdersReq) returns (FetchMessageResp);
+}
