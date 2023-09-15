@@ -1,6 +1,6 @@
 ### env-config
 
-取圖匡環境參數 `window.\_env\_` 的模組。
+取圖匡環境參數 `window._env_` 的模組。
 
 
 #### 線上環境
