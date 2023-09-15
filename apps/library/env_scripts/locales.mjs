@@ -37,20 +37,20 @@ const genLangFiles = async (lang, dict) => {
 }
 
 
-await clearLangFolder()
-await $`mkdir -p ${LANG_FILEPATH}`
-await $`touch ${LANG_FILEPATH}/index.ts`
-await $`touch ${LANG_FILEPATH}/fetcher.ts`
-await $`echo "export default (path: string) => {\n  switch (path) {" >> ${LANG_FILEPATH}/fetcher.ts`
+// await clearLangFolder()
+// await $`mkdir -p ${LANG_FILEPATH}`
+// await $`touch ${LANG_FILEPATH}/index.ts`
+// await $`touch ${LANG_FILEPATH}/fetcher.ts`
+// await $`echo "export default (path: string) => {\n  switch (path) {" >> ${LANG_FILEPATH}/fetcher.ts`
 
-for (const lang of LANGUAGES) {
-  const langData = await fetch(`${LOCALE_SERVER}/client/${REPO_NAME}/${lang}`)
-  const json = await langData.json()
+// for (const lang of LANGUAGES) {
+//   const langData = await fetch(`${LOCALE_SERVER}/client/${REPO_NAME}/${lang}`)
+//   const json = await langData.json()
 
-  const dict = parseJsonDataToDict(json)
-  await genLangFiles(lang, dict)
-}
+//   const dict = parseJsonDataToDict(json)
+//   await genLangFiles(lang, dict)
+// }
 
-await $`echo "default: return () => import('./en_US_common.json')" >> ${LANG_FILEPATH}/fetcher.ts`
-await $`echo "}}" >> ${LANG_FILEPATH}/fetcher.ts`
+// await $`echo "default: return () => import('./en_US_common.json')" >> ${LANG_FILEPATH}/fetcher.ts`
+// await $`echo "}}" >> ${LANG_FILEPATH}/fetcher.ts`
 
