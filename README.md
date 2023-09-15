@@ -1,5 +1,6 @@
 ## IM-Monorepo
 
+- [Related Document](#Related_Document)
 - [Requirement](#Requirement)
 - [Folder Structure](#FolderStructure)
   - [apps](#FolderStructure_apps)
@@ -20,6 +21,20 @@
 - [Postcss Root Selector](#Postcss_Root_Selector)
 - [Unit Testing](#Unit_Testing)
 - [Issues](#Issues)
+
+---
+
+### <a name="Related_Document"></a>Related Document
+
+- [平台與 IM 廣場串接文件](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2582183990/IM)
+- [平台與 IM 聊天室串接文件](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2581922325/IM)
+- [51 API Doc](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2544468287/51+doc)
+- [Backend 專家主播 API Doc](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2545942563/inno+API+Doc)
+- [Backend 聊天室 Ws Doc](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2579465000/IM+Protobuf+Doc)
+- [IM Release Note](https://innotech.atlassian.net/wiki/spaces/GDIM/pages/2588901381/Release+Note)
+- [51 直播後台](https://test.xymszlg.com/admin)
+- [51 直播前台](https://test.xymszlg.com/)
+- [FE commit Rule](https://innotech.atlassian.net/wiki/spaces/Frontend/pages/2625700412/Git+Commit+Rule)
 
 ---
 
